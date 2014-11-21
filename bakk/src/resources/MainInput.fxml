@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="500.0" prefWidth="1318.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <!-- TODO Add Nodes -->
+  <children>
+    <Label layoutX="58.0" layoutY="61.0" text="Add arguments:" />
+    <Label layoutX="569.0" layoutY="64.0" text="attacks:" />
+    <Label layoutX="58.0" layoutY="101.0" text="A" />
+    <TextField layoutX="97.0" layoutY="98.0" prefWidth="456.0" />
+    <TextField layoutX="570.0" layoutY="100.0" prefWidth="229.0" />
+    <Label layoutX="58.0" layoutY="129.0" text="B" />
+    <TextField layoutX="97.0" layoutY="129.0" prefHeight="23.0" prefWidth="456.0" />
+    <TextField layoutX="570.0" layoutY="131.0" prefWidth="229.0" />
+    <Label layoutX="58.0" layoutY="166.0" text="C" />
+    <TextField layoutX="97.0" layoutY="163.0" prefWidth="456.0" />
+    <TextField layoutX="570.0" layoutY="165.0" prefWidth="229.0" />
+    <Label layoutX="58.0" layoutY="203.0" text="D" />
+    <TextField layoutX="97.0" layoutY="201.0" prefWidth="456.0" />
+    <TextField layoutX="570.0" layoutY="205.0" prefWidth="229.0" />
+    <Label layoutX="60.0" layoutY="244.0" text="E" />
+    <TextField layoutX="97.0" layoutY="239.0" prefWidth="456.0" />
+    <TextField layoutX="570.0" layoutY="241.0" prefWidth="229.0" />
+    <Label layoutX="60.0" layoutY="278.0" text="F" />
+    <TextField layoutX="97.0" layoutY="275.0" prefWidth="456.0" />
+    <TextField layoutX="569.0" layoutY="277.0" prefWidth="229.0" />
+    <Label layoutX="58.0" layoutY="311.0" text="G" />
+    <TextField layoutX="97.0" layoutY="308.0" prefWidth="456.0" />
+    <TextField layoutX="570.0" layoutY="310.0" prefWidth="229.0" />
+    <Label layoutX="58.0" layoutY="347.0" text="H" />
+    <TextField layoutX="97.0" layoutY="341.0" prefWidth="456.0" />
+    <TextField layoutX="570.0" layoutY="344.0" prefWidth="229.0" />
+    <Label layoutX="58.0" layoutY="377.0" text="I" />
+    <TextField layoutX="97.0" layoutY="377.0" prefWidth="456.0" />
+    <TextField layoutX="570.0" layoutY="380.0" prefWidth="229.0" />
+    <Label layoutX="61.0" layoutY="418.0" text="J" />
+    <TextField layoutX="97.0" layoutY="409.0" prefWidth="456.0" />
+    <TextField layoutX="570.0" layoutY="410.0" prefWidth="229.0" />
+    <Button layoutX="839.0" layoutY="99.0" mnemonicParsing="false" text="Extension type A" />
+    <Label layoutX="839.0" layoutY="67.0" text="compute:" />
+    <Button layoutX="839.0" layoutY="131.0" mnemonicParsing="false" text="Extension type B" />
+    <Button layoutX="839.0" layoutY="165.0" mnemonicParsing="false" text="Extension type C" />
+    <Button layoutX="839.0" layoutY="201.0" mnemonicParsing="false" text="Extension type D" />
+    <Button layoutX="652.0" layoutY="453.0" mnemonicParsing="false" text="visualize" />
+  </children>
+</AnchorPane>
