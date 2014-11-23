@@ -9,43 +9,43 @@
 <AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <!-- TODO Add Nodes -->
   <children>
-    <Label layoutX="202.0" text="Abstract argumentation frameworks" AnchorPane.topAnchor="30.0">
+    <Label fx:id="headlineLbl" layoutX="202.0" text="Abstract argumentation frameworks" AnchorPane.topAnchor="30.0">
       <font>
         <Font size="25.0" />
       </font>
     </Label>
-    <Label text="Add arguments:" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="70.0" />
-    <Label text="attacks:" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="70.0" />
-    <Label text="A" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="100.0" />
-    <TextField prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="100.0" />
-    <TextField prefWidth="200.0" text="" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="100.0" />
-    <Label text="B" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="130.0" />
-    <TextField prefHeight="23.0" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="130.0" />
-    <TextField prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="130.0" />
-    <Label text="C" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="160.0" />
-    <TextField prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="160.0" />
-    <TextField prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="160.0" />
-    <Label text="D" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="190.0" />
-    <TextField prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="190.0" />
-    <TextField prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="190.0" />
-    <Label text="E" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="220.0" />
-    <TextField prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="220.0" />
-    <TextField prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="220.0" />
-    <Label text="F" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="250.0" />
-    <TextField prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="250.0" />
-    <TextField prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="250.0" />
-    <Label text="G" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="280.0" />
-    <TextField prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="280.0" />
-    <TextField prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="280.0" />
-    <Label text="H" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="310.0" />
-    <TextField prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="310.0" />
-    <TextField prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="310.0" />
-    <Label text="I" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="340.0" />
-    <TextField prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="340.0" />
-    <TextField prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="340.0" />
-    <Label text="J" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="370.0" />
-    <TextField prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="370.0" />
-    <TextField prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="370.0" />
-    <Button mnemonicParsing="false" prefWidth="229.0" text="show graph" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="430.0" />
+    <Label fx:id="addLbl" text="Add arguments:" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="70.0" />
+    <Label fx:id="attackLbl" text="attacks:" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="70.0" />
+    <Label fx:id="aLbl" text="A" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="100.0" />
+    <TextField fx:id="argumentATxt" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="100.0" />
+    <TextField fx:id="attackATxt" prefWidth="200.0" text="" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="100.0" />
+    <Label fx:id="bLbl" text="B" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="130.0" />
+    <TextField id="argumentbTxt" fx:id="argumentBTxt" prefHeight="23.0" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="130.0" />
+    <TextField fx:id="attackBTxt" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="130.0" />
+    <Label fx:id="cLbl" text="C" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="160.0" />
+    <TextField fx:id="argumentCTxt" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="160.0" />
+    <TextField fx:id="attackCTxt" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="160.0" />
+    <Label fx:id="dLbl" text="D" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="190.0" />
+    <TextField fx:id="argumentDTxt" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="190.0" />
+    <TextField fx:id="attackDTxt" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="190.0" />
+    <Label fx:id="eLbl" text="E" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="220.0" />
+    <TextField fx:id="argumentETxt" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="220.0" />
+    <TextField fx:id="attackETxt" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="220.0" />
+    <Label fx:id="fLbl" text="F" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="250.0" />
+    <TextField id="argumentATxt" fx:id="argumentFTxt" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="250.0" />
+    <TextField fx:id="attackFTxt" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="250.0" />
+    <Label fx:id="gLbl" text="G" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="280.0" />
+    <TextField fx:id="argumentGTxt" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="280.0" />
+    <TextField id="attackFTxt" fx:id="attackGTxt" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="280.0" />
+    <Label fx:id="hLbl" text="H" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="310.0" />
+    <TextField fx:id="argumentHTxt" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="310.0" />
+    <TextField fx:id="attackHTxt" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="310.0" />
+    <Label fx:id="iLbl" text="I" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="340.0" />
+    <TextField fx:id="argumentITxt" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="340.0" />
+    <TextField fx:id="attackITxt" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="340.0" />
+    <Label fx:id="jLbl" text="J" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="370.0" />
+    <TextField fx:id="argumentJTxt" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="370.0" />
+    <TextField fx:id="attackJTxt" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="370.0" />
+    <Button fx:id="showGraphBtn" mnemonicParsing="false" prefWidth="229.0" text="show graph" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="430.0" />
   </children>
 </AnchorPane>
