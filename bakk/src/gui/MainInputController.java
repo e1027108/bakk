@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import dto.ArgumentDto;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -29,38 +30,19 @@ public class MainInputController {
 	@FXML
 	private Button showGraphBtn;
 	
-	private ArrayList<TextField> arguments, attacks;
-
+	private ArrayList<ArgumentDto> arguments;
+	
 	@FXML
 	void initialize() {
 		/* if needed add assertions (get them from scene builder) */
 		
-		//TODO fix window size and possible scaling problems
+		//TODO later fix window size and possible scaling problems
 		
-		arguments = new ArrayList<TextField>();
-		attacks = new ArrayList<TextField>();
-		
-		arguments.add(argumentATxt);
-		arguments.add(argumentBTxt);
-		arguments.add(argumentCTxt);
-		arguments.add(argumentDTxt);
-		arguments.add(argumentETxt);
-		arguments.add(argumentFTxt);
-		arguments.add(argumentGTxt);
-		arguments.add(argumentHTxt);
-		arguments.add(argumentITxt);
-		arguments.add(argumentJTxt);
-		
-		attacks.add(attackATxt);
-		attacks.add(attackBTxt);
-		attacks.add(attackCTxt);
-		attacks.add(attackDTxt);
-		attacks.add(attackETxt);
-		attacks.add(attackFTxt);
-		attacks.add(attackGTxt);
-		attacks.add(attackHTxt);
-		attacks.add(attackITxt);
-		attacks.add(attackJTxt);
+		arguments = new ArrayList<ArgumentDto>();
 	}
-
+	
+	@FXML
+	public void onShowButton(){
+		System.out.println("test");
+	}
 }

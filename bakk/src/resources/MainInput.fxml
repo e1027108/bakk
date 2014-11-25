@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.MainInputController">
   <!-- TODO Add Nodes -->
   <children>
     <Label fx:id="headlineLbl" layoutX="202.0" text="Abstract argumentation frameworks" AnchorPane.topAnchor="30.0">
@@ -46,6 +46,6 @@
     <Label fx:id="jLbl" text="J" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="370.0" />
     <TextField fx:id="argumentJTxt" prefWidth="450.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="370.0" />
     <TextField fx:id="attackJTxt" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.topAnchor="370.0" />
-    <Button fx:id="showGraphBtn" mnemonicParsing="false" prefWidth="229.0" text="show graph" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="430.0" />
+    <Button fx:id="showGraphBtn" mnemonicParsing="false" onAction="#onShowButton" prefWidth="229.0" text="show graph" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="430.0" />
   </children>
 </AnchorPane>
