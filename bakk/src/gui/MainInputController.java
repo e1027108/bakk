@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import dto.ArgumentDto;
+import exceptions.InvalidInputException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,27 +24,29 @@ public class MainInputController {
 	private TextField argumentATxt, argumentBTxt, argumentCTxt, argumentDTxt, argumentETxt, argumentFTxt, 
 	argumentGTxt, argumentHTxt, argumentITxt, argumentJTxt, attackATxt, attackBTxt, attackCTxt, attackDTxt,
 	attackETxt, attackFTxt, attackGTxt, attackHTxt, attackITxt, attackJTxt;
-	
+
 	@FXML
 	private Label addLbl, attackLbl, headlineLbl, aLbl, bLbl, cLbl, dLbl, eLbl, fLbl, gLbl, hLbl, iLbl, jLbl;
 
 	@FXML
 	private Button showGraphBtn;
-	
+
+	// TODO create hover over explanations in code and fxml doc
+
 	private ArrayList<ArgumentDto> arguments;
-	
+
 	@FXML
 	void initialize() {
 		/* if needed add assertions (get them from scene builder) */
-		
+
 		//TODO later fix window size and possible scaling problems
-		
+
 		arguments = new ArrayList<ArgumentDto>();
 	}
-	
+
 	//TODO maybe change from A...J to A0...A9
 	@FXML
-	public void onShowButton(){
+	public void onShowButton() throws InvalidInputException{ //TODO handle exceptions thrown by @FXML annotated methods
 		if(!argumentATxt.getText().isEmpty() || !attackATxt.getText().isEmpty()){
 			arguments.add(new ArgumentDto('A', parseArgument(argumentATxt), parseAttacks(attackATxt)));
 		}
@@ -74,10 +77,10 @@ public class MainInputController {
 		if(!argumentJTxt.getText().isEmpty() || !attackJTxt.getText().isEmpty()){
 			arguments.add(new ArgumentDto('J', parseArgument(argumentJTxt), parseAttacks(attackJTxt)));
 		}
-		
+
 		//TODO create graphwindow, send info there, open it (instead of maininput, but in the same window)
 	}
-	
+
 	private String parseArgument(TextField argument) {
 		if(argument.getText().isEmpty()){
 			return "no argument description";
@@ -85,16 +88,34 @@ public class MainInputController {
 		return argument.getText();
 	}
 
-	private String parseAttacks(TextField attack) {
-		if(attack.getText().isEmpty()){
+	private String parseAttacks(TextField attack) throws InvalidInputException {
+		String input = attack.getText();
+		String argumentNames = "ABCDEFGHIJ";
+		String attackValues = "";
+
+		if(input.isEmpty()){
 			return "";
 		}
 		else{
-			String argumentNames = "ABCDEFGHIJ";
-			
-			//TODO remove everything like separators, but throw exception if there are invalid letters
-			return null; //TODO replace null with something
-		}
-	}
+			input = input.replaceAll("[ ,]", "");
 
+			for(int i = 0; i < argumentNames.length(); i++){
+				String stringValue = String.valueOf(argumentNames.charAt(i)); 
+				if(input.contains(stringValue)){ //check for uppercase
+					attackValues += stringValue;
+					input = input.replace(stringValue, "");
+				}
+				else if(input.contains(stringValue.toLowerCase())){ //check for lowercase
+					attackValues += stringValue;
+					input = input.replace(stringValue.toLowerCase(), "");
+				}
+			}
+		}
+
+		if(input.length() > 0){
+			throw new InvalidInputException("Invalid or duplicate attacks detected.");
+		}
+
+		return attackValues;
+	}
 }

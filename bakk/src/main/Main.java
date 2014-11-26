@@ -17,7 +17,7 @@ public class Main extends Application{
 	public void start(Stage stage) throws Exception {
 
 		try{
-			mainInput = FXMLLoader.load(getClass().getResource("/resources/MainInput.fxml"));
+			mainInput = FXMLLoader.load(getClass().getResource("/MainInput.fxml"));
 		} catch (Exception e){
 			e.printStackTrace();
 			System.exit(-1);
