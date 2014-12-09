@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import dto.ArgumentDto;
 
 public class Framework {
-	private ArrayList<ArgumentDto> arguments;
+	private ArrayList<Argument> arguments;
 	
-	public Framework(ArrayList<ArgumentDto> arguments){
+	public Framework(ArrayList<Argument> arguments){
 		this.arguments = arguments;
 	}
 	
