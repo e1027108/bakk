@@ -7,12 +7,18 @@ import java.util.ResourceBundle;
 import dto.ArgumentDto;
 import exceptions.InvalidInputException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 
 
 public class MainInputController {
+	
+	@FXML
+	private AnchorPane root;
 
 	@FXML
 	private ResourceBundle resources;
@@ -31,7 +37,7 @@ public class MainInputController {
 	@FXML
 	private Button showGraphBtn;
 
-	// TODO create hover over explanations in code and fxml doc
+	// TODO create hover over explanations
 
 	private ArrayList<ArgumentDto> arguments;
 
@@ -44,7 +50,6 @@ public class MainInputController {
 		arguments = new ArrayList<ArgumentDto>();
 	}
 
-	//TODO maybe change from A...J to A0...A9
 	@FXML
 	public void onShowButton() throws InvalidInputException{ //TODO handle exceptions thrown by @FXML annotated methods
 		if(!argumentATxt.getText().isEmpty() || !attackATxt.getText().isEmpty()){
@@ -78,7 +83,8 @@ public class MainInputController {
 			arguments.add(new ArgumentDto('J', parseArgument(argumentJTxt), parseAttacks(attackJTxt)));
 		}
 
-		//TODO create graphwindow, send info there, open it (instead of maininput, but in the same window)
+		//TODO replace window with demonstrationwindow, send info there, show it
+		
 	}
 
 	private String parseArgument(TextField argument) {

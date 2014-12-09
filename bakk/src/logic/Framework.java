@@ -2,8 +2,6 @@ package logic;
 
 import java.util.ArrayList;
 
-import dto.ArgumentDto;
-
 public class Framework {
 	private ArrayList<Argument> arguments;
 	

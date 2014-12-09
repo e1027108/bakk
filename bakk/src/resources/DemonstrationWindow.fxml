@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.DemonstrationWindowController">
+<AnchorPane fx:id="root" prefHeight="500.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.DemonstrationWindowController">
   <!-- TODO Add Nodes -->
   <children>
     <AnchorPane fx:id="graphPane" prefHeight="440.0" prefWidth="440.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
