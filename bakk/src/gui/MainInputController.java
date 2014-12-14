@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -8,11 +9,13 @@ import dto.ArgumentDto;
 import exceptions.InvalidInputException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 
 public class MainInputController {
@@ -83,8 +86,6 @@ public class MainInputController {
 			arguments.add(new ArgumentDto('J', parseArgument(argumentJTxt), parseAttacks(attackJTxt)));
 		}
 
-		//TODO replace window with demonstrationwindow, send info there, show it
-		
 	}
 
 	private String parseArgument(TextField argument) {

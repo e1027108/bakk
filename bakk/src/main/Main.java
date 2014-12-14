@@ -16,8 +16,11 @@ public class Main extends Application{
 	@Override
 	public void start(Stage stage) throws Exception {
 
+		/* TODO remove after testing and connecting windows */
+		String fxmlName = "/DemonstrationWindow.fxml"; //alt: "/MainInput.fxml"
+		
 		try{
-			mainInput = FXMLLoader.load(getClass().getResource("/MainInput.fxml"));
+			mainInput = FXMLLoader.load(getClass().getResource(fxmlName));
 		} catch (Exception e){
 			e.printStackTrace();
 			System.exit(-1);
@@ -25,7 +28,7 @@ public class Main extends Application{
 
 		Scene scene = new Scene(mainInput);
 		stage.setScene(scene);
-		stage.setTitle("Group Creation");
+		stage.setTitle("Abstract argumentation frameworks");
 		stage.setResizable(false);
 		stage.centerOnScreen();
 		stage.show();
