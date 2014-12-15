@@ -52,9 +52,18 @@ public class DemonstrationWindowController {
     	
     	argumentFramework = new Framework(arguments);
     	
+    	for(Argument a: arguments){
+    		String attackers = "";
+    		for(Argument a2: argumentFramework.getAttackers(a.getName())){
+    			attackers += a2.getName();
+    		}
+    		
+    		System.out.println("" + a.getName() + " gets attacked by: " + attackers);
+    	}
+    	
     	/* --------------------------- /testing purposes ------------------------------ */
     	
-    	// TODO test framework and implement extensions
+    	// TODO implement extensions
     }
 
 }

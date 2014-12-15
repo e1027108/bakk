@@ -9,7 +9,7 @@ public class Framework {
 		this.arguments = arguments;
 	}
 
-	public ArrayList<Argument> getAttacks(char argumentName){
+	private ArrayList<Argument> getAttacks(char argumentName){
 		ArrayList<Argument> attacks = new ArrayList<Argument>();
 		String attackString = getArgument(argumentName).getAttacks();
 		
