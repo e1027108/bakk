@@ -10,12 +10,10 @@
   <children>
     <AnchorPane fx:id="graphPane" prefHeight="440.0" prefWidth="440.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
     <Button fx:id="backButton" mnemonicParsing="false" text="&lt;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-    <Button id="computationButton1" layoutX="55.0" mnemonicParsing="false" text="extension 1" AnchorPane.bottomAnchor="10.0" />
-    <Button layoutX="161.0" mnemonicParsing="false" text="extension 2" AnchorPane.bottomAnchor="10.0" />
-    <Button layoutX="267.0" mnemonicParsing="false" text="extension 3" AnchorPane.bottomAnchor="10.0" />
-    <Button layoutX="373.0" mnemonicParsing="false" text="extension 4" AnchorPane.bottomAnchor="10.0" />
-    <Button layoutX="479.0" mnemonicParsing="false" text="extension 5" AnchorPane.bottomAnchor="10.0" />
-    <Button layoutX="585.0" layoutY="467.0" mnemonicParsing="false" text="extension 6" />
+    <Button id="computationButton1" fx:id="completeBtn" layoutX="55.0" mnemonicParsing="false" onAction="#onCompleteClick" text="complete extensions" AnchorPane.bottomAnchor="10.0" />
+    <Button fx:id="preferredBtn" layoutX="213.0" mnemonicParsing="false" onAction="#onPreferredClick" text="preferred extensions" AnchorPane.bottomAnchor="10.0" />
+    <Button fx:id="stableBtn" layoutX="372.0" mnemonicParsing="false" onAction="#onStableClick" text="stable extensions" AnchorPane.bottomAnchor="10.0" />
+    <Button fx:id="groundedBtn" layoutX="516.0" mnemonicParsing="false" onAction="#onGroundedClick" text="grounded extension" AnchorPane.bottomAnchor="10.0" />
     <TextArea fx:id="explanationArea" prefHeight="440.0" prefWidth="319.0" wrapText="true" AnchorPane.leftAnchor="460.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
   </children>
 </AnchorPane>

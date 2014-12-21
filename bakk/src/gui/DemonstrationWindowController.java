@@ -21,7 +21,8 @@ public class DemonstrationWindowController {
     private URL location;
 
     @FXML
-    private Button backButton; //TODO implement while connecting views
+    private Button backButton, completeBtn, preferredBtn, stableBtn, groundedBtn;
+    // TODO implement back button
 
     @FXML
     private TextArea explanationArea;
@@ -64,6 +65,29 @@ public class DemonstrationWindowController {
     	/* --------------------------- /testing purposes ------------------------------ */
     	
     	// TODO implement extensions
+    }
+    
+    @FXML
+    public void onCompleteClick(){
+    	
+    }
+    
+    @FXML
+    public void onPreferredClick(){
+    	// TODO compute all preferred extensions
+    	// TODO visualize for user (nodes and text)
+    }
+    
+    @FXML
+    public void onStableClick(){
+    	// TODO compute all stable extensions
+    	// TODO visualize for user (nodes and text)
+    }
+    
+    @FXML
+    public void onGroundedClick(){
+    	// TODO compute the grounded extension
+    	// TODO visualize for user (nodes and text)
     }
 
 }
