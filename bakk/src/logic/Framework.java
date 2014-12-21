@@ -46,4 +46,24 @@ public class Framework {
 		
 		return null;
 	}
+	
+	public ArrayList<Extension> getCompleteExtensions(){
+		// TODO compute all complete extensions
+		return null;
+	}
+	
+	public ArrayList<Extension> getPreferredExtensions(){
+		// TODO compute all preferred extensions
+		return null;
+	}
+	
+	public ArrayList<Extension> getStableExtensions(){
+		// TODO compute all stable extensions
+		return null;
+	}
+	
+	public Extension getGroundedExtension(){
+		// TODO compute grounded extension
+		return null;
+	}
 }
