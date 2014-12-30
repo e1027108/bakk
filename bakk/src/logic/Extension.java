@@ -5,21 +5,14 @@ import java.util.ArrayList;
 public class Extension {
 	
 	private ArrayList<Argument> arguments; //arguments of extension
-	private Framework framework;
-	
-	public Extension (Framework framework){
-		this.arguments = new ArrayList<Argument>();
-		this.framework = framework;
-	}
 	
 	/**
 	 * new Extension with a starting node
 	 * @param a
 	 */
-	public Extension (Argument a, Framework framework){
+	public Extension (Argument a){
 		this.arguments = new ArrayList<Argument>();
 		this.arguments.add(a);
-		this.framework = framework;
 	}
 	
 	public void addArgument(Argument a){

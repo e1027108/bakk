@@ -5,15 +5,35 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="root" prefHeight="500.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.DemonstrationWindowController">
-  <!-- TODO Add Nodes -->
-  <children>
-    <AnchorPane fx:id="graphPane" prefHeight="440.0" prefWidth="440.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-    <Button fx:id="backButton" mnemonicParsing="false" text="&lt;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
-    <Button id="computationButton1" fx:id="completeBtn" layoutX="55.0" mnemonicParsing="false" onAction="#onCompleteClick" text="complete extensions" AnchorPane.bottomAnchor="10.0" />
-    <Button fx:id="preferredBtn" layoutX="213.0" mnemonicParsing="false" onAction="#onPreferredClick" text="preferred extensions" AnchorPane.bottomAnchor="10.0" />
-    <Button fx:id="stableBtn" layoutX="372.0" mnemonicParsing="false" onAction="#onStableClick" text="stable extensions" AnchorPane.bottomAnchor="10.0" />
-    <Button fx:id="groundedBtn" layoutX="516.0" mnemonicParsing="false" onAction="#onGroundedClick" text="grounded extension" AnchorPane.bottomAnchor="10.0" />
-    <TextArea fx:id="explanationArea" prefHeight="440.0" prefWidth="319.0" wrapText="true" AnchorPane.leftAnchor="460.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-  </children>
+<AnchorPane fx:id="root" prefHeight="550.0" prefWidth="800.0"
+	xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
+	fx:controller="gui.DemonstrationWindowController">
+	<!-- TODO Add Nodes -->
+	<children>
+		<AnchorPane fx:id="graphPane" prefHeight="440.0" prefWidth="440.0"
+			AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+		<TextArea fx:id="explanationArea" prefHeight="440.0"
+			prefWidth="319.0" wrapText="true" AnchorPane.leftAnchor="460.0"
+			AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+		<Button fx:id="backButton" mnemonicParsing="false" text="&lt;"
+			AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" />
+		<Button fx:id="conflictFreeBtn" mnemonicParsing="false"
+			onAction="#onConflictFreeClick" prefWidth="160.0" text="conflict-free sets"
+			AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="55.0" />
+		<Button fx:id="admissibleBtn" layoutY="477.0" mnemonicParsing="false"
+			onAction="#onAdmissibleClick" prefWidth="160.0" text="admissible extensions"
+			AnchorPane.leftAnchor="225.0" />
+		<Button fx:id="preferredBtn" mnemonicParsing="false"
+			onAction="#onPreferredClick" prefWidth="160.0" text="preferred extensions"
+			AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="395.0" />
+		<Button fx:id="stableBtn" mnemonicParsing="false" onAction="#onStableClick"
+			prefWidth="160.0" text="stable extensions" AnchorPane.bottomAnchor="50.0"
+			AnchorPane.leftAnchor="565.0" />
+		<Button fx:id="groundedBtn" mnemonicParsing="false" onAction="#onGroundedClick"
+			prefWidth="160.0" text="grounded extension" AnchorPane.bottomAnchor="15.0"
+			AnchorPane.leftAnchor="55.0" />
+		<Button fx:id="completeBtn" layoutX="225.0" mnemonicParsing="false"
+			onAction="#onCompleteClick" prefWidth="160.0" text="complete extensions"
+			AnchorPane.bottomAnchor="15.0" />
+	</children>
 </AnchorPane>

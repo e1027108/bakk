@@ -21,7 +21,7 @@ public class DemonstrationWindowController {
     private URL location;
 
     @FXML
-    private Button backButton, completeBtn, preferredBtn, stableBtn, groundedBtn;
+    private Button backButton, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn;
     // TODO implement back button
 
     @FXML
@@ -69,7 +69,8 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onCompleteClick(){
-    	
+    	// TODO compute all complete extensions
+    	// TODO visualize for user (nodes and text)
     }
     
     @FXML
@@ -87,6 +88,18 @@ public class DemonstrationWindowController {
     @FXML
     public void onGroundedClick(){
     	// TODO compute the grounded extension
+    	// TODO visualize for user (nodes and text)
+    }
+    
+    @FXML
+    public void onConflictFreeClick(){
+    	// TODO compute all conflict-free sets
+    	// TODO visualize for user (nodes and text)
+    }
+    
+    @FXML
+    public void onAdmissibleClick(){
+    	// TODO compute all admissible sets
     	// TODO visualize for user (nodes and text)
     }
 

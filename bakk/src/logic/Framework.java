@@ -48,7 +48,7 @@ public class Framework {
 	}
 	
 	public ArrayList<Extension> getCompleteExtensions(){
-		// TODO compute all complete extensions
+		// TODO compute all complete extensions		
 		return null;
 	}
 	
@@ -64,6 +64,16 @@ public class Framework {
 	
 	public Extension getGroundedExtension(){
 		// TODO compute grounded extension
+		return null;
+	}
+	
+	public ArrayList<Extension> getConflictFreeSets(){
+		// TODO compute all conflict-free sets
+		return null;
+	}
+	
+	public ArrayList<Extension> getAdmissibleSets(){
+		// TODO compute all admissible sets
 		return null;
 	}
 }
