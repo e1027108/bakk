@@ -25,7 +25,16 @@ public class Extension {
 	}
 	
 	public boolean isConflictFree(){
-		// TODO check if Extension is conflict-free
+		String attacks = getAttacks();
+		String names = getArgumentNames();
+		
+		for(int i = 0; i < names.length(); i++){
+			String tmp = "" + names.charAt(i);
+			if(attacks.contains(tmp)){
+				return false;
+			}
+		}
+		
 		return true;
 	}
 	
@@ -52,5 +61,25 @@ public class Extension {
 	public boolean isGrounded(){
 		// TODO check if extension is grounded
 		return true;
+	}
+	
+	public String getAttacks(){
+		String attacks = "";
+		
+		for(Argument a: arguments){
+			attacks += a.getAttacks();
+		}
+		
+		return attacks;
+	}
+	
+	public String getArgumentNames(){
+		String names = "";
+		
+		for(Argument a: arguments){
+			names += a.getName(); 
+		}
+		
+		return names;
 	}
 }
