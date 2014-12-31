@@ -41,15 +41,34 @@ public class DemonstrationWindowController {
         /* --------------------------- testing purposes ------------------------------- */
     	ArrayList<Argument> arguments = new ArrayList<Argument>();
     	
-    	arguments.add(new Argument('A',"A","ABG"));
-    	arguments.add(new Argument('B',"B","DI"));
-    	arguments.add(new Argument('C',"C",""));
-    	arguments.add(new Argument('D',"D","AE"));
-    	arguments.add(new Argument('E',"E","ADF"));
-    	arguments.add(new Argument('F',"F","DG"));
-    	arguments.add(new Argument('G',"G","E"));
-    	arguments.add(new Argument('H',"H","F"));
-    	arguments.add(new Argument('I',"I",""));
+    	// test one
+    	arguments.add(new Argument('A',"A","B"));
+    	arguments.add(new Argument('B',"B",""));
+    	arguments.add(new Argument('C',"C","BD"));
+    	arguments.add(new Argument('D',"D","CE"));
+    	arguments.add(new Argument('E',"E","E"));
+
+    	// test two
+    	/*
+    	arguments.add(new Argument('A',"A","B"));
+    	arguments.add(new Argument('B',"B","AC"));
+    	arguments.add(new Argument('C',"C","DE"));
+    	arguments.add(new Argument('D',"D","B"));
+    	arguments.add(new Argument('E',"E","AF"));
+    	arguments.add(new Argument('F',"F","G"));
+    	arguments.add(new Argument('G',"G",""));
+    	 */
+    	
+    	// test three
+    	/*
+    	arguments.add(new Argument('A',"A","B"));
+    	arguments.add(new Argument('B',"B","ACE"));
+    	arguments.add(new Argument('C',"C","D"));
+    	arguments.add(new Argument('D',"D","B"));
+    	arguments.add(new Argument('E',"E","BF"));
+    	arguments.add(new Argument('F',"F",""));
+    	arguments.add(new Argument('G',"G","FD"));
+    	 */
     	
     	argumentFramework = new Framework(arguments);
     	
@@ -102,5 +121,5 @@ public class DemonstrationWindowController {
     	// TODO compute all admissible sets
     	// TODO visualize for user (nodes and text)
     }
-
+    
 }
