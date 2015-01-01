@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import logic.Argument;
+import logic.Extension;
 import logic.Framework;
 
 
@@ -34,19 +35,22 @@ public class DemonstrationWindowController {
     private AnchorPane root;
     
     private Framework argumentFramework;
+    private ArrayList<Argument> arguments;
 
 
     @FXML
     void initialize() {
+    	arguments = new ArrayList<Argument>();
         /* --------------------------- testing purposes ------------------------------- */
-    	ArrayList<Argument> arguments = new ArrayList<Argument>();
     	
     	// test one
+    	/*
     	arguments.add(new Argument('A',"A","B"));
     	arguments.add(new Argument('B',"B",""));
     	arguments.add(new Argument('C',"C","BD"));
     	arguments.add(new Argument('D',"D","CE"));
     	arguments.add(new Argument('E',"E","E"));
+    	*/
 
     	// test two
     	/*
@@ -57,7 +61,7 @@ public class DemonstrationWindowController {
     	arguments.add(new Argument('E',"E","AF"));
     	arguments.add(new Argument('F',"F","G"));
     	arguments.add(new Argument('G',"G",""));
-    	 */
+    	*/
     	
     	// test three
     	/*
@@ -68,22 +72,18 @@ public class DemonstrationWindowController {
     	arguments.add(new Argument('E',"E","BF"));
     	arguments.add(new Argument('F',"F",""));
     	arguments.add(new Argument('G',"G","FD"));
-    	 */
+    	*/
     	
     	argumentFramework = new Framework(arguments);
-    	
-    	for(Argument a: arguments){
-    		String attackers = "";
-    		for(Argument a2: argumentFramework.getAttackers(a.getName())){
-    			attackers += a2.getName();
-    		}
-    		
-    		System.out.println("" + a.getName() + " gets attacked by: " + attackers);
-    	}
     	
     	/* --------------------------- /testing purposes ------------------------------ */
     	
     	// TODO implement extensions
+    }
+    
+    @FXML
+    public void onConflictFreeClick(){
+    	ArrayList<Extension> conflictFree = argumentFramework.getConflictFreeSets();
     }
     
     @FXML
@@ -111,15 +111,21 @@ public class DemonstrationWindowController {
     }
     
     @FXML
-    public void onConflictFreeClick(){
-    	// TODO compute all conflict-free sets
-    	// TODO visualize for user (nodes and text)
-    }
-    
-    @FXML
     public void onAdmissibleClick(){
     	// TODO compute all admissible sets
     	// TODO visualize for user (nodes and text)
+    }
+    
+    // for testing
+    private void printAttacks(){
+    	for(Argument a: arguments){
+    		String attackers = "";
+    		for(Argument a2: argumentFramework.getAttackers(a.getName())){
+    			attackers += a2.getName();
+    		}
+    		
+    		System.out.println("" + a.getName() + " gets attacked by: " + attackers);
+    	}
     }
     
 }

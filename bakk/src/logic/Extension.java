@@ -15,6 +15,10 @@ public class Extension {
 		this.arguments.add(a);
 	}
 	
+	public Extension (ArrayList<Argument> arguments){
+		this.arguments = arguments; //TODO watch out for problems regarding flat copy
+	}
+	
 	public void addArgument(Argument a){
 		// TODO change so it fits all extension types
 	}
