@@ -53,7 +53,6 @@ public class DemonstrationWindowController {
     	*/
 
     	// test two
-    	/*
     	arguments.add(new Argument('A',"A","B"));
     	arguments.add(new Argument('B',"B","AC"));
     	arguments.add(new Argument('C',"C","DE"));
@@ -61,7 +60,6 @@ public class DemonstrationWindowController {
     	arguments.add(new Argument('E',"E","AF"));
     	arguments.add(new Argument('F',"F","G"));
     	arguments.add(new Argument('G',"G",""));
-    	*/
     	
     	// test three
     	/*

@@ -49,36 +49,47 @@ public class Framework {
 
 	public ArrayList<Extension> getConflictFreeSets(){
 		ArrayList<Extension> conflictFreeSets = new ArrayList<Extension>();
-		
+
 		//the list, but not the elements will be changed, so no deep copy needed
-		ArrayList<Argument> workingSet = arguments;
-		
+		ArrayList<Argument> workingSet = new ArrayList<Argument>();
+		workingSet.addAll(arguments);
+
 		if(arguments == null){
 			return null;
 		}
-
+		
 		for(Argument a: arguments){
 			workingSet.remove(a); //doesn't need to contain the argument, because it is provided seperately
 			ArrayList<Argument> nonConflictingSet = getNonConflicting(workingSet, a); //gets every argument a doesn't conflict with
 			ArrayList<Extension> tmpConflictFreeSubSets = getConflictFreeSubSets(nonConflictingSet, a); //gets all conflict-free sets of the provided subsets containing a
-			conflictFreeSets.addAll(tmpConflictFreeSubSets); //adds the conflict-free sets for an argument to the overall list
+			if(tmpConflictFreeSubSets != null && !tmpConflictFreeSubSets.isEmpty()){
+				conflictFreeSets.addAll(tmpConflictFreeSubSets); //adds the conflict-free sets for an argument to the overall list
+			}
 		}
-		
+
 		conflictFreeSets.add(new Extension(new ArrayList<Argument>()));
 
 		return conflictFreeSets;
 	}
 
 	private ArrayList<Argument> getNonConflicting(ArrayList<Argument> workingSet, Argument arg) {
-		// TODO extract from workingSet all Arguments that don't conflict with arg (can conflict with each other)
-		return null;
+		ArrayList<Argument> nonConflicting = new ArrayList<Argument>(); //TODO find out if needed, manipulation of workingSet sufficient?
+		String attacks = arg.getAttacks();
+
+		for(Argument a: workingSet){
+			if(!a.getAttacks().contains(String.valueOf(arg.getName())) && !attacks.contains(String.valueOf(a.getName()))){
+				nonConflicting.add(a);
+			}
+		}
+
+		return nonConflicting;
 	}
-	
+
 	private ArrayList<Extension> getConflictFreeSubSets(ArrayList<Argument> nonConflictingSet, Argument arg) {
 		// TODO create all subsets of nonConflictingSet, add a to those, check if conflict-free and return those as extensions
 		return null;
 	}
-	
+
 	private ArrayList<Argument> getAllSubsets(ArrayList<Argument> set){
 		// TODO return all subSets of the given set (including the empty set)
 		return null;
