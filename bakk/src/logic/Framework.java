@@ -86,11 +86,12 @@ public class Framework {
 	}
 
 	private ArrayList<Extension> getConflictFreeSubSets(ArrayList<Argument> nonConflictingSet, Argument arg) {
-		ArrayList<Extension> subSets = getAllSubsets(nonConflictingSet);
+		ArrayList<ArrayList<Argument>> subSets = getAllSubsets(nonConflictingSet);
 		ArrayList<Extension> conflictFree = new ArrayList<Extension>();
 		
-		for(Extension e: subSets){
-			e.addArgument(arg);
+		for(ArrayList<Argument> s: subSets){
+			s.add(arg);
+			Extension e = new Extension(s);
 			if(e.isConflictFree()){
 				conflictFree.add(e);
 			}
@@ -99,8 +100,9 @@ public class Framework {
 		return conflictFree;
 	}
 
-	private ArrayList<Extension> getAllSubsets(ArrayList<Argument> set){
+	private ArrayList<ArrayList<Argument>> getAllSubsets(ArrayList<Argument> set){
 		// TODO return all subSets of the given set (including the empty set)
+		
 		return null;
 	}
 
