@@ -73,7 +73,7 @@ public class Framework {
 	}
 
 	private ArrayList<Argument> getNonConflicting(ArrayList<Argument> workingSet, Argument arg) {
-		ArrayList<Argument> nonConflicting = new ArrayList<Argument>(); //TODO find out if needed, manipulation of workingSet sufficient?
+		ArrayList<Argument> nonConflicting = new ArrayList<Argument>();
 		String attacks = arg.getAttacks();
 
 		for(Argument a: workingSet){
@@ -86,11 +86,20 @@ public class Framework {
 	}
 
 	private ArrayList<Extension> getConflictFreeSubSets(ArrayList<Argument> nonConflictingSet, Argument arg) {
-		// TODO create all subsets of nonConflictingSet, add a to those, check if conflict-free and return those as extensions
-		return null;
+		ArrayList<Extension> subSets = getAllSubsets(nonConflictingSet);
+		ArrayList<Extension> conflictFree = new ArrayList<Extension>();
+		
+		for(Extension e: subSets){
+			e.addArgument(arg);
+			if(e.isConflictFree()){
+				conflictFree.add(e);
+			}
+		}
+		
+		return conflictFree;
 	}
 
-	private ArrayList<Argument> getAllSubsets(ArrayList<Argument> set){
+	private ArrayList<Extension> getAllSubsets(ArrayList<Argument> set){
 		// TODO return all subSets of the given set (including the empty set)
 		return null;
 	}
