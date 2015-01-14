@@ -43,16 +43,15 @@ public class DemonstrationWindowController {
     	arguments = new ArrayList<Argument>();
         /* --------------------------- testing purposes ------------------------------- */
     	
-    	// test one
-    	/*
+    	/* test one
     	arguments.add(new Argument('A',"A","B"));
     	arguments.add(new Argument('B',"B",""));
     	arguments.add(new Argument('C',"C","BD"));
     	arguments.add(new Argument('D',"D","CE"));
     	arguments.add(new Argument('E',"E","E"));
-    	*/
-
-    	// test two
+		*/
+    	
+    	//test two
     	arguments.add(new Argument('A',"A","B"));
     	arguments.add(new Argument('B',"B","AC"));
     	arguments.add(new Argument('C',"C","DE"));

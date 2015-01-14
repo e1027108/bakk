@@ -101,9 +101,20 @@ public class Framework {
 	}
 
 	private ArrayList<ArrayList<Argument>> getAllSubsets(ArrayList<Argument> set){
-		// TODO return all subSets of the given set (including the empty set)
+		ArrayList<ArrayList<Argument>> powerSet = new ArrayList<ArrayList<Argument>>();
+		int elements = set.size();
 		
-		return null;
+		for(int i = 0; i < Math.pow(2, elements); i++){ //there are 2^n subsets
+			ArrayList<Argument> subset = new ArrayList<Argument>();
+			for(int j = 0; j < elements; j++){
+				if(((i>>j) & 1) == 1){ //checking every bit (at point of checking least significant bit of shifting result)
+					subset.add(set.get(j));
+				}
+			}
+			powerSet.add(subset);
+		}
+		
+		return powerSet;
 	}
 
 	public ArrayList<Extension> getCompleteExtensions(){
