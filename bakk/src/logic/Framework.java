@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Framework {
 	private ArrayList<Argument> arguments;
+	private ArrayList<Extension> previousConflictFreeSets; //TODO check for null everytime it's used
 
 	public Framework(ArrayList<Argument> arguments){
 		this.arguments = arguments;
@@ -68,7 +69,10 @@ public class Framework {
 		}
 
 		conflictFreeSets.add(new Extension(new ArrayList<Argument>()));
-
+		
+		previousConflictFreeSets = new ArrayList<Extension>();
+		previousConflictFreeSets.addAll(conflictFreeSets);
+		
 		return conflictFreeSets;
 	}
 
@@ -117,27 +121,27 @@ public class Framework {
 		return powerSet;
 	}
 
-	public ArrayList<Extension> getCompleteExtensions(){
+	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious){
 		// TODO compute all complete extensions		
 		return null;
 	}
 
-	public ArrayList<Extension> getPreferredExtensions(){
+	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious){
 		// TODO compute all preferred extensions
 		return null;
 	}
 
-	public ArrayList<Extension> getStableExtensions(){
+	public ArrayList<Extension> getStableExtensions(boolean usePrevious){
 		// TODO compute all stable extensions
 		return null;
 	}
 
-	public Extension getGroundedExtension(){
+	public Extension getGroundedExtension(boolean usePrevious){
 		// TODO compute grounded extension
 		return null;
 	}
 
-	public ArrayList<Extension> getAdmissibleSets(){
+	public ArrayList<Extension> getAdmissibleSets(boolean usePrevious){
 		// TODO compute all admissible sets
 		return null;
 	}

@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import logic.Argument;
@@ -24,6 +25,9 @@ public class DemonstrationWindowController {
     @FXML
     private Button backButton, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn;
     // TODO implement back button
+    
+    @FXML
+    private CheckBox previousCheckBox;
 
     @FXML
     private TextArea explanationArea;
@@ -80,6 +84,7 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onConflictFreeClick(){
+    	//TODO in logic, implement user-friendly output in textarea
     	ArrayList<Extension> conflictFree = argumentFramework.getConflictFreeSets();
     }
     

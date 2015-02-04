@@ -17,5 +17,8 @@
     <Button fx:id="stableBtn" mnemonicParsing="false" onAction="#onStableClick" prefWidth="160.0" text="stable extensions" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="565.0" />
     <Button fx:id="groundedBtn" mnemonicParsing="false" onAction="#onGroundedClick" prefWidth="160.0" text="grounded extension" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="55.0" />
     <Button fx:id="completeBtn" mnemonicParsing="false" onAction="#onCompleteClick" prefWidth="160.0" text="complete extensions" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="225.0" />
+    <Separator layoutX="393.0" layoutY="512.0" orientation="VERTICAL" prefHeight="38.0" />
+    <Separator layoutX="395.0" layoutY="510.0" prefWidth="405.0" />
+    <CheckBox fx:id="previousCheckBox" layoutX="400.0" layoutY="515.0" mnemonicParsing="false" text="use previously computed sets for further computations" />
   </children>
 </AnchorPane>
