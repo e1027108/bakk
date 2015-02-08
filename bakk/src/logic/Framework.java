@@ -132,8 +132,28 @@ public class Framework {
 	}
 
 	public ArrayList<Extension> getStableExtensions(boolean usePrevious){
-		// TODO compute all stable extensions
-		return null;
+		ArrayList<Extension> cf;
+		ArrayList<Extension> stable = new ArrayList<Extension>();
+		
+		// TODO conflict-free sets that attack every argument outside of it
+		if(!usePrevious || (previousConflictFreeSets == null)){
+			cf = getConflictFreeSets();
+		}
+		else{
+			cf = previousConflictFreeSets;
+		}
+		
+		if(cf.isEmpty()){
+			return null;
+		}
+
+		for(Extension e: cf){
+			if(e.getAttacks().length() == (arguments.size()-e.getArgumentNames().length())){
+				stable.add(e);
+			}
+		}
+		
+		return stable;
 	}
 
 	public Extension getGroundedExtension(boolean usePrevious){

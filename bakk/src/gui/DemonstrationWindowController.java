@@ -47,15 +47,14 @@ public class DemonstrationWindowController {
     	arguments = new ArrayList<Argument>();
         /* --------------------------- testing purposes ------------------------------- */
     	
-    	/* test one
+    	// test one
     	arguments.add(new Argument('A',"A","B"));
     	arguments.add(new Argument('B',"B",""));
     	arguments.add(new Argument('C',"C","BD"));
     	arguments.add(new Argument('D',"D","CE"));
     	arguments.add(new Argument('E',"E","E"));
-		*/
     	
-    	//test two
+    	/* test two
     	arguments.add(new Argument('A',"A","B"));
     	arguments.add(new Argument('B',"B","AC"));
     	arguments.add(new Argument('C',"C","DE"));
@@ -63,6 +62,7 @@ public class DemonstrationWindowController {
     	arguments.add(new Argument('E',"E","AF"));
     	arguments.add(new Argument('F',"F","G"));
     	arguments.add(new Argument('G',"G",""));
+    	*/
     	
     	// test three
     	/*
@@ -84,8 +84,12 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onConflictFreeClick(){
-    	//TODO in logic, implement user-friendly output in textarea
+    	//TODO implement user-friendly output in textarea
     	ArrayList<Extension> conflictFree = argumentFramework.getConflictFreeSets();
+    	
+    	for(Extension e: conflictFree){
+    		System.out.println("{" + e.getArgumentNames() + "}");
+    	}
     }
     
     @FXML
@@ -102,8 +106,12 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onStableClick(){
-    	// TODO compute all stable extensions
-    	// TODO visualize for user (nodes and text)
+    	//TODO implement user-friendly output in textarea
+    	ArrayList<Extension> stable = argumentFramework.getStableExtensions(previousCheckBox.isSelected());
+    	
+    	for(Extension e: stable){
+    		System.out.println("{" + e.getArgumentNames() + "}");
+    	}
     }
     
     @FXML

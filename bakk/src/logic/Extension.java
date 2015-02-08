@@ -68,10 +68,17 @@ public class Extension {
 	}
 	
 	public String getAttacks(){
+		String tmp = "";
 		String attacks = "";
 		
 		for(Argument a: arguments){
-			attacks += a.getAttacks();
+			tmp += a.getAttacks();
+		}
+		
+		for(int i = 0; i<tmp.length(); i++){
+			if(!attacks.contains(String.valueOf(tmp.charAt(i)))){
+				attacks += tmp.charAt(i);
+			}
 		}
 		
 		return attacks;
