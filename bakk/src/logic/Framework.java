@@ -135,7 +135,7 @@ public class Framework {
 		ArrayList<Extension> cf;
 		ArrayList<Extension> stable = new ArrayList<Extension>();
 		
-		// TODO conflict-free sets that attack every argument outside of it
+		//TODO outsource null/empty check
 		if(!usePrevious || (previousConflictFreeSets == null)){
 			cf = getConflictFreeSets();
 		}
@@ -148,7 +148,7 @@ public class Framework {
 		}
 
 		for(Extension e: cf){
-			if(e.getAttacks().length() == (arguments.size()-e.getArgumentNames().length())){
+			if(e.isStable(this)){
 				stable.add(e);
 			}
 		}
@@ -161,8 +161,33 @@ public class Framework {
 		return null;
 	}
 
+	//aka admissible extensions
 	public ArrayList<Extension> getAdmissibleSets(boolean usePrevious){
-		// TODO compute all admissible sets
-		return null;
+		ArrayList<Extension> cf;
+		ArrayList<Extension> admissible = new ArrayList<Extension>();
+		
+		//TODO outsource null/empty check
+		if(!usePrevious || (previousConflictFreeSets == null)){
+			cf = getConflictFreeSets();
+		}
+		else{
+			cf = previousConflictFreeSets;
+		}
+		
+		if(cf.isEmpty()){
+			return null;
+		}
+		
+		for(Extension e: cf){
+			if(e.isAdmissible(this)){
+				admissible.add(e);
+			}
+		}
+		
+		return admissible;
+	}
+
+	public ArrayList<Argument> getArguments() {
+		return arguments;
 	}
 }

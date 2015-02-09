@@ -84,7 +84,7 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onConflictFreeClick(){
-    	//TODO implement user-friendly output in textarea
+    	//TODO implement user-friendly output in TextArea
     	ArrayList<Extension> conflictFree = argumentFramework.getConflictFreeSets();
     	
     	for(Extension e: conflictFree){
@@ -106,7 +106,7 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onStableClick(){
-    	//TODO implement user-friendly output in textarea
+    	//TODO implement user-friendly output in TextArea
     	ArrayList<Extension> stable = argumentFramework.getStableExtensions(previousCheckBox.isSelected());
     	
     	for(Extension e: stable){
@@ -122,8 +122,12 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onAdmissibleClick(){
-    	// TODO compute all admissible sets
-    	// TODO visualize for user (nodes and text)
+    	//TODO implement user-friendly output in TextArea
+    	ArrayList<Extension> admissible = argumentFramework.getAdmissibleSets(previousCheckBox.isSelected());
+    	
+    	for(Extension e: admissible){
+    		System.out.println("{" + e.getArgumentNames() + "}");
+    	}
     }
     
     // for testing
