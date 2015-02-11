@@ -137,24 +137,24 @@ public class Framework {
 			return null;
 		}
 		
-		for(Argument a: arguments){
-			ArrayList<Extension> tmp = new ArrayList<Extension>();
-			String argumentName = String.valueOf(a.getName());
-			for(Extension e: admissible){
-				if(e.getArgumentNames().contains(argumentName)){
-					if(tmp.isEmpty() || (tmp.get(0).getArgumentNames().length() == e.getArgumentNames().length())){
-						tmp.add(e);
-					}
-					else if(tmp.get(0).getArgumentNames().length() < e.getArgumentNames().length()){
-						tmp = new ArrayList<Extension>();
-						tmp.add(e);
+		boolean add;
+		for(Extension e: admissible){
+			add = true;
+			for(Argument a: arguments){
+				if(!e.getArguments().contains(a)){
+					ArrayList<Argument> tmparg = new ArrayList<Argument>();
+					tmparg.addAll(e.getArguments());
+					Extension tmp = new Extension(tmparg);
+					tmp.addArgument(a);
+					if(tmp.isConflictFree() && tmp.isCFAdmissible(this)){
+						System.out.println("{" + tmp.getArgumentNames() + "} is admissible, so {" + e.getArgumentNames() + "} is not complete");
+						add = false;
+						break;
 					}
 				}
 			}
-			for(Extension e: tmp){
-				if(!complete.contains(e)){
-					complete.add(e);
-				}
+			if(add){
+				complete.add(e);
 			}
 		}
 		
@@ -218,7 +218,7 @@ public class Framework {
 		}
 		
 		for(Extension e: cf){
-			if(e.isAdmissible(this)){
+			if(e.isCFAdmissible(this)){
 				admissible.add(e);
 			}
 		}

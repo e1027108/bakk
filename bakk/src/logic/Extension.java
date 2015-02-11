@@ -20,14 +20,14 @@ public class Extension {
 	}
 
 	public void addArgument(Argument a){
-		// TODO change so it fits all extension types
+		if(!arguments.contains(a)){
+			arguments.add(a);
+		}
+		else{
+			System.out.println("Already in there!"); //TODO maybe replace
+		}
 	}
-
-	public boolean isAcceptable(Argument a){
-		// TODO check argument acceptability in regards to framework and arguments already in extension
-		return true;
-	}
-
+	
 	public boolean isConflictFree(){
 		String attacks = getAttacks();
 		String names = getArgumentNames();
@@ -42,11 +42,12 @@ public class Extension {
 		return true;
 	}
 
-	public boolean isAdmissible(Framework framework){
+	//checks if this extension is admissible if it is conflictfree
+	//TODO seperate acceptability?
+	public boolean isCFAdmissible(Framework framework){
 		String attacks = getAttacks();
 		String attackers = "";
-		//TODO for each argument, check if all the attackers are in getAttacks
-
+		
 		for(Argument a: arguments){
 			String tmp = "";
 			for(Argument a2: framework.getAttackers(a.getName())){
@@ -112,6 +113,10 @@ public class Extension {
 		}
 
 		return names;
+	}
+	
+	public ArrayList<Argument> getArguments(){
+		return arguments;
 	}
 
 	/*
