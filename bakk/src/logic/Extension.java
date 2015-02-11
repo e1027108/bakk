@@ -10,12 +10,12 @@ public class Extension {
 	 * new Extension with a starting node
 	 * @param a
 	 */
-	public Extension (Argument a){
+	public Extension(Argument a){
 		this.arguments = new ArrayList<Argument>();
 		this.arguments.add(a);
 	}
 
-	public Extension (ArrayList<Argument> arguments){
+	public Extension(ArrayList<Argument> arguments){
 		this.arguments = arguments; //TODO watch out for problems regarding flat copy
 	}
 
@@ -46,19 +46,19 @@ public class Extension {
 		String attacks = getAttacks();
 		String attackers = "";
 		//TODO for each argument, check if all the attackers are in getAttacks
-		
-    	for(Argument a: arguments){
-    		String tmp = "";
-    		for(Argument a2: framework.getAttackers(a.getName())){
-    			tmp += a2.getName();
-    		}
-    		
-    		attackers += tmp;
-    	}
-		
+
+		for(Argument a: arguments){
+			String tmp = "";
+			for(Argument a2: framework.getAttackers(a.getName())){
+				tmp += a2.getName();
+			}
+
+			attackers += tmp;
+		}
+
 		while(attackers.length() > 0){
 			String attacker = String.valueOf(attackers.charAt(attackers.length()-1));
-			
+
 			if(attacks.contains(attacker)){
 				attackers = attackers.replaceAll(attacker, "");
 			}
@@ -66,12 +66,12 @@ public class Extension {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
 
 	public boolean isComplete(){
-		// TODO check if extension is complete
+		// TODO needed?
 		return true;
 	}
 
@@ -85,11 +85,6 @@ public class Extension {
 			return true;
 		}
 		return false;
-	}
-
-	public boolean isGrounded(){
-		// TODO check if extension is grounded
-		return true;
 	}
 
 	public String getAttacks(){
@@ -117,5 +112,16 @@ public class Extension {
 		}
 
 		return names;
+	}
+
+	/*
+	 * The characteristic function, denoted by F_AF, of an argumentation framework 
+	 * AF = <AR,attacks> is defined as follows:
+	 * F_AF: 2^AR -> 2^AR
+	 * F_AF(S) = { A | A is acceptable wrt S }
+	 */
+	public int getFixedPoint(Framework framework){ //TODO int?
+		//TODO compute fixed point F_AF
+		return 0;
 	}
 }

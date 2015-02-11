@@ -94,8 +94,12 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onCompleteClick(){
-    	// TODO compute all complete extensions
-    	// TODO visualize for user (nodes and text)
+    	//TODO implement user-friendly output in TextArea
+    	ArrayList<Extension> complete = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
+    	
+    	for(Extension e: complete){
+    		System.out.println("{" + e.getArgumentNames() + "}");
+    	}
     }
     
     @FXML

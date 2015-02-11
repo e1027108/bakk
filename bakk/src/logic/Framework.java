@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Framework {
 	private ArrayList<Argument> arguments;
 	private ArrayList<Extension> previousConflictFreeSets; //TODO check for null everytime it's used
+	private ArrayList<Extension> previousAdmissibleSets;
 
 	public Framework(ArrayList<Argument> arguments){
 		this.arguments = arguments;
@@ -122,8 +123,42 @@ public class Framework {
 	}
 
 	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious){
-		// TODO compute all complete extensions		
-		return null;
+		ArrayList<Extension> admissible;
+		ArrayList<Extension> complete = new ArrayList<Extension>();
+		
+		if(!usePrevious || (previousConflictFreeSets == null)){
+			admissible = getAdmissibleSets(usePrevious);
+		}
+		else{
+			admissible = previousAdmissibleSets;
+		}
+		
+		if(admissible.isEmpty()){
+			return null;
+		}
+		
+		for(Argument a: arguments){
+			ArrayList<Extension> tmp = new ArrayList<Extension>();
+			String argumentName = String.valueOf(a.getName());
+			for(Extension e: admissible){
+				if(e.getArgumentNames().contains(argumentName)){
+					if(tmp.isEmpty() || (tmp.get(0).getArgumentNames().length() == e.getArgumentNames().length())){
+						tmp.add(e);
+					}
+					else if(tmp.get(0).getArgumentNames().length() < e.getArgumentNames().length()){
+						tmp = new ArrayList<Extension>();
+						tmp.add(e);
+					}
+				}
+			}
+			for(Extension e: tmp){
+				if(!complete.contains(e)){
+					complete.add(e);
+				}
+			}
+		}
+		
+		return complete;
 	}
 
 	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious){
@@ -156,6 +191,10 @@ public class Framework {
 		return stable;
 	}
 
+	/*
+	 * The grounded extension of an argumentation framework AF, denoted by GE_AF, is
+	 * the least fixed point of F_AF
+	 */
 	public Extension getGroundedExtension(boolean usePrevious){
 		// TODO compute grounded extension
 		return null;
@@ -183,6 +222,9 @@ public class Framework {
 				admissible.add(e);
 			}
 		}
+		
+		previousAdmissibleSets = new ArrayList<Extension>();
+		previousAdmissibleSets.addAll(admissible);
 		
 		return admissible;
 	}
