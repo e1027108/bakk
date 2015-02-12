@@ -5,21 +5,41 @@ import java.util.ArrayList;
 public class Extension {
 
 	private ArrayList<Argument> arguments; //arguments of extension
+	private Framework framework; //framework from which the extension is derived
 
 	/**
-	 * new Extension with a starting node
-	 * @param a
+	 * creates a new Extension with a starting node
+	 * @param framework is the framework from which the extension is derived
+	 * @param a is the starting argument
 	 */
-	public Extension(Argument a){
+	public Extension(Argument a, Framework framework){
 		this.arguments = new ArrayList<Argument>();
-		this.arguments.add(a);
+		this.framework = framework;
+		addArgument(a);
 	}
 
-	public Extension(ArrayList<Argument> arguments){
-		this.arguments = arguments; //TODO watch out for problems regarding flat copy
+	/**
+	 * creates a complete Extension
+	 * @param framework is the framework from which the extension is derived
+	 * @param arguments is a set of Arguments
+	 */
+	public Extension(ArrayList<Argument> arguments, Framework framework){
+		this.arguments = new ArrayList<Argument>();
+		this.framework = framework;
+		for(Argument a: arguments){
+			addArgument(a); //TODO handle Exception
+		}
 	}
 
+	/**
+	 * adds an argument to the Extension
+	 * @param a is the argument to be added
+	 */
 	public void addArgument(Argument a){
+		if(!framework.getArguments().contains(a)){
+			throw new IllegalArgumentException("Argument is not in framework!"); //TODO handle
+		}
+		
 		if(!arguments.contains(a)){
 			arguments.add(a);
 		}
@@ -28,6 +48,11 @@ public class Extension {
 		}
 	}
 	
+	/**
+	 * checks if an extension is conflict-free
+	 * @details checks if no argument in the extension attacks another
+	 * @return if the extension is conflict-free
+	 */
 	public boolean isConflictFree(){
 		String attacks = getAttacks();
 		String names = getArgumentNames();
@@ -42,9 +67,13 @@ public class Extension {
 		return true;
 	}
 
-	//checks if this extension is admissible if it is conflictfree
-	//TODO seperate acceptability?
-	public boolean isCFAdmissible(Framework framework){
+	/**
+	 * checks if a conflict-free set is admissible
+	 * @details checks if all attackers are included in the attacks
+	 * @param framework is the framework from which the extension is derived
+	 * @return if all the arguments are defended
+	 */
+	public boolean isCFAdmissible(){
 		String attacks = getAttacks();
 		String attackers = "";
 		
@@ -81,13 +110,21 @@ public class Extension {
 		return true;
 	}
 
-	public boolean isStable(Framework framework){
+	/**
+	 * checks if the extension in stable
+	 * @return if every argument outside the extension is attacked
+	 */
+	public boolean isStable(){
 		if(getAttacks().length() == (framework.getArguments().size()-getArgumentNames().length())){
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * computes all attacks of the extension
+	 * @return a String list of arguments that the extension attacks
+	 */
 	public String getAttacks(){
 		String tmp = "";
 		String attacks = "";
@@ -105,6 +142,10 @@ public class Extension {
 		return attacks;
 	}
 
+	/**
+	 * computes a list of all arguments
+	 * @return a String list of arguments in the extension
+	 */
 	public String getArgumentNames(){
 		String names = "";
 
@@ -125,7 +166,7 @@ public class Extension {
 	 * F_AF: 2^AR -> 2^AR
 	 * F_AF(S) = { A | A is acceptable wrt S }
 	 */
-	public int getFixedPoint(Framework framework){ //TODO int?
+	public int getFixedPoint(){ //TODO int?
 		//TODO compute fixed point F_AF
 		return 0;
 	}
