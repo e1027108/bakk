@@ -40,10 +40,12 @@ public class DemonstrationWindowController {
     
     private Framework argumentFramework;
     private ArrayList<Argument> arguments;
-
+    private Interactor interactor;
 
     @FXML
     void initialize() {
+      	interactor = new Interactor(explanationArea); //TODO add parameters later
+    	
     	arguments = new ArrayList<Argument>();
         /* --------------------------- testing purposes ------------------------------- */
     	
@@ -75,11 +77,9 @@ public class DemonstrationWindowController {
     	arguments.add(new Argument('G',"G","FD"));
     	*/
     	
-    	argumentFramework = new Framework(arguments);
+    	argumentFramework = new Framework(arguments, interactor);
     	
     	/* --------------------------- /testing purposes ------------------------------ */
-    	
-    	// TODO implement extensions
     }
     
     @FXML

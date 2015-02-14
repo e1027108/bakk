@@ -1,18 +1,23 @@
 package logic;
 
+import gui.Interactor;
+
 import java.util.ArrayList;
 
 public class Framework {
 	private ArrayList<Argument> arguments; //the set of arguments within the framework
 	private ArrayList<Extension> previousConflictFreeSets; //a stored previously computed set of conflict-free sets
 	private ArrayList<Extension> previousAdmissibleSets; //a stored previously computed set of admissible extensions
-
+	private Interactor interactor; //interacts with the gui
+	//TODO write user-friendly messages to gui using the interactor
+	
 	/**
 	 * creates an abstract argument framework
 	 * @param arguments the set of arguments that comprise the framework
 	 */
-	public Framework(ArrayList<Argument> arguments){
+	public Framework(ArrayList<Argument> arguments, Interactor interactor){
 		this.arguments = arguments;
+		this.interactor = interactor;
 	}
 
 	/**
