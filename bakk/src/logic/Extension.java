@@ -159,15 +159,4 @@ public class Extension {
 	public ArrayList<Argument> getArguments(){
 		return arguments;
 	}
-
-	/*
-	 * The characteristic function, denoted by F_AF, of an argumentation framework 
-	 * AF = <AR,attacks> is defined as follows:
-	 * F_AF: 2^AR -> 2^AR
-	 * F_AF(S) = { A | A is acceptable wrt S }
-	 */
-	public int getFixedPoint(){ //TODO int?
-		//TODO compute fixed point F_AF
-		return 0;
-	}
 }

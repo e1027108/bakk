@@ -39,45 +39,57 @@ public class DemonstrationWindowController {
     private AnchorPane root;
     
     private Framework argumentFramework;
-    private ArrayList<Argument> arguments;
+    private ArrayList<Argument> arguments; //TODO read stuff from input into here later
     private Interactor interactor;
 
     @FXML
     void initialize() {
       	interactor = new Interactor(explanationArea); //TODO add parameters later
     	
-    	arguments = new ArrayList<Argument>();
         /* --------------------------- testing purposes ------------------------------- */
-    	
+      	
+      	ArrayList<Argument> arguments1 = new ArrayList<Argument>();
+      	ArrayList<Argument> arguments2 = new ArrayList<Argument>();
+      	ArrayList<Argument> arguments3 = new ArrayList<Argument>();
+      	ArrayList<Argument> arguments4 = new ArrayList<Argument>();
+      	ArrayList<Argument> arguments5 = new ArrayList<Argument>();
+
     	// test one
-    	arguments.add(new Argument('A',"A","B"));
-    	arguments.add(new Argument('B',"B",""));
-    	arguments.add(new Argument('C',"C","BD"));
-    	arguments.add(new Argument('D',"D","CE"));
-    	arguments.add(new Argument('E',"E","E"));
+    	arguments1.add(new Argument('A',"A","B"));
+    	arguments1.add(new Argument('B',"B",""));
+    	arguments1.add(new Argument('C',"C","BD"));
+    	arguments1.add(new Argument('D',"D","CE"));
+    	arguments1.add(new Argument('E',"E","E"));
     	
-    	/* test two
-    	arguments.add(new Argument('A',"A","B"));
-    	arguments.add(new Argument('B',"B","AC"));
-    	arguments.add(new Argument('C',"C","DE"));
-    	arguments.add(new Argument('D',"D","B"));
-    	arguments.add(new Argument('E',"E","AF"));
-    	arguments.add(new Argument('F',"F","G"));
-    	arguments.add(new Argument('G',"G",""));
-    	*/
+    	// test two
+    	arguments2.add(new Argument('A',"A","B"));
+    	arguments2.add(new Argument('B',"B","AC"));
+    	arguments2.add(new Argument('C',"C","DE"));
+    	arguments2.add(new Argument('D',"D","B"));
+    	arguments2.add(new Argument('E',"E","AF"));
+    	arguments2.add(new Argument('F',"F","G"));
+    	arguments2.add(new Argument('G',"G",""));
     	
     	// test three
-    	/*
-    	arguments.add(new Argument('A',"A","B"));
-    	arguments.add(new Argument('B',"B","ACE"));
-    	arguments.add(new Argument('C',"C","D"));
-    	arguments.add(new Argument('D',"D","B"));
-    	arguments.add(new Argument('E',"E","BF"));
-    	arguments.add(new Argument('F',"F",""));
-    	arguments.add(new Argument('G',"G","FD"));
-    	*/
+    	arguments3.add(new Argument('A',"A","B"));
+    	arguments3.add(new Argument('B',"B","ACE"));
+    	arguments3.add(new Argument('C',"C","D"));
+    	arguments3.add(new Argument('D',"D","B"));
+    	arguments3.add(new Argument('E',"E","BF"));
+    	arguments3.add(new Argument('F',"F",""));
+    	arguments3.add(new Argument('G',"G","FD"));
     	
-    	argumentFramework = new Framework(arguments, interactor);
+    	// test four
+    	arguments4.add(new Argument('A',"A","B"));
+    	arguments4.add(new Argument('B',"B","A"));
+    	arguments4.add(new Argument('C',"C","B"));
+    	
+    	// test five
+    	arguments5.add(new Argument('A',"A","B"));
+    	arguments5.add(new Argument('B',"B","AC"));
+    	arguments5.add(new Argument('C',"C","B"));
+    	
+    	argumentFramework = new Framework(arguments4, interactor);
     	
     	/* --------------------------- /testing purposes ------------------------------ */
     }
@@ -104,8 +116,12 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onPreferredClick(){
-    	// TODO compute all preferred extensions
-    	// TODO visualize for user (nodes and text)
+    	//TODO implement user-friendly output in TextArea
+    	ArrayList<Extension> preferred = argumentFramework.getPreferredExtensions(previousCheckBox.isSelected());
+    	
+    	for(Extension e: preferred){
+    		System.out.println("{" + e.getArgumentNames() + "}");
+    	}
     }
     
     @FXML
@@ -120,8 +136,10 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onGroundedClick(){
-    	// TODO compute the grounded extension
-    	// TODO visualize for user (nodes and text)
+    	//TODO implement user-friendly output in TextArea
+    	Extension grounded = argumentFramework.getGroundedExtension(previousCheckBox.isSelected());
+    	
+    	System.out.println("{" + grounded.getArgumentNames() + "}");
     }
     
     @FXML

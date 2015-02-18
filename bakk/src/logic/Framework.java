@@ -6,8 +6,9 @@ import java.util.ArrayList;
 
 public class Framework {
 	private ArrayList<Argument> arguments; //the set of arguments within the framework
-	private ArrayList<Extension> previousConflictFreeSets; //a stored previously computed set of conflict-free sets
-	private ArrayList<Extension> previousAdmissibleSets; //a stored previously computed set of admissible extensions
+	private ArrayList<Extension> previousConflictFreeSets; //a stored, previously computed set of conflict-free sets
+	private ArrayList<Extension> previousAdmissibleSets; //a stored, previously computed set of admissible extensions
+	private ArrayList<Extension> previousCompleteExtensions; //a stored, previously computed set of complete extensions
 	private Interactor interactor; //interacts with the gui
 	//TODO write user-friendly messages to gui using the interactor
 	
@@ -205,7 +206,7 @@ public class Framework {
 					Extension tmp = new Extension(tmparg, this);
 					tmp.addArgument(a);
 					if(tmp.isConflictFree() && tmp.isCFAdmissible()){
-						System.out.println("{" + tmp.getArgumentNames() + "} is admissible, so {" + e.getArgumentNames() + "} is not complete");
+						//System.out.println("{" + tmp.getArgumentNames() + "} is admissible, so {" + e.getArgumentNames() + "} is not complete");
 						add = false;
 						break;
 					}
@@ -215,6 +216,9 @@ public class Framework {
 				complete.add(e);
 			}
 		}
+		
+		previousCompleteExtensions = new ArrayList<Extension>();
+		previousCompleteExtensions.addAll(complete);
 		
 		return complete;
 	}
@@ -258,10 +262,43 @@ public class Framework {
 	/*
 	 * The grounded extension of an argumentation framework AF, denoted by GE_AF, is
 	 * the least fixed point of F_AF
+	 *
+	 * The characteristic function, denoted by F_AF, of an argumentation framework 
+	 * AF = <AR,attacks> is defined as follows:
+	 * F_AF: 2^AR -> 2^AR
+	 * F_AF(S) = { A | A is acceptable (=defended) wrt S }
 	 */
 	public Extension getGroundedExtension(boolean usePrevious){
-		// TODO compute grounded extension
-		return null;
+		ArrayList<Extension> complete;
+		ArrayList<Argument> grounded = new ArrayList<Argument>();
+		
+		//TODO outsource null/empty check
+		if(!usePrevious || (previousConflictFreeSets == null)){
+			complete = getCompleteExtensions(usePrevious);
+		}
+		else{
+			complete = previousCompleteExtensions;
+		}
+		
+		if(complete.isEmpty()){
+			return null;
+		}
+
+		for(Extension e: complete){
+			//TODO find smallest common element in complete extensions
+			if(grounded.isEmpty()){
+				grounded.addAll(e.getArguments());
+			}
+			else{
+				for(int i = grounded.size()-1;i>=0;i--){
+					if(!e.getArguments().contains(grounded.get(i))){
+						grounded.remove(grounded.get(i));
+					}
+				}
+			}
+		}
+		
+		return new Extension(grounded, this);
 	}
 
 	/**
