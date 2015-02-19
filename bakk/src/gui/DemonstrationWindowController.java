@@ -53,6 +53,7 @@ public class DemonstrationWindowController {
       	ArrayList<Argument> arguments3 = new ArrayList<Argument>();
       	ArrayList<Argument> arguments4 = new ArrayList<Argument>();
       	ArrayList<Argument> arguments5 = new ArrayList<Argument>();
+      	ArrayList<Argument> arguments6 = new ArrayList<Argument>();
 
     	// test one
     	arguments1.add(new Argument('A',"A","B"));
@@ -89,7 +90,11 @@ public class DemonstrationWindowController {
     	arguments5.add(new Argument('B',"B","AC"));
     	arguments5.add(new Argument('C',"C","B"));
     	
-    	argumentFramework = new Framework(arguments1, interactor);
+    	// test six (nixon)
+    	arguments6.add(new Argument('A',"A","B"));
+    	arguments6.add(new Argument('B',"B","A"));
+    	
+    	argumentFramework = new Framework(arguments6, interactor);
     	
     	/* --------------------------- /testing purposes ------------------------------ */
     }
