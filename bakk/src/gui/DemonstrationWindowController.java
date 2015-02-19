@@ -89,7 +89,7 @@ public class DemonstrationWindowController {
     	arguments5.add(new Argument('B',"B","AC"));
     	arguments5.add(new Argument('C',"C","B"));
     	
-    	argumentFramework = new Framework(arguments4, interactor);
+    	argumentFramework = new Framework(arguments1, interactor);
     	
     	/* --------------------------- /testing purposes ------------------------------ */
     }

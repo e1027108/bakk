@@ -196,23 +196,15 @@ public class Framework {
 			return null;
 		}
 		
-		boolean add;
 		for(Extension e: admissible){
-			add = true;
+			boolean isComplete = true;
 			for(Argument a: arguments){
-				if(!e.getArguments().contains(a)){
-					ArrayList<Argument> tmparg = new ArrayList<Argument>();
-					tmparg.addAll(e.getArguments());
-					Extension tmp = new Extension(tmparg, this);
-					tmp.addArgument(a);
-					if(tmp.isConflictFree() && tmp.isCFAdmissible()){
-						//System.out.println("{" + tmp.getArgumentNames() + "} is admissible, so {" + e.getArgumentNames() + "} is not complete");
-						add = false;
-						break;
-					}
+				if(defends(e, a) && !e.getArguments().contains(a)){
+					isComplete = false;
+					break;
 				}
 			}
-			if(add){
+			if(isComplete){
 				complete.add(e);
 			}
 		}
@@ -221,6 +213,19 @@ public class Framework {
 		previousCompleteExtensions.addAll(complete);
 		
 		return complete;
+	}
+
+	private boolean defends(Extension e, Argument a) {
+		String extensionAttacks = e.getAttacks();
+		ArrayList<Argument> attackArgument = getAttackers(a.getName());
+		
+		for(Argument attacker: attackArgument){
+			if(!extensionAttacks.contains(String.valueOf(attacker.getName()))){
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious){
