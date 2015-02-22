@@ -94,7 +94,7 @@ public class DemonstrationWindowController {
     	arguments6.add(new Argument('A',"A","B"));
     	arguments6.add(new Argument('B',"B","A"));
     	
-    	argumentFramework = new Framework(arguments6, interactor);
+    	argumentFramework = new Framework(arguments1, interactor);
     	
     	/* --------------------------- /testing purposes ------------------------------ */
     }

@@ -100,13 +100,28 @@ public class Extension {
 		return true;
 	}
 
-	public boolean isComplete(){
-		// TODO needed?
+	public boolean isPreferred(ArrayList<Extension> admissible){
+		for(Extension e: admissible){
+			if(e.equals(this)){
+				continue;
+			}
+			else if(isSubsetOf(e)){
+				return false;
+			}
+		}
+		
 		return true;
 	}
 
-	public boolean isPreferrable(){
-		// TODO check if extension is preferrable
+	private boolean isSubsetOf(Extension e) {
+		ArrayList<Argument> extArg = e.getArguments();
+		
+		for(Argument a: arguments){
+			if(!extArg.contains(a)){
+				return false;
+			}
+		}
+		
 		return true;
 	}
 

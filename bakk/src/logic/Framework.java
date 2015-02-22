@@ -229,8 +229,28 @@ public class Framework {
 	}
 
 	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious){
-		// TODO compute all preferred extensions
-		return null;
+		ArrayList<Extension> admissible;
+		ArrayList<Extension> preferred = new ArrayList<Extension>();
+		
+		//TODO outsource null/empty check
+		if(!usePrevious || (previousAdmissibleSets == null)){
+			admissible = getAdmissibleSets(usePrevious);
+		}
+		else{
+			admissible = previousAdmissibleSets;
+		}
+		
+		if(admissible.isEmpty()){
+			return null;
+		}
+		
+		for(Extension e: admissible){
+			if(e.isPreferred(admissible)){
+				preferred.add(e);
+			}
+		}
+		
+		return preferred;
 	}
 
 	/**
