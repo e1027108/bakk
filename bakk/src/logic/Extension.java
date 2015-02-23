@@ -100,6 +100,11 @@ public class Extension {
 		return true;
 	}
 
+	/**
+	 * checks if the extension is preferred of the given ones
+	 * @param admissible the set of admissible extensions of which the extension may be preferred
+	 * @return if the extension is a true subset of another
+	 */
 	public boolean isPreferred(ArrayList<Extension> admissible){
 		for(Extension e: admissible){
 			if(e.equals(this)){
@@ -113,6 +118,11 @@ public class Extension {
 		return true;
 	}
 
+	/**
+	 * checks if the extension is a sub-extension of the given one
+	 * @param e the given extension
+	 * @return if all elements of the extension are also in the given extension
+	 */
 	private boolean isSubsetOf(Extension e) {
 		ArrayList<Argument> extArg = e.getArguments();
 		

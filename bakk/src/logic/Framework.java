@@ -215,6 +215,12 @@ public class Framework {
 		return complete;
 	}
 
+	/**
+	 * checks if the given extension defends the given argument
+	 * @param e the extension that might defend the argument
+	 * @param a the argument that might be defended
+	 * @return whether the given extension defends the given argument
+	 */
 	private boolean defends(Extension e, Argument a) {
 		String extensionAttacks = e.getAttacks();
 		ArrayList<Argument> attackArgument = getAttackers(a.getName());
@@ -228,6 +234,12 @@ public class Framework {
 		return true;
 	}
 
+	/**
+	 * computes all preferred extensions
+	 * @details each admissible set is checked if it is preferred within the framework
+	 * @param usePrevious specifies if previously computed sets for the extensions should be used (true) or computed anew (false)
+	 * @return the set of preferred extensions of the framework
+	 */
 	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious){
 		ArrayList<Extension> admissible;
 		ArrayList<Extension> preferred = new ArrayList<Extension>();
@@ -284,14 +296,11 @@ public class Framework {
 		return stable;
 	}
 
-	/*
-	 * The grounded extension of an argumentation framework AF, denoted by GE_AF, is
-	 * the least fixed point of F_AF
-	 *
-	 * The characteristic function, denoted by F_AF, of an argumentation framework 
-	 * AF = <AR,attacks> is defined as follows:
-	 * F_AF: 2^AR -> 2^AR
-	 * F_AF(S) = { A | A is acceptable (=defended) wrt S }
+	/**
+	 * find the grounded extension of the framework
+	 * @details the complete extensions are checked for common elements, the least element being the grounded extension
+	 * @param usePrevious specifies if previously computed sets for the extensions should be used (true) or computed anew (false)
+	 * @return the grounded extension of the framework
 	 */
 	public Extension getGroundedExtension(boolean usePrevious){
 		ArrayList<Extension> complete;
@@ -310,7 +319,6 @@ public class Framework {
 		}
 
 		for(Extension e: complete){
-			//TODO find smallest common element in complete extensions
 			if(grounded.isEmpty()){
 				grounded.addAll(e.getArguments());
 			}
