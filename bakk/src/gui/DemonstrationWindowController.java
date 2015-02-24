@@ -23,8 +23,7 @@ public class DemonstrationWindowController {
     private URL location;
 
     @FXML
-    private Button backButton, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn;
-    // TODO implement back button
+    private Button backButton, nextButton, arrowButton, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn;
     
     @FXML
     private CheckBox previousCheckBox;
@@ -101,7 +100,6 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onConflictFreeClick(){
-    	//TODO implement user-friendly output in TextArea
     	ArrayList<Extension> conflictFree = argumentFramework.getConflictFreeSets();
     	
     	for(Extension e: conflictFree){
@@ -111,7 +109,6 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onCompleteClick(){
-    	//TODO implement user-friendly output in TextArea
     	ArrayList<Extension> complete = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
     	
     	for(Extension e: complete){
@@ -121,7 +118,6 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onPreferredClick(){
-    	//TODO implement user-friendly output in TextArea
     	ArrayList<Extension> preferred = argumentFramework.getPreferredExtensions(previousCheckBox.isSelected());
     	
     	for(Extension e: preferred){
@@ -131,7 +127,6 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onStableClick(){
-    	//TODO implement user-friendly output in TextArea
     	ArrayList<Extension> stable = argumentFramework.getStableExtensions(previousCheckBox.isSelected());
     	
     	for(Extension e: stable){
@@ -141,7 +136,6 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onGroundedClick(){
-    	//TODO implement user-friendly output in TextArea
     	Extension grounded = argumentFramework.getGroundedExtension(previousCheckBox.isSelected());
     	
     	System.out.println("{" + grounded.getArgumentNames() + "}");
@@ -149,7 +143,6 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onAdmissibleClick(){
-    	//TODO implement user-friendly output in TextArea
     	ArrayList<Extension> admissible = argumentFramework.getAdmissibleSets(previousCheckBox.isSelected());
     	
     	for(Extension e: admissible){
@@ -157,16 +150,20 @@ public class DemonstrationWindowController {
     	}
     }
     
-    // for testing
-    private void printAttacks(){
-    	for(Argument a: arguments){
-    		String attackers = "";
-    		for(Argument a2: argumentFramework.getAttackers(a.getName())){
-    			attackers += a2.getName();
-    		}
-    		
-    		System.out.println("" + a.getName() + " gets attacked by: " + attackers);
-    	}
+    @FXML
+    public void onBackClick(){
+    	interactor.removeLine();
+    }
+    
+    @FXML
+    public void onNextClick(){
+    	interactor.addLine();
+    }
+    
+    @FXML
+    public void onArrowClick(){
+    	//TODO go back to MainInput
+    	System.out.println("<");
     }
     
 }

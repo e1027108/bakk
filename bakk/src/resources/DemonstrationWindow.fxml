@@ -8,9 +8,9 @@
 <AnchorPane fx:id="root" prefHeight="550.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.DemonstrationWindowController">
   <!-- TODO Add Nodes -->
   <children>
-    <AnchorPane fx:id="graphPane" prefHeight="440.0" prefWidth="440.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-    <TextArea fx:id="explanationArea" prefHeight="440.0" prefWidth="319.0" wrapText="true" AnchorPane.leftAnchor="460.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-    <Button fx:id="backButton" mnemonicParsing="false" text="&lt;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" />
+    <AnchorPane fx:id="graphPane" prefHeight="450.0" prefWidth="440.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+    <TextArea fx:id="explanationArea" prefHeight="420.0" prefWidth="330.0" wrapText="true" AnchorPane.leftAnchor="460.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+    <Button id="backButton" fx:id="arrowButton" mnemonicParsing="false" onAction="#onArrowClick" text="&lt;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" />
     <Button fx:id="conflictFreeBtn" mnemonicParsing="false" onAction="#onConflictFreeClick" prefWidth="160.0" text="conflict-free sets" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="55.0" />
     <Button fx:id="admissibleBtn" mnemonicParsing="false" onAction="#onAdmissibleClick" prefWidth="160.0" text="admissible extensions" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="225.0" />
     <Button fx:id="preferredBtn" mnemonicParsing="false" onAction="#onPreferredClick" prefWidth="160.0" text="preferred extensions" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="395.0" />
@@ -20,5 +20,7 @@
     <Separator layoutX="393.0" layoutY="512.0" orientation="VERTICAL" prefHeight="38.0" />
     <Separator layoutX="395.0" layoutY="510.0" prefWidth="405.0" />
     <CheckBox fx:id="previousCheckBox" layoutX="400.0" layoutY="515.0" mnemonicParsing="false" text="use previously computed sets for further computations" />
+    <Button id="conflictFreeBtn" fx:id="backButton" layoutY="437.0" mnemonicParsing="false" onAction="#onBackClick" prefWidth="60.0" text="back" AnchorPane.rightAnchor="227.5" />
+    <Button id="conflictFreeBtn" fx:id="nextButton" layoutY="437.0" mnemonicParsing="false" onAction="#onNextClick" prefWidth="60.0" text="next" AnchorPane.rightAnchor="62.5" />
   </children>
 </AnchorPane>
