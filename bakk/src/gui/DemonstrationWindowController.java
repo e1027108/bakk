@@ -13,7 +13,6 @@ import logic.Argument;
 import logic.Extension;
 import logic.Framework;
 
-
 public class DemonstrationWindowController {
 
     @FXML
@@ -23,7 +22,7 @@ public class DemonstrationWindowController {
     private URL location;
 
     @FXML
-    private Button backButton, nextButton, arrowButton, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn;
+    private Button backButton, nextButton, showAllButton, arrowButton, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn;
     
     @FXML
     private CheckBox previousCheckBox;
@@ -43,7 +42,7 @@ public class DemonstrationWindowController {
 
     @FXML
     void initialize() {
-      	interactor = new Interactor(explanationArea); //TODO add parameters later
+      	interactor = new Interactor(explanationArea, nextButton, backButton, showAllButton); //TODO add parameters later
     	
         /* --------------------------- testing purposes ------------------------------- */
       	
@@ -105,6 +104,8 @@ public class DemonstrationWindowController {
     	for(Extension e: conflictFree){
     		System.out.println("{" + e.getArgumentNames() + "}");
     	}
+    	
+    	resetUI();
     }
     
     @FXML
@@ -114,6 +115,8 @@ public class DemonstrationWindowController {
     	for(Extension e: complete){
     		System.out.println("{" + e.getArgumentNames() + "}");
     	}
+    	
+    	resetUI();
     }
     
     @FXML
@@ -123,6 +126,8 @@ public class DemonstrationWindowController {
     	for(Extension e: preferred){
     		System.out.println("{" + e.getArgumentNames() + "}");
     	}
+    	
+    	resetUI();
     }
     
     @FXML
@@ -132,6 +137,8 @@ public class DemonstrationWindowController {
     	for(Extension e: stable){
     		System.out.println("{" + e.getArgumentNames() + "}");
     	}
+    	
+    	resetUI();
     }
     
     @FXML
@@ -139,6 +146,8 @@ public class DemonstrationWindowController {
     	Extension grounded = argumentFramework.getGroundedExtension(previousCheckBox.isSelected());
     	
     	System.out.println("{" + grounded.getArgumentNames() + "}");
+    	
+    	resetUI();
     }
     
     @FXML
@@ -148,16 +157,29 @@ public class DemonstrationWindowController {
     	for(Extension e: admissible){
     		System.out.println("{" + e.getArgumentNames() + "}");
     	}
+    	
+    	resetUI();
     }
     
     @FXML
     public void onBackClick(){
     	interactor.removeLine();
+    	
+    	if(explanationArea.getText().isEmpty()){
+    		backButton.setDisable(true);
+    	}
     }
     
     @FXML
     public void onNextClick(){
     	interactor.addLine();
+    	
+    	backButton.setDisable(false);
+    }
+    
+    @FXML
+    public void onShowAllClick(){
+    	interactor.addAllLines();
     }
     
     @FXML
@@ -166,4 +188,9 @@ public class DemonstrationWindowController {
     	System.out.println("<");
     }
     
+    public void resetUI(){
+    	explanationArea.setText("");
+    	nextButton.setDisable(false);
+    	showAllButton.setDisable(false);
+    }
 }

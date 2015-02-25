@@ -2,15 +2,20 @@ package gui;
 
 import java.util.Stack;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
 public class Interactor {
 	
 	private TextArea textArea;
+	private Button nextButton, backButton, skipButton;
 	private Stack<String> storedMessages;
 	
-	public Interactor(TextArea textArea){ //TODO add graphical node representation
+	public Interactor(TextArea textArea, Button nextButton, Button backButton, Button skipButton){ //TODO add graphical node representation
 		this.textArea = textArea;
+		this.nextButton = nextButton;
+		this.backButton = backButton;
+		this.skipButton = skipButton;
 		storedMessages = new Stack<String>();
 	}
 	
@@ -28,6 +33,12 @@ public class Interactor {
 			else{
 				overwrite();
 			}
+		}
+	}
+	
+	public void addAllLines(){
+		while(!storedMessages.isEmpty()){
+			addLine();
 		}
 	}
 	
