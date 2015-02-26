@@ -105,7 +105,7 @@ public class DemonstrationWindowController {
     		System.out.println("{" + e.getArgumentNames() + "}");
     	}
     	
-    	resetUI();
+    	setUI();
     }
     
     @FXML
@@ -116,7 +116,7 @@ public class DemonstrationWindowController {
     		System.out.println("{" + e.getArgumentNames() + "}");
     	}
     	
-    	resetUI();
+    	setUI();
     }
     
     @FXML
@@ -127,7 +127,7 @@ public class DemonstrationWindowController {
     		System.out.println("{" + e.getArgumentNames() + "}");
     	}
     	
-    	resetUI();
+    	setUI();
     }
     
     @FXML
@@ -138,7 +138,7 @@ public class DemonstrationWindowController {
     		System.out.println("{" + e.getArgumentNames() + "}");
     	}
     	
-    	resetUI();
+    	setUI();
     }
     
     @FXML
@@ -147,7 +147,7 @@ public class DemonstrationWindowController {
     	
     	System.out.println("{" + grounded.getArgumentNames() + "}");
     	
-    	resetUI();
+    	setUI();
     }
     
     @FXML
@@ -158,7 +158,7 @@ public class DemonstrationWindowController {
     		System.out.println("{" + e.getArgumentNames() + "}");
     	}
     	
-    	resetUI();
+    	setUI();
     }
     
     @FXML
@@ -172,14 +172,14 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onNextClick(){
-    	interactor.addLine();
+    	interactor.printLine();
     	
     	backButton.setDisable(false);
     }
     
     @FXML
     public void onShowAllClick(){
-    	interactor.addAllLines();
+    	interactor.printAllLines();
     }
     
     @FXML
@@ -188,9 +188,10 @@ public class DemonstrationWindowController {
     	System.out.println("<");
     }
     
-    public void resetUI(){
+    public void setUI(){
     	explanationArea.setText("");
     	nextButton.setDisable(false);
     	showAllButton.setDisable(false);
+    	interactor.printLine();
     }
 }

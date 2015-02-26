@@ -184,4 +184,20 @@ public class Extension {
 	public ArrayList<Argument> getArguments(){
 		return arguments;
 	}
+
+	public String format() {
+		String formatted = "{";
+		
+		for(Argument a: arguments){
+			formatted += a.getName() + ", ";
+		}
+		
+		if(formatted.length() > 1){
+			formatted = formatted.substring(0,formatted.length()-2);
+		}
+		
+		formatted += "}";
+		
+		return formatted;
+	}
 }

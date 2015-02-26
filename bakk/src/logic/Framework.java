@@ -343,6 +343,7 @@ public class Framework {
 	public ArrayList<Extension> getAdmissibleSets(boolean usePrevious){
 		ArrayList<Extension> cf;
 		ArrayList<Extension> admissible = new ArrayList<Extension>();
+		String notification;
 		
 		//TODO outsource null/empty check
 		if(!usePrevious || (previousConflictFreeSets == null)){
@@ -350,22 +351,63 @@ public class Framework {
 		}
 		else{
 			cf = previousConflictFreeSets;
+			notification = "using previously computed conflict-free sets: ";
+			
+			if(cf.size() == 0){
+				notification += "There are no conflict-free sets!";
+			}
+			else{
+				notification += formatExtensions(cf);
+			}
+			
+			interactor.addToStoredMessages(notification);
 		}
 		
 		if(cf.isEmpty()){
+			interactor.addToStoredMessages("There are no admissible extensions!");
 			return null;
 		}
 		
 		for(Extension e: cf){
 			if(e.isCFAdmissible()){
 				admissible.add(e);
+				
+				notification = e.format() + " is an admissible extension!";
 			}
+			else{
+				notification = e.format() + " is not an admissible extension!";
+			}
+			interactor.addToStoredMessages(notification);
 		}
+		
+		if(admissible.size() > 0){
+			notification = "The admissible extensions are: "; 
+			notification += formatExtensions(admissible);
+		}
+		else{
+			notification = "There are no admissible extensions!";
+		}
+		interactor.addToStoredMessages(notification);
+		//TODO outsource message generation?
 		
 		previousAdmissibleSets = new ArrayList<Extension>();
 		previousAdmissibleSets.addAll(admissible);
 		
 		return admissible;
+	}
+
+	private String formatExtensions(ArrayList<Extension> cf) {
+		String formatted = "";
+		
+		for(Extension e: cf){
+			formatted += e.format() + ", ";
+		}
+		
+		if(formatted.length() > 1){
+			formatted = formatted.substring(0,formatted.length()-2);
+		}
+		
+		return formatted;
 	}
 
 	public ArrayList<Argument> getArguments() {

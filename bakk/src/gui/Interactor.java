@@ -1,6 +1,6 @@
 package gui;
 
-import java.util.Stack;
+import java.util.LinkedList;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -9,26 +9,26 @@ public class Interactor {
 	
 	private TextArea textArea;
 	private Button nextButton, backButton, skipButton;
-	private Stack<String> storedMessages;
+	private LinkedList<String> storedMessages;
 	
 	public Interactor(TextArea textArea, Button nextButton, Button backButton, Button skipButton){ //TODO add graphical node representation
 		this.textArea = textArea;
 		this.nextButton = nextButton;
 		this.backButton = backButton;
 		this.skipButton = skipButton;
-		storedMessages = new Stack<String>();
+		storedMessages = new LinkedList<String>();
 	}
 	
 	public void overwrite(){
 		if(!storedMessages.isEmpty()){
-			textArea.setText(storedMessages.pop());
+			textArea.setText(storedMessages.pollLast());
 		}
 	}
 	
-	public void addLine(){
+	public void printLine(){
 		if(!storedMessages.isEmpty()){
 			if(!textArea.getText().isEmpty()){
-				textArea.setText(textArea.getText() + "\n" + storedMessages.pop());
+				textArea.setText(textArea.getText() + "\n" + storedMessages.pollLast());
 			}
 			else{
 				overwrite();
@@ -36,9 +36,9 @@ public class Interactor {
 		}
 	}
 	
-	public void addAllLines(){
+	public void printAllLines(){
 		while(!storedMessages.isEmpty()){
-			addLine();
+			printLine();
 		}
 	}
 	
@@ -59,7 +59,7 @@ public class Interactor {
 	
 	//TODO make more efficient
 	public void addToStart(String message){
-		Stack<String> tmp = new Stack<String>();
+		LinkedList<String> tmp = new LinkedList<String>();
 		tmp.push(message);
 		tmp.addAll(storedMessages);
 		storedMessages = tmp;
