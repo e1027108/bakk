@@ -47,11 +47,11 @@ public class Interactor {
 		
 		if(!tmp.isEmpty()){
 			if(tmp.contains("\n")){
-				addToStoredMessages(tmp.substring(tmp.lastIndexOf('\n'), tmp.length()).replace("\n", ""));
+				storedMessages.addLast(tmp.substring(tmp.lastIndexOf('\n'), tmp.length()).replace("\n", ""));
 				textArea.setText(tmp.substring(0,tmp.lastIndexOf('\n')));
 			}
 			else{
-				addToStoredMessages(tmp);
+				storedMessages.addLast(tmp);
 				textArea.setText("");
 			}
 		}
@@ -71,5 +71,9 @@ public class Interactor {
 	
 	public void addToStoredMessages(String message){
 		storedMessages.push(message);
+	}
+	
+	public void emptyQueue(){
+		storedMessages = new LinkedList<String>();
 	}
 }

@@ -10,6 +10,7 @@ public class Framework {
 	private ArrayList<Extension> previousAdmissibleSets; //a stored, previously computed set of admissible extensions
 	private ArrayList<Extension> previousCompleteExtensions; //a stored, previously computed set of complete extensions
 	private Interactor interactor; //interacts with the gui
+	private String notification;
 	//TODO write user-friendly messages to gui using the interactor
 	
 	/**
@@ -274,6 +275,7 @@ public class Framework {
 	public ArrayList<Extension> getStableExtensions(boolean usePrevious){
 		ArrayList<Extension> cf;
 		ArrayList<Extension> stable = new ArrayList<Extension>();
+
 		
 		//TODO outsource null/empty check
 		if(!usePrevious || (previousConflictFreeSets == null)){
@@ -281,17 +283,36 @@ public class Framework {
 		}
 		else{
 			cf = previousConflictFreeSets;
+			
+			notification = "using previously computed conflict-free sets: ";
+			
+			if(cf.size() == 0){
+				notification += "There are no conflict-free sets!";
+			}
+			else{
+				notification += formatExtensions(cf);
+			}
+			
+			interactor.addToStoredMessages(notification);
 		}
 		
 		if(cf.isEmpty()){
+			//shouldn't be possible
+			interactor.addToStoredMessages("Since there are no conflict-free sets, there are no stable extensions!");
 			return null;
 		}
 
 		for(Extension e: cf){
 			if(e.isStable()){
 				stable.add(e);
+				interactor.addToStoredMessages(e.format() + " is a stable extension."); 
+			}
+			else{
+				interactor.addToStoredMessages(e.format() + " is not a stable extension.");
 			}
 		}
+		
+		interactor.addToStoredMessages("The stable extensions are: " + formatExtensions(stable));
 		
 		return stable;
 	}
@@ -312,26 +333,60 @@ public class Framework {
 		}
 		else{
 			complete = previousCompleteExtensions;
+			notification = "using previously computed complete extensions: ";
+			
+			if(complete.size() == 0){
+				notification += "There are no complete extensions!";
+			}
+			else{
+				notification += formatExtensions(complete);
+			}
+			
+			interactor.addToStoredMessages(notification);
 		}
 		
 		if(complete.isEmpty()){
+			//this shouldn't be possible to happen
+			interactor.addToStoredMessages("Since there are no complete extensions there is no grounded extension!");
 			return null;
 		}
 
 		for(Extension e: complete){
+			if(e.getArgumentNames().length() == 0){
+				interactor.addToStoredMessages("Since there is a complete extension {}, the grounded extension is {}");
+				return new Extension(grounded, this);
+			}
+		}
+		
+		for(Extension e: complete){
+			String eFormat = e.format();
 			if(grounded.isEmpty()){
 				grounded.addAll(e.getArguments());
+				interactor.addToStoredMessages("The complete extension " + eFormat + " is our first candidate as grounded extension.");
 			}
 			else{
+				int errors = 0;
 				for(int i = grounded.size()-1;i>=0;i--){
 					if(!e.getArguments().contains(grounded.get(i))){
+						interactor.addToStoredMessages("The complete extension " + eFormat + " does not contain the argument " + grounded.get(i).getName() + ", therefore it is removed from our candidate");
 						grounded.remove(grounded.get(i));
+						errors++;
 					}
+				}
+				if(errors == 0){
+					interactor.addToStoredMessages("The complete extension " + eFormat + " contains all arguments of our candidate.");
+				}
+				else{
+					interactor.addToStoredMessages("Our new candidate is " + new Extension(grounded,this).format());
 				}
 			}
 		}
 		
-		return new Extension(grounded, this);
+		Extension groundedExtension = new Extension(grounded,this);
+		
+		interactor.addToStoredMessages("The grounded extension is: " + groundedExtension.format());
+		
+		return groundedExtension;
 	}
 
 	/**
@@ -343,7 +398,6 @@ public class Framework {
 	public ArrayList<Extension> getAdmissibleSets(boolean usePrevious){
 		ArrayList<Extension> cf;
 		ArrayList<Extension> admissible = new ArrayList<Extension>();
-		String notification;
 		
 		//TODO outsource null/empty check
 		if(!usePrevious || (previousConflictFreeSets == null)){
@@ -364,7 +418,7 @@ public class Framework {
 		}
 		
 		if(cf.isEmpty()){
-			interactor.addToStoredMessages("There are no admissible extensions!");
+			interactor.addToStoredMessages("Since there are no conflict-free sets there are no admissible extensions!");
 			return null;
 		}
 		

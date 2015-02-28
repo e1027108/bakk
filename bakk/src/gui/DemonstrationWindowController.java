@@ -99,6 +99,8 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onConflictFreeClick(){
+    	interactor.emptyQueue();
+    	
     	ArrayList<Extension> conflictFree = argumentFramework.getConflictFreeSets();
     	
     	for(Extension e: conflictFree){
@@ -110,6 +112,8 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onCompleteClick(){
+    	interactor.emptyQueue();
+    	
     	ArrayList<Extension> complete = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
     	
     	for(Extension e: complete){
@@ -121,6 +125,8 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onPreferredClick(){
+    	interactor.emptyQueue();
+    	
     	ArrayList<Extension> preferred = argumentFramework.getPreferredExtensions(previousCheckBox.isSelected());
     	
     	for(Extension e: preferred){
@@ -132,6 +138,8 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onStableClick(){
+    	interactor.emptyQueue();
+    	
     	ArrayList<Extension> stable = argumentFramework.getStableExtensions(previousCheckBox.isSelected());
     	
     	for(Extension e: stable){
@@ -143,6 +151,8 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onGroundedClick(){
+    	interactor.emptyQueue();
+    	
     	Extension grounded = argumentFramework.getGroundedExtension(previousCheckBox.isSelected());
     	
     	System.out.println("{" + grounded.getArgumentNames() + "}");
@@ -152,6 +162,8 @@ public class DemonstrationWindowController {
     
     @FXML
     public void onAdmissibleClick(){
+    	interactor.emptyQueue();
+    	
     	ArrayList<Extension> admissible = argumentFramework.getAdmissibleSets(previousCheckBox.isSelected());
     	
     	for(Extension e: admissible){
@@ -180,6 +192,8 @@ public class DemonstrationWindowController {
     @FXML
     public void onShowAllClick(){
     	interactor.printAllLines();
+    	
+    	backButton.setDisable(false);
     }
     
     @FXML
