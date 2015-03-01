@@ -181,10 +181,10 @@ public class Extension {
 		return names;
 	}
 	
-	public ArrayList<Argument> getArguments(){
-		return arguments;
-	}
-
+	/**
+	 * formats the extension to a user-friendly string format
+	 * @return a list of argument names (separated by ',' between '{' and '}')
+	 */
 	public String format() {
 		String formatted = "{";
 		
@@ -199,5 +199,9 @@ public class Extension {
 		formatted += "}";
 		
 		return formatted;
+	}
+	
+	public ArrayList<Argument> getArguments(){
+		return arguments;
 	}
 }

@@ -2,29 +2,34 @@ package gui;
 
 import java.util.LinkedList;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
 public class Interactor {
 	
 	private TextArea textArea;
-	private Button nextButton, backButton, skipButton;
 	private LinkedList<String> storedMessages;
 	
-	public Interactor(TextArea textArea, Button nextButton, Button backButton, Button skipButton){ //TODO add graphical node representation
+	/**
+	 * creates an interactor to buffer messages and write them into the textarea the user can read
+	 * @param textArea the textarea to be read by the user
+	 */
+	public Interactor(TextArea textArea){ //TODO add graphical node representation
 		this.textArea = textArea;
-		this.nextButton = nextButton;
-		this.backButton = backButton;
-		this.skipButton = skipButton;
 		storedMessages = new LinkedList<String>();
 	}
 	
+	/**
+	 * prints the first stored message into the textarea, overwriting its previous contents
+	 */
 	public void overwrite(){
 		if(!storedMessages.isEmpty()){
 			textArea.setText(storedMessages.pollLast());
 		}
 	}
 	
+	/**
+	 * adds the queued message to the textarea's text
+	 */
 	public void printLine(){
 		if(!storedMessages.isEmpty()){
 			if(!textArea.getText().isEmpty()){
@@ -36,12 +41,18 @@ public class Interactor {
 		}
 	}
 	
+	/**
+	 * adds all remaining messages in the queue to the textarea
+	 */
 	public void printAllLines(){
 		while(!storedMessages.isEmpty()){
 			printLine();
 		}
 	}
 	
+	/**
+	 * removes the last line from the textarea and places it first in the queue
+	 */
 	public void removeLine(){
 		String tmp = textArea.getText();
 		
@@ -57,23 +68,30 @@ public class Interactor {
 		}
 	}
 	
-	//TODO make more efficient
-	public void addToStart(String message){
-		LinkedList<String> tmp = new LinkedList<String>();
-		tmp.push(message);
-		tmp.addAll(storedMessages);
-		storedMessages = tmp;
-	}
-	
 	public void manipulateNodes(){
 		//TODO will be used to interact with graphical node representation
 	}
 	
+	/**
+	 * adds a message to the end of the queue
+	 * @param message the message added to the end of the queue
+	 */
 	public void addToStoredMessages(String message){
 		storedMessages.push(message);
 	}
 	
+	/**
+	 * deletes all the contents from the queue
+	 */
 	public void emptyQueue(){
 		storedMessages = new LinkedList<String>();
+	}
+	
+	/**
+	 * checks if the queue holds elements
+	 * @return whether there are still elements in the queue
+	 */
+	public boolean hasNext(){
+		return !(storedMessages.size()>0);
 	}
 }

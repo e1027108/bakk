@@ -10,8 +10,7 @@ public class Framework {
 	private ArrayList<Extension> previousAdmissibleSets; //a stored, previously computed set of admissible extensions
 	private ArrayList<Extension> previousCompleteExtensions; //a stored, previously computed set of complete extensions
 	private Interactor interactor; //interacts with the gui
-	private String notification;
-	//TODO write user-friendly messages to gui using the interactor
+	private String notification; //storage space for messages to be written to the interactor
 	
 	/**
 	 * creates an abstract argument framework
@@ -191,24 +190,44 @@ public class Framework {
 		}
 		else{
 			admissible = previousAdmissibleSets;
+			
+			notification = "using previously computed admissible extensions: ";
+			
+			if(admissible.size() == 0){
+				notification += "There are no admissible extensions!";
+			}
+			else{
+				notification += formatExtensions(admissible);
+			}
+			
+			interactor.addToStoredMessages(notification);
 		}
 		
 		if(admissible.isEmpty()){
+			//shouldn't be possible
+			interactor.addToStoredMessages("Since there are no admissible extensions, there are no complete extensions!");
 			return null;
 		}
 		
 		for(Extension e: admissible){
 			boolean isComplete = true;
+			String format = e.format();
+			
 			for(Argument a: arguments){
 				if(defends(e, a) && !e.getArguments().contains(a)){
+					interactor.addToStoredMessages("The extension " + format + " defends the argument " + a.getName() + " which it doesn't contain. "
+							+ "Therefore it is not a complete extension.");
 					isComplete = false;
 					break;
 				}
 			}
 			if(isComplete){
+				interactor.addToStoredMessages("The extension " + format + " is a complete extension!");
 				complete.add(e);
 			}
 		}
+		
+		interactor.addToStoredMessages("The complete extensions are: " + formatExtensions(complete));
 		
 		previousCompleteExtensions = new ArrayList<Extension>();
 		previousCompleteExtensions.addAll(complete);
@@ -251,17 +270,36 @@ public class Framework {
 		}
 		else{
 			admissible = previousAdmissibleSets;
+			
+			notification = "using previously computed admissible extensions: ";
+			
+			if(admissible.size() == 0){
+				notification += "There are no admissible extensions!";
+			}
+			else{
+				notification += formatExtensions(admissible);
+			}
+			
+			interactor.addToStoredMessages(notification);
 		}
 		
 		if(admissible.isEmpty()){
+			//shouldn't be possible
+			interactor.addToStoredMessages("Since there are no admissible extensions, there are no preferred extensions!");
 			return null;
 		}
 		
 		for(Extension e: admissible){
 			if(e.isPreferred(admissible)){
 				preferred.add(e);
+				interactor.addToStoredMessages(e.format() + " is a preferred extension."); 
+			}
+			else{
+				interactor.addToStoredMessages(e.format() + " is not a preferred extension.");
 			}
 		}
+		
+		interactor.addToStoredMessages("The preferred extensions are: " + formatExtensions(preferred));
 		
 		return preferred;
 	}
@@ -450,10 +488,15 @@ public class Framework {
 		return admissible;
 	}
 
-	private String formatExtensions(ArrayList<Extension> cf) {
+	/**
+	 * formats an extensions to be in a user-friendly string form
+	 * @param extensions the extensions to be formated
+	 * @return a list (separated by ',') of the formatted extensions
+	 */
+	private String formatExtensions(ArrayList<Extension> extensions) {
 		String formatted = "";
 		
-		for(Extension e: cf){
+		for(Extension e: extensions){
 			formatted += e.format() + ", ";
 		}
 		
@@ -466,5 +509,10 @@ public class Framework {
 
 	public ArrayList<Argument> getArguments() {
 		return arguments;
+	}
+	
+	//TODO checks?
+	public void addToInteractor(String message){
+		interactor.addToStoredMessages(message);
 	}
 }

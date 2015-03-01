@@ -42,7 +42,7 @@ public class DemonstrationWindowController {
 
     @FXML
     void initialize() {
-      	interactor = new Interactor(explanationArea, nextButton, backButton, showAllButton); //TODO add parameters later
+      	interactor = new Interactor(explanationArea); //TODO add parameters later
     	
         /* --------------------------- testing purposes ------------------------------- */
       	
@@ -180,6 +180,9 @@ public class DemonstrationWindowController {
     	if(explanationArea.getText().isEmpty()){
     		backButton.setDisable(true);
     	}
+    	
+    	showAllButton.setDisable(false);
+    	nextButton.setDisable(false);
     }
     
     @FXML
@@ -187,6 +190,10 @@ public class DemonstrationWindowController {
     	interactor.printLine();
     	
     	backButton.setDisable(false);
+
+    	if(interactor.hasNext()){
+    		disableForwardButtons();
+    	}
     }
     
     @FXML
@@ -194,6 +201,15 @@ public class DemonstrationWindowController {
     	interactor.printAllLines();
     	
     	backButton.setDisable(false);
+    	
+    	if(interactor.hasNext()){
+    		disableForwardButtons();
+    	}
+    }
+    
+    public void disableForwardButtons(){
+    	nextButton.setDisable(true);
+    	showAllButton.setDisable(true);
     }
     
     @FXML
