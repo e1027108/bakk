@@ -26,9 +26,7 @@ public class Extension {
 	public Extension(ArrayList<Argument> arguments, Framework framework){
 		this.arguments = new ArrayList<Argument>();
 		this.framework = framework;
-		for(Argument a: arguments){
-			addArgument(a); //TODO handle Exception
-		}
+		this.arguments.addAll(arguments);
 	}
 
 	/**
@@ -60,10 +58,12 @@ public class Extension {
 		for(int i = 0; i < names.length(); i++){
 			String tmp = "" + names.charAt(i);
 			if(attacks.contains(tmp)){
+				framework.addToInteractor(this.format() + " attacks the argument " + tmp + ", thus it is not a conflict-free set!");
 				return false;
 			}
 		}
 
+		framework.addToInteractor(this.format() + " is a conflict-free set, because it does not attack its own arguments");
 		return true;
 	}
 

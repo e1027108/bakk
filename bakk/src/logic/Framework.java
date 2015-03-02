@@ -76,78 +76,35 @@ public class Framework {
 
 	/**
 	 * computes all conflict-free sets of the framework
-	 * @details for every argument a set is created containing it and all arguments that don't attack and it doesn't attack
-	 * 			from these conflict-free sets are extracted
-	 * 			duplicates don't get created, because an already checked argument doesn't become part of the sets of the next
+	 * @details computes the powerset of the set of arguments
+	 * 			checks every set (within the powerset) if it is conflict-free
 	 * @return the set of all conflict-free sets
 	 */
 	public ArrayList<Extension> getConflictFreeSets(){
 		ArrayList<Extension> conflictFreeSets = new ArrayList<Extension>();
-
-		//the list, but not the elements will be changed, so no deep copy needed
-		ArrayList<Argument> workingSet = new ArrayList<Argument>();
-		workingSet.addAll(arguments);
-
+		ArrayList<ArrayList<Argument>> powerset;
+		
 		if(arguments == null){
+			//should not be possible
+			interactor.addToStoredMessages("No arguments found, error!");
 			return null;
 		}
 		
-		for(Argument a: arguments){
-			workingSet.remove(a); //doesn't need to contain the argument, because it is provided seperately
-			ArrayList<Argument> nonConflictingSet = getNonConflicting(workingSet, a); //gets every argument a doesn't conflict with
-			ArrayList<Extension> tmpConflictFreeSubSets = getConflictFreeSubSets(nonConflictingSet, a); //gets all conflict-free sets of the provided subsets containing a
-			if(tmpConflictFreeSubSets != null && !tmpConflictFreeSubSets.isEmpty()){
-				conflictFreeSets.addAll(tmpConflictFreeSubSets); //adds the conflict-free sets for an argument to the overall list
+		powerset = getAllSubsets(arguments);
+		
+		for(ArrayList<Argument> set: powerset){
+			Extension tmp = new Extension(set, this);
+			if(tmp.isConflictFree()){
+				conflictFreeSets.add(tmp);
 			}
 		}
-
-		conflictFreeSets.add(new Extension(new ArrayList<Argument>(), this));
+		
+		interactor.addToStoredMessages("The conflict-free sets are: " + formatExtensions(conflictFreeSets));
 		
 		previousConflictFreeSets = new ArrayList<Extension>();
 		previousConflictFreeSets.addAll(conflictFreeSets);
 		
 		return conflictFreeSets;
-	}
-
-	/**
-	 * computes a set of arguments not attacking or being attacked by a specific one
-	 * @param workingSet is the set of eligible arguments to be checked
-	 * @param arg is the argument that shouldn't have be in conflict with the checked ones
-	 * @return a set of arguments not attacking or being attacked by the specified argument
-	 */
-	private ArrayList<Argument> getNonConflicting(ArrayList<Argument> workingSet, Argument arg) {
-		ArrayList<Argument> nonConflicting = new ArrayList<Argument>();
-		String attacks = arg.getAttacks();
-
-		for(Argument a: workingSet){
-			if(!a.getAttacks().contains(String.valueOf(arg.getName())) && !attacks.contains(String.valueOf(a.getName()))){
-				nonConflicting.add(a);
-			}
-		}
-
-		return nonConflicting;
-	}
-
-	/**
-	 * checks for all subsets of a set if they are conflict-free
-	 * @details the specified argument is added to every set to be checked in turn and checked for conflict-freeness
-	 * @param nonConflictingSet a set of argument that all individually don't conflict with a specified argument
-	 * @param arg the specified argument not to conflict with
-	 * @return the set of all conflict-free subsets regarding the specified argument and sets
-	 */
-	private ArrayList<Extension> getConflictFreeSubSets(ArrayList<Argument> nonConflictingSet, Argument arg) {
-		ArrayList<ArrayList<Argument>> subSets = getAllSubsets(nonConflictingSet);
-		ArrayList<Extension> conflictFree = new ArrayList<Extension>();
-		
-		for(ArrayList<Argument> s: subSets){
-			s.add(arg);
-			Extension e = new Extension(s, this);
-			if(e.isConflictFree()){
-				conflictFree.add(e);
-			}
-		}
-		
-		return conflictFree;
 	}
 
 	/**
@@ -191,7 +148,7 @@ public class Framework {
 		else{
 			admissible = previousAdmissibleSets;
 			
-			notification = "using previously computed admissible extensions: ";
+			notification = "Using previously computed admissible extensions: ";
 			
 			if(admissible.size() == 0){
 				notification += "There are no admissible extensions!";
@@ -203,9 +160,7 @@ public class Framework {
 			interactor.addToStoredMessages(notification);
 		}
 		
-		if(admissible.isEmpty()){
-			//shouldn't be possible
-			interactor.addToStoredMessages("Since there are no admissible extensions, there are no complete extensions!");
+		if(invalidityCheck(admissible, "admissible extensions", "complete extensions")){
 			return null;
 		}
 		
@@ -271,7 +226,7 @@ public class Framework {
 		else{
 			admissible = previousAdmissibleSets;
 			
-			notification = "using previously computed admissible extensions: ";
+			notification = "Using previously computed admissible extensions: ";
 			
 			if(admissible.size() == 0){
 				notification += "There are no admissible extensions!";
@@ -283,9 +238,7 @@ public class Framework {
 			interactor.addToStoredMessages(notification);
 		}
 		
-		if(admissible.isEmpty()){
-			//shouldn't be possible
-			interactor.addToStoredMessages("Since there are no admissible extensions, there are no preferred extensions!");
+		if(invalidityCheck(admissible, "admissible extensions", "preferred extensions")){
 			return null;
 		}
 		
@@ -322,7 +275,7 @@ public class Framework {
 		else{
 			cf = previousConflictFreeSets;
 			
-			notification = "using previously computed conflict-free sets: ";
+			notification = "Using previously computed conflict-free sets: ";
 			
 			if(cf.size() == 0){
 				notification += "There are no conflict-free sets!";
@@ -334,9 +287,7 @@ public class Framework {
 			interactor.addToStoredMessages(notification);
 		}
 		
-		if(cf.isEmpty()){
-			//shouldn't be possible
-			interactor.addToStoredMessages("Since there are no conflict-free sets, there are no stable extensions!");
+		if(invalidityCheck(cf, "conflict-free sets", "stable extensions")){
 			return null;
 		}
 
@@ -371,9 +322,9 @@ public class Framework {
 		}
 		else{
 			complete = previousCompleteExtensions;
-			notification = "using previously computed complete extensions: ";
+			notification = "Using previously computed complete extensions: ";
 			
-			if(complete.size() == 0){
+			if(complete == null || complete.size() == 0){
 				notification += "There are no complete extensions!";
 			}
 			else{
@@ -383,9 +334,7 @@ public class Framework {
 			interactor.addToStoredMessages(notification);
 		}
 		
-		if(complete.isEmpty()){
-			//this shouldn't be possible to happen
-			interactor.addToStoredMessages("Since there are no complete extensions there is no grounded extension!");
+		if(invalidityCheck(complete, "complete extensions", "grounded extension")){
 			return null;
 		}
 
@@ -443,7 +392,7 @@ public class Framework {
 		}
 		else{
 			cf = previousConflictFreeSets;
-			notification = "using previously computed conflict-free sets: ";
+			notification = "Using previously computed conflict-free sets: ";
 			
 			if(cf.size() == 0){
 				notification += "There are no conflict-free sets!";
@@ -455,8 +404,7 @@ public class Framework {
 			interactor.addToStoredMessages(notification);
 		}
 		
-		if(cf.isEmpty()){
-			interactor.addToStoredMessages("Since there are no conflict-free sets there are no admissible extensions!");
+		if(invalidityCheck(cf, "conflict-free sets", "admissible extensions")){
 			return null;
 		}
 		
@@ -507,12 +455,34 @@ public class Framework {
 		return formatted;
 	}
 
-	public ArrayList<Argument> getArguments() {
-		return arguments;
+	/**
+	 * checks if the list can be used for further computation
+	 * @details the set is checked if it is empty or even null
+	 * 			making it unfit to be used in further computations
+	 * @param list the list to be checked
+	 * @param cause cause of the possible problem
+	 * @param effect what is not computable because of a problem
+	 * @return if there is a problem with the set for further computation
+	 */
+	public boolean invalidityCheck(ArrayList<Extension> list, String cause, String effect){
+		if(list == null || list.isEmpty()){ //shouldn't be possible
+			String are = ", there are no ";
+			
+			if(effect.contains("grounded")){
+				are = are.replace("are", "is");
+			}
+			
+			interactor.addToStoredMessages("Since there are no " + cause + are + effect + "!");
+			return true;
+		}
+		return false;
 	}
 	
-	//TODO checks?
 	public void addToInteractor(String message){
 		interactor.addToStoredMessages(message);
+	}
+	
+	public ArrayList<Argument> getArguments() {
+		return arguments;
 	}
 }

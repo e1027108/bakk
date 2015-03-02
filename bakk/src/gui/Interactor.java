@@ -24,6 +24,7 @@ public class Interactor {
 	public void overwrite(){
 		if(!storedMessages.isEmpty()){
 			textArea.setText(storedMessages.pollLast());
+			scrollDown();
 		}
 	}
 	
@@ -34,6 +35,7 @@ public class Interactor {
 		if(!storedMessages.isEmpty()){
 			if(!textArea.getText().isEmpty()){
 				textArea.setText(textArea.getText() + "\n" + storedMessages.pollLast());
+				scrollDown();
 			}
 			else{
 				overwrite();
@@ -48,6 +50,15 @@ public class Interactor {
 		while(!storedMessages.isEmpty()){
 			printLine();
 		}
+		scrollDown();
+	}
+	
+	/**
+	 * scrolls the textArea to the bottom
+	 */
+	public void scrollDown(){
+		textArea.setScrollTop(Double.MAX_VALUE);
+		textArea.appendText("");
 	}
 	
 	/**
@@ -60,6 +71,7 @@ public class Interactor {
 			if(tmp.contains("\n")){
 				storedMessages.addLast(tmp.substring(tmp.lastIndexOf('\n'), tmp.length()).replace("\n", ""));
 				textArea.setText(tmp.substring(0,tmp.lastIndexOf('\n')));
+				scrollDown();
 			}
 			else{
 				storedMessages.addLast(tmp);

@@ -52,6 +52,8 @@ public class DemonstrationWindowController {
       	ArrayList<Argument> arguments4 = new ArrayList<Argument>();
       	ArrayList<Argument> arguments5 = new ArrayList<Argument>();
       	ArrayList<Argument> arguments6 = new ArrayList<Argument>();
+      	ArrayList<Argument> arguments7 = new ArrayList<Argument>();
+      	ArrayList<Argument> arguments8 = null;
 
     	// test one
     	arguments1.add(new Argument('A',"A","B"));
@@ -91,6 +93,11 @@ public class DemonstrationWindowController {
     	// test six (nixon)
     	arguments6.add(new Argument('A',"A","B"));
     	arguments6.add(new Argument('B',"B","A"));
+    	
+    	// test seven is empty
+    	
+    	// test eight is null
+    	// TODO fix exceptions when getting null
     	
     	argumentFramework = new Framework(arguments1, interactor);
     	
@@ -155,7 +162,9 @@ public class DemonstrationWindowController {
     	
     	Extension grounded = argumentFramework.getGroundedExtension(previousCheckBox.isSelected());
     	
-    	System.out.println("{" + grounded.getArgumentNames() + "}");
+    	if(grounded != null){
+    		System.out.println("{" + grounded.getArgumentNames() + "}");
+    	}
     	
     	setUI();
     }
