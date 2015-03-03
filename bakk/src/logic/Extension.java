@@ -51,53 +51,45 @@ public class Extension {
 	 * @details checks if no argument in the extension attacks another
 	 * @return if the extension is conflict-free
 	 */
-	public boolean isConflictFree(){
+	public boolean isConflictFree(boolean write){
 		String attacks = getAttacks();
 		String names = getArgumentNames();
 
 		for(int i = 0; i < names.length(); i++){
 			String tmp = "" + names.charAt(i);
 			if(attacks.contains(tmp)){
-				framework.addToInteractor(this.format() + " attacks the argument " + tmp + ", thus it is not a conflict-free set!");
+				if(write){
+					framework.addToInteractor(this.format() + " attacks the argument " + tmp + ", thus it is not a conflict-free set!");
+				}
 				return false;
 			}
 		}
 
-		framework.addToInteractor(this.format() + " is a conflict-free set, because it does not attack its own arguments");
+		if(write){
+			framework.addToInteractor(this.format() + " is a conflict-free set, because it does not attack its own arguments");
+		}
 		return true;
 	}
 
 	/**
-	 * checks if a conflict-free set is admissible
-	 * @details checks if all attackers are included in the attacks
-	 * @param framework is the framework from which the extension is derived
+	 * checks if a set is admissible
 	 * @return if all the arguments are defended
 	 */
-	public boolean isCFAdmissible(){
-		String attacks = getAttacks();
-		String attackers = "";
-		
-		for(Argument a: arguments){
-			String tmp = "";
-			for(Argument a2: framework.getAttackers(a.getName())){
-				tmp += a2.getName();
-			}
-
-			attackers += tmp;
+	public boolean isAdmissible(){
+		if(!isConflictFree(false)){
+			framework.addToInteractor(format() + " is not a conflict-free set, so it is not an admissible extension.");
+			return false;
 		}
-
-		while(attackers.length() > 0){
-			String attacker = String.valueOf(attackers.charAt(attackers.length()-1));
-
-			if(attacks.contains(attacker)){
-				attackers = attackers.replaceAll(attacker, "");
+		else{
+			for(Argument a: arguments){
+				if(!framework.defends(this,a)){
+					framework.addToInteractor(format() + " does not defend " + a.getName() + ", so it is not an admissible extension.");
+					return false;
+				}
 			}
-			else{
-				return false;
-			}
+			framework.addToInteractor(format() + " defends all its arguments, so it is an admissible extension.");
+			return true;
 		}
-
-		return true;
 	}
 
 	/**
@@ -111,10 +103,13 @@ public class Extension {
 				continue;
 			}
 			else if(isSubsetOf(e)){
+				String format = format();
+				framework.addToInteractor("Since " + format + " is a subset of " + e.format() + ", " + format + " is not preferred.");
 				return false;
 			}
 		}
 		
+		framework.addToInteractor(format() + " is not the subset of another admissible extension, so it is a preferred extension.");
 		return true;
 	}
 
@@ -141,6 +136,7 @@ public class Extension {
 	 */
 	public boolean isStable(){
 		if(getAttacks().length() == (framework.getArguments().size()-getArgumentNames().length())){
+			//TODO check if the ones outside are also the ones that are attacked
 			return true;
 		}
 		return false;

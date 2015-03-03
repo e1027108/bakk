@@ -94,7 +94,7 @@ public class Framework {
 		
 		for(ArrayList<Argument> set: powerset){
 			Extension tmp = new Extension(set, this);
-			if(tmp.isConflictFree()){
+			if(tmp.isConflictFree(true)){
 				conflictFreeSets.add(tmp);
 			}
 		}
@@ -196,7 +196,7 @@ public class Framework {
 	 * @param a the argument that might be defended
 	 * @return whether the given extension defends the given argument
 	 */
-	private boolean defends(Extension e, Argument a) {
+	public boolean defends(Extension e, Argument a) {
 		String extensionAttacks = e.getAttacks();
 		ArrayList<Argument> attackArgument = getAttackers(a.getName());
 		
@@ -245,10 +245,6 @@ public class Framework {
 		for(Extension e: admissible){
 			if(e.isPreferred(admissible)){
 				preferred.add(e);
-				interactor.addToStoredMessages(e.format() + " is a preferred extension."); 
-			}
-			else{
-				interactor.addToStoredMessages(e.format() + " is not a preferred extension.");
 			}
 		}
 		
@@ -409,15 +405,9 @@ public class Framework {
 		}
 		
 		for(Extension e: cf){
-			if(e.isCFAdmissible()){
+			if(e.isAdmissible()){
 				admissible.add(e);
-				
-				notification = e.format() + " is an admissible extension!";
 			}
-			else{
-				notification = e.format() + " is not an admissible extension!";
-			}
-			interactor.addToStoredMessages(notification);
 		}
 		
 		if(admissible.size() > 0){
