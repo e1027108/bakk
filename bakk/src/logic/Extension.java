@@ -135,11 +135,28 @@ public class Extension {
 	 * @return if every argument outside the extension is attacked
 	 */
 	public boolean isStable(){
-		if(getAttacks().length() == (framework.getArguments().size()-getArgumentNames().length())){
-			//TODO check if the ones outside are also the ones that are attacked
+		ArrayList<Argument> allArguments = framework.getArguments();
+		String attacks = getAttacks();
+		
+		if(!isConflictFree(false)){
+			framework.addToInteractor(format() + " is not a conflict-free set, so it is not a stable extension.");
+			return false;
+		}
+		
+		if(attacks.length() == (allArguments.size()-getArgumentNames().length())){
+			framework.addToInteractor(format() + " attacks every argument outside itself, so it is a stable extension.");
 			return true;
 		}
-		return false;
+		else{
+			//TODO find an argument it does not attack, print that to textArea
+			for(Argument a: allArguments){
+				if(!arguments.contains(a) && !attacks.contains(String.valueOf(a.getName()))){
+					framework.addToInteractor(format() + " is not a stable extension because it does not attack " + a.getName());
+					break;
+				}
+			}
+			return false;
+		}
 	}
 
 	/**

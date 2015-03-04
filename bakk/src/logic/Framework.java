@@ -290,10 +290,6 @@ public class Framework {
 		for(Extension e: cf){
 			if(e.isStable()){
 				stable.add(e);
-				interactor.addToStoredMessages(e.format() + " is a stable extension."); 
-			}
-			else{
-				interactor.addToStoredMessages(e.format() + " is not a stable extension.");
 			}
 		}
 		
