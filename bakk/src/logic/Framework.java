@@ -26,7 +26,7 @@ public class Framework {
 	 * @param argumentName the name of the argument that attacks
 	 * @return the set of arguments being attacked by the specified argument
 	 */
-	private ArrayList<Argument> getAttacks(char argumentName){
+	private ArrayList<Argument> getAttacks(char argumentName){ //TODO use or delete
 		ArrayList<Argument> attacks = new ArrayList<Argument>();
 		String attackString = getArgument(argumentName).getAttacks();
 

@@ -1,6 +1,5 @@
 package gui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -8,22 +7,18 @@ import java.util.ResourceBundle;
 import dto.ArgumentDto;
 import exceptions.InvalidInputException;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-
 
 public class MainInputController {
-	
+
 	private static WrapperController wrapper;
-	
+
 	private Interactor interactor;
-	
+
 	@FXML
 	private AnchorPane root;
 
@@ -39,7 +34,10 @@ public class MainInputController {
 	attackETxt, attackFTxt, attackGTxt, attackHTxt, attackITxt, attackJTxt;
 
 	@FXML
-	private Label addLbl, attackLbl, headlineLbl, aLbl, bLbl, cLbl, dLbl, eLbl, fLbl, gLbl, hLbl, iLbl, jLbl;
+	private CheckBox ABox, BBox, CBox, DBox, EBox, FBox, GBox, HBox, IBox, JBox; 
+
+	@FXML
+	private Label useLbl, addLbl, attackLbl, headlineLbl, aLbl, bLbl, cLbl, dLbl, eLbl, fLbl, gLbl, hLbl, iLbl, jLbl;
 
 	@FXML
 	private Button showGraphBtn;
@@ -54,41 +52,45 @@ public class MainInputController {
 		arguments = new ArrayList<ArgumentDto>();
 	}
 
-	@FXML //TODO check if input handling is correct
-	public void onShowButton() throws InvalidInputException{ //TODO handle exceptions thrown by @FXML annotated methods
-		if(!argumentATxt.getText().isEmpty() || !attackATxt.getText().isEmpty()){
-			arguments.add(new ArgumentDto('A', parseArgument(argumentATxt), parseAttacks(attackATxt)));
-		}
-		if(!argumentBTxt.getText().isEmpty() || !attackBTxt.getText().isEmpty()){
-			arguments.add(new ArgumentDto('B', parseArgument(argumentBTxt), parseAttacks(attackBTxt)));
-		}
-		if(!argumentCTxt.getText().isEmpty() || !attackCTxt.getText().isEmpty()){
-			arguments.add(new ArgumentDto('C', parseArgument(argumentCTxt), parseAttacks(attackCTxt)));
-		}
-		if(!argumentDTxt.getText().isEmpty() || !attackDTxt.getText().isEmpty()){
-			arguments.add(new ArgumentDto('D', parseArgument(argumentDTxt), parseAttacks(attackDTxt)));
-		}
-		if(!argumentETxt.getText().isEmpty() || !attackETxt.getText().isEmpty()){
-			arguments.add(new ArgumentDto('E', parseArgument(argumentETxt), parseAttacks(attackETxt)));
-		}
-		if(!argumentFTxt.getText().isEmpty() || !attackFTxt.getText().isEmpty()){
-			arguments.add(new ArgumentDto('F', parseArgument(argumentFTxt), parseAttacks(attackFTxt)));
-		}
-		if(!argumentGTxt.getText().isEmpty() || !attackGTxt.getText().isEmpty()){
-			arguments.add(new ArgumentDto('G', parseArgument(argumentGTxt), parseAttacks(attackGTxt)));
-		}
-		if(!argumentHTxt.getText().isEmpty() || !attackHTxt.getText().isEmpty()){
-			arguments.add(new ArgumentDto('H', parseArgument(argumentHTxt), parseAttacks(attackHTxt)));
-		}
-		if(!argumentITxt.getText().isEmpty() || !attackITxt.getText().isEmpty()){
-			arguments.add(new ArgumentDto('I', parseArgument(argumentITxt), parseAttacks(attackITxt)));
-		}
-		if(!argumentJTxt.getText().isEmpty() || !attackJTxt.getText().isEmpty()){
-			arguments.add(new ArgumentDto('J', parseArgument(argumentJTxt), parseAttacks(attackJTxt)));
+	@FXML
+	public void onShowButton(){
+		try{
+			if(ABox.isSelected()){
+				arguments.add(new ArgumentDto('A', parseArgument(argumentATxt), parseAttacks(attackATxt)));
+			}
+			if(BBox.isSelected()){
+				arguments.add(new ArgumentDto('B', parseArgument(argumentBTxt), parseAttacks(attackBTxt)));
+			}
+			if(CBox.isSelected()){
+				arguments.add(new ArgumentDto('C', parseArgument(argumentCTxt), parseAttacks(attackCTxt)));
+			}
+			if(DBox.isSelected()){
+				arguments.add(new ArgumentDto('D', parseArgument(argumentDTxt), parseAttacks(attackDTxt)));
+			}
+			if(EBox.isSelected()){
+				arguments.add(new ArgumentDto('E', parseArgument(argumentETxt), parseAttacks(attackETxt)));
+			}
+			if(FBox.isSelected()){
+				arguments.add(new ArgumentDto('F', parseArgument(argumentFTxt), parseAttacks(attackFTxt)));
+			}
+			if(GBox.isSelected()){
+				arguments.add(new ArgumentDto('G', parseArgument(argumentGTxt), parseAttacks(attackGTxt)));
+			}
+			if(HBox.isSelected()){
+				arguments.add(new ArgumentDto('H', parseArgument(argumentHTxt), parseAttacks(attackHTxt)));
+			}
+			if(IBox.isSelected()){
+				arguments.add(new ArgumentDto('I', parseArgument(argumentITxt), parseAttacks(attackITxt)));
+			}
+			if(JBox.isSelected()){
+				arguments.add(new ArgumentDto('J', parseArgument(argumentJTxt), parseAttacks(attackJTxt)));
+			}
+		} catch(InvalidInputException e){
+			System.out.println(e.getMessage());
+			//TODO put into error label
+			return;
 		}
 
-		// TODO has to check first whether the arguments attack anything that does not exist
-		interactor.setRawArguments(arguments);
 		wrapper.loadDemonstration();
 	}
 
@@ -101,7 +103,7 @@ public class MainInputController {
 
 	private String parseAttacks(TextField attack) throws InvalidInputException {
 		String input = attack.getText();
-		String argumentNames = "ABCDEFGHIJ";
+		String argumentNames = getSelected();
 		String attackValues = "";
 
 		if(input.isEmpty()){
@@ -124,12 +126,30 @@ public class MainInputController {
 		}
 
 		if(input.length() > 0){
-			throw new InvalidInputException("Invalid or duplicate attacks detected.");
+			throw new InvalidInputException("Invalid or duplicate attacks detected: " + input);
 		}
 
 		return attackValues;
 	}
-	
+
+	private String getSelected() {
+		String selected = "";
+
+		//Most beautiful ugly code!
+		if(ABox.isSelected()) selected += "A";
+		if(BBox.isSelected()) selected += "B";
+		if(CBox.isSelected()) selected += "C";
+		if(DBox.isSelected()) selected += "D";
+		if(EBox.isSelected()) selected += "E";
+		if(FBox.isSelected()) selected += "F";
+		if(GBox.isSelected()) selected += "G";
+		if(HBox.isSelected()) selected += "H";
+		if(IBox.isSelected()) selected += "I";
+		if(JBox.isSelected()) selected += "J";
+
+		return selected;
+	}
+
 	public static void setWrapper(WrapperController wrapperController) {
 		wrapper = wrapperController;
 	}
