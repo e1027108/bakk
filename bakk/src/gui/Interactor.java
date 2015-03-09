@@ -1,21 +1,38 @@
 package gui;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
+import dto.ArgumentDto;
 import javafx.scene.control.TextArea;
 
 public class Interactor {
 	
+	private static Interactor singleton;
 	private TextArea textArea;
 	private LinkedList<String> storedMessages;
+	private ArrayList<ArgumentDto> rawArguments;
 	
 	/**
-	 * creates an interactor to buffer messages and write them into the textarea the user can read
+	 * creates an interactor, responsible for interaction between logic, input and output
 	 * @param textArea the textarea to be read by the user
 	 */
-	public Interactor(TextArea textArea){ //TODO add graphical node representation
+	private Interactor(TextArea textArea){ //TODO add graphical node representation
 		this.textArea = textArea;
 		storedMessages = new LinkedList<String>();
+	}
+	
+	public static Interactor getInstance(TextArea textArea){
+		if(singleton == null){
+			singleton = new Interactor(textArea);
+		}
+		
+		//to be able to get a textarea into the interactor even after it was instantiated
+		if(singleton.textArea == null){
+			singleton.textArea = textArea;
+		}
+		
+		return singleton;
 	}
 	
 	/**
@@ -105,5 +122,14 @@ public class Interactor {
 	 */
 	public boolean hasNext(){
 		return !(storedMessages.size()>0);
+	}
+
+	public void setRawArguments(ArrayList<ArgumentDto> arguments) {
+		rawArguments = new ArrayList<ArgumentDto>();
+		rawArguments.addAll(arguments);
+	}
+
+	public ArrayList<ArgumentDto> getRawArguments() {
+		return rawArguments;
 	}
 }

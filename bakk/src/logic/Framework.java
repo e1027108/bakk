@@ -16,7 +16,7 @@ public class Framework {
 	 * creates an abstract argument framework
 	 * @param arguments the set of arguments that comprise the framework
 	 */
-	public Framework(ArrayList<Argument> arguments, Interactor interactor){
+	public Framework(ArrayList<Argument> arguments, Interactor interactor) throws IllegalArgumentException{
 		this.arguments = arguments;
 		this.interactor = interactor;
 	}

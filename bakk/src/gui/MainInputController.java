@@ -20,6 +20,10 @@ import javafx.stage.Stage;
 
 public class MainInputController {
 	
+	private static WrapperController wrapper;
+	
+	private Interactor interactor;
+	
 	@FXML
 	private AnchorPane root;
 
@@ -46,14 +50,11 @@ public class MainInputController {
 
 	@FXML
 	void initialize() {
-		/* if needed add assertions (get them from scene builder) */
-
-		//TODO later fix window size and possible scaling problems
-
+		interactor = Interactor.getInstance(null);
 		arguments = new ArrayList<ArgumentDto>();
 	}
 
-	@FXML
+	@FXML //TODO check if input handling is correct
 	public void onShowButton() throws InvalidInputException{ //TODO handle exceptions thrown by @FXML annotated methods
 		if(!argumentATxt.getText().isEmpty() || !attackATxt.getText().isEmpty()){
 			arguments.add(new ArgumentDto('A', parseArgument(argumentATxt), parseAttacks(attackATxt)));
@@ -86,6 +87,9 @@ public class MainInputController {
 			arguments.add(new ArgumentDto('J', parseArgument(argumentJTxt), parseAttacks(attackJTxt)));
 		}
 
+		// TODO has to check first whether the arguments attack anything that does not exist
+		interactor.setRawArguments(arguments);
+		wrapper.loadDemonstration();
 	}
 
 	private String parseArgument(TextField argument) {
@@ -124,5 +128,9 @@ public class MainInputController {
 		}
 
 		return attackValues;
+	}
+	
+	public static void setWrapper(WrapperController wrapperController) {
+		wrapper = wrapperController;
 	}
 }
