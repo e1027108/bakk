@@ -42,18 +42,19 @@ public class MainInputController {
 	@FXML
 	private Button showGraphBtn;
 
-	// TODO create hover over explanations
+	// TODO create tooltips
 
 	private ArrayList<ArgumentDto> arguments;
 
 	@FXML
 	void initialize() {
 		interactor = Interactor.getInstance(null);
-		arguments = new ArrayList<ArgumentDto>();
 	}
 
 	@FXML
 	public void onShowButton(){
+		arguments = new ArrayList<ArgumentDto>();
+		
 		try{
 			if(ABox.isSelected()){
 				arguments.add(new ArgumentDto('A', parseArgument(argumentATxt), parseAttacks(attackATxt)));
@@ -91,6 +92,7 @@ public class MainInputController {
 			return;
 		}
 
+		interactor.setRawArguments(arguments);
 		wrapper.loadDemonstration();
 	}
 

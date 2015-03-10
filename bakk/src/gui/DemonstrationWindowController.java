@@ -127,9 +127,7 @@ public class DemonstrationWindowController {
 
 		ArrayList<Extension> conflictFree = argumentFramework.getConflictFreeSets();
 
-		for(Extension e: conflictFree){
-			System.out.println("{" + e.getArgumentNames() + "}");
-		}
+		//printExtensions(conflictFree);
 
 		setUI();
 	}
@@ -140,9 +138,7 @@ public class DemonstrationWindowController {
 
 		ArrayList<Extension> complete = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
 
-		for(Extension e: complete){
-			System.out.println("{" + e.getArgumentNames() + "}");
-		}
+		//printExtensions(complete);
 
 		setUI();
 	}
@@ -153,9 +149,7 @@ public class DemonstrationWindowController {
 
 		ArrayList<Extension> preferred = argumentFramework.getPreferredExtensions(previousCheckBox.isSelected());
 
-		for(Extension e: preferred){
-			System.out.println("{" + e.getArgumentNames() + "}");
-		}
+		//printExtensions(preferred);
 
 		setUI();
 	}
@@ -166,9 +160,7 @@ public class DemonstrationWindowController {
 
 		ArrayList<Extension> stable = argumentFramework.getStableExtensions(previousCheckBox.isSelected());
 
-		for(Extension e: stable){
-			System.out.println("{" + e.getArgumentNames() + "}");
-		}
+		//printExtensions(stable);
 
 		setUI();
 	}
@@ -179,9 +171,9 @@ public class DemonstrationWindowController {
 
 		Extension grounded = argumentFramework.getGroundedExtension(previousCheckBox.isSelected());
 
-		if(grounded != null){
+		/*if(grounded != null){
 			System.out.println("{" + grounded.getArgumentNames() + "}");
-		}
+		}*/
 
 		setUI();
 	}
@@ -192,9 +184,7 @@ public class DemonstrationWindowController {
 
 		ArrayList<Extension> admissible = argumentFramework.getAdmissibleSets(previousCheckBox.isSelected());
 
-		for(Extension e: admissible){
-			System.out.println("{" + e.getArgumentNames() + "}");
-		}
+		//printExtensions(admissible);
 
 		setUI();
 	}
@@ -260,5 +250,12 @@ public class DemonstrationWindowController {
 
 	public static void setWrapper(WrapperController wrapperController){
 		wrapper = wrapperController;
+	}
+	
+	//for testing
+	public void printExtensions(ArrayList<Extension> ext){
+		for(Extension e: ext){
+			System.out.println("{" + e.getArgumentNames() + "}");
+		}
 	}
 }
