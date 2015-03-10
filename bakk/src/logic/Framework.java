@@ -129,6 +129,60 @@ public class Framework {
 		
 		return powerSet;
 	}
+	
+	/**
+	 * computes all admissible sets (= admissible extensions) of the framework
+	 * @details every conflict-free set is checked if it's admissible
+	 * @param usePrevious specifies if previously computed sets for the extensions should be used (true) or computed anew (false)
+	 * @return the set of admissible sets of the framework
+	 */
+	public ArrayList<Extension> getAdmissibleSets(boolean usePrevious){
+		ArrayList<Extension> cf;
+		ArrayList<Extension> admissible = new ArrayList<Extension>();
+		
+		//TODO outsource null/empty check
+		if(!usePrevious || (previousConflictFreeSets == null)){
+			cf = getConflictFreeSets();
+		}
+		else{
+			cf = previousConflictFreeSets;
+			notification = "Using previously computed conflict-free sets: ";
+			
+			if(cf.size() == 0){
+				notification += "There are no conflict-free sets!";
+			}
+			else{
+				notification += formatExtensions(cf);
+			}
+			
+			interactor.addToStoredMessages(notification);
+		}
+		
+		if(invalidityCheck(cf, "conflict-free sets", "admissible extensions")){
+			return null;
+		}
+		
+		for(Extension e: cf){
+			if(e.isAdmissible()){
+				admissible.add(e);
+			}
+		}
+		
+		if(admissible.size() > 0){
+			notification = "The admissible extensions are: "; 
+			notification += formatExtensions(admissible);
+		}
+		else{
+			notification = "There are no admissible extensions!";
+		}
+		interactor.addToStoredMessages(notification);
+		//TODO outsource message generation?
+		
+		previousAdmissibleSets = new ArrayList<Extension>();
+		previousAdmissibleSets.addAll(admissible);
+		
+		return admissible;
+	}
 
 	/**
 	 * computes all complete extensions of the framework
@@ -366,60 +420,6 @@ public class Framework {
 		interactor.addToStoredMessages("The grounded extension is: " + groundedExtension.format());
 		
 		return groundedExtension;
-	}
-
-	/**
-	 * computes all admissible sets (= admissible extensions) of the framework
-	 * @details every conflict-free set is checked if it's admissible
-	 * @param usePrevious specifies if previously computed sets for the extensions should be used (true) or computed anew (false)
-	 * @return the set of admissible sets of the framework
-	 */
-	public ArrayList<Extension> getAdmissibleSets(boolean usePrevious){
-		ArrayList<Extension> cf;
-		ArrayList<Extension> admissible = new ArrayList<Extension>();
-		
-		//TODO outsource null/empty check
-		if(!usePrevious || (previousConflictFreeSets == null)){
-			cf = getConflictFreeSets();
-		}
-		else{
-			cf = previousConflictFreeSets;
-			notification = "Using previously computed conflict-free sets: ";
-			
-			if(cf.size() == 0){
-				notification += "There are no conflict-free sets!";
-			}
-			else{
-				notification += formatExtensions(cf);
-			}
-			
-			interactor.addToStoredMessages(notification);
-		}
-		
-		if(invalidityCheck(cf, "conflict-free sets", "admissible extensions")){
-			return null;
-		}
-		
-		for(Extension e: cf){
-			if(e.isAdmissible()){
-				admissible.add(e);
-			}
-		}
-		
-		if(admissible.size() > 0){
-			notification = "The admissible extensions are: "; 
-			notification += formatExtensions(admissible);
-		}
-		else{
-			notification = "There are no admissible extensions!";
-		}
-		interactor.addToStoredMessages(notification);
-		//TODO outsource message generation?
-		
-		previousAdmissibleSets = new ArrayList<Extension>();
-		previousAdmissibleSets.addAll(admissible);
-		
-		return admissible;
 	}
 
 	/**

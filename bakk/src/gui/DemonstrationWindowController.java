@@ -42,79 +42,21 @@ public class DemonstrationWindowController {
 	private Framework argumentFramework;
 	private ArrayList<Argument> arguments;
 	private Interactor interactor;
-
-
-
+	private ArrayList<Extension> resultSet;
+	
 	@FXML
-	void initialize() {
+	void initialize() {		
 		interactor = Interactor.getInstance(explanationArea); //TODO add parameters later (for nodes)
 		readArguments(interactor.getRawArguments());
-
-		/* --------------------------- testing purposes ------------------------------- */
-
-      	ArrayList<Argument> arguments1 = new ArrayList<Argument>();
-      	ArrayList<Argument> arguments2 = new ArrayList<Argument>();
-      	ArrayList<Argument> arguments3 = new ArrayList<Argument>();
-      	ArrayList<Argument> arguments4 = new ArrayList<Argument>();
-      	ArrayList<Argument> arguments5 = new ArrayList<Argument>();
-      	ArrayList<Argument> arguments6 = new ArrayList<Argument>();
-      	ArrayList<Argument> arguments7 = new ArrayList<Argument>();
-      	ArrayList<Argument> arguments8 = null;
-
-    	// test one
-    	arguments1.add(new Argument('A',"A","B"));
-    	arguments1.add(new Argument('B',"B",""));
-    	arguments1.add(new Argument('C',"C","BD"));
-    	arguments1.add(new Argument('D',"D","CE"));
-    	arguments1.add(new Argument('E',"E","E"));
-
-    	// test two
-    	arguments2.add(new Argument('A',"A","B"));
-    	arguments2.add(new Argument('B',"B","AC"));
-    	arguments2.add(new Argument('C',"C","DE"));
-    	arguments2.add(new Argument('D',"D","B"));
-    	arguments2.add(new Argument('E',"E","AF"));
-    	arguments2.add(new Argument('F',"F","G"));
-    	arguments2.add(new Argument('G',"G",""));
-
-    	// test three
-    	arguments3.add(new Argument('A',"A","B"));
-    	arguments3.add(new Argument('B',"B","ACE"));
-    	arguments3.add(new Argument('C',"C","D"));
-    	arguments3.add(new Argument('D',"D","B"));
-    	arguments3.add(new Argument('E',"E","BF"));
-    	arguments3.add(new Argument('F',"F",""));
-    	arguments3.add(new Argument('G',"G","FD"));
-
-    	// test four
-    	arguments4.add(new Argument('A',"A","B"));
-    	arguments4.add(new Argument('B',"B","A"));
-    	arguments4.add(new Argument('C',"C","B"));
-
-    	// test five
-    	arguments5.add(new Argument('A',"A","B"));
-    	arguments5.add(new Argument('B',"B","AC"));
-    	arguments5.add(new Argument('C',"C","B"));
-
-    	// test six (nixon)
-    	arguments6.add(new Argument('A',"A","B"));
-    	arguments6.add(new Argument('B',"B","A"));
-
-    	// test seven is empty
-
-    	// test eight is null
-    	// TODO fix exceptions when getting null
-
-    	/* --------------------------- /testing purposes ------------------------------ */
-
 		argumentFramework = new Framework(arguments, interactor);
+		
+		
 	}
 
 	private void readArguments(ArrayList<ArgumentDto> rawArguments) {
 		arguments = new ArrayList<Argument>();
 		
 		if(null != rawArguments && !rawArguments.isEmpty()){
-			
 			for(ArgumentDto a: rawArguments){
 				arguments.add(new Argument(a.getName(), a.getStatement(), a.getAttacks()));
 			}
@@ -122,12 +64,23 @@ public class DemonstrationWindowController {
 	}
 
 	@FXML
-	public void onConflictFreeClick(){
+	public void onConflictFreeClick() {
+		interactor.emptyQueue();
+		
+		resultSet = argumentFramework.getConflictFreeSets();
+
+		//printExtensions(resultSet);
+
+		setUI();
+	}
+	
+	@FXML
+	public void onAdmissibleClick(){
 		interactor.emptyQueue();
 
-		ArrayList<Extension> conflictFree = argumentFramework.getConflictFreeSets();
+		resultSet = argumentFramework.getAdmissibleSets(previousCheckBox.isSelected());
 
-		//printExtensions(conflictFree);
+		//printExtensions(resultSet);
 
 		setUI();
 	}
@@ -136,9 +89,9 @@ public class DemonstrationWindowController {
 	public void onCompleteClick(){
 		interactor.emptyQueue();
 
-		ArrayList<Extension> complete = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
+		resultSet = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
 
-		//printExtensions(complete);
+		//printExtensions(resultSet);
 
 		setUI();
 	}
@@ -147,9 +100,9 @@ public class DemonstrationWindowController {
 	public void onPreferredClick(){
 		interactor.emptyQueue();
 
-		ArrayList<Extension> preferred = argumentFramework.getPreferredExtensions(previousCheckBox.isSelected());
+		resultSet = argumentFramework.getPreferredExtensions(previousCheckBox.isSelected());
 
-		//printExtensions(preferred);
+		//printExtensions(resultSet);
 
 		setUI();
 	}
@@ -158,9 +111,9 @@ public class DemonstrationWindowController {
 	public void onStableClick(){
 		interactor.emptyQueue();
 
-		ArrayList<Extension> stable = argumentFramework.getStableExtensions(previousCheckBox.isSelected());
+		resultSet = argumentFramework.getStableExtensions(previousCheckBox.isSelected());
 
-		//printExtensions(stable);
+		//printExtensions(resultSet);
 
 		setUI();
 	}
@@ -174,17 +127,6 @@ public class DemonstrationWindowController {
 		/*if(grounded != null){
 			System.out.println("{" + grounded.getArgumentNames() + "}");
 		}*/
-
-		setUI();
-	}
-
-	@FXML
-	public void onAdmissibleClick(){
-		interactor.emptyQueue();
-
-		ArrayList<Extension> admissible = argumentFramework.getAdmissibleSets(previousCheckBox.isSelected());
-
-		//printExtensions(admissible);
 
 		setUI();
 	}

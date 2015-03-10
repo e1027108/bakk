@@ -7,6 +7,4 @@ public class InvalidInputException extends Exception {
 	public InvalidInputException(String string) {
 		super(string);
 	}
-
-	//TODO maybe take another constructor argument and specify error message further
 }

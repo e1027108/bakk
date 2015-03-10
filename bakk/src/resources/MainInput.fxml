@@ -15,8 +15,8 @@
       </font>
     </Label>
     <Label fx:id="useLbl" layoutY="87.0" text="use?" AnchorPane.leftAnchor="50.0" />
-    <Label fx:id="addLbl" text="argument description (optional):" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="87.0" />
-    <Label fx:id="attackLbl" text="attacks (argument names, optional):" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="90.0" />
+    <Label fx:id="addLbl" text="argument description:" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="87.0" />
+    <Label fx:id="attackLbl" text="attacks:" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="90.0" />
     <CheckBox fx:id="ABox" indeterminate="false" mnemonicParsing="false" selected="false" text="A" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="125.0" />
     <TextField fx:id="argumentATxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="120.0" />
     <TextField fx:id="attackATxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="120.0" />
@@ -48,5 +48,10 @@
     <TextField fx:id="argumentJTxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="390.0" />
     <TextField fx:id="attackJTxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="390.0" />
     <Button fx:id="showGraphBtn" mnemonicParsing="false" onAction="#onShowButton" prefWidth="229.0" text="show graph" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="450.0" />
+    <Label fx:id="errorLbl" alignment="CENTER" prefWidth="700.0" text="errorlabel" textAlignment="CENTER" textFill="RED" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
+      <font>
+        <Font size="16.0" />
+      </font>
+    </Label>
   </children>
 </AnchorPane>
