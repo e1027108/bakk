@@ -68,8 +68,7 @@ public class MainInputController {
 
 		errorLbl.setText("");
 
-		showTip = new Tooltip();
-		showTip.setText("Shows a graph representation of the created abstract argumentation framework.\nThere you can compute various extensions.");
+		showTip = new Tooltip("Shows a graph representation of the created abstract argumentation framework.\nThere you can compute various extensions.");
 		showGraphBtn.setTooltip(showTip);
 
 		checkBoxes = new ArrayList<CheckBox>();
@@ -86,28 +85,24 @@ public class MainInputController {
 		alphabetical[1] = statements;
 		alphabetical[2] = attacks;
 
-		useTip = new Tooltip();
-		useTip.setText("Select which arguments you want\nto use for further computation.");
+		useTip = new Tooltip("Select which arguments you want\nto use for further computation.");
 		useLbl.setTooltip(useTip);
 		for(CheckBox c: checkBoxes){
 			c.setTooltip(useTip);
 		}
 
-		descriptionTip = new Tooltip();
-		descriptionTip.setText("Assign a statement or description to the argument.");
+		descriptionTip = new Tooltip("Assign a statement or description to the argument.");
 		addLbl.setTooltip(descriptionTip);
 		for(TextField f: statements){
 			f.setTooltip(descriptionTip);
 		}
 
-		attackTip = new Tooltip();
-		attackTip.setText("Write the name of the arguments\nthis argument should attack here.");
+		attackTip = new Tooltip("Write the name of the arguments\nthis argument should attack here.");
 		for(TextField f: attacks){
 			f.setTooltip(attackTip);
 		}
 		
-		generalAttackTip = new Tooltip();
-		generalAttackTip.setText("Set attacks between arguments.");
+		generalAttackTip = new Tooltip("Set attacks between arguments.");
 		attackLbl.setTooltip(generalAttackTip);
 		
 	}

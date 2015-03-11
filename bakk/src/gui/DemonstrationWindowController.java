@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import logic.Argument;
 import logic.Extension;
@@ -33,7 +34,7 @@ public class DemonstrationWindowController {
 	private URL location; //location of file
 
 	@FXML
-	private Button backButton, nextButton, showAllButton, arrowButton, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn; //buttons in demonstration window
+	private Button backBtn, nextBtn, showAllBtn, arrowBtn, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn; //buttons in demonstration window
 
 	@FXML
 	private CheckBox previousCheckBox; //checkbox whether to use previously computed sets or extensions
@@ -46,11 +47,13 @@ public class DemonstrationWindowController {
 
 	@FXML
 	private AnchorPane root; //root pane containing all the UI elements
+	
+	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, backTip, nextTip, allTip;
 
 	private Framework argumentFramework; //argument framework containing the arguments
 	private ArrayList<Argument> arguments; //arguments of the framework
 	private Interactor interactor; //Interactor controlling the results the user sees
-	private ArrayList<Extension> resultSet; //set containing computation results TODO use or add supresswarnings
+	private ArrayList<Extension> resultSet; //set containing computation results
 	
 	/**
 	 * initializes the controller
@@ -63,7 +66,41 @@ public class DemonstrationWindowController {
 		readArguments(interactor.getRawArguments());
 		argumentFramework = new Framework(arguments, interactor);
 		
-		//TODO tooltips
+		arrowTip = new Tooltip("Returns to input view.");
+		arrowBtn.setTooltip(arrowTip);
+		
+		backTip = new Tooltip("Goes back a step of the computation.");
+		backBtn.setTooltip(backTip);
+		
+		nextTip = new Tooltip("Shows the next step of the computation.");
+		nextBtn.setTooltip(nextTip);
+		
+		allTip = new Tooltip("Shows all steps of the computation.");
+		showAllBtn.setTooltip(allTip);
+		
+		previousTip = new Tooltip("If checked the program will not repeat computations it already has performed,"
+				+ "\nbut instead use the previous computations' results for further computations.");
+		previousCheckBox.setTooltip(previousTip);
+		
+		//TODO add text to following tooltips
+		
+		conflictFreeTip = new Tooltip("");
+		conflictFreeBtn.setTooltip(conflictFreeTip);
+		
+		admissibleTip = new Tooltip("");
+		admissibleBtn.setTooltip(admissibleTip);
+		
+		completeTip = new Tooltip("");
+		completeBtn.setTooltip(completeTip);
+		
+		stableTip = new Tooltip("");
+		stableBtn.setTooltip(stableTip);
+		
+		preferredTip = new Tooltip("");
+		preferredBtn.setTooltip(preferredTip);
+		
+		groundedTip = new Tooltip("");
+		groundedBtn.setTooltip(groundedTip);
 	}
 
 	/**
@@ -173,7 +210,7 @@ public class DemonstrationWindowController {
 	public void onNextClick(){
 		interactor.printLine();
 
-		backButton.setDisable(false);
+		backBtn.setDisable(false);
 
 		if(interactor.hasNext()){
 			disableForwardButtons();
@@ -190,11 +227,11 @@ public class DemonstrationWindowController {
 		interactor.removeLine();
 
 		if(explanationArea.getText().isEmpty()){
-			backButton.setDisable(true);
+			backBtn.setDisable(true);
 		}
 
-		showAllButton.setDisable(false);
-		nextButton.setDisable(false);
+		showAllBtn.setDisable(false);
+		nextBtn.setDisable(false);
 		
 		//TODO revert node change
 	}
@@ -206,7 +243,7 @@ public class DemonstrationWindowController {
 	public void onShowAllClick(){
 		interactor.printAllLines();
 
-		backButton.setDisable(false);
+		backBtn.setDisable(false);
 
 		if(interactor.hasNext()){
 			disableForwardButtons();
@@ -217,8 +254,8 @@ public class DemonstrationWindowController {
 	 * disables the next and show all buttons
 	 */
 	public void disableForwardButtons(){
-		nextButton.setDisable(true);
-		showAllButton.setDisable(true);
+		nextBtn.setDisable(true);
+		showAllBtn.setDisable(true);
 	}
 
 	/**
@@ -234,8 +271,8 @@ public class DemonstrationWindowController {
 	 */
 	public void setUI(){
 		explanationArea.setText("");
-		nextButton.setDisable(false);
-		showAllButton.setDisable(false);
+		nextBtn.setDisable(false);
+		showAllBtn.setDisable(false);
 		interactor.printLine();
 	}
 
