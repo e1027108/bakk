@@ -6,6 +6,12 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * The Abstract Argumentation Framework program enables the user to
+ *  create abstract argumentation frameworks, compute their extensions
+ *  and to view a step-by-step guide through the computation process
+ * @author Patrick Bellositz
+ */
 public class Main extends Application{
 	/**
 	 * the wrapper pane for all subsequently shown panes (i.e. input, demonstration)

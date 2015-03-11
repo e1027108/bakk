@@ -6,6 +6,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * Controller controlling the Wrapper.fxml file behaviour
+ * 	for controlling which other scenes are shown on screen
+ * @author Patrick Bellositz
+ */
 public class WrapperController {
 	@FXML
 	private AnchorPane root, mainPane, demonstrationPane; //panes that can be shown and the root pane

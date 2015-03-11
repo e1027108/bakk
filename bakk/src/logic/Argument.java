@@ -1,5 +1,9 @@
 package logic;
 
+/**
+ * The Argument class describes an argument in an abstract argumentation framework
+ * @author Patrick Bellositz
+ */
 public class Argument {
 	private char name; //name of the argument
 	private String statement; //statement describing the argument

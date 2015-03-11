@@ -1,5 +1,9 @@
 package dto;
 
+/**
+ * Data Transfer Object for Arguments from Input to Demonstration
+ * @author Patrick Bellositz
+ */
 public class ArgumentDto {
 	private char name; //name of the argument
 	private String statement; //statement describing the argument

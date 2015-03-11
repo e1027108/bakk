@@ -2,6 +2,11 @@ package logic;
 
 import java.util.ArrayList;
 
+/**
+ * The Extension class contains a set of arguments and is capable
+ *  of computing if it is of (most of) the extension types of an abstract argumentation framework
+ * @author Patrick Bellositz
+ */
 public class Extension {
 
 	private ArrayList<Argument> arguments; //arguments of extension

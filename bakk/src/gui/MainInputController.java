@@ -15,6 +15,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * Controller controlling the MainInput.fxml file behaviour
+ *  for managing input to further use in computations
+ * @author Patrick Bellositz
+ */
 public class MainInputController {
 
 	/**

@@ -6,6 +6,11 @@ import java.util.LinkedList;
 import dto.ArgumentDto;
 import javafx.scene.control.TextArea;
 
+/**
+ * Class connecting information transfer between user and program
+ * 	as well as between the different UI scenes
+ * @author Patrick Bellositz
+ */
 public class Interactor {
 	/**
 	 * the only (singleton) instance of the Interactor class

@@ -4,6 +4,11 @@ import gui.Interactor;
 
 import java.util.ArrayList;
 
+/**
+ * The Framework class is a representation of an abstract argumentation framework
+ *  and includes methods to compute its extensions (together with the extension class)
+ * @author Patrick Bellositz
+ */
 public class Framework {
 	private ArrayList<Argument> arguments; //the set of arguments within the framework
 	private ArrayList<Extension> previousConflictFreeSets; //a stored, previously computed set of conflict-free sets

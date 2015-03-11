@@ -1,5 +1,9 @@
 package exceptions;
 
+/**
+ * Exception for invalid but programatically useable input
+ * @author Patrick Bellositz
+ */
 public class InvalidInputException extends Exception {
 
 	/**

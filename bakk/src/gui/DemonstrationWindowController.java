@@ -14,6 +14,11 @@ import logic.Argument;
 import logic.Extension;
 import logic.Framework;
 
+/**
+ * Controller controlling the DemonstrationWindow.fxml file behaviour
+ * 	for demonstrating how abstract argumentation frameworks work
+ * @author Patrick Bellositz
+ */
 public class DemonstrationWindowController {
 
 	/**
