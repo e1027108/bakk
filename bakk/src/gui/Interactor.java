@@ -7,11 +7,14 @@ import dto.ArgumentDto;
 import javafx.scene.control.TextArea;
 
 public class Interactor {
-	
+	/**
+	 * the only (singleton) instance of the Interactor class
+	 */
 	private static Interactor singleton;
-	private TextArea textArea;
-	private LinkedList<String> storedMessages;
-	private ArrayList<ArgumentDto> rawArguments;
+	
+	private TextArea textArea; //the textArea controlled by the Interactor
+	private LinkedList<String> storedMessages; //queue storing the messages to be shown to the user
+	private ArrayList<ArgumentDto> rawArguments; //ArgumentDtos stored for further use in an argument Framework
 	
 	/**
 	 * creates an interactor, responsible for interaction between logic, input and output
@@ -138,6 +141,9 @@ public class Interactor {
 		rawArguments.addAll(arguments);
 	}
 
+	/**
+	 * @return the ArgumentDtos stored for further use
+	 */
 	public ArrayList<ArgumentDto> getRawArguments() {
 		return rawArguments;
 	}

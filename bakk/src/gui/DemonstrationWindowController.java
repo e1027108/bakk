@@ -16,33 +16,36 @@ import logic.Framework;
 
 public class DemonstrationWindowController {
 
+	/**
+	 * wrapper object controlling what is shown on screen
+	 */
 	private static WrapperController wrapper;
 
 	@FXML
-	private ResourceBundle resources;
+	private ResourceBundle resources; //resource bundle
 
 	@FXML
-	private URL location;
+	private URL location; //location of file
 
 	@FXML
-	private Button backButton, nextButton, showAllButton, arrowButton, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn;
+	private Button backButton, nextButton, showAllButton, arrowButton, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn; //buttons in demonstration window
 
 	@FXML
-	private CheckBox previousCheckBox;
+	private CheckBox previousCheckBox; //checkbox whether to use previously computed sets or extensions
 
 	@FXML
-	private TextArea explanationArea;
+	private TextArea explanationArea; //textArea describing every computation
 
 	@FXML
-	private AnchorPane graphPane;
+	private AnchorPane graphPane; //pane where node illustrations are shown
 
 	@FXML
-	private AnchorPane root;
+	private AnchorPane root; //root pane containing all the UI elements
 
-	private Framework argumentFramework;
-	private ArrayList<Argument> arguments;
-	private Interactor interactor;
-	private ArrayList<Extension> resultSet;
+	private Framework argumentFramework; //argument framework containing the arguments
+	private ArrayList<Argument> arguments; //arguments of the framework
+	private Interactor interactor; //Interactor controlling the results the user sees
+	private ArrayList<Extension> resultSet; //set containing computation results TODO use or add supresswarnings
 	
 	/**
 	 * initializes the controller

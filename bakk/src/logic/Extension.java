@@ -214,6 +214,9 @@ public class Extension {
 		return formatted;
 	}
 	
+	/**
+	 * @return list of arguments of the extension
+	 */
 	public ArrayList<Argument> getArguments(){
 		return arguments;
 	}

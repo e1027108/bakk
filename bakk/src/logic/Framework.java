@@ -464,10 +464,17 @@ public class Framework {
 		return false;
 	}
 	
+	/**
+	 * stores a message at the end of the queue of the Interactor
+	 * @param message message to be stored by Interactor
+	 */
 	public void addToInteractor(String message){
 		interactor.addToStoredMessages(message);
 	}
 	
+	/**
+	 * @return the list of the arguments of the extension
+	 */
 	public ArrayList<Argument> getArguments() {
 		return arguments;
 	}

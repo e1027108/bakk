@@ -8,7 +8,7 @@ import javafx.scene.layout.AnchorPane;
 
 public class WrapperController {
 	@FXML
-	private AnchorPane root, mainPane, demonstrationPane;
+	private AnchorPane root, mainPane, demonstrationPane; //panes that can be shown and the root pane
 
 	/**
 	 * at program start shows the main input window

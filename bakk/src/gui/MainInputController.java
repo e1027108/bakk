@@ -17,42 +17,42 @@ import javafx.scene.layout.AnchorPane;
 
 public class MainInputController {
 
+	/**
+	 * wrapper object controlling what is shown on screen
+	 */
 	private static WrapperController wrapper;
 
-	private Interactor interactor;
+	@FXML
+	private AnchorPane root; //root pane
 
 	@FXML
-	private AnchorPane root;
+	private ResourceBundle resources; //resource bundle
 
 	@FXML
-	private ResourceBundle resources;
-
-	@FXML
-	private URL location;
+	private URL location; //file location
 
 	@FXML
 	private TextField argumentATxt, argumentBTxt, argumentCTxt, argumentDTxt, argumentETxt, argumentFTxt, 
 	argumentGTxt, argumentHTxt, argumentITxt, argumentJTxt, attackATxt, attackBTxt, attackCTxt, attackDTxt,
-	attackETxt, attackFTxt, attackGTxt, attackHTxt, attackITxt, attackJTxt;
+	attackETxt, attackFTxt, attackGTxt, attackHTxt, attackITxt, attackJTxt; //text fields for input
 
 	@FXML
-	private CheckBox ABox, BBox, CBox, DBox, EBox, FBox, GBox, HBox, IBox, JBox; 
+	private CheckBox ABox, BBox, CBox, DBox, EBox, FBox, GBox, HBox, IBox, JBox; //checkboxes selecting which textfields to be read from
 
 	@FXML
-	private Label useLbl, addLbl, attackLbl, headlineLbl, errorLbl;
+	private Label useLbl, addLbl, attackLbl, headlineLbl, errorLbl; //descriptive labels
 
 	@FXML
-	private Button showGraphBtn;
+	private Button showGraphBtn; //button to go to next window
 
-	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip;
+	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip; //tooltips describing what to input or what happens
 
-	// TODO create tooltips
-
-	private ArrayList<ArgumentDto> arguments;
-	private ArrayList<CheckBox> checkBoxes;
-	private ArrayList<TextField> statements;
-	private ArrayList<TextField> attacks;
-	private ArrayList<?> alphabetical[];
+	private Interactor interactor; //Interactor controlling the results the user sees
+	private ArrayList<ArgumentDto> arguments; //arguments read from the text fields
+	private ArrayList<CheckBox> checkBoxes; //list of checkboxes selecting information to be used
+	private ArrayList<TextField> statements; //list of textfields containing argument describing statments
+	private ArrayList<TextField> attacks; //list of textfields containing the attack information
+	private ArrayList<?> alphabetical[]; //array of input containing lists
 
 	/**
 	 * gets an Interactor and adds tooltips for elements
