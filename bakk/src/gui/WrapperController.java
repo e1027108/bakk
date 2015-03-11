@@ -1,9 +1,7 @@
 package gui;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-import dto.ArgumentDto;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
@@ -12,11 +10,17 @@ public class WrapperController {
 	@FXML
 	private AnchorPane root, mainPane, demonstrationPane;
 
+	/**
+	 * at program start shows the main input window
+	 */
 	@FXML
 	void initialize(){
 		loadMain();
 	}
 
+	/**
+	 * loads the main input file and shows it on screen
+	 */
 	@FXML
 	public void loadMain() {
 		if(mainPane == null){
@@ -31,6 +35,9 @@ public class WrapperController {
 		root.getChildren().setAll(mainPane);
 	}
 
+	/**
+	 * loads the demonstration window file and shows it on screen
+	 */
 	@FXML
 	public void loadDemonstration(){
 		if(demonstrationPane == null){

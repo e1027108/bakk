@@ -22,6 +22,11 @@ public class Interactor {
 		storedMessages = new LinkedList<String>();
 	}
 	
+	/**
+	 * static method responsible for only creating a single Interactor for all objects
+	 * @param textArea the textArea into which the interactor writes
+	 * @return the only instance of the Interactor
+	 */
 	public static Interactor getInstance(TextArea textArea){
 		if(singleton == null){
 			singleton = new Interactor(textArea);
@@ -124,6 +129,10 @@ public class Interactor {
 		return !(storedMessages.size()>0);
 	}
 
+	/**
+	 * stores the ArgumentDtos
+	 * @param arguments the ArgumentDtos to be stored
+	 */
 	public void setRawArguments(ArrayList<ArgumentDto> arguments) {
 		rawArguments = new ArrayList<ArgumentDto>();
 		rawArguments.addAll(arguments);

@@ -44,15 +44,24 @@ public class DemonstrationWindowController {
 	private Interactor interactor;
 	private ArrayList<Extension> resultSet;
 	
+	/**
+	 * initializes the controller
+	 * @details gets the interactor, reads arguments from it,
+	 * 			creates the Framework and sets tooltips
+	 */
 	@FXML
 	void initialize() {		
 		interactor = Interactor.getInstance(explanationArea); //TODO add parameters later (for nodes)
 		readArguments(interactor.getRawArguments());
 		argumentFramework = new Framework(arguments, interactor);
 		
-		
+		//TODO tooltips
 	}
 
+	/**
+	 * converts Arguments from ArgumentDtos and saves them
+	 * @param rawArguments a list of ArgumentDtos
+	 */
 	private void readArguments(ArrayList<ArgumentDto> rawArguments) {
 		arguments = new ArrayList<Argument>();
 		
@@ -63,6 +72,9 @@ public class DemonstrationWindowController {
 		}
 	}
 
+	/**
+	 * initiates the computation of the conflict free sets of the framework
+	 */
 	@FXML
 	public void onConflictFreeClick() {
 		interactor.emptyQueue();
@@ -74,6 +86,9 @@ public class DemonstrationWindowController {
 		setUI();
 	}
 	
+	/**
+	 * initiates the computation of the admissible sets of the framework
+	 */
 	@FXML
 	public void onAdmissibleClick(){
 		interactor.emptyQueue();
@@ -85,6 +100,9 @@ public class DemonstrationWindowController {
 		setUI();
 	}
 
+	/**
+	 * initiates the computation of the complete extensions of the framework
+	 */
 	@FXML
 	public void onCompleteClick(){
 		interactor.emptyQueue();
@@ -96,6 +114,9 @@ public class DemonstrationWindowController {
 		setUI();
 	}
 
+	/**
+	 * initiates the computation of the preferred extensions of the framework
+	 */
 	@FXML
 	public void onPreferredClick(){
 		interactor.emptyQueue();
@@ -107,6 +128,9 @@ public class DemonstrationWindowController {
 		setUI();
 	}
 
+	/**
+	 * initiates the computation of the stable extensions of the framework
+	 */
 	@FXML
 	public void onStableClick(){
 		interactor.emptyQueue();
@@ -118,6 +142,9 @@ public class DemonstrationWindowController {
 		setUI();
 	}
 
+	/**
+	 * initiates the computation of the grounded extension of the framework
+	 */
 	@FXML
 	public void onGroundedClick(){
 		interactor.emptyQueue();
@@ -131,6 +158,25 @@ public class DemonstrationWindowController {
 		setUI();
 	}
 
+	/**
+	 * moves the output of the computation one step forward
+	 */
+	@FXML
+	public void onNextClick(){
+		interactor.printLine();
+
+		backButton.setDisable(false);
+
+		if(interactor.hasNext()){
+			disableForwardButtons();
+		}
+		
+		//TODO show node change
+	}
+	
+	/**
+	 * moves the output of the computation one step back
+	 */
 	@FXML
 	public void onBackClick(){
 		interactor.removeLine();
@@ -141,19 +187,13 @@ public class DemonstrationWindowController {
 
 		showAllButton.setDisable(false);
 		nextButton.setDisable(false);
+		
+		//TODO revert node change
 	}
 
-	@FXML
-	public void onNextClick(){
-		interactor.printLine();
-
-		backButton.setDisable(false);
-
-		if(interactor.hasNext()){
-			disableForwardButtons();
-		}
-	}
-
+	/**
+	 * shows the complete computation process in text
+	 */
 	@FXML
 	public void onShowAllClick(){
 		interactor.printAllLines();
@@ -165,16 +205,25 @@ public class DemonstrationWindowController {
 		}
 	}
 
+	/**
+	 * disables the next and show all buttons
+	 */
 	public void disableForwardButtons(){
 		nextButton.setDisable(true);
 		showAllButton.setDisable(true);
 	}
 
+	/**
+	 * returns to main input window
+	 */
 	@FXML
 	public void onArrowClick(){
 		wrapper.loadMain();
 	}
 
+	/**
+	 * brings the UI into a state where viewing of the computation process is possible
+	 */
 	public void setUI(){
 		explanationArea.setText("");
 		nextButton.setDisable(false);
@@ -182,19 +231,19 @@ public class DemonstrationWindowController {
 		interactor.printLine();
 	}
 
-	public void setArguments(ArrayList<ArgumentDto> arguments){
-		for(ArgumentDto a: arguments){
-			this.arguments.add(new Argument(a.getName(),"","")); //TODO replace strings with something that makes sense
-		}
-
-		System.out.println("erfolg");
-	}
-
+	/**
+	 * sets the wrapper for all windows to apply to this controller's window
+	 * @param wrapperController the wrapper controlling which window is shown
+	 */
 	public static void setWrapper(WrapperController wrapperController){
 		wrapper = wrapperController;
 	}
 	
-	//for testing
+	/**
+	 * prints the arguments of all computed extensions (only for testing)
+	 * @param ext the extensions to be printed
+	 */
+	//TODO remove some time
 	public void printExtensions(ArrayList<Extension> ext){
 		for(Extension e: ext){
 			System.out.println("{" + e.getArgumentNames() + "}");

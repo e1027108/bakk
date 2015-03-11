@@ -13,6 +13,9 @@ public class Main extends Application{
 		launch(args);
 	}
 
+	/**
+	 * loads the Wrapper file creates a scene for it and shows it on screen
+	 */
 	@Override
 	public void start(Stage stage) throws Exception {
 

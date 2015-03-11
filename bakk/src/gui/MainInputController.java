@@ -54,6 +54,9 @@ public class MainInputController {
 	private ArrayList<TextField> attacks;
 	private ArrayList<?> alphabetical[];
 
+	/**
+	 * gets an Interactor and adds tooltips for elements
+	 */
 	@FXML
 	void initialize() {
 		interactor = Interactor.getInstance(null);
@@ -104,6 +107,9 @@ public class MainInputController {
 		
 	}
 
+	/**
+	 * reads text from selected rows and stores it into ArgumentDtos, then initiates screen change to Demonstration Window
+	 */
 	@FXML
 	public void onShowButton(){
 		arguments = new ArrayList<ArgumentDto>();
@@ -141,6 +147,11 @@ public class MainInputController {
 		wrapper.loadDemonstration();
 	}
 
+	/**
+	 * creates standard description for an argument or returns given one
+	 * @param argument the TextField containing the description
+	 * @return the standard or given description
+	 */
 	private String parseArgument(TextField argument) {
 		if(argument.getText().isEmpty()){
 			return "no argument description";
@@ -148,6 +159,12 @@ public class MainInputController {
 		return argument.getText();
 	}
 
+	/**
+	 * reads attack String, filters and checks for invalid input
+	 * @param attack the TextField containing the attack String
+	 * @return a String of valid attacks
+	 * @throws InvalidInputException if there is invalid input, throws error message to calling method
+	 */
 	private String parseAttacks(TextField attack) throws InvalidInputException {
 		String input = attack.getText();
 		String argumentNames = getSelected();
@@ -179,6 +196,10 @@ public class MainInputController {
 		return attackValues;
 	}
 
+	/**
+	 * checks which Arguments' are selected
+	 * @return a String of selected Arguments
+	 */
 	private String getSelected() {
 		String selected = "";
 
@@ -191,6 +212,10 @@ public class MainInputController {
 		return selected;
 	}
 
+	/**
+	 * sets the wrapper for all windows to apply to this controller's window
+	 * @param wrapperController the wrapper controlling which window is shown
+	 */
 	public static void setWrapper(WrapperController wrapperController) {
 		wrapper = wrapperController;
 	}

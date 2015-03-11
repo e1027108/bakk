@@ -5,6 +5,12 @@ public class ArgumentDto {
 	private String statement;
 	private String attacks;
 	
+	/**
+	 * creates a Data Transfer Object for arguments
+	 * @param name name of the argument
+	 * @param statement text or formula describing the argument
+	 * @param attacks string of argument names the argument attacks
+	 */
 	public ArgumentDto(char name, String statement, String attacks){
 		this.setName(name);
 		this.setStatement(statement);

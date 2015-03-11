@@ -1,7 +1,5 @@
 package logic;
 
-import java.util.ArrayList;
-
 public class Argument {
 	private char name;
 	private String statement;
