@@ -61,10 +61,8 @@ public class DemonstrationWindowController {
 	 * 			creates the Framework and sets tooltips
 	 */
 	@FXML
-	void initialize() {		
-		interactor = Interactor.getInstance(explanationArea); //TODO add parameters later (for nodes)
-		readArguments(interactor.getRawArguments());
-		argumentFramework = new Framework(arguments, interactor);
+	void initialize() {
+		setInitialValues();
 		
 		arrowTip = new Tooltip("Returns to input view.");
 		arrowBtn.setTooltip(arrowTip);
@@ -82,24 +80,22 @@ public class DemonstrationWindowController {
 				+ "\nbut instead use the previous computations' results for further computations.");
 		previousCheckBox.setTooltip(previousTip);
 		
-		//TODO add text to following tooltips
-		
-		conflictFreeTip = new Tooltip("");
+		conflictFreeTip = new Tooltip("A set of arguments is conflict-free,\nif none of it's arguments attack another.\n\nClick to compute all conflict-free sets.");
 		conflictFreeBtn.setTooltip(conflictFreeTip);
 		
-		admissibleTip = new Tooltip("");
+		admissibleTip = new Tooltip("A conflict-free set is an admissible extension,\nif it defends each of it's arguments.\n\nClick to compute all admissible extensions.");
 		admissibleBtn.setTooltip(admissibleTip);
 		
-		completeTip = new Tooltip("");
+		completeTip = new Tooltip("An admissible extension is a complete extension,\nif it contains every argument it defends.\n\nClick to compute all complete extensions.");
 		completeBtn.setTooltip(completeTip);
 		
-		stableTip = new Tooltip("");
+		stableTip = new Tooltip("A conflict-free set is a stable extension,\nif it attacks every argument it doesn't contain.\n\nClick to compute all stable extensions.");
 		stableBtn.setTooltip(stableTip);
 		
-		preferredTip = new Tooltip("");
+		preferredTip = new Tooltip("An admissible extension is a preferred extension,\nif it is not a subset of another admissible extension.\n\nClick to compute all preferred extensions.");
 		preferredBtn.setTooltip(preferredTip);
 		
-		groundedTip = new Tooltip("");
+		groundedTip = new Tooltip("The extension containing all arguments that all\ncomplete extensions have in common is the grounded extension.\n\nClick to compute the grounded extension.");
 		groundedBtn.setTooltip(groundedTip);
 	}
 
@@ -263,6 +259,7 @@ public class DemonstrationWindowController {
 	 */
 	@FXML
 	public void onArrowClick(){
+		explanationArea.setText("");
 		wrapper.loadMain();
 	}
 
@@ -282,6 +279,27 @@ public class DemonstrationWindowController {
 	 */
 	public static void setWrapper(WrapperController wrapperController){
 		wrapper = wrapperController;
+	}
+	
+	/**
+	 * @return the text area used for result output
+	 */
+	public TextArea getTextArea(){
+		return explanationArea;
+	}
+	
+	/**
+	 * sets the initial UI and data values that can be changed but not unchangable values
+	 */
+	public void setInitialValues() {
+		interactor = Interactor.getInstance(this); //TODO add parameters later (for nodes)
+		readArguments(interactor.getRawArguments());
+		argumentFramework = new Framework(arguments, interactor);
+		
+		explanationArea.setText("");
+		backBtn.setDisable(true);
+		nextBtn.setDisable(true);
+		showAllBtn.setDisable(true);	
 	}
 	
 	/**

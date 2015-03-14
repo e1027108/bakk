@@ -144,6 +144,7 @@ public class MainInputController {
 
 		errorLbl.setText("");
 		interactor.setRawArguments(arguments);
+		interactor.setDemonstrationValues();
 		wrapper.loadDemonstration();
 	}
 
