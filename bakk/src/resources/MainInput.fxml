@@ -17,7 +17,7 @@
     <Label fx:id="useLbl" layoutY="87.0" text="use?" AnchorPane.leftAnchor="50.0" />
     <Label fx:id="addLbl" text="argument description:" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="87.0" />
     <Label fx:id="attackLbl" text="attacks:" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="90.0" />
-    <CheckBox fx:id="ABox" indeterminate="false" mnemonicParsing="false" selected="false" text="A" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="125.0" />
+    <CheckBox fx:id="ABox" mnemonicParsing="false" text="A" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="125.0" />
     <TextField fx:id="argumentATxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="120.0" />
     <TextField fx:id="attackATxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="120.0" />
     <CheckBox fx:id="BBox" mnemonicParsing="false" text="B" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="155.0" />

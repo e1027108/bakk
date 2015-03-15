@@ -74,7 +74,7 @@ public class MainInputController {
 		checkBoxes = new ArrayList<CheckBox>();
 		statements = new ArrayList<TextField>();
 		attacks = new ArrayList<TextField>();
-		Collections.addAll(checkBoxes, ABox, BBox, CBox, DBox, EBox, FBox, HBox, IBox, JBox);
+		Collections.addAll(checkBoxes, ABox, BBox, CBox, DBox, EBox, FBox, GBox, HBox, IBox, JBox);
 		Collections.addAll(statements, argumentATxt, argumentBTxt, argumentCTxt, argumentDTxt, argumentETxt,
 				argumentFTxt, argumentGTxt, argumentHTxt, argumentITxt, argumentJTxt);
 		Collections.addAll(attacks, attackATxt, attackBTxt, attackCTxt, attackDTxt, attackETxt, attackFTxt,
@@ -191,6 +191,7 @@ public class MainInputController {
 		}
 
 		if(input.length() > 0){
+			System.out.println(input);
 			throw new InvalidInputException("Invalid or duplicate attacks detected: " + input);
 		}
 
