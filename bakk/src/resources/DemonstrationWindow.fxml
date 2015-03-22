@@ -8,7 +8,6 @@
 <AnchorPane fx:id="root" prefHeight="550.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.DemonstrationWindowController">
   <!-- TODO Add Nodes -->
   <children>
-    <AnchorPane fx:id="graphPane" prefHeight="450.0" prefWidth="440.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
     <TextArea fx:id="explanationArea" editable="false" prefHeight="420.0" prefWidth="330.0" wrapText="true" AnchorPane.leftAnchor="460.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
     <Button id="backButton" fx:id="backBtn" cancelButton="false" disable="true" mnemonicParsing="false" onAction="#onBackClick" prefWidth="60.0" text="back" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="260.0" />
     <Button id="nextButton" fx:id="nextBtn" disable="true" mnemonicParsing="false" onAction="#onNextClick" prefWidth="60.0" text="next" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="190.0" />

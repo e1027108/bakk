@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import com.sun.prism.paint.Color;
+
 import dto.ArgumentDto;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -43,9 +45,6 @@ public class DemonstrationWindowController {
 	private TextArea explanationArea; //textArea describing every computation
 
 	@FXML
-	private AnchorPane graphPane; //pane where node illustrations are shown
-
-	@FXML
 	private AnchorPane root; //root pane containing all the UI elements
 	
 	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, backTip, nextTip, allTip;
@@ -54,11 +53,12 @@ public class DemonstrationWindowController {
 	private ArrayList<Argument> arguments; //arguments of the framework
 	private Interactor interactor; //Interactor controlling the results the user sees
 	private ArrayList<Extension> resultSet; //set containing computation results
+	private NodePane graphPane; //pane where node illustrations are shown
 	
 	/**
 	 * initializes the controller
 	 * @details gets the interactor, reads arguments from it,
-	 * 			creates the Framework and sets tooltips
+	 * 			creates Framework and Graph and sets tooltips
 	 */
 	@FXML
 	void initialize() {
@@ -97,6 +97,8 @@ public class DemonstrationWindowController {
 		
 		groundedTip = new Tooltip("The extension containing all arguments that all\ncomplete extensions have in common is the grounded extension.\n\nClick to compute the grounded extension.");
 		groundedBtn.setTooltip(groundedTip);
+		
+		
 	}
 
 	/**
@@ -260,6 +262,7 @@ public class DemonstrationWindowController {
 	@FXML
 	public void onArrowClick(){
 		explanationArea.setText("");
+		
 		wrapper.loadMain();
 	}
 
@@ -299,7 +302,15 @@ public class DemonstrationWindowController {
 		explanationArea.setText("");
 		backBtn.setDisable(true);
 		nextBtn.setDisable(true);
-		showAllBtn.setDisable(true);	
+		showAllBtn.setDisable(true);
+		
+		root.getChildren().remove(graphPane);
+		graphPane = new NodePane();
+		root.getChildren().add(graphPane);
+		graphPane.setPrefHeight(470);
+		graphPane.setPrefWidth(460);
+		graphPane.createGraph(argumentFramework);
+		graphPane.drawGraph();
 	}
 	
 	/**
