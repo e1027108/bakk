@@ -9,18 +9,20 @@
   <!-- TODO Add Nodes -->
   <children>
     <TextArea fx:id="explanationArea" editable="false" prefHeight="420.0" prefWidth="330.0" wrapText="true" AnchorPane.leftAnchor="460.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-    <Button id="backButton" fx:id="backBtn" cancelButton="false" disable="true" mnemonicParsing="false" onAction="#onBackClick" prefWidth="60.0" text="back" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="260.0" />
-    <Button id="nextButton" fx:id="nextBtn" disable="true" mnemonicParsing="false" onAction="#onNextClick" prefWidth="60.0" text="next" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="190.0" />
-    <Separator orientation="VERTICAL" prefHeight="30.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="435.0" />
-    <Button id="showAllButton" fx:id="showAllBtn" disable="true" mnemonicParsing="false" onAction="#onShowAllClick" prefWidth="100.0" text="show all" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="40.0" />
+    <Button id="backButton" fx:id="backBtn" cancelButton="false" disable="true" mnemonicParsing="false" onAction="#onBackClick" prefWidth="55.0" text="back" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="280.0" />
+    <Button id="nextButton" fx:id="nextBtn" disable="true" mnemonicParsing="false" onAction="#onNextClick" prefWidth="55.0" text="next" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="220.0" />
+    <Separator orientation="VERTICAL" prefHeight="30.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="435.0" />
+    <Button id="showAllButton" fx:id="showAllBtn" disable="true" graphicTextGap="4.0" mnemonicParsing="false" onAction="#onShowAllClick" prefWidth="-1.0" text="show steps" textAlignment="LEFT" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="105.0" />
+    <Separator layoutY="434.0" orientation="VERTICAL" prefHeight="30.0" AnchorPane.rightAnchor="205.0" />
+    <Button id="showAllButton" fx:id="resultsBtn" disable="true" mnemonicParsing="false" onAction="#onResultsClick" prefWidth="-1.0" text="results" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="15.0" />
     <Separator prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="470.0" />
     <Button id="arrowButton" fx:id="arrowBtn" mnemonicParsing="false" onAction="#onArrowClick" text="&lt;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" />
     <Button fx:id="conflictFreeBtn" mnemonicParsing="false" onAction="#onConflictFreeClick" prefWidth="160.0" text="conflict-free sets" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="55.0" />
     <Button fx:id="admissibleBtn" mnemonicParsing="false" onAction="#onAdmissibleClick" prefWidth="160.0" text="admissible extensions" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="225.0" />
     <Button fx:id="preferredBtn" mnemonicParsing="false" onAction="#onPreferredClick" prefWidth="160.0" text="preferred extensions" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="395.0" />
     <Button fx:id="stableBtn" mnemonicParsing="false" onAction="#onStableClick" prefWidth="160.0" text="stable extensions" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="565.0" />
-    <Button fx:id="groundedBtn" mnemonicParsing="false" onAction="#onGroundedClick" prefWidth="160.0" text="grounded extension" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="55.0" />
-    <Button fx:id="completeBtn" mnemonicParsing="false" onAction="#onCompleteClick" prefWidth="160.0" text="complete extensions" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="225.0" />
+    <Button fx:id="completeBtn" mnemonicParsing="false" onAction="#onCompleteClick" prefWidth="160.0" text="complete extensions" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="55.0" />
+    <Button fx:id="groundedBtn" mnemonicParsing="false" onAction="#onGroundedClick" prefWidth="160.0" text="grounded extension" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="225.0" />
     <Separator layoutX="393.0" layoutY="512.0" orientation="VERTICAL" prefHeight="23.0" />
     <Separator layoutX="395.0" layoutY="510.0" prefWidth="405.0" />
     <CheckBox fx:id="previousCheckBox" layoutX="400.0" layoutY="515.0" mnemonicParsing="false" text="use previously computed sets for further computations" />

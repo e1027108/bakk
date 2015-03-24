@@ -368,7 +368,7 @@ public class Framework {
 		ArrayList<Argument> grounded = new ArrayList<Argument>();
 		
 		//TODO outsource null/empty check
-		if(!usePrevious || (previousConflictFreeSets == null)){
+		if(!usePrevious || (previousCompleteExtensions == null)){
 			complete = getCompleteExtensions(usePrevious);
 		}
 		else{

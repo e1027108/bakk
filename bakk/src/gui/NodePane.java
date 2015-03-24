@@ -45,7 +45,6 @@ public class NodePane extends AnchorPane{
 		super();
 
 		viz = new Group();
-		//setStyle("-fx-background-color: #00ee55");
 	}
 
 	/**

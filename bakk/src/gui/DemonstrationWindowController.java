@@ -36,7 +36,7 @@ public class DemonstrationWindowController {
 	private URL location; //location of file
 
 	@FXML
-	private Button backBtn, nextBtn, showAllBtn, arrowBtn, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn; //buttons in demonstration window
+	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn; //buttons in demonstration window
 
 	@FXML
 	private CheckBox previousCheckBox; //checkbox whether to use previously computed sets or extensions
@@ -247,6 +247,11 @@ public class DemonstrationWindowController {
 			disableForwardButtons();
 		}
 	}
+	
+	@FXML
+	public void onResultsClick(){
+		//TODO implement
+	}
 
 	/**
 	 * disables the next and show all buttons
@@ -295,7 +300,7 @@ public class DemonstrationWindowController {
 	 * sets the initial UI and data values that can be changed but not unchangable values
 	 */
 	public void setInitialValues() {
-		interactor = Interactor.getInstance(this); //TODO add parameters later (for nodes)
+		interactor = Interactor.getInstance(this);
 		readArguments(interactor.getRawArguments());
 		argumentFramework = new Framework(arguments, interactor);
 		
@@ -317,7 +322,6 @@ public class DemonstrationWindowController {
 	 * prints the arguments of all computed extensions (only for testing)
 	 * @param ext the extensions to be printed
 	 */
-	//TODO remove some time
 	public void printExtensions(ArrayList<Extension> ext){
 		for(Extension e: ext){
 			System.out.println("{" + e.getArgumentNames() + "}");
