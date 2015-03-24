@@ -47,7 +47,7 @@ public class DemonstrationWindowController {
 	@FXML
 	private AnchorPane root; //root pane containing all the UI elements
 	
-	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, backTip, nextTip, allTip;
+	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, backTip, nextTip, allTip, resultsTip;
 
 	private Framework argumentFramework; //argument framework containing the arguments
 	private ArrayList<Argument> arguments; //arguments of the framework
@@ -76,6 +76,9 @@ public class DemonstrationWindowController {
 		allTip = new Tooltip("Shows all steps of the computation.");
 		showAllBtn.setTooltip(allTip);
 		
+		resultsTip = new Tooltip("Shows the results of the computation, without showing any steps");
+		resultsBtn.setTooltip(resultsTip);
+		
 		previousTip = new Tooltip("If checked the program will not repeat computations it already has performed,"
 				+ "\nbut instead use the previous computations' results for further computations.");
 		previousCheckBox.setTooltip(previousTip);
@@ -97,7 +100,6 @@ public class DemonstrationWindowController {
 		
 		groundedTip = new Tooltip("The extension containing all arguments that all\ncomplete extensions have in common is the grounded extension.\n\nClick to compute the grounded extension.");
 		groundedBtn.setTooltip(groundedTip);
-		
 		
 	}
 
@@ -230,6 +232,7 @@ public class DemonstrationWindowController {
 
 		showAllBtn.setDisable(false);
 		nextBtn.setDisable(false);
+		resultsBtn.setDisable(false);
 		
 		//TODO revert node change
 	}
@@ -250,7 +253,11 @@ public class DemonstrationWindowController {
 	
 	@FXML
 	public void onResultsClick(){
-		//TODO implement
+		interactor.skipToLastLine();
+		
+		showAllBtn.setDisable(true);
+		nextBtn.setDisable(true);
+		backBtn.setDisable(true);
 	}
 
 	/**
@@ -259,6 +266,7 @@ public class DemonstrationWindowController {
 	public void disableForwardButtons(){
 		nextBtn.setDisable(true);
 		showAllBtn.setDisable(true);
+		resultsBtn.setDisable(true);
 	}
 
 	/**
@@ -276,8 +284,10 @@ public class DemonstrationWindowController {
 	 */
 	public void setUI(){
 		explanationArea.setText("");
+		backBtn.setDisable(true);
 		nextBtn.setDisable(false);
 		showAllBtn.setDisable(false);
+		resultsBtn.setDisable(false);
 		interactor.printLine();
 	}
 
@@ -308,6 +318,7 @@ public class DemonstrationWindowController {
 		backBtn.setDisable(true);
 		nextBtn.setDisable(true);
 		showAllBtn.setDisable(true);
+		resultsBtn.setDisable(true);
 		
 		root.getChildren().remove(graphPane);
 		graphPane = new NodePane();

@@ -95,6 +95,8 @@ public class Framework {
 			return null;
 		}
 		
+		interactor.addToStoredMessages("Computing conflict-free sets!");
+		
 		powerset = getAllSubsets(arguments);
 		
 		for(ArrayList<Argument> set: powerset){
@@ -145,13 +147,13 @@ public class Framework {
 		ArrayList<Extension> cf;
 		ArrayList<Extension> admissible = new ArrayList<Extension>();
 		
-		//TODO outsource null/empty check
 		if(!usePrevious || (previousConflictFreeSets == null)){
+			interactor.addToStoredMessages("Computing conflict-free sets to compute admissible extensions!");
 			cf = getConflictFreeSets();
 		}
 		else{
 			cf = previousConflictFreeSets;
-			notification = "Using previously computed conflict-free sets: ";
+			notification = "Using previously computed conflict-free sets to compute admissible extensions: ";
 			
 			if(cf.size() == 0){
 				notification += "There are no conflict-free sets!";
@@ -181,7 +183,6 @@ public class Framework {
 			notification = "There are no admissible extensions!";
 		}
 		interactor.addToStoredMessages(notification);
-		//TODO outsource message generation?
 		
 		previousAdmissibleSets = new ArrayList<Extension>();
 		previousAdmissibleSets.addAll(admissible);
@@ -201,13 +202,14 @@ public class Framework {
 		ArrayList<Extension> admissible;
 		ArrayList<Extension> complete = new ArrayList<Extension>();
 		
-		if(!usePrevious || (previousConflictFreeSets == null)){
+		if(!usePrevious || (previousAdmissibleSets == null)){
+			interactor.addToStoredMessages("Computing admissible extensions to compute complete extensions!");
 			admissible = getAdmissibleSets(usePrevious);
 		}
 		else{
 			admissible = previousAdmissibleSets;
 			
-			notification = "Using previously computed admissible extensions: ";
+			notification = "Using previously computed admissible extensions to compute complete extensions: ";
 			
 			if(admissible.size() == 0){
 				notification += "There are no admissible extensions!";
@@ -280,12 +282,13 @@ public class Framework {
 		
 		//TODO outsource null/empty check
 		if(!usePrevious || (previousAdmissibleSets == null)){
+			interactor.addToStoredMessages("Computing admissible extensions to compute preferred extensions!");
 			admissible = getAdmissibleSets(usePrevious);
 		}
 		else{
 			admissible = previousAdmissibleSets;
 			
-			notification = "Using previously computed admissible extensions: ";
+			notification = "Using previously computed admissible extensions to compute preferred extensions: ";
 			
 			if(admissible.size() == 0){
 				notification += "There are no admissible extensions!";
@@ -325,12 +328,13 @@ public class Framework {
 		
 		//TODO outsource null/empty check
 		if(!usePrevious || (previousConflictFreeSets == null)){
+			interactor.addToStoredMessages("Computing conflict-free sets to compute stable extensions!");
 			cf = getConflictFreeSets();
 		}
 		else{
 			cf = previousConflictFreeSets;
 			
-			notification = "Using previously computed conflict-free sets: ";
+			notification = "Using previously computed conflict-free sets to compute stable extensions: ";
 			
 			if(cf.size() == 0){
 				notification += "There are no conflict-free sets!";
@@ -369,11 +373,12 @@ public class Framework {
 		
 		//TODO outsource null/empty check
 		if(!usePrevious || (previousCompleteExtensions == null)){
+			interactor.addToStoredMessages("Computing complete extensions to compute the grounded extension!");
 			complete = getCompleteExtensions(usePrevious);
 		}
 		else{
 			complete = previousCompleteExtensions;
-			notification = "Using previously computed complete extensions: ";
+			notification = "Using previously computed complete extensions to compute the grounded extension: ";
 			
 			if(complete == null || complete.size() == 0){
 				notification += "There are no complete extensions!";

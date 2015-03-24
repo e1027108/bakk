@@ -58,7 +58,7 @@ public class Interactor {
 	/**
 	 * prints the first stored message into the textarea, overwriting its previous contents
 	 */
-	public void overwrite(){
+	private void overwrite(){
 		if(!storedMessages.isEmpty()){
 			textArea.setText(storedMessages.pollLast());
 			scrollDown();
@@ -86,6 +86,14 @@ public class Interactor {
 	public void printAllLines(){
 		while(!storedMessages.isEmpty()){
 			printLine();
+		}
+		scrollDown();
+	}
+	
+	public void skipToLastLine() {
+		if(!storedMessages.isEmpty()){
+			textArea.setText(storedMessages.getFirst());
+			emptyQueue();
 		}
 		scrollDown();
 	}
