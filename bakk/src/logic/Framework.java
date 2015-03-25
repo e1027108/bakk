@@ -1,8 +1,14 @@
 package logic;
 
+import interactor.Command;
+import interactor.GraphInstruction;
 import interactor.Interactor;
 
 import java.util.ArrayList;
+
+import javafx.scene.paint.Color;
+
+import com.sun.org.apache.bcel.internal.generic.Instruction;
 
 /**
  * The Framework class is a representation of an abstract argumentation framework
@@ -16,7 +22,7 @@ public class Framework {
 	private ArrayList<Extension> previousCompleteExtensions; //a stored, previously computed set of complete extensions
 	private Interactor interactor; //interacts with the gui
 	private String notification; //storage space for messages to be written to the interactor
-	
+
 	/**
 	 * creates an abstract argument framework
 	 * @param arguments the set of arguments that comprise the framework
@@ -88,30 +94,30 @@ public class Framework {
 	public ArrayList<Extension> getConflictFreeSets(){
 		ArrayList<Extension> conflictFreeSets = new ArrayList<Extension>();
 		ArrayList<ArrayList<Argument>> powerset;
-		
+
 		if(arguments == null){
 			//should not be possible
-			interactor.addToStoredMessages("No arguments found, error!");
+			interactor.addToCommands(new Command("No arguments found, error!", null));//TODO handle null command
 			return null;
 		}
-		
-		interactor.addToStoredMessages("Computing conflict-free sets!");
-		
+
+		interactor.addToCommands(new Command("Computing conflict-free sets!", null));
+
 		powerset = getAllSubsets(arguments);
-		
+
 		for(ArrayList<Argument> set: powerset){
 			Extension tmp = new Extension(set, this);
 			if(tmp.isConflictFree(true)){
 				conflictFreeSets.add(tmp);
 			}
 		}
-		
-		interactor.addToStoredMessages("The conflict-free sets are: " + formatExtensions(conflictFreeSets));
-		
+
+		interactor.addToCommands(new Command("The conflict-free sets are: " + formatExtensions(conflictFreeSets), null));
+
 		previousConflictFreeSets = new ArrayList<Extension>();
 		previousConflictFreeSets.addAll(conflictFreeSets);
-		
-		return conflictFreeSets;
+
+		return conflictFreeSets; //TODO at this point the controller should give dropdown, containing the extensions for highlighting
 	}
 
 	/**
@@ -123,7 +129,7 @@ public class Framework {
 	private ArrayList<ArrayList<Argument>> getAllSubsets(ArrayList<Argument> set){
 		ArrayList<ArrayList<Argument>> powerSet = new ArrayList<ArrayList<Argument>>();
 		int elements = set.size();
-		
+
 		for(int i = 0; i < Math.pow(2, elements); i++){ //there are 2^n subsets
 			ArrayList<Argument> subset = new ArrayList<Argument>();
 			for(int j = 0; j < elements; j++){
@@ -133,10 +139,10 @@ public class Framework {
 			}
 			powerSet.add(subset);
 		}
-		
+
 		return powerSet;
 	}
-	
+
 	/**
 	 * computes all admissible sets (= admissible extensions) of the framework
 	 * @details every conflict-free set is checked if it's admissible
@@ -146,35 +152,35 @@ public class Framework {
 	public ArrayList<Extension> getAdmissibleSets(boolean usePrevious){
 		ArrayList<Extension> cf;
 		ArrayList<Extension> admissible = new ArrayList<Extension>();
-		
+
 		if(!usePrevious || (previousConflictFreeSets == null)){
-			interactor.addToStoredMessages("Computing conflict-free sets to compute admissible extensions!");
+			interactor.addToCommands(new Command("Computing conflict-free sets to compute admissible extensions!", null));
 			cf = getConflictFreeSets();
 		}
 		else{
 			cf = previousConflictFreeSets;
 			notification = "Using previously computed conflict-free sets to compute admissible extensions: ";
-			
+
 			if(cf.size() == 0){
 				notification += "There are no conflict-free sets!";
 			}
 			else{
 				notification += formatExtensions(cf);
 			}
-			
-			interactor.addToStoredMessages(notification);
+
+			interactor.addToCommands(new Command(notification, null)); //TODO dropdown for that?
 		}
-		
+
 		if(invalidityCheck(cf, "conflict-free sets", "admissible extensions")){
 			return null;
 		}
-		
+
 		for(Extension e: cf){
 			if(e.isAdmissible()){
 				admissible.add(e);
 			}
 		}
-		
+
 		if(admissible.size() > 0){
 			notification = "The admissible extensions are: "; 
 			notification += formatExtensions(admissible);
@@ -182,11 +188,11 @@ public class Framework {
 		else{
 			notification = "There are no admissible extensions!";
 		}
-		interactor.addToStoredMessages(notification);
-		
+		interactor.addToCommands(new Command(notification, null)); //TODO dropdown here (for previous)?
+
 		previousAdmissibleSets = new ArrayList<Extension>();
 		previousAdmissibleSets.addAll(admissible);
-		
+
 		return admissible;
 	}
 
@@ -201,53 +207,55 @@ public class Framework {
 	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious){
 		ArrayList<Extension> admissible;
 		ArrayList<Extension> complete = new ArrayList<Extension>();
-		
+
 		if(!usePrevious || (previousAdmissibleSets == null)){
-			interactor.addToStoredMessages("Computing admissible extensions to compute complete extensions!");
+			interactor.addToCommands(new Command("Computing admissible extensions to compute complete extensions!",null));
 			admissible = getAdmissibleSets(usePrevious);
 		}
 		else{
 			admissible = previousAdmissibleSets;
-			
+
 			notification = "Using previously computed admissible extensions to compute complete extensions: ";
-			
+
 			if(admissible.size() == 0){
 				notification += "There are no admissible extensions!";
 			}
 			else{
 				notification += formatExtensions(admissible);
 			}
-			
-			interactor.addToStoredMessages(notification);
+
+			interactor.addToCommands(new Command(notification,null));
 		}
-		
+
 		if(invalidityCheck(admissible, "admissible extensions", "complete extensions")){
 			return null;
 		}
-		
+
 		for(Extension e: admissible){
 			boolean isComplete = true;
 			String format = e.format();
-			
+
 			for(Argument a: arguments){
 				if(defends(e, a) && !e.getArguments().contains(a)){
-					interactor.addToStoredMessages("The extension " + format + " defends the argument " + a.getName() + " which it doesn't contain. "
-							+ "Therefore it is not a complete extension.");
+					interactor.addToCommands(new Command("The extension " + format + " defends the argument " + a.getName() + " which it "
+							+ "doesn't contain. Therefore it is not a complete extension.", null)); //TODO remove null, instead highlight attackers, defendant, defender (edges)
 					isComplete = false;
 					break;
 				}
 			}
 			if(isComplete){
-				interactor.addToStoredMessages("The extension " + format + " is a complete extension!");
+				GraphInstruction highlight = e.toInstruction(Color.GREEN);
+
+				interactor.addToCommands(new Command("The extension " + format + " is a complete extension!", highlight));
 				complete.add(e);
 			}
 		}
-		
-		interactor.addToStoredMessages("The complete extensions are: " + formatExtensions(complete));
-		
+
+		interactor.addToCommands(new Command("The complete extensions are: " + formatExtensions(complete), null));
+
 		previousCompleteExtensions = new ArrayList<Extension>();
 		previousCompleteExtensions.addAll(complete);
-		
+
 		return complete;
 	}
 
@@ -260,13 +268,13 @@ public class Framework {
 	public boolean defends(Extension e, Argument a) {
 		String extensionAttacks = e.getAttacks();
 		ArrayList<Argument> attackArgument = getAttackers(a.getName());
-		
+
 		for(Argument attacker: attackArgument){
 			if(!extensionAttacks.contains(String.valueOf(attacker.getName()))){
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -279,39 +287,39 @@ public class Framework {
 	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious){
 		ArrayList<Extension> admissible;
 		ArrayList<Extension> preferred = new ArrayList<Extension>();
-		
+
 		//TODO outsource null/empty check
 		if(!usePrevious || (previousAdmissibleSets == null)){
-			interactor.addToStoredMessages("Computing admissible extensions to compute preferred extensions!");
+			interactor.addToCommands(new Command("Computing admissible extensions to compute preferred extensions!", null));//TODO dropdown (all previouses?)
 			admissible = getAdmissibleSets(usePrevious);
 		}
 		else{
 			admissible = previousAdmissibleSets;
-			
+
 			notification = "Using previously computed admissible extensions to compute preferred extensions: ";
-			
+
 			if(admissible.size() == 0){
 				notification += "There are no admissible extensions!";
 			}
 			else{
 				notification += formatExtensions(admissible);
 			}
-			
-			interactor.addToStoredMessages(notification);
+
+			interactor.addToCommands(new Command(notification, null));
 		}
-		
+
 		if(invalidityCheck(admissible, "admissible extensions", "preferred extensions")){
 			return null;
 		}
-		
+
 		for(Extension e: admissible){
 			if(e.isPreferred(admissible)){
 				preferred.add(e);
 			}
 		}
-		
-		interactor.addToStoredMessages("The preferred extensions are: " + formatExtensions(preferred));
-		
+
+		interactor.addToCommands(new Command("The preferred extensions are: " + formatExtensions(preferred), null));
+
 		return preferred;
 	}
 
@@ -325,27 +333,27 @@ public class Framework {
 		ArrayList<Extension> cf;
 		ArrayList<Extension> stable = new ArrayList<Extension>();
 
-		
+
 		//TODO outsource null/empty check
 		if(!usePrevious || (previousConflictFreeSets == null)){
-			interactor.addToStoredMessages("Computing conflict-free sets to compute stable extensions!");
+			interactor.addToCommands(new Command("Computing conflict-free sets to compute stable extensions!", null));//TODO
 			cf = getConflictFreeSets();
 		}
 		else{
 			cf = previousConflictFreeSets;
-			
+
 			notification = "Using previously computed conflict-free sets to compute stable extensions: ";
-			
+
 			if(cf.size() == 0){
 				notification += "There are no conflict-free sets!";
 			}
 			else{
 				notification += formatExtensions(cf);
 			}
-			
-			interactor.addToStoredMessages(notification);
+
+			interactor.addToCommands(new Command(notification, null));
 		}
-		
+
 		if(invalidityCheck(cf, "conflict-free sets", "stable extensions")){
 			return null;
 		}
@@ -355,9 +363,9 @@ public class Framework {
 				stable.add(e);
 			}
 		}
-		
-		interactor.addToStoredMessages("The stable extensions are: " + formatExtensions(stable));
-		
+
+		interactor.addToCommands(new Command("The stable extensions are: " + formatExtensions(stable), null));
+
 		return stable;
 	}
 
@@ -370,65 +378,71 @@ public class Framework {
 	public Extension getGroundedExtension(boolean usePrevious){
 		ArrayList<Extension> complete;
 		ArrayList<Argument> grounded = new ArrayList<Argument>();
-		
+
 		//TODO outsource null/empty check
 		if(!usePrevious || (previousCompleteExtensions == null)){
-			interactor.addToStoredMessages("Computing complete extensions to compute the grounded extension!");
+			interactor.addToCommands(new Command("Computing complete extensions to compute the grounded extension!", null)); //TODO
 			complete = getCompleteExtensions(usePrevious);
 		}
 		else{
 			complete = previousCompleteExtensions;
 			notification = "Using previously computed complete extensions to compute the grounded extension: ";
-			
+
 			if(complete == null || complete.size() == 0){
 				notification += "There are no complete extensions!";
 			}
 			else{
 				notification += formatExtensions(complete);
 			}
-			
-			interactor.addToStoredMessages(notification);
+
+			interactor.addToCommands(new Command(notification, null));
 		}
-		
+
 		if(invalidityCheck(complete, "complete extensions", "grounded extension")){
 			return null;
 		}
 
+		if(complete.size() == 1){
+			interactor.addToCommands(new Command("The only complete extension " + complete.get(0).format() + " is the grounded extension.", complete.get(0).toInstruction(Color.GREEN)));
+			return complete.get(0);
+		}
+		
 		for(Extension e: complete){
 			if(e.getArgumentNames().length() == 0){
-				interactor.addToStoredMessages("Since there is a complete extension {}, the grounded extension is {}");
+				interactor.addToCommands(new Command("Since there is a complete extension {}, the grounded extension is {}", null));
 				return new Extension(grounded, this);
 			}
 		}
-		
+
 		for(Extension e: complete){
 			String eFormat = e.format();
 			if(grounded.isEmpty()){
 				grounded.addAll(e.getArguments());
-				interactor.addToStoredMessages("The complete extension " + eFormat + " is our first candidate as grounded extension.");
+				interactor.addToCommands(new Command("The complete extension " + eFormat + " is our first candidate as grounded extension.", e.toInstruction(Color.GREEN)));
 			}
 			else{
 				int errors = 0;
 				for(int i = grounded.size()-1;i>=0;i--){
 					if(!e.getArguments().contains(grounded.get(i))){
-						interactor.addToStoredMessages("The complete extension " + eFormat + " does not contain the argument " + grounded.get(i).getName() + ", therefore it is removed from our candidate");
+						interactor.addToCommands(new Command("The complete extension " + eFormat + " does not contain the argument " 
+								+ grounded.get(i).getName() + ", therefore it is removed from our candidate", e.toInstruction(Color.RED)));
 						grounded.remove(grounded.get(i));
 						errors++;
 					}
 				}
 				if(errors == 0){
-					interactor.addToStoredMessages("The complete extension " + eFormat + " contains all arguments of our candidate.");
+					interactor.addToCommands(new Command("The complete extension " + eFormat + " contains all arguments of our candidate.", null)); //TODO remove null, figure something out
 				}
 				else{
-					interactor.addToStoredMessages("Our new candidate is " + new Extension(grounded,this).format());
+					interactor.addToCommands(new Command("Our new candidate is " + new Extension(grounded,this).format(), e.toInstruction(Color.GREEN)));
 				}
 			}
 		}
-		
+
 		Extension groundedExtension = new Extension(grounded,this);
-		
-		interactor.addToStoredMessages("The grounded extension is: " + groundedExtension.format());
-		
+
+		interactor.addToCommands(new Command("The grounded extension is: " + groundedExtension.format(), null));
+
 		return groundedExtension;
 	}
 
@@ -439,15 +453,15 @@ public class Framework {
 	 */
 	private String formatExtensions(ArrayList<Extension> extensions) {
 		String formatted = "";
-		
+
 		for(Extension e: extensions){
 			formatted += e.format() + ", ";
 		}
-		
+
 		if(formatted.length() > 1){
 			formatted = formatted.substring(0,formatted.length()-2);
 		}
-		
+
 		return formatted;
 	}
 
@@ -463,25 +477,25 @@ public class Framework {
 	public boolean invalidityCheck(ArrayList<Extension> list, String cause, String effect){
 		if(list == null || list.isEmpty()){ //shouldn't be possible
 			String are = ", there are no ";
-			
+
 			if(effect.contains("grounded")){
 				are = are.replace("are", "is");
 			}
-			
-			interactor.addToStoredMessages("Since there are no " + cause + are + effect + "!");
+
+			interactor.addToCommands(new Command("Since there are no " + cause + are + effect + "!", null)); //TODO perhaps make everything black?
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * stores a message at the end of the queue of the Interactor
 	 * @param message message to be stored by Interactor
 	 */
-	public void addToInteractor(String message){
-		interactor.addToStoredMessages(message);
+	public void addToInteractor(Command command){
+		interactor.addToCommands(command);
 	}
-	
+
 	/**
 	 * @return the list of the arguments of the extension
 	 */

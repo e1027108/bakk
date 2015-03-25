@@ -1,6 +1,13 @@
 package logic;
 
+import interactor.Command;
+import interactor.GraphInstruction;
+
 import java.util.ArrayList;
+
+import javafx.scene.paint.Color;
+
+import com.sun.org.apache.bcel.internal.generic.Instruction;
 
 /**
  * The Extension class contains a set of arguments and is capable
@@ -64,14 +71,14 @@ public class Extension {
 			String tmp = "" + names.charAt(i);
 			if(attacks.contains(tmp)){
 				if(write){
-					framework.addToInteractor(this.format() + " attacks the argument " + tmp + ", thus it is not a conflict-free set!");
+					framework.addToInteractor(new Command(this.format() + " attacks the argument " + tmp + ", thus it is not a conflict-free set!", null)); //TODO fill in for null (use all errors?)
 				}
 				return false;
 			}
 		}
 
 		if(write){
-			framework.addToInteractor(this.format() + " is a conflict-free set, because it does not attack its own arguments");
+			framework.addToInteractor(new Command(this.format() + " is a conflict-free set, because it does not attack its own arguments", toInstruction(Color.GREEN)));
 		}
 		return true;
 	}
@@ -82,17 +89,17 @@ public class Extension {
 	 */
 	public boolean isAdmissible(){
 		if(!isConflictFree(false)){
-			framework.addToInteractor(format() + " is not a conflict-free set, so it is not an admissible extension.");
+			framework.addToInteractor(new Command(format() + " is not a conflict-free set, so it is not an admissible extension.", toInstruction(Color.RED)));
 			return false;
 		}
 		else{
 			for(Argument a: arguments){
 				if(!framework.defends(this,a)){
-					framework.addToInteractor(format() + " does not defend " + a.getName() + ", so it is not an admissible extension.");
+					framework.addToInteractor(new Command(format() + " does not defend " + a.getName() + ", so it is not an admissible extension.", null)); //TODO fill in for null
 					return false;
 				}
 			}
-			framework.addToInteractor(format() + " defends all its arguments, so it is an admissible extension.");
+			framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", null)); //TODO fill in for null
 			return true;
 		}
 	}
@@ -109,12 +116,12 @@ public class Extension {
 			}
 			else if(isSubsetOf(e)){
 				String format = format();
-				framework.addToInteractor("Since " + format + " is a subset of " + e.format() + ", " + format + " is not preferred.");
+				framework.addToInteractor(new Command("Since " + format + " is a subset of " + e.format() + ", " + format + " is not preferred.", null)); //TODO fill in for null
 				return false;
 			}
 		}
 		
-		framework.addToInteractor(format() + " is not the subset of another admissible extension, so it is a preferred extension.");
+		framework.addToInteractor(new Command(format() + " is not the subset of another admissible extension, so it is a preferred extension.", null)); //TODO replace null
 		return true;
 	}
 
@@ -144,19 +151,19 @@ public class Extension {
 		String attacks = getAttacks();
 		
 		if(!isConflictFree(false)){
-			framework.addToInteractor(format() + " is not a conflict-free set, so it is not a stable extension.");
+			framework.addToInteractor(new Command(format() + " is not a conflict-free set, so it is not a stable extension.", toInstruction(Color.RED)));
 			return false;
 		}
 		
 		if(attacks.length() == (allArguments.size()-getArgumentNames().length())){
-			framework.addToInteractor(format() + " attacks every argument outside itself, so it is a stable extension.");
+			framework.addToInteractor(new Command(format() + " attacks every argument outside itself, so it is a stable extension.", null)); //TODO replace null
 			return true;
 		}
 		else{
 			//TODO find an argument it does not attack, print that to textArea
 			for(Argument a: allArguments){
 				if(!arguments.contains(a) && !attacks.contains(String.valueOf(a.getName()))){
-					framework.addToInteractor(format() + " is not a stable extension because it does not attack " + a.getName());
+					framework.addToInteractor(new Command(format() + " is not a stable extension because it does not attack " + a.getName(), null)); //TODO replace null
 					break;
 				}
 			}
@@ -224,5 +231,10 @@ public class Extension {
 	 */
 	public ArrayList<Argument> getArguments(){
 		return arguments;
+	}
+
+	public GraphInstruction toInstruction(Color color) {
+		// TODO transform extension to instruction (nodes, edges?)
+		return null;
 	}
 }

@@ -21,7 +21,7 @@ public class Interactor {
 
 	private TextArea textArea; //the textArea controlled by the Interactor
 	private DemonstrationWindowController controller;
-	private LinkedList<Command> storedMessages; //queue storing the messages to be shown to the user
+	private LinkedList<Command> storedCommands; //queue storing the messages to be shown to the user
 	private ArrayList<ArgumentDto> rawArguments; //ArgumentDtos stored for further use in an argument Framework
 
 	/**
@@ -34,10 +34,8 @@ public class Interactor {
 		if(controller != null){
 			this.textArea = this.controller.getTextArea();
 		}
-		
-		System.out.println(textArea.toString());
 
-		storedMessages = new LinkedList<Command>();
+		storedCommands = new LinkedList<Command>();
 	}
 
 	/**
@@ -63,8 +61,8 @@ public class Interactor {
 	 * prints the first stored message into the textarea, overwriting its previous contents
 	 */
 	private void overwrite(){
-		if(!storedMessages.isEmpty()){
-			textArea.setText(storedMessages.pollLast().getText());
+		if(!storedCommands.isEmpty()){
+			textArea.setText(storedCommands.pollLast().getText());
 			scrollDown();
 		}
 	}
@@ -73,9 +71,9 @@ public class Interactor {
 	 * adds the queued message to the textarea's text
 	 */
 	public void printLine(){
-		if(!storedMessages.isEmpty()){
+		if(!storedCommands.isEmpty()){
 			if(!textArea.getText().isEmpty()){
-				textArea.setText(textArea.getText() + "\n" + storedMessages.pollLast().getText());
+				textArea.setText(textArea.getText() + "\n" + storedCommands.pollLast().getText());
 				scrollDown();
 			}
 			else{
@@ -88,15 +86,15 @@ public class Interactor {
 	 * adds all remaining messages in the queue to the textarea
 	 */
 	public void printAllLines(){
-		while(!storedMessages.isEmpty()){
+		while(!storedCommands.isEmpty()){
 			printLine();
 		}
 		scrollDown();
 	}
 	
 	public void skipToLastLine() {
-		if(!storedMessages.isEmpty()){
-			textArea.setText(storedMessages.getFirst().getText());
+		if(!storedCommands.isEmpty()){
+			textArea.setText(storedCommands.getFirst().getText());
 			emptyQueue();
 		}
 		scrollDown();
@@ -118,12 +116,12 @@ public class Interactor {
 
 		if(!tmp.isEmpty()){
 			if(tmp.contains("\n")){
-				storedMessages.addLast(new Command(tmp.substring(tmp.lastIndexOf('\n'), tmp.length()).replace("\n", ""), null/*TODO instruction*/));
+				storedCommands.addLast(new Command(tmp.substring(tmp.lastIndexOf('\n'), tmp.length()).replace("\n", ""), null/*TODO instruction*/));
 				textArea.setText(tmp.substring(0,tmp.lastIndexOf('\n')));
 				scrollDown();
 			}
 			else{
-				storedMessages.addLast(new Command(tmp, null/*TODO instruction*/));
+				storedCommands.addLast(new Command(tmp, null/*TODO instruction*/));
 				textArea.setText("");
 			}
 		}
@@ -137,15 +135,15 @@ public class Interactor {
 	 * adds a message to the end of the queue
 	 * @param message the message added to the end of the queue
 	 */
-	public void addToStoredMessages(String message){
-		storedMessages.push(new Command(message, null/*TODO instruction*/));
+	public void addToCommands(Command command){
+		storedCommands.push(command); //TODO fix compiling problems resulting from rewriting this method
 	}
 
 	/**
 	 * deletes all the contents from the queue
 	 */
 	public void emptyQueue(){
-		storedMessages = new LinkedList<Command>();
+		storedCommands = new LinkedList<Command>();
 	}
 
 	/**
@@ -153,7 +151,7 @@ public class Interactor {
 	 * @return whether there are still elements in the queue
 	 */
 	public boolean hasNext(){
-		return !(storedMessages.size()>0);
+		return !(storedCommands.size()>0);
 	}
 
 	/**
