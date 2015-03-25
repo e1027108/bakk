@@ -1,6 +1,6 @@
 package logic;
 
-import gui.Interactor;
+import interactor.Interactor;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,6 @@
-package gui;
+package interactor;
+
+import gui.DemonstrationWindowController;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -19,7 +21,7 @@ public class Interactor {
 
 	private TextArea textArea; //the textArea controlled by the Interactor
 	private DemonstrationWindowController controller;
-	private LinkedList<String> storedMessages; //queue storing the messages to be shown to the user
+	private LinkedList<Command> storedMessages; //queue storing the messages to be shown to the user
 	private ArrayList<ArgumentDto> rawArguments; //ArgumentDtos stored for further use in an argument Framework
 
 	/**
@@ -32,8 +34,10 @@ public class Interactor {
 		if(controller != null){
 			this.textArea = this.controller.getTextArea();
 		}
+		
+		System.out.println(textArea.toString());
 
-		storedMessages = new LinkedList<String>();
+		storedMessages = new LinkedList<Command>();
 	}
 
 	/**
@@ -60,7 +64,7 @@ public class Interactor {
 	 */
 	private void overwrite(){
 		if(!storedMessages.isEmpty()){
-			textArea.setText(storedMessages.pollLast());
+			textArea.setText(storedMessages.pollLast().getText());
 			scrollDown();
 		}
 	}
@@ -71,7 +75,7 @@ public class Interactor {
 	public void printLine(){
 		if(!storedMessages.isEmpty()){
 			if(!textArea.getText().isEmpty()){
-				textArea.setText(textArea.getText() + "\n" + storedMessages.pollLast());
+				textArea.setText(textArea.getText() + "\n" + storedMessages.pollLast().getText());
 				scrollDown();
 			}
 			else{
@@ -92,7 +96,7 @@ public class Interactor {
 	
 	public void skipToLastLine() {
 		if(!storedMessages.isEmpty()){
-			textArea.setText(storedMessages.getFirst());
+			textArea.setText(storedMessages.getFirst().getText());
 			emptyQueue();
 		}
 		scrollDown();
@@ -114,19 +118,19 @@ public class Interactor {
 
 		if(!tmp.isEmpty()){
 			if(tmp.contains("\n")){
-				storedMessages.addLast(tmp.substring(tmp.lastIndexOf('\n'), tmp.length()).replace("\n", ""));
+				storedMessages.addLast(new Command(tmp.substring(tmp.lastIndexOf('\n'), tmp.length()).replace("\n", ""), null/*TODO instruction*/));
 				textArea.setText(tmp.substring(0,tmp.lastIndexOf('\n')));
 				scrollDown();
 			}
 			else{
-				storedMessages.addLast(tmp);
+				storedMessages.addLast(new Command(tmp, null/*TODO instruction*/));
 				textArea.setText("");
 			}
 		}
 	}
 
-	public void manipulateNodes(){
-		//TODO will be used to interact with graphical node representation
+	public void manipulateGraph(){
+		//TODO use to manipulate graph or replace with other method(s)
 	}
 
 	/**
@@ -134,14 +138,14 @@ public class Interactor {
 	 * @param message the message added to the end of the queue
 	 */
 	public void addToStoredMessages(String message){
-		storedMessages.push(message);
+		storedMessages.push(new Command(message, null/*TODO instruction*/));
 	}
 
 	/**
 	 * deletes all the contents from the queue
 	 */
 	public void emptyQueue(){
-		storedMessages = new LinkedList<String>();
+		storedMessages = new LinkedList<Command>();
 	}
 
 	/**

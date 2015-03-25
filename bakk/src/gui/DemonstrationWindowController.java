@@ -1,5 +1,7 @@
 package gui;
 
+import interactor.Interactor;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -335,7 +337,7 @@ public class DemonstrationWindowController {
 	 */
 	public void printExtensions(ArrayList<Extension> ext){
 		for(Extension e: ext){
-			System.out.println("{" + e.getArgumentNames() + "}");
+			System.out.println(e.format());
 		}
 	}
 }
