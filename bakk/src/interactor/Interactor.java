@@ -50,9 +50,7 @@ public class Interactor {
 		if(singleton == null){
 			singleton = new Interactor(controller);
 		}
-
-		//to be able to get a textarea into the interactor even after it was instantiated
-		if(singleton.controller == null && controller != null){
+		else{ //to be able to get a textarea into the interactor even after it was instantiated
 			singleton.controller = controller;
 			singleton.textArea = controller.getTextArea();
 			singleton.graph = controller.getGraphPane();

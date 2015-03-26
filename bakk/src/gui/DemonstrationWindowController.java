@@ -302,7 +302,7 @@ public class DemonstrationWindowController {
 		root.getChildren().add(graphPane);
 		graphPane.setPrefHeight(470);
 		graphPane.setPrefWidth(460);
-
+		
 		interactor = Interactor.getInstance(this);
 		readArguments(interactor.getRawArguments());
 		argumentFramework = new Framework(arguments, interactor);

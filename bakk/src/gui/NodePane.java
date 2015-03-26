@@ -386,13 +386,12 @@ public class NodePane extends AnchorPane{
 		if(nodeInstructions != null){
 			for(SingleInstruction i: nodeInstructions){
 				NamedCircle tmp = getCircleByName(i.getName());
-				
-				System.out.print(tmp.getName());
 
 				if(tmp != null){
 					tmp.setFill(i.getColor());
 				}
-			}}
+			}
+		}
 
 		if(edgeInstructions != null){
 			for(SingleInstruction i: edgeInstructions){
@@ -400,7 +399,7 @@ public class NodePane extends AnchorPane{
 
 				if(tmp != null){
 					if(tmp.hasArc()){
-						tmp.getArc().setFill(i.getColor());
+						tmp.getArc().setStroke(i.getColor());
 					}
 					else if(tmp.hasLine()){
 						tmp.getLine().setFill(i.getColor());
@@ -436,7 +435,7 @@ public class NodePane extends AnchorPane{
 		}
 		for(DirectedEdge e: edges){
 			if(e.hasArc()){
-				e.getArc().setFill(Color.BLACK);
+				e.getArc().setStroke(Color.BLACK);
 			}
 			else if(e.hasLine()){
 				e.getLine().setFill(Color.BLACK);
