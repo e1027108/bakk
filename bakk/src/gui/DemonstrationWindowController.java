@@ -210,7 +210,7 @@ public class DemonstrationWindowController {
 	 */
 	@FXML
 	public void onNextClick(){
-		interactor.printLine();
+		interactor.executeNextCommand();
 
 		backBtn.setDisable(false);
 
@@ -255,7 +255,7 @@ public class DemonstrationWindowController {
 	
 	@FXML
 	public void onResultsClick(){
-		interactor.skipToLastLine();
+		interactor.skipToLastCommand();
 		
 		showAllBtn.setDisable(true);
 		nextBtn.setDisable(true);
@@ -290,7 +290,7 @@ public class DemonstrationWindowController {
 		nextBtn.setDisable(false);
 		showAllBtn.setDisable(false);
 		resultsBtn.setDisable(false);
-		interactor.printLine();
+		interactor.executeNextCommand();
 	}
 
 	/**

@@ -62,7 +62,10 @@ public class Interactor {
 	 */
 	private void overwrite(){
 		if(!storedCommands.isEmpty()){
-			textArea.setText(storedCommands.pollLast().getText());
+			Command cmd = storedCommands.pollLast();
+			
+			textArea.setText(cmd.getText());
+			manipulateGraph(cmd.getInstruction());
 			scrollDown();
 		}
 	}
@@ -70,11 +73,15 @@ public class Interactor {
 	/**
 	 * adds the queued message to the textarea's text
 	 */
-	public void printLine(){
+	public void executeNextCommand(){
 		if(!storedCommands.isEmpty()){
 			if(!textArea.getText().isEmpty()){
-				textArea.setText(textArea.getText() + "\n" + storedCommands.pollLast().getText());
+				Command cmd = storedCommands.pollLast();
+				
+				textArea.setText(textArea.getText() + "\n" + cmd.getText());
 				scrollDown();
+				
+				manipulateGraph(cmd.getInstruction());
 			}
 			else{
 				overwrite();
@@ -87,14 +94,17 @@ public class Interactor {
 	 */
 	public void printAllLines(){
 		while(!storedCommands.isEmpty()){
-			printLine();
+			executeNextCommand();
 		}
 		scrollDown();
 	}
 	
-	public void skipToLastLine() {
+	public void skipToLastCommand() {
 		if(!storedCommands.isEmpty()){
-			textArea.setText(storedCommands.getFirst().getText());
+			Command cmd = storedCommands.getFirst();
+			
+			textArea.setText(cmd.getText());
+			manipulateGraph(cmd.getInstruction());
 			emptyQueue();
 		}
 		scrollDown();
@@ -127,8 +137,8 @@ public class Interactor {
 		}
 	}
 
-	public void manipulateGraph(){
-		//TODO use to manipulate graph or replace with other method(s)
+	public void manipulateGraph(GraphInstruction graphInstruction){
+		//TODO use to manipulate graph
 	}
 
 	/**
@@ -136,7 +146,7 @@ public class Interactor {
 	 * @param message the message added to the end of the queue
 	 */
 	public void addToCommands(Command command){
-		storedCommands.push(command); //TODO fix compiling problems resulting from rewriting this method
+		storedCommands.push(command);
 	}
 
 	/**

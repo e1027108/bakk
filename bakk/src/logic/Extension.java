@@ -2,6 +2,7 @@ package logic;
 
 import interactor.Command;
 import interactor.GraphInstruction;
+import interactor.SingleInstruction;
 
 import java.util.ArrayList;
 
@@ -234,7 +235,18 @@ public class Extension {
 	}
 
 	public GraphInstruction toInstruction(Color color) {
-		// TODO transform extension to instruction (nodes, edges?)
-		return null;
+		ArrayList<SingleInstruction> nodeInstructions = new ArrayList<SingleInstruction>();
+		ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
+		
+		for(Argument a: arguments){
+			String argName = String.valueOf(a.getName());
+			nodeInstructions.add(new SingleInstruction(argName, color));
+			
+			for(int i = 0; i < a.getAttacks().length(); i++){
+				edgeInstructions.add(new SingleInstruction(argName + a.getAttacks().charAt(i), color));
+			}
+		}
+		
+		return new GraphInstruction(nodeInstructions, edgeInstructions);
 	}
 }
