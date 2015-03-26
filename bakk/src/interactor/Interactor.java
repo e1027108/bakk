@@ -1,6 +1,7 @@
 package interactor;
 
 import gui.DemonstrationWindowController;
+import gui.NodePane;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -20,6 +21,7 @@ public class Interactor {
 	private static Interactor singleton;
 
 	private TextArea textArea; //the textArea controlled by the Interactor
+	private NodePane graph; //the anchorpane in which the graph is drawn
 	private DemonstrationWindowController controller;
 	private LinkedList<Command> storedCommands; //queue storing the messages to be shown to the user
 	private ArrayList<ArgumentDto> rawArguments; //ArgumentDtos stored for further use in an argument Framework
@@ -28,11 +30,12 @@ public class Interactor {
 	 * creates an interactor, responsible for interaction between logic, input and output
 	 * @param textArea the textarea to be read by the user
 	 */
-	private Interactor(DemonstrationWindowController controller){ //TODO add graphical node representation
+	private Interactor(DemonstrationWindowController controller){
 		this.controller = controller;
 
 		if(controller != null){
 			this.textArea = this.controller.getTextArea();
+			this.graph = this.controller.getGraphPane();
 		}
 
 		storedCommands = new LinkedList<Command>();
@@ -52,6 +55,7 @@ public class Interactor {
 		if(singleton.controller == null && controller != null){
 			singleton.controller = controller;
 			singleton.textArea = controller.getTextArea();
+			singleton.graph = controller.getGraphPane();
 		}
 
 		return singleton;
@@ -121,7 +125,7 @@ public class Interactor {
 	/**
 	 * removes the last line from the textarea and places it first in the queue
 	 */
-	public void removeLine(){
+	public void removeLine(){ //TODO rework so commands can be extracted from nodepane
 		String tmp = textArea.getText();
 
 		if(!tmp.isEmpty()){
@@ -137,8 +141,8 @@ public class Interactor {
 		}
 	}
 
-	public void manipulateGraph(GraphInstruction graphInstruction){
-		//TODO use to manipulate graph
+	public void manipulateGraph(GraphInstruction instruction){
+		graph.executeInstruction(instruction);
 	}
 
 	/**

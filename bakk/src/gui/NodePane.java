@@ -1,5 +1,8 @@
 package gui;
 
+import interactor.GraphInstruction;
+import interactor.SingleInstruction;
+
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -12,7 +15,6 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
 import edu.uci.ics.jung.visualization.VisualizationModel;
-import javafx.geometry.Point2DBuilder;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -22,7 +24,6 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.TextAlignment;
 import logic.Argument;
 import logic.Framework;
@@ -40,6 +41,8 @@ public class NodePane extends AnchorPane{
 	private Group viz;
 	private Framework framework;
 	private DirectedSparseGraph<String, String> graph;
+	private ArrayList<NamedCircle> nodes;
+	private ArrayList<DirectedEdge> edges;
 
 	public NodePane(){
 		super();
@@ -73,7 +76,7 @@ public class NodePane extends AnchorPane{
 
 	public void drawGraph() {
 		if(framework == null || graph == null){
-			return; //TODO handle?
+			return;
 		}
 
 		int width = (int) Math.ceil(this.getPrefWidth()-20);
@@ -87,8 +90,9 @@ public class NodePane extends AnchorPane{
 	}
 
 	private void renderGraph(Graph<String, String> graph, Layout<String, String> layout, Group viz) {
-		ArrayList<Label> labellist = new ArrayList<Label>();
 		ArrayList<Point2D> nodePositions = new ArrayList<Point2D>(); 
+		nodes = new ArrayList<NamedCircle>();
+		edges = new ArrayList<DirectedEdge>();
 
 		boolean useLayout = true;
 
@@ -110,7 +114,7 @@ public class NodePane extends AnchorPane{
 			nodePositions.add(p);
 
 			// draw the vertex as a circle
-			Circle circle = new Circle();
+			NamedCircle circle = new NamedCircle(new Label(v));
 			circle.setCenterX(p.getX());
 			circle.setCenterY(p.getY());
 			circle.setRadius(CIRCLE_RADIUS);
@@ -118,20 +122,21 @@ public class NodePane extends AnchorPane{
 			// add it to the group, so it is shown on screen
 			this.getChildren().add(circle);
 
-			Label tmp = new Label(v);
+			Label tmp = circle.getNameTag();
 			tmp.setTextFill(Color.WHITE);
 			tmp.setTextAlignment(TextAlignment.CENTER);
 			tmp.setTooltip(new Tooltip(framework.getArgument(v.charAt(0)).getStatement()));
 			tmp.setLayoutX(p.getX()-CIRCLE_RADIUS*0.3);
 			tmp.setLayoutY(p.getY()-CIRCLE_RADIUS*0.7);
 			this.getChildren().add(tmp);
-			labellist.add(tmp);
+
+			nodes.add(circle);
 		}
 
 		// draw the edges
-		for (String n : graph.getEdges()) {
+		for (String direction : graph.getEdges()) {
 			// get the end points of the edge
-			Pair<String> endpoints = graph.getEndpoints(n);
+			Pair<String> endpoints = graph.getEndpoints(direction);
 
 			// Get the end points as Point2D objects so we can use them in the builder
 			Point2D pStart, pEnd;
@@ -146,15 +151,15 @@ public class NodePane extends AnchorPane{
 
 			// Draw the line or arc
 			if(pStart.getX() != pEnd.getX() || pStart.getY() != pEnd.getY()){
-				drawDirectedEdge(pStart, pEnd);
+				drawDirectedEdge(pStart, pEnd, direction);
 			}
 			else{
-				drawDirectedArc(pStart, getPreferredAngle(pEnd, nodePositions));
+				drawDirectedArc(pStart, getPreferredAngle(pEnd, nodePositions), direction);
 			}
 		}
 
-		for(Label l: labellist){
-			l.toFront();
+		for(int i = 0; i<nodes.size(); i++){
+			nodes.get(i).getNameTag().toFront();
 		}
 	}
 
@@ -234,17 +239,16 @@ public class NodePane extends AnchorPane{
 		return angle%360;
 	}
 
-	//TODO does not work properly, fix!
-	private void drawDirectedArc(Point2D pStart, double nodeAngle) {
+	private void drawDirectedArc(Point2D pStart, double nodeAngle, String direction) {
 		double arcradius = CIRCLE_RADIUS*0.8;
 		Arc arc = new Arc();
-		
+
 		arc.setCenterX(pStart.getX() + CIRCLE_RADIUS*1.4 * modifyXPosition(nodeAngle));
 		arc.setCenterY(pStart.getY() + CIRCLE_RADIUS*1.4 * modifyYPosition(nodeAngle));
-		
+
 		arc.setRadiusX(arcradius);
 		arc.setRadiusY(arcradius);
-		arc.setStartAngle(nodeAngle); //TODO make it so the arc is outside the circlelayout (use nodeAngle)
+		arc.setStartAngle(nodeAngle);
 		arc.setLength(ARC_LENGTH);
 		arc.setFill(Color.TRANSPARENT);
 		arc.setStroke(Color.BLACK);
@@ -283,6 +287,7 @@ public class NodePane extends AnchorPane{
 				arc.getCenterX() + diffX + leftX, arc.getCenterY() + diffY + leftY,
 		});
 
+		edges.add(new DirectedEdge(arc, triangle, direction));
 		this.getChildren().addAll(arc, triangle);
 	}
 
@@ -322,7 +327,7 @@ public class NodePane extends AnchorPane{
 		return value;
 	}
 
-	private void drawDirectedEdge(Point2D pStart, Point2D pEnd){
+	private void drawDirectedEdge(Point2D pStart, Point2D pEnd, String direction){
 		//draw line
 		Line line = new Line();
 		line.setStartX(pStart.getX());
@@ -363,8 +368,81 @@ public class NodePane extends AnchorPane{
 				pEnd.getX() + diffX + leftX, pEnd.getY() + diffY + leftY
 		});
 
+		edges.add(new DirectedEdge(line, triangle, direction));
 		// add the edge to the screen
 		this.getChildren().addAll(line, triangle);
+	}
+
+	public void executeInstruction(GraphInstruction instruction){
+		resetColors();
+
+		if(instruction == null){
+			return;
+		}
+
+		ArrayList<SingleInstruction> nodeInstructions = instruction.getNodeInstructions();
+		ArrayList<SingleInstruction> edgeInstructions = instruction.getEdgeInstructions();		
+
+		if(nodeInstructions != null){
+			for(SingleInstruction i: nodeInstructions){
+				NamedCircle tmp = getCircleByName(i.getName());
+				
+				System.out.print(tmp.getName());
+
+				if(tmp != null){
+					tmp.setFill(i.getColor());
+				}
+			}}
+
+		if(edgeInstructions != null){
+			for(SingleInstruction i: edgeInstructions){
+				DirectedEdge tmp = getEdgeByName(i.getName()); //name of edge = direction
+
+				if(tmp != null){
+					if(tmp.hasArc()){
+						tmp.getArc().setFill(i.getColor());
+					}
+					else if(tmp.hasLine()){
+						tmp.getLine().setFill(i.getColor());
+					}
+					tmp.getTriangle().setFill(i.getColor());
+				}
+			}
+		}
+	}
+
+	private DirectedEdge getEdgeByName(String direction) {
+		for(DirectedEdge e: edges){
+			if(e.getDirection().equals(direction)){
+				return e;
+			}
+		}
+		return null;
+	}
+
+	private NamedCircle getCircleByName(String name) {
+		for(NamedCircle n: nodes){
+			if(n.getName().equals(name)){
+				return n;
+			}
+		}
+		return null;
+	}
+
+	private void resetColors() {
+		for(NamedCircle n: nodes){
+			n.setFill(Color.BLACK);
+			n.getNameTag().setTextFill(Color.WHITE);
+		}
+		for(DirectedEdge e: edges){
+			if(e.hasArc()){
+				e.getArc().setFill(Color.BLACK);
+			}
+			else if(e.hasLine()){
+				e.getLine().setFill(Color.BLACK);
+			}
+			e.getTriangle().setFill(Color.BLACK);
+		}
 	}
 
 	public Framework getFramework(){

@@ -234,19 +234,19 @@ public class Extension {
 		return arguments;
 	}
 
+	/**
+	 * computes instruction that highlights exension's nodes in given color
+	 * @param color the color of the highlighting
+	 * @return the set of seperate instructions needed for to highlight the nodes
+	 */
 	public GraphInstruction toInstruction(Color color) {
 		ArrayList<SingleInstruction> nodeInstructions = new ArrayList<SingleInstruction>();
-		ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
 		
 		for(Argument a: arguments){
 			String argName = String.valueOf(a.getName());
 			nodeInstructions.add(new SingleInstruction(argName, color));
-			
-			for(int i = 0; i < a.getAttacks().length(); i++){
-				edgeInstructions.add(new SingleInstruction(argName + a.getAttacks().charAt(i), color));
-			}
 		}
 		
-		return new GraphInstruction(nodeInstructions, edgeInstructions);
+		return new GraphInstruction(nodeInstructions, null);
 	}
 }

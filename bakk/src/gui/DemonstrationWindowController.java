@@ -292,7 +292,31 @@ public class DemonstrationWindowController {
 		resultsBtn.setDisable(false);
 		interactor.executeNextCommand();
 	}
+	
+	/**
+	 * sets the initial UI and data values that can be changed but not unchangable values
+	 */
+	public void setInitialValues() {
+		root.getChildren().remove(graphPane);
+		graphPane = new NodePane();
+		root.getChildren().add(graphPane);
+		graphPane.setPrefHeight(470);
+		graphPane.setPrefWidth(460);
 
+		interactor = Interactor.getInstance(this);
+		readArguments(interactor.getRawArguments());
+		argumentFramework = new Framework(arguments, interactor);
+		
+		graphPane.createGraph(argumentFramework);
+		graphPane.drawGraph();
+		
+		explanationArea.setText("");
+		backBtn.setDisable(true);
+		nextBtn.setDisable(true);
+		showAllBtn.setDisable(true);
+		resultsBtn.setDisable(true);
+	}
+	
 	/**
 	 * sets the wrapper for all windows to apply to this controller's window
 	 * @param wrapperController the wrapper controlling which window is shown
@@ -308,27 +332,8 @@ public class DemonstrationWindowController {
 		return explanationArea;
 	}
 	
-	/**
-	 * sets the initial UI and data values that can be changed but not unchangable values
-	 */
-	public void setInitialValues() {
-		interactor = Interactor.getInstance(this);
-		readArguments(interactor.getRawArguments());
-		argumentFramework = new Framework(arguments, interactor);
-		
-		explanationArea.setText("");
-		backBtn.setDisable(true);
-		nextBtn.setDisable(true);
-		showAllBtn.setDisable(true);
-		resultsBtn.setDisable(true);
-		
-		root.getChildren().remove(graphPane);
-		graphPane = new NodePane();
-		root.getChildren().add(graphPane);
-		graphPane.setPrefHeight(470);
-		graphPane.setPrefWidth(460);
-		graphPane.createGraph(argumentFramework);
-		graphPane.drawGraph();
+	public NodePane getGraphPane(){
+		return graphPane;
 	}
 	
 	/**
