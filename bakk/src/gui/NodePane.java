@@ -14,14 +14,12 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
-import edu.uci.ics.jung.visualization.VisualizationModel;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.TextAlignment;
@@ -37,7 +35,6 @@ public class NodePane extends AnchorPane{
 	private static final int ARC_LENGTH = 270;
 	private static final int ARC_ANGLE = 315;
 	private Layout<String, String> layout;
-	private VisualizationModel<String, String> model;
 	private Group viz;
 	private Framework framework;
 	private DirectedSparseGraph<String, String> graph;
@@ -83,9 +80,15 @@ public class NodePane extends AnchorPane{
 		int height = (int) Math.ceil(this.getPrefHeight()-20);
 
 		layout = new CircleLayout<String, String>(graph);
-		model = new DefaultVisualizationModel<String, String>(layout, new Dimension(width, height));
+		new DefaultVisualizationModel<String, String>(layout, new Dimension(width, height));
 
 		renderGraph(graph, layout, viz);
+		
+		for(int i = 0; i<nodes.size(); i++){
+			nodes.get(i).toFront();
+			nodes.get(i).getNameTag().toFront();
+		}
+		
 		this.getChildren().add(viz);
 	}
 
@@ -156,10 +159,6 @@ public class NodePane extends AnchorPane{
 			else{
 				drawDirectedArc(pStart, getPreferredAngle(pEnd, nodePositions), direction);
 			}
-		}
-
-		for(int i = 0; i<nodes.size(); i++){
-			nodes.get(i).getNameTag().toFront();
 		}
 	}
 

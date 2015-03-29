@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 import javafx.scene.paint.Color;
 
-import com.sun.org.apache.bcel.internal.generic.Instruction;
-
 /**
  * The Extension class contains a set of arguments and is capable
  *  of computing if it is of (most of) the extension types of an abstract argumentation framework
@@ -53,9 +51,6 @@ public class Extension {
 		
 		if(!arguments.contains(a)){
 			arguments.add(a);
-		}
-		else{
-			System.out.println("Already in there!"); //TODO maybe replace
 		}
 	}
 	

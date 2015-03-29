@@ -123,7 +123,7 @@ public class Interactor {
 	/**
 	 * removes the last line from the textarea and places it first in the queue
 	 */
-	public void removeLine(){ //TODO rework so commands can be extracted from nodepane
+	public void removeLine(){ //TODO introduce another queue for going back
 		String tmp = textArea.getText();
 
 		if(!tmp.isEmpty()){
@@ -163,7 +163,7 @@ public class Interactor {
 	 * @return whether there are still elements in the queue
 	 */
 	public boolean hasNext(){
-		return !(storedCommands.size()>0);
+		return (storedCommands.size()>0);
 	}
 
 	/**

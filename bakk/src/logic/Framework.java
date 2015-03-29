@@ -3,12 +3,11 @@ package logic;
 import interactor.Command;
 import interactor.GraphInstruction;
 import interactor.Interactor;
+import interactor.SingleInstruction;
 
 import java.util.ArrayList;
 
 import javafx.scene.paint.Color;
-
-import com.sun.org.apache.bcel.internal.generic.Instruction;
 
 /**
  * The Framework class is a representation of an abstract argumentation framework
@@ -30,22 +29,6 @@ public class Framework {
 	public Framework(ArrayList<Argument> arguments, Interactor interactor) throws IllegalArgumentException{
 		this.arguments = arguments;
 		this.interactor = interactor;
-	}
-
-	/**
-	 * computes a set of arguments that are attacked by an argument
-	 * @param argumentName the name of the argument that attacks
-	 * @return the set of arguments being attacked by the specified argument
-	 */
-	private ArrayList<Argument> getAttacks(char argumentName){ //TODO use or delete
-		ArrayList<Argument> attacks = new ArrayList<Argument>();
-		String attackString = getArgument(argumentName).getAttacks();
-
-		for(int i = 0;i<attackString.length();i++){
-			attacks.add(getArgument(attackString.charAt(i)));
-		}
-
-		return attacks;
 	}
 
 	/**
@@ -463,6 +446,18 @@ public class Framework {
 		}
 
 		return formatted;
+	}
+	
+	public GraphInstruction getInstructionFromString(String item) {
+		GraphInstruction instruction = new GraphInstruction(new ArrayList<SingleInstruction>(), null);		
+		item = item.replace("{", "");
+		item = item.replace("}", "");
+		
+		for(int i = 0; i < item.length(); i++){
+			instruction.getNodeInstructions().add(new SingleInstruction(String.valueOf(item.charAt(i)), Color.GREEN));
+		}
+		
+		return instruction;
 	}
 
 	/**

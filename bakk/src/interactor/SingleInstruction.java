@@ -7,9 +7,9 @@ public class SingleInstruction {
 	private String name;
 	private Color color;
 
-	public SingleInstruction(String name, Color color){
+	public SingleInstruction(String name, Color green){
 		this.name = name;
-		this.color = color;
+		this.color = green;
 	}
 	
 	public String getName(){

@@ -17,8 +17,7 @@
     <Separator orientation="VERTICAL" prefHeight="25.0" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="435.0" />
     <Button id="showAllButton" fx:id="resultsBtn" disable="true" mnemonicParsing="false" onAction="#onResultsClick" prefWidth="-1.0" text="results" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="145.0" />
     <Separator orientation="VERTICAL" prefHeight="25.0" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="435.0" />
-    <Label layoutX="772.0" text="show:" AnchorPane.bottomAnchor="90.0" />
-    <ChoiceBox prefWidth="70.0" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="20.0">
+    <ChoiceBox id="setChoiceBox" fx:id="setsChoiceBox" disable="true" prefWidth="105.0" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="20.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Item 1" />
