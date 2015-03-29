@@ -233,7 +233,7 @@ public class DemonstrationWindowController {
 	 */
 	@FXML
 	public void onBackClick(){
-		interactor.removeLine();
+		interactor.revertCommand();
 
 		if(explanationArea.getText().isEmpty()){
 			backBtn.setDisable(true);
@@ -243,9 +243,6 @@ public class DemonstrationWindowController {
 		showAllBtn.setDisable(false);
 		nextBtn.setDisable(false);
 		resultsBtn.setDisable(false);
-
-		//TODO revert graph changes
-		//TODO and reset highlighting through choicebox
 	}
 
 	/**
@@ -264,7 +261,9 @@ public class DemonstrationWindowController {
 	@FXML
 	public void onResultsClick(){
 		interactor.skipToLastCommand();
-
+		interactor.emptyQueue();
+		
+		backBtn.setDisable(true);
 		disableForwardButtons();
 		showChoices();
 	}
@@ -300,6 +299,7 @@ public class DemonstrationWindowController {
 
 		setsChoiceBox.setItems(FXCollections.observableArrayList(formatList));
 		setsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChoiceListener<Number>());
+		setsChoiceBox.getSelectionModel().selectFirst();
 	}
 	
 	@SuppressWarnings("hiding")

@@ -24,6 +24,7 @@ public class Interactor {
 	private NodePane graph; //the anchorpane in which the graph is drawn
 	private DemonstrationWindowController controller;
 	private LinkedList<Command> storedCommands; //queue storing the messages to be shown to the user
+	private LinkedList<Command> history;
 	private ArrayList<ArgumentDto> rawArguments; //ArgumentDtos stored for further use in an argument Framework
 
 	/**
@@ -39,6 +40,7 @@ public class Interactor {
 		}
 
 		storedCommands = new LinkedList<Command>();
+		history = new LinkedList<Command>();
 	}
 
 	/**
@@ -69,6 +71,8 @@ public class Interactor {
 			textArea.setText(cmd.getText());
 			manipulateGraph(cmd.getInstruction());
 			scrollDown();
+			
+			history.push(cmd);
 		}
 	}
 
@@ -84,6 +88,8 @@ public class Interactor {
 				scrollDown();
 				
 				manipulateGraph(cmd.getInstruction());
+				
+				history.push(cmd);
 			}
 			else{
 				overwrite();
@@ -101,7 +107,7 @@ public class Interactor {
 		scrollDown();
 	}
 	
-	public void skipToLastCommand() {
+	public void skipToLastCommand() { //no push to history!
 		if(!storedCommands.isEmpty()){
 			Command cmd = storedCommands.getFirst();
 			
@@ -123,17 +129,23 @@ public class Interactor {
 	/**
 	 * removes the last line from the textarea and places it first in the queue
 	 */
-	public void removeLine(){ //TODO introduce another queue for going back
+	public void revertCommand(){
 		String tmp = textArea.getText();
 
+		if(history.isEmpty()){
+			return;
+		}
+		
 		if(!tmp.isEmpty()){
 			if(tmp.contains("\n")){
-				storedCommands.addLast(new Command(tmp.substring(tmp.lastIndexOf('\n'), tmp.length()).replace("\n", ""), null/*TODO instruction*/));
 				textArea.setText(tmp.substring(0,tmp.lastIndexOf('\n')));
+				storedCommands.addLast(history.pollFirst());
+				manipulateGraph(history.peekFirst().getInstruction());
 				scrollDown();
 			}
 			else{
-				storedCommands.addLast(new Command(tmp, null/*TODO instruction*/));
+				storedCommands.addLast(history.pollFirst());
+				manipulateGraph(history.peekFirst().getInstruction());
 				textArea.setText("");
 			}
 		}
@@ -156,6 +168,7 @@ public class Interactor {
 	 */
 	public void emptyQueue(){
 		storedCommands = new LinkedList<Command>();
+		history = new LinkedList<Command>();
 	}
 
 	/**
