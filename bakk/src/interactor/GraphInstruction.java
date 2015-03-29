@@ -18,4 +18,12 @@ public class GraphInstruction {
 	public ArrayList<SingleInstruction> getEdgeInstructions(){
 		return edgeInstructions;
 	}
+	
+	public void setNodeInstructions(ArrayList<SingleInstruction> instructions){
+		this.nodeInstructions = instructions;
+	}
+	
+	public void setEdgeInstructions(ArrayList<SingleInstruction> instructions){
+		this.edgeInstructions = instructions;
+	}
 }

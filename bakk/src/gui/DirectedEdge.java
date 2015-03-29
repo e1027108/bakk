@@ -15,12 +15,14 @@ public class DirectedEdge {
 		this.arc = arc;
 		this.line = null;
 		this.triangle = triangle;
+		this.direction = direction;
 	}
 	
 	public DirectedEdge(Line line, Polygon triangle, String direction){
 		this.line = line;
 		this.arc = null;
 		this.triangle = triangle;
+		this.direction = direction;
 	}
 	
 	public Arc getArc(){

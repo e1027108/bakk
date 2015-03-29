@@ -84,9 +84,12 @@ public class NodePane extends AnchorPane{
 
 		renderGraph(graph, layout, viz);
 		
-		for(int i = 0; i<nodes.size(); i++){
-			nodes.get(i).toFront();
-			nodes.get(i).getNameTag().toFront();
+		for(NamedCircle c: nodes){
+			c.toFront();
+			c.getNameTag().toFront();
+		}
+		for(DirectedEdge e: edges){
+			e.getTriangle().toFront();
 		}
 		
 		this.getChildren().add(viz);
@@ -396,12 +399,13 @@ public class NodePane extends AnchorPane{
 			for(SingleInstruction i: edgeInstructions){
 				DirectedEdge tmp = getEdgeByName(i.getName()); //name of edge = direction
 
+
 				if(tmp != null){
 					if(tmp.hasArc()){
 						tmp.getArc().setStroke(i.getColor());
 					}
 					else if(tmp.hasLine()){
-						tmp.getLine().setFill(i.getColor());
+						tmp.getLine().setStroke(i.getColor());
 					}
 					tmp.getTriangle().setFill(i.getColor());
 				}
@@ -411,7 +415,8 @@ public class NodePane extends AnchorPane{
 
 	private DirectedEdge getEdgeByName(String direction) {
 		for(DirectedEdge e: edges){
-			if(e.getDirection().equals(direction)){
+			String tmp = e.getDirection();
+			if(tmp != null && tmp.equals(direction)){
 				return e;
 			}
 		}
@@ -420,7 +425,8 @@ public class NodePane extends AnchorPane{
 
 	private NamedCircle getCircleByName(String name) {
 		for(NamedCircle n: nodes){
-			if(n.getName().equals(name)){
+			String tmp = n.getName();
+			if(tmp != null && tmp.equals(name)){
 				return n;
 			}
 		}
@@ -437,7 +443,7 @@ public class NodePane extends AnchorPane{
 				e.getArc().setStroke(Color.BLACK);
 			}
 			else if(e.hasLine()){
-				e.getLine().setFill(Color.BLACK);
+				e.getLine().setStroke(Color.BLACK);
 			}
 			e.getTriangle().setFill(Color.BLACK);
 		}

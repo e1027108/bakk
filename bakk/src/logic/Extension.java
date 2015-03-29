@@ -6,6 +6,7 @@ import interactor.SingleInstruction;
 
 import java.util.ArrayList;
 
+import edu.uci.ics.jung.graph.util.Pair;
 import javafx.scene.paint.Color;
 
 /**
@@ -60,19 +61,41 @@ public class Extension {
 	 * @return if the extension is conflict-free
 	 */
 	public boolean isConflictFree(boolean write){
-		String attacks = getAttacks();
-		String names = getArgumentNames();
+		ArrayList<Pair<String>> violatingAttacks = new ArrayList<Pair<String>>();
 
-		for(int i = 0; i < names.length(); i++){
-			String tmp = "" + names.charAt(i);
-			if(attacks.contains(tmp)){
-				if(write){
-					framework.addToInteractor(new Command(this.format() + " attacks the argument " + tmp + ", thus it is not a conflict-free set!", null)); //TODO fill in for null (use all errors?)
+		for(Argument a: arguments){
+			String attacks = a.getAttacks();
+			for(Argument a2: arguments){
+				String tmp = "" + a2.getName();
+				if(attacks.contains(tmp)){
+					violatingAttacks.add(new Pair<String>(String.valueOf(a.getName()),tmp));
 				}
-				return false;
 			}
 		}
 
+		if(!violatingAttacks.isEmpty()){
+			if(write){ //TODO outsource?
+				String tmp = ""; //start outsource?
+				GraphInstruction instruction = toInstruction(Color.GREEN);
+				ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
+				
+				for(Pair<String> p: violatingAttacks){
+					if(!tmp.contains(p.getSecond())){ //multiple arguments could attack the same one
+						tmp += p.getSecond() + ", ";
+					}
+					edgeInstructions.add(new SingleInstruction((p.getFirst()+p.getSecond()),Color.RED));
+				}
+				
+				tmp = tmp.substring(0, tmp.length()-2);
+				String last = violatingAttacks.get(violatingAttacks.size()-1).getSecond();
+				tmp = tmp.replace(", " + last, " and " + last);
+				instruction.setEdgeInstructions(edgeInstructions); //end outsource?
+				
+				framework.addToInteractor(new Command(this.format() + " attacks the arguments " + tmp + "; thus it is not a conflict-free set!", instruction));
+			}
+			return false;
+		}
+		
 		if(write){
 			framework.addToInteractor(new Command(this.format() + " is a conflict-free set, because it does not attack its own arguments", toInstruction(Color.GREEN)));
 		}
