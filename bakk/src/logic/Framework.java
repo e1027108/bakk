@@ -80,7 +80,7 @@ public class Framework {
 
 		if(arguments == null){
 			//should not be possible
-			interactor.addToCommands(new Command("No arguments found, error!", null));//TODO handle null command
+			interactor.addToCommands(new Command("No arguments found, error!", null));
 			return null;
 		}
 
@@ -100,7 +100,7 @@ public class Framework {
 		previousConflictFreeSets = new ArrayList<Extension>();
 		previousConflictFreeSets.addAll(conflictFreeSets);
 
-		return conflictFreeSets; //TODO at this point the controller should give dropdown, containing the extensions for highlighting
+		return conflictFreeSets;
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class Framework {
 				notification += formatExtensions(cf);
 			}
 
-			interactor.addToCommands(new Command(notification, null)); //TODO dropdown for that?
+			interactor.addToCommands(new Command(notification, null));
 		}
 
 		if(invalidityCheck(cf, "conflict-free sets", "admissible extensions")){
@@ -171,7 +171,7 @@ public class Framework {
 		else{
 			notification = "There are no admissible extensions!";
 		}
-		interactor.addToCommands(new Command(notification, null)); //TODO dropdown here (for previous)?
+		interactor.addToCommands(new Command(notification, null));
 
 		previousAdmissibleSets = new ArrayList<Extension>();
 		previousAdmissibleSets.addAll(admissible);
@@ -221,7 +221,7 @@ public class Framework {
 			for(Argument a: arguments){
 				if(defends(e, a) && !e.getArguments().contains(a)){
 					interactor.addToCommands(new Command("The extension " + format + " defends the argument " + a.getName() + " which it "
-							+ "doesn't contain. Therefore it is not a complete extension.", null)); //TODO remove null, instead highlight attackers, defendant, defender (edges)
+							+ "doesn't contain. Therefore it is not a complete extension.", null)); //TODO highlight not contained defended arguments blue (edges too)?
 					isComplete = false;
 					break;
 				}
@@ -271,9 +271,8 @@ public class Framework {
 		ArrayList<Extension> admissible;
 		ArrayList<Extension> preferred = new ArrayList<Extension>();
 
-		//TODO outsource null/empty check
 		if(!usePrevious || (previousAdmissibleSets == null)){
-			interactor.addToCommands(new Command("Computing admissible extensions to compute preferred extensions!", null));//TODO dropdown (all previouses?)
+			interactor.addToCommands(new Command("Computing admissible extensions to compute preferred extensions!", null));
 			admissible = getAdmissibleSets(usePrevious);
 		}
 		else{
@@ -316,10 +315,8 @@ public class Framework {
 		ArrayList<Extension> cf;
 		ArrayList<Extension> stable = new ArrayList<Extension>();
 
-
-		//TODO outsource null/empty check
 		if(!usePrevious || (previousConflictFreeSets == null)){
-			interactor.addToCommands(new Command("Computing conflict-free sets to compute stable extensions!", null));//TODO
+			interactor.addToCommands(new Command("Computing conflict-free sets to compute stable extensions!", null));
 			cf = getConflictFreeSets();
 		}
 		else{
@@ -362,9 +359,8 @@ public class Framework {
 		ArrayList<Extension> complete;
 		ArrayList<Argument> grounded = new ArrayList<Argument>();
 
-		//TODO outsource null/empty check
 		if(!usePrevious || (previousCompleteExtensions == null)){
-			interactor.addToCommands(new Command("Computing complete extensions to compute the grounded extension!", null)); //TODO
+			interactor.addToCommands(new Command("Computing complete extensions to compute the grounded extension!", null));
 			complete = getCompleteExtensions(usePrevious);
 		}
 		else{
@@ -408,13 +404,13 @@ public class Framework {
 				for(int i = grounded.size()-1;i>=0;i--){
 					if(!e.getArguments().contains(grounded.get(i))){
 						interactor.addToCommands(new Command("The complete extension " + eFormat + " does not contain the argument " 
-								+ grounded.get(i).getName() + ", therefore it is removed from our candidate", e.toInstruction(Color.RED)));
+								+ grounded.get(i).getName() + ", therefore it is removed from our candidate", e.toInstruction(Color.RED))); //TODO highlight contained green, non contained red, other blue
 						grounded.remove(grounded.get(i));
 						errors++;
 					}
 				}
 				if(errors == 0){
-					interactor.addToCommands(new Command("The complete extension " + eFormat + " contains all arguments of our candidate.", null)); //TODO remove null, figure something out
+					interactor.addToCommands(new Command("The complete extension " + eFormat + " contains all arguments of our candidate.", null)); //TODO highlight contained green, other blue
 				}
 				else{
 					interactor.addToCommands(new Command("Our new candidate is " + new Extension(grounded,this).format(), e.toInstruction(Color.GREEN)));
@@ -477,7 +473,7 @@ public class Framework {
 				are = are.replace("are", "is");
 			}
 
-			interactor.addToCommands(new Command("Since there are no " + cause + are + effect + "!", null)); //TODO perhaps make everything black?
+			interactor.addToCommands(new Command("Since there are no " + cause + are + effect + "!", null));
 			return true;
 		}
 		return false;

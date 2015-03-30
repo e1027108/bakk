@@ -114,11 +114,12 @@ public class Extension {
 		else{
 			for(Argument a: arguments){
 				if(!framework.defends(this,a)){
-					framework.addToInteractor(new Command(format() + " does not defend " + a.getName() + ", so it is not an admissible extension.", null)); //TODO fill in for null
+					//TODO find a way to highlight attacks that are not being defended
+					framework.addToInteractor(new Command(format() + " does not defend " + a.getName() + ", so it is not an admissible extension.", null));
 					return false;
 				}
 			}
-			framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", null)); //TODO fill in for null
+			framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", null)); //TODO highlight all defending attacks?
 			return true;
 		}
 	}
@@ -135,12 +136,12 @@ public class Extension {
 			}
 			else if(isSubsetOf(e)){
 				String format = format();
-				framework.addToInteractor(new Command("Since " + format + " is a subset of " + e.format() + ", " + format + " is not preferred.", null)); //TODO fill in for null
+				framework.addToInteractor(new Command("Since " + format + " is a subset of " + e.format() + ", " + format + " is not preferred.", null)); //TODO highlight additional nodes blue?
 				return false;
 			}
 		}
 		
-		framework.addToInteractor(new Command(format() + " is not the subset of another admissible extension, so it is a preferred extension.", null)); //TODO replace null
+		framework.addToInteractor(new Command(format() + " is not the subset of another admissible extension, so it is a preferred extension.", toInstruction(Color.GREEN)));
 		return true;
 	}
 
@@ -175,14 +176,14 @@ public class Extension {
 		}
 		
 		if(attacks.length() == (allArguments.size()-getArgumentNames().length())){
-			framework.addToInteractor(new Command(format() + " attacks every argument outside itself, so it is a stable extension.", null)); //TODO replace null
+			framework.addToInteractor(new Command(format() + " attacks every argument outside itself, so it is a stable extension.", null)); //TODO highlight all attacks too
 			return true;
 		}
 		else{
-			//TODO find an argument it does not attack, print that to textArea
+			//TODO find all arguments it does not attack (instead of just the first)
 			for(Argument a: allArguments){
 				if(!arguments.contains(a) && !attacks.contains(String.valueOf(a.getName()))){
-					framework.addToInteractor(new Command(format() + " is not a stable extension because it does not attack " + a.getName(), null)); //TODO replace null
+					framework.addToInteractor(new Command(format() + " is not a stable extension because it does not attack " + a.getName(), null)); //TODO highlight all attacks, nodes missing attacks red?
 					break;
 				}
 			}

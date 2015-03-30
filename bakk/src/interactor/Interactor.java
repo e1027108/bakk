@@ -127,7 +127,7 @@ public class Interactor {
 	}
 
 	/**
-	 * removes the last line from the textarea and places it first in the queue
+	 * removes the last line from the textArea and places it first in the queue
 	 */
 	public void revertCommand(){
 		String tmp = textArea.getText();
@@ -145,7 +145,6 @@ public class Interactor {
 			}
 			else{
 				storedCommands.addLast(history.pollFirst());
-				manipulateGraph(history.peekFirst().getInstruction());
 				textArea.setText("");
 			}
 		}
