@@ -127,7 +127,7 @@ public class Interactor {
 	}
 
 	/**
-	 * removes the last line from the textArea and places it first in the queue
+	 * re-applies the last command before the current command (from history), moves current command on top of queue
 	 */
 	public void revertCommand(){
 		String tmp = textArea.getText();

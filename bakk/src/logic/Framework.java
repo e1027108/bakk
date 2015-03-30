@@ -6,7 +6,10 @@ import interactor.Interactor;
 import interactor.SingleInstruction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
+import edu.uci.ics.jung.graph.util.Pair;
 import javafx.scene.paint.Color;
 
 /**
@@ -215,22 +218,49 @@ public class Framework {
 		}
 
 		for(Extension e: admissible){
-			boolean isComplete = true;
 			String format = e.format();
+			ArrayList<Argument> outside = new ArrayList<Argument>();
+			ArrayList<Triple<Argument>> uselessDefences = new ArrayList<Triple<Argument>>();
+			
+			outside.addAll(arguments);
+			outside.removeAll(e.getArguments());
 
-			for(Argument a: arguments){
-				if(defends(e, a) && !e.getArguments().contains(a)){
-					interactor.addToCommands(new Command("The extension " + format + " defends the argument " + a.getName() + " which it "
-							+ "doesn't contain. Therefore it is not a complete extension.", null)); //TODO highlight not contained defended arguments blue (edges too)?
-					isComplete = false;
-					break;
+			for(Argument a: outside){
+				ArrayList<Pair<Argument>> defences = getDefences(e,a);
+				
+				for(Pair<Argument> defence: defences){
+					uselessDefences.add(new Triple<Argument>(a, defence.getFirst(), defence.getSecond())); //a: defended, first: defender, second: attacker
 				}
 			}
-			if(isComplete){
+			
+			if(uselessDefences.isEmpty()){
 				GraphInstruction highlight = e.toInstruction(Color.GREEN);
-
 				interactor.addToCommands(new Command("The extension " + format + " is a complete extension!", highlight));
 				complete.add(e);
+			}
+			else{
+				String missing = "";
+				GraphInstruction instruction = e.toInstruction(Color.GREEN);
+				ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
+				
+				for(Triple<Argument> t: uselessDefences){
+					String defended = "" + t.getFirst().getName();
+					String defender = "" + t.getSecond().getName();
+					String attacker = "" + t.getThird().getName();
+					if(!missing.contains(defended)){
+						missing += defended;
+						instruction.getNodeInstructions().add(new SingleInstruction(defended,Color.BLUE));
+					}
+					edgeInstructions.add(new SingleInstruction(attacker+defended,Color.RED));
+					edgeInstructions.add(new SingleInstruction(defender+attacker,Color.GREEN));
+					instruction.getNodeInstructions().add(new SingleInstruction(attacker,Color.RED));
+				}
+				
+				missing = formatNameList(missing);
+				instruction.setEdgeInstructions(edgeInstructions);
+				
+				interactor.addToCommands(new Command("The extension " + format + " defends the argument(s) " + missing + " that it "
+						+ "doesn't contain. Therefore it is not a complete extension.", instruction)); //TODO highlight not contained defended arguments blue (edges too)?
 			}
 		}
 
@@ -243,22 +273,24 @@ public class Framework {
 	}
 
 	/**
-	 * checks if the given extension defends the given argument
+	 * checks which arguments of the given extension defend the specified argument
 	 * @param e the extension that might defend the argument
 	 * @param a the argument that might be defended
-	 * @return whether the given extension defends the given argument
+	 * @return a list of argument pairs consisting of defender and attacker
 	 */
-	public boolean defends(Extension e, Argument a) {
-		String extensionAttacks = e.getAttacks();
+	public ArrayList<Pair<Argument>> getDefences(Extension e, Argument a) {
 		ArrayList<Argument> attackArgument = getAttackers(a.getName());
+		ArrayList<Pair<Argument>> defences = new ArrayList<Pair<Argument>>();
 
 		for(Argument attacker: attackArgument){
-			if(!extensionAttacks.contains(String.valueOf(attacker.getName()))){
-				return false;
+			for(Argument eArg: e.getArguments()){
+				if(eArg.getAttacks().contains(String.valueOf(attacker.getName()))){
+					defences.add(new Pair<Argument>(eArg,attacker));
+				}
 			}
 		}
 
-		return true;
+		return defences;
 	}
 
 	/**
@@ -492,5 +524,23 @@ public class Framework {
 	 */
 	public ArrayList<Argument> getArguments() {
 		return arguments;
+	}
+
+	public String formatNameList(String input) {
+		String output = "";
+	
+		if(input.length() < 2){
+			return input;
+		}
+		
+		for(int i = 0; i < input.length()-1; i++){
+			output += input.charAt(i) + ", ";
+		}
+		
+		output = output.substring(0,output.length()-2);
+		String last = "" + output.charAt(output.length()-1);
+		output = output.replace(", " + last, " and " + last);
+				
+		return output;
 	}
 }

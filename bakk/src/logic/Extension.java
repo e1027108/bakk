@@ -74,22 +74,20 @@ public class Extension {
 		}
 
 		if(!violatingAttacks.isEmpty()){
-			if(write){ //TODO outsource?
-				String tmp = ""; //start outsource?
+			if(write){
+				String tmp = "";
 				GraphInstruction instruction = toInstruction(Color.GREEN);
 				ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
 				
 				for(Pair<String> p: violatingAttacks){
 					if(!tmp.contains(p.getSecond())){ //multiple arguments could attack the same one
-						tmp += p.getSecond() + ", ";
+						tmp += p.getSecond();
 					}
 					edgeInstructions.add(new SingleInstruction((p.getFirst()+p.getSecond()),Color.RED));
 				}
 				
-				tmp = tmp.substring(0, tmp.length()-2);
-				String last = violatingAttacks.get(violatingAttacks.size()-1).getSecond();
-				tmp = tmp.replace(", " + last, " and " + last);
-				instruction.setEdgeInstructions(edgeInstructions); //end outsource?
+				tmp = framework.formatNameList(tmp);
+				instruction.setEdgeInstructions(edgeInstructions);
 				
 				framework.addToInteractor(new Command(this.format() + " attacks the arguments " + tmp + "; thus it is not a conflict-free set!", instruction));
 			}
@@ -113,7 +111,10 @@ public class Extension {
 		}
 		else{
 			for(Argument a: arguments){
-				if(!framework.defends(this,a)){
+				if(framework.getAttackers(a.getName()).isEmpty()){ //if it doesn't get attacked, no defences are neccessary
+					continue;
+				}
+				else if(framework.getDefences(this, a).isEmpty()){ //otherwise, if there are none, then it's not defended
 					//TODO find a way to highlight attacks that are not being defended
 					framework.addToInteractor(new Command(format() + " does not defend " + a.getName() + ", so it is not an admissible extension.", null));
 					return false;
