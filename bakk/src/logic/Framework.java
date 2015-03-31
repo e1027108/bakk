@@ -187,6 +187,9 @@ public class Framework {
 	 * @details for each extension it is checked if it is possible to add another argument from the framework and still receive an admissible set
 	 * 			if it is, the extension in question is not a complete extension
 	 * 			all other extensions are complete extensions
+	 * 
+	 * 			Note: nodes that attack each other but both (on their own) would be 
+	 * 			defended by an extension don't get colored consistently!
 	 * @param usePrevious specifies if previously computed sets for the extensions should be used (true) or computed anew (false)
 	 * @return the set of all complete extensions of the framework
 	 */
@@ -257,7 +260,7 @@ public class Framework {
 					edgeInstructions.add(new SingleInstruction(defender+attacker,Color.GREEN));
 					if(!(attacker.equals(defender) && attacker.equals(defended))){
 						instruction.getNodeInstructions().add(new SingleInstruction(attacker,Color.RED));
-					}
+					} 
 				}
 
 				missing = formatNameList(missing);
@@ -286,15 +289,26 @@ public class Framework {
 	public ArrayList<String> getDefences(Extension e, Argument a) {
 		ArrayList<Argument> attackArgument = getAttackers(a.getName());
 		ArrayList<String> defences = new ArrayList<String>();
+		String argName = String.valueOf(a.getName());
 
-		if(attackArgument.isEmpty()){
-			defences.add(""+a.getName()+a.getName());
+		if(e.getAttacks().contains(argName) || a.getAttacks().contains(argName)){ //if it gets attacked by the extension itself or it attacks itself
+			return defences;
+		}
+
+		if(attackArgument.isEmpty()){ //if it doesn't get attacked
+			defences.add(argName+argName);
 		}
 		else{
 			for(Argument attacker: attackArgument){
+				String attName = String.valueOf(attacker.getName());
+				
+				if(a.getAttacks().contains(attName)){ //or defends itself
+					defences.add(argName+attName);
+				}
+				
 				for(Argument eArg: e.getArguments()){
-					if(eArg.getAttacks().contains(String.valueOf(attacker.getName()))){
-						defences.add(""+eArg.getName()+attacker.getName());
+					if(eArg.getAttacks().contains(attName)){ //if it gets defended
+						defences.add(eArg.getName()+attName);
 					}
 				}
 			}
