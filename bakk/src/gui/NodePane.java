@@ -83,7 +83,13 @@ public class NodePane extends AnchorPane{
 		new DefaultVisualizationModel<String, String>(layout, new Dimension(width, height));
 
 		renderGraph(graph, layout, viz);
-		
+
+		arrangePositions();
+
+		this.getChildren().add(viz);
+	}
+
+	private void arrangePositions() {
 		for(NamedCircle c: nodes){
 			c.toFront();
 			c.getNameTag().toFront();
@@ -91,8 +97,6 @@ public class NodePane extends AnchorPane{
 		for(DirectedEdge e: edges){
 			e.getTriangle().toFront();
 		}
-		
-		this.getChildren().add(viz);
 	}
 
 	private void renderGraph(Graph<String, String> graph, Layout<String, String> layout, Group viz) {
@@ -399,13 +403,18 @@ public class NodePane extends AnchorPane{
 			for(SingleInstruction i: edgeInstructions){
 				DirectedEdge tmp = getEdgeByName(i.getName()); //name of edge = direction
 
-
 				if(tmp != null){
 					if(tmp.hasArc()){
 						tmp.getArc().setStroke(i.getColor());
 					}
 					else if(tmp.hasLine()){
 						tmp.getLine().setStroke(i.getColor());
+
+						DirectedEdge reverse = getEdgeByName(""+i.getName().charAt(1)+i.getName().charAt(0));
+
+						if(reverse != null){
+							reverse.getLine().setStroke(Color.TRANSPARENT);
+						}
 					}
 					tmp.getTriangle().setFill(i.getColor());
 				}

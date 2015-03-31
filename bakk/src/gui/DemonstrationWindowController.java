@@ -136,7 +136,7 @@ public class DemonstrationWindowController {
 
 		resultSet = argumentFramework.getConflictFreeSets();
 
-		//printExtensions(resultSet);
+		printExtensions(resultSet);
 
 		setUI();
 	}

@@ -111,13 +111,24 @@ public class Extension {
 		}
 		else{
 			for(Argument a: arguments){
-				if(framework.getAttackers(a.getName()).isEmpty()){ //if it doesn't get attacked, no defences are neccessary
+				ArrayList<String> defences = framework.getDefences(this, a);
+				ArrayList<Argument> attackers = framework.getAttackers(a.getName());
+				
+				if(attackers.isEmpty()){ //if it doesn't get attacked, no defences are neccessary
 					continue;
 				}
-				else if(framework.getDefences(this, a).isEmpty()){ //otherwise, if there are none, then it's not defended
+				else{
 					//TODO find a way to highlight attacks that are not being defended
-					framework.addToInteractor(new Command(format() + " does not defend " + a.getName() + ", so it is not an admissible extension.", null));
-					return false;
+					String defeatedAttackers = "";
+					for(String p: defences){
+						defeatedAttackers += p.charAt(1);
+					}
+					for(Argument att: attackers){
+						if(!defeatedAttackers.contains(String.valueOf(att.getName()))){
+							framework.addToInteractor(new Command(format() + " does not defend " + a.getName() + " against " + att.getName() + ", so it is not an admissible extension.", null));
+							return false;
+						}
+					}
 				}
 			}
 			framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", null)); //TODO highlight all defending attacks?

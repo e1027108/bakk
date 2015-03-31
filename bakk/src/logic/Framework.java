@@ -221,18 +221,18 @@ public class Framework {
 			String format = e.format();
 			ArrayList<Argument> outside = new ArrayList<Argument>();
 			ArrayList<Triple<Argument>> uselessDefences = new ArrayList<Triple<Argument>>();
-			
+
 			outside.addAll(arguments);
 			outside.removeAll(e.getArguments());
 
 			for(Argument a: outside){
-				ArrayList<Pair<Argument>> defences = getDefences(e,a);
-				
-				for(Pair<Argument> defence: defences){
-					uselessDefences.add(new Triple<Argument>(a, defence.getFirst(), defence.getSecond())); //a: defended, first: defender, second: attacker
+				ArrayList<String> defences = getDefences(e,a);
+
+				for(String defence: defences){
+					uselessDefences.add(new Triple<Argument>(a, getArgument(defence.charAt(0)), getArgument(defence.charAt(1)))); //a: defended, first: defender, second: attacker
 				}
 			}
-			
+
 			if(uselessDefences.isEmpty()){
 				GraphInstruction highlight = e.toInstruction(Color.GREEN);
 				interactor.addToCommands(new Command("The extension " + format + " is a complete extension!", highlight));
@@ -242,25 +242,29 @@ public class Framework {
 				String missing = "";
 				GraphInstruction instruction = e.toInstruction(Color.GREEN);
 				ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
-				
+
 				for(Triple<Argument> t: uselessDefences){
 					String defended = "" + t.getFirst().getName();
 					String defender = "" + t.getSecond().getName();
 					String attacker = "" + t.getThird().getName();
+
 					if(!missing.contains(defended)){
 						missing += defended;
 						instruction.getNodeInstructions().add(new SingleInstruction(defended,Color.BLUE));
 					}
+
 					edgeInstructions.add(new SingleInstruction(attacker+defended,Color.RED));
 					edgeInstructions.add(new SingleInstruction(defender+attacker,Color.GREEN));
-					instruction.getNodeInstructions().add(new SingleInstruction(attacker,Color.RED));
+					if(!(attacker.equals(defender) && attacker.equals(defended))){
+						instruction.getNodeInstructions().add(new SingleInstruction(attacker,Color.RED));
+					}
 				}
-				
+
 				missing = formatNameList(missing);
 				instruction.setEdgeInstructions(edgeInstructions);
-				
+
 				interactor.addToCommands(new Command("The extension " + format + " defends the argument(s) " + missing + " that it "
-						+ "doesn't contain. Therefore it is not a complete extension.", instruction)); //TODO highlight not contained defended arguments blue (edges too)?
+						+ "doesn't contain. Therefore it is not a complete extension.", instruction));
 			}
 		}
 
@@ -276,16 +280,22 @@ public class Framework {
 	 * checks which arguments of the given extension defend the specified argument
 	 * @param e the extension that might defend the argument
 	 * @param a the argument that might be defended
-	 * @return a list of argument pairs consisting of defender and attacker
+	 * @return a string representing the edge from defender to attacker;
+	 * 		in case a argument doesn't get attacked the string representation is this arguments name twice
 	 */
-	public ArrayList<Pair<Argument>> getDefences(Extension e, Argument a) {
+	public ArrayList<String> getDefences(Extension e, Argument a) {
 		ArrayList<Argument> attackArgument = getAttackers(a.getName());
-		ArrayList<Pair<Argument>> defences = new ArrayList<Pair<Argument>>();
+		ArrayList<String> defences = new ArrayList<String>();
 
-		for(Argument attacker: attackArgument){
-			for(Argument eArg: e.getArguments()){
-				if(eArg.getAttacks().contains(String.valueOf(attacker.getName()))){
-					defences.add(new Pair<Argument>(eArg,attacker));
+		if(attackArgument.isEmpty()){
+			defences.add(""+a.getName()+a.getName());
+		}
+		else{
+			for(Argument attacker: attackArgument){
+				for(Argument eArg: e.getArguments()){
+					if(eArg.getAttacks().contains(String.valueOf(attacker.getName()))){
+						defences.add(""+eArg.getName()+attacker.getName());
+					}
 				}
 			}
 		}
@@ -417,7 +427,7 @@ public class Framework {
 			interactor.addToCommands(new Command("The only complete extension " + complete.get(0).format() + " is the grounded extension.", complete.get(0).toInstruction(Color.GREEN)));
 			return complete.get(0);
 		}
-		
+
 		for(Extension e: complete){
 			if(e.getArgumentNames().length() == 0){
 				interactor.addToCommands(new Command("Since there is a complete extension {}, the grounded extension is {}", null));
@@ -435,7 +445,9 @@ public class Framework {
 				int errors = 0;
 				for(int i = grounded.size()-1;i>=0;i--){
 					if(!e.getArguments().contains(grounded.get(i))){
-						interactor.addToCommands(new Command("The complete extension " + eFormat + " does not contain the argument " 
+
+
+						interactor.addToCommands(new Command("The complete extension " + eFormat + " does not contain the argument "
 								+ grounded.get(i).getName() + ", therefore it is removed from our candidate", e.toInstruction(Color.RED))); //TODO highlight contained green, non contained red, other blue
 						grounded.remove(grounded.get(i));
 						errors++;
@@ -475,16 +487,16 @@ public class Framework {
 
 		return formatted;
 	}
-	
+
 	public GraphInstruction getInstructionFromString(String item) {
 		GraphInstruction instruction = new GraphInstruction(new ArrayList<SingleInstruction>(), null);		
 		item = item.replace("{", "");
 		item = item.replace("}", "");
-		
+
 		for(int i = 0; i < item.length(); i++){
 			instruction.getNodeInstructions().add(new SingleInstruction(String.valueOf(item.charAt(i)), Color.GREEN));
 		}
-		
+
 		return instruction;
 	}
 
@@ -528,19 +540,19 @@ public class Framework {
 
 	public String formatNameList(String input) {
 		String output = "";
-	
+
 		if(input.length() < 2){
 			return input;
 		}
-		
+
 		for(int i = 0; i < input.length()-1; i++){
 			output += input.charAt(i) + ", ";
 		}
-		
+
 		output = output.substring(0,output.length()-2);
 		String last = "" + output.charAt(output.length()-1);
 		output = output.replace(", " + last, " and " + last);
-				
+
 		return output;
 	}
 }
