@@ -545,7 +545,7 @@ public class Framework {
 			return input;
 		}
 
-		for(int i = 0; i < input.length()-1; i++){
+		for(int i = 0; i < input.length(); i++){
 			output += input.charAt(i) + ", ";
 		}
 

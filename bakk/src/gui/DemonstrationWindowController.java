@@ -126,7 +126,7 @@ public class DemonstrationWindowController {
 			}
 		}
 	}
-
+                                                                                                                                                                                                                                                                                                                                         
 	/**
 	 * initiates the computation of the conflict free sets of the framework
 	 */
@@ -136,7 +136,7 @@ public class DemonstrationWindowController {
 
 		resultSet = argumentFramework.getConflictFreeSets();
 
-		printExtensions(resultSet);
+		//printExtensions(resultSet);
 
 		setUI();
 	}
