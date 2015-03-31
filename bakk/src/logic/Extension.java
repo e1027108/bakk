@@ -49,12 +49,12 @@ public class Extension {
 		if(!framework.getArguments().contains(a)){
 			throw new IllegalArgumentException("Argument is not in framework!"); //TODO handle
 		}
-		
+
 		if(!arguments.contains(a)){
 			arguments.add(a);
 		}
 	}
-	
+
 	/**
 	 * checks if an extension is conflict-free
 	 * @details checks if no argument in the extension attacks another
@@ -78,22 +78,22 @@ public class Extension {
 				String tmp = "";
 				GraphInstruction instruction = toInstruction(Color.GREEN);
 				ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
-				
+
 				for(Pair<String> p: violatingAttacks){
 					if(!tmp.contains(p.getSecond())){ //multiple arguments could attack the same one
 						tmp += p.getSecond();
 					}
 					edgeInstructions.add(new SingleInstruction((p.getFirst()+p.getSecond()),Color.RED));
 				}
-				
+
 				tmp = framework.formatNameList(tmp);
 				instruction.setEdgeInstructions(edgeInstructions);
-				
+
 				framework.addToInteractor(new Command(this.format() + " attacks the arguments " + tmp + "; thus it is not a conflict-free set!", instruction));
 			}
 			return false;
 		}
-		
+
 		if(write){
 			framework.addToInteractor(new Command(this.format() + " is a conflict-free set, because it does not attack its own arguments", toInstruction(Color.GREEN)));
 		}
@@ -110,29 +110,53 @@ public class Extension {
 			return false;
 		}
 		else{
+			String undefended = "";
+			GraphInstruction highlight = toInstruction(Color.GREEN);
+			highlight.setEdgeInstructions(new ArrayList<SingleInstruction>());
+			ArrayList<SingleInstruction> relevantDefenses = new ArrayList<SingleInstruction>();
+
 			for(Argument a: arguments){
 				ArrayList<String> defences = framework.getDefences(this, a);
 				ArrayList<Argument> attackers = framework.getAttackers(a.getName());
-				
+				String argName = String.valueOf(a.getName());
+
 				if(attackers.isEmpty()){ //if it doesn't get attacked, no defences are neccessary
 					continue;
 				}
 				else{
-					//TODO find a way to highlight attacks that are not being defended
 					String defeatedAttackers = "";
+
 					for(String p: defences){
 						defeatedAttackers += p.charAt(1);
 					}
+
 					for(Argument att: attackers){
-						if(!defeatedAttackers.contains(String.valueOf(att.getName()))){
-							framework.addToInteractor(new Command(format() + " does not defend " + a.getName() + " against " + att.getName() + ", so it is not an admissible extension.", null));
-							return false;
+						String attName = String.valueOf(att.getName());
+
+						if(!defeatedAttackers.contains(attName)){
+							if(att.getAttacks().contains(argName)){
+								highlight.getNodeInstructions().add(new SingleInstruction(attName, Color.RED));					
+								highlight.getEdgeInstructions().add(new SingleInstruction(attName+argName, Color.RED));
+								undefended += attName;
+							}
+						}
+						else{
+							if(a.getAttacks().contains(attName)){
+								relevantDefenses.add(new SingleInstruction(argName+attName, Color.GREEN));
+							}
 						}
 					}
 				}
 			}
-			framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", null)); //TODO highlight all defending attacks?
-			return true;
+			if(undefended.length() > 0){
+				framework.addToInteractor(new Command(format() + " does not defend against " + framework.formatNameList(undefended) + ", so it is not an admissible extension.", highlight));
+				return false;
+			}
+			else{
+				highlight.getEdgeInstructions().addAll(relevantDefenses);
+				framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", highlight));
+				return true;
+			}
 		}
 	}
 
@@ -152,7 +176,7 @@ public class Extension {
 				return false;
 			}
 		}
-		
+
 		framework.addToInteractor(new Command(format() + " is not the subset of another admissible extension, so it is a preferred extension.", toInstruction(Color.GREEN)));
 		return true;
 	}
@@ -164,13 +188,13 @@ public class Extension {
 	 */
 	private boolean isSubsetOf(Extension e) {
 		ArrayList<Argument> extArg = e.getArguments();
-		
+
 		for(Argument a: arguments){
 			if(!extArg.contains(a)){
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -181,12 +205,12 @@ public class Extension {
 	public boolean isStable(){
 		ArrayList<Argument> allArguments = framework.getArguments();
 		String attacks = getAttacks();
-		
+
 		if(!isConflictFree(false)){
 			framework.addToInteractor(new Command(format() + " is not a conflict-free set, so it is not a stable extension.", toInstruction(Color.RED)));
 			return false;
 		}
-		
+
 		if(attacks.length() == (allArguments.size()-getArgumentNames().length())){
 			framework.addToInteractor(new Command(format() + " attacks every argument outside itself, so it is a stable extension.", null)); //TODO highlight all attacks too
 			return true;
@@ -237,27 +261,27 @@ public class Extension {
 
 		return names;
 	}
-	
+
 	/**
 	 * formats the extension to a user-friendly string format
 	 * @return a list of argument names (separated by ',' between '{' and '}')
 	 */
 	public String format() {
 		String formatted = "{";
-		
+
 		for(Argument a: arguments){
 			formatted += a.getName() + ", ";
 		}
-		
+
 		if(formatted.length() > 1){
 			formatted = formatted.substring(0,formatted.length()-2);
 		}
-		
+
 		formatted += "}";
-		
+
 		return formatted;
 	}
-	
+
 	/**
 	 * @return list of arguments of the extension
 	 */
@@ -272,12 +296,12 @@ public class Extension {
 	 */
 	public GraphInstruction toInstruction(Color color) {
 		ArrayList<SingleInstruction> nodeInstructions = new ArrayList<SingleInstruction>();
-		
+
 		for(Argument a: arguments){
 			String argName = String.valueOf(a.getName());
 			nodeInstructions.add(new SingleInstruction(argName, color));
 		}
-		
+
 		return new GraphInstruction(nodeInstructions, null);
 	}
 }
