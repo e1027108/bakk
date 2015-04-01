@@ -236,20 +236,44 @@ public class Framework {
 				}
 			}
 
+			ArrayList<Argument> atts = new ArrayList<Argument>();
+			ArrayList<Argument> uLdefended = new ArrayList<Argument>();
+			for(Triple<Argument> t: uselessDefences){
+				if(!t.getSecond().equals(t.getThird())){
+					if(!atts.contains("" + t.getThird())){
+						atts.add(t.getThird());
+					}
+					if(!uLdefended.contains("" + t.getFirst())){
+						uLdefended.add(t.getFirst());
+					}
+				}
+			}
+
+			atts.retainAll(uLdefended);
+
+			while(atts.size()>0){
+				for(Triple<Argument> t: uselessDefences){
+					if(t.getFirst().equals(atts.get(0))){
+						uselessDefences.remove(t);
+						atts.remove(0);
+					}
+				}
+			}
+
 			if(uselessDefences.isEmpty()){
 				GraphInstruction highlight = e.toInstruction(Color.GREEN);
 				ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
-				
+
 				for(Argument a: e.getArguments()){
 					ArrayList<String> usefulDefences = getDefences(e,a);
 					for(String defence: usefulDefences){
 						edgeInstructions.add(new SingleInstruction(defence,Color.GREEN));
 					}
 				}
-				
+
 				highlight.setEdgeInstructions(edgeInstructions);
-				
-				interactor.addToCommands(new Command("The extension " + format + " is a complete extension, because it attacks all its attackers.", highlight));
+
+				interactor.addToCommands(new Command("The extension " + format + " is a complete extension, because contains every argument it defends.", highlight));
 				complete.add(e);
 			}
 			else{
@@ -312,11 +336,11 @@ public class Framework {
 		else{
 			for(Argument attacker: attackArgument){
 				String attName = String.valueOf(attacker.getName());
-				
+
 				if(a.getAttacks().contains(attName)){ //or defends itself
 					defences.add(argName+attName);
 				}
-				
+
 				for(Argument eArg: e.getArguments()){
 					if(eArg.getAttacks().contains(attName)){ //if it gets defended
 						defences.add(eArg.getName()+attName);
@@ -417,7 +441,7 @@ public class Framework {
 		else{
 			interactor.addToCommands(new Command("There are no stable extensions!", null));
 		}
-			
+
 		return stable;
 	}
 
@@ -467,7 +491,7 @@ public class Framework {
 
 		for(Extension e: complete){
 			String eFormat = e.format();
-			
+
 			if(grounded.isEmpty()){ //if no elements in grounded, e is first extension
 				grounded.addAll(e.getArguments());
 				interactor.addToCommands(new Command("The extension " + eFormat + " is the first candidate for grounded extension.", e.toInstruction(Color.GREEN)));
@@ -475,9 +499,9 @@ public class Framework {
 			else{ //else check for common elements in extension
 				ArrayList<Argument> missing = new ArrayList<Argument>();
 				String missingString = "";
-				
+
 				GraphInstruction highlight = new GraphInstruction(new ArrayList<SingleInstruction>(), new ArrayList<SingleInstruction>());
-				
+
 				for(Argument a: grounded){
 					String aName = String.valueOf(a.getName());
 					if(!e.getArguments().contains(a)){
@@ -486,12 +510,12 @@ public class Framework {
 						highlight.getNodeInstructions().add(new SingleInstruction(aName,Color.BLUE));
 					}
 				}
-				
-				grounded = findCommonElements(grounded, e.getArguments());
-				
+
+				grounded.retainAll(e.getArguments());
+
 				Extension tmp = new Extension(grounded, this);
 				highlight.getNodeInstructions().addAll(tmp.toInstruction(Color.GREEN).getNodeInstructions());
-				
+
 				if(missing.size() > 0){
 					interactor.addToCommands(new Command(eFormat + " doesn't contain the argument(s) " + formatNameList(missingString) + 
 							". Therefore our new candidate is " + tmp.format(), highlight));
@@ -499,32 +523,18 @@ public class Framework {
 				else{
 					interactor.addToCommands(new Command("Since " + eFormat + " contains all the arguments of " + tmp.format() + " our candidate doesn't change.", highlight));
 				}
-				
+
 				if(grounded.isEmpty()){
 					break;
 				}
 			}
 		}
-		
+
 		Extension groundedExtension = new Extension(grounded,this);
 
 		interactor.addToCommands(new Command("The grounded extension is: " + groundedExtension.format(), groundedExtension.toInstruction(Color.GREEN)));
 
 		return groundedExtension;
-	}
-
-	private ArrayList<Argument> findCommonElements(ArrayList<Argument> set1, ArrayList<Argument> set2) {
-		ArrayList<Argument> result = new ArrayList<Argument>();
-		
-		result.addAll(set1);
-		
-		for(int i = result.size()-1; i>=0; i--){
-			if(!set2.contains(result.get(i))){
-				result.remove(i);
-			}
-		}
-		
-		return result;
 	}
 
 	/**

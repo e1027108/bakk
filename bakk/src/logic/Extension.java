@@ -245,7 +245,7 @@ public class Extension {
 				}
 			}
 			
-			framework.addToInteractor(new Command(format() + " is not a stable extension because it does not attack " + framework.formatNameList(notAttacked), instruction));
+			framework.addToInteractor(new Command(format() + " is not a stable extension because it does not attack " + framework.formatNameList(notAttacked) + ".", instruction));
 			return false;
 		}
 	}
