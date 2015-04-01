@@ -165,14 +165,22 @@ public class Extension {
 	 * @param admissible the set of admissible extensions of which the extension may be preferred
 	 * @return if the extension is a true subset of another
 	 */
-	public boolean isPreferred(ArrayList<Extension> admissible){
+	public boolean isPreferred(ArrayList<Extension> admissible){		
 		for(Extension e: admissible){
 			if(e.equals(this)){
 				continue;
 			}
 			else if(isSubsetOf(e)){
 				String format = format();
-				framework.addToInteractor(new Command("Since " + format + " is a subset of " + e.format() + ", " + format + " is not preferred.", null)); //TODO highlight additional nodes blue?
+				GraphInstruction instruction = e.toInstruction(Color.GREEN);
+
+				for(Argument a: e.getArguments()){
+					if(!getArguments().contains(a)){
+						instruction.getNodeInstructions().add(new SingleInstruction(""+a.getName(),Color.BLUE));
+					}
+				}
+
+				framework.addToInteractor(new Command("Since " + format + " is a subset of " + e.format() + ", " + format + " is not preferred.", instruction));
 				return false;
 			}
 		}
@@ -205,24 +213,39 @@ public class Extension {
 	public boolean isStable(){
 		ArrayList<Argument> allArguments = framework.getArguments();
 		String attacks = getAttacks();
+		GraphInstruction instruction = toInstruction(Color.GREEN);
+		instruction.setEdgeInstructions(new ArrayList<SingleInstruction>());
 
 		if(!isConflictFree(false)){
 			framework.addToInteractor(new Command(format() + " is not a conflict-free set, so it is not a stable extension.", toInstruction(Color.RED)));
 			return false;
 		}
 
+		for(Argument a: getArguments()){
+			String argName = String.valueOf(a.getName());
+			String argAttacks = a.getAttacks();
+			for(int i = 0; i < argAttacks.length(); i++){
+				instruction.getEdgeInstructions().add(new SingleInstruction(argName+argAttacks.charAt(i), Color.GREEN));
+			}
+		}
+		
 		if(attacks.length() == (allArguments.size()-getArgumentNames().length())){
-			framework.addToInteractor(new Command(format() + " attacks every argument outside itself, so it is a stable extension.", null)); //TODO highlight all attacks too
+			framework.addToInteractor(new Command(format() + " attacks every argument outside itself, so it is a stable extension.", instruction));
 			return true;
 		}
 		else{
-			//TODO find all arguments it does not attack (instead of just the first)
+			String notAttacked = "";
+			
 			for(Argument a: allArguments){
-				if(!arguments.contains(a) && !attacks.contains(String.valueOf(a.getName()))){
-					framework.addToInteractor(new Command(format() + " is not a stable extension because it does not attack " + a.getName(), null)); //TODO highlight all attacks, nodes missing attacks red?
-					break;
+				String argName = String.valueOf(a.getName());
+				
+				if(!arguments.contains(a) && !attacks.contains(argName)){
+					instruction.getNodeInstructions().add(new SingleInstruction(argName,Color.RED));
+					notAttacked += argName;
 				}
 			}
+			
+			framework.addToInteractor(new Command(format() + " is not a stable extension because it does not attack " + framework.formatNameList(notAttacked), instruction));
 			return false;
 		}
 	}
