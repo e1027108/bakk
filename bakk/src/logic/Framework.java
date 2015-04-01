@@ -238,7 +238,18 @@ public class Framework {
 
 			if(uselessDefences.isEmpty()){
 				GraphInstruction highlight = e.toInstruction(Color.GREEN);
-				interactor.addToCommands(new Command("The extension " + format + " is a complete extension!", highlight));
+				ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
+				
+				for(Argument a: e.getArguments()){
+					ArrayList<String> usefulDefences = getDefences(e,a);
+					for(String defence: usefulDefences){
+						edgeInstructions.add(new SingleInstruction(defence,Color.GREEN));
+					}
+				}
+				
+				highlight.setEdgeInstructions(edgeInstructions);
+				
+				interactor.addToCommands(new Command("The extension " + format + " is a complete extension, because it attacks all its attackers.", highlight));
 				complete.add(e);
 			}
 			else{
@@ -400,8 +411,13 @@ public class Framework {
 			}
 		}
 
-		interactor.addToCommands(new Command("The stable extensions are: " + formatExtensions(stable), null));
-
+		if(stable.size()>0){
+			interactor.addToCommands(new Command("The stable extensions are: " + formatExtensions(stable), null));
+		}
+		else{
+			interactor.addToCommands(new Command("There are no stable extensions!", null));
+		}
+			
 		return stable;
 	}
 
@@ -451,36 +467,64 @@ public class Framework {
 
 		for(Extension e: complete){
 			String eFormat = e.format();
-			if(grounded.isEmpty()){
+			
+			if(grounded.isEmpty()){ //if no elements in grounded, e is first extension
 				grounded.addAll(e.getArguments());
-				interactor.addToCommands(new Command("The complete extension " + eFormat + " is our first candidate as grounded extension.", e.toInstruction(Color.GREEN)));
+				interactor.addToCommands(new Command("The extension " + eFormat + " is the first candidate for grounded extension.", e.toInstruction(Color.GREEN)));
 			}
-			else{
-				int errors = 0;
-				for(int i = grounded.size()-1;i>=0;i--){
-					if(!e.getArguments().contains(grounded.get(i))){
-
-
-						interactor.addToCommands(new Command("The complete extension " + eFormat + " does not contain the argument "
-								+ grounded.get(i).getName() + ", therefore it is removed from our candidate", e.toInstruction(Color.RED))); //TODO highlight contained green, non contained red, other blue
-						grounded.remove(grounded.get(i));
-						errors++;
+			else{ //else check for common elements in extension
+				ArrayList<Argument> missing = new ArrayList<Argument>();
+				String missingString = "";
+				
+				GraphInstruction highlight = new GraphInstruction(new ArrayList<SingleInstruction>(), new ArrayList<SingleInstruction>());
+				
+				for(Argument a: grounded){
+					String aName = String.valueOf(a.getName());
+					if(!e.getArguments().contains(a)){
+						missingString += aName;
+						missing.add(a);
+						highlight.getNodeInstructions().add(new SingleInstruction(aName,Color.BLUE));
 					}
 				}
-				if(errors == 0){
-					interactor.addToCommands(new Command("The complete extension " + eFormat + " contains all arguments of our candidate.", null)); //TODO highlight contained green, other blue
+				
+				grounded = findCommonElements(grounded, e.getArguments());
+				
+				Extension tmp = new Extension(grounded, this);
+				highlight.getNodeInstructions().addAll(tmp.toInstruction(Color.GREEN).getNodeInstructions());
+				
+				if(missing.size() > 0){
+					interactor.addToCommands(new Command(eFormat + " doesn't contain the argument(s) " + formatNameList(missingString) + 
+							". Therefore our new candidate is " + tmp.format(), highlight));
 				}
 				else{
-					interactor.addToCommands(new Command("Our new candidate is " + new Extension(grounded,this).format(), e.toInstruction(Color.GREEN)));
+					interactor.addToCommands(new Command("Since " + eFormat + " contains all the arguments of " + tmp.format() + " our candidate doesn't change.", highlight));
+				}
+				
+				if(grounded.isEmpty()){
+					break;
 				}
 			}
 		}
-
+		
 		Extension groundedExtension = new Extension(grounded,this);
 
-		interactor.addToCommands(new Command("The grounded extension is: " + groundedExtension.format(), null));
+		interactor.addToCommands(new Command("The grounded extension is: " + groundedExtension.format(), groundedExtension.toInstruction(Color.GREEN)));
 
 		return groundedExtension;
+	}
+
+	private ArrayList<Argument> findCommonElements(ArrayList<Argument> set1, ArrayList<Argument> set2) {
+		ArrayList<Argument> result = new ArrayList<Argument>();
+		
+		result.addAll(set1);
+		
+		for(int i = result.size()-1; i>=0; i--){
+			if(!set2.contains(result.get(i))){
+				result.remove(i);
+			}
+		}
+		
+		return result;
 	}
 
 	/**
