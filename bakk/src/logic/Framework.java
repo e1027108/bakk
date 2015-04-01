@@ -236,30 +236,6 @@ public class Framework {
 				}
 			}
 
-			ArrayList<Argument> atts = new ArrayList<Argument>();
-			ArrayList<Argument> uLdefended = new ArrayList<Argument>();
-			for(Triple<Argument> t: uselessDefences){
-				if(!t.getSecond().equals(t.getThird())){
-					if(!atts.contains("" + t.getThird())){
-						atts.add(t.getThird());
-					}
-					if(!uLdefended.contains("" + t.getFirst())){
-						uLdefended.add(t.getFirst());
-					}
-				}
-			}
-
-			atts.retainAll(uLdefended);
-
-			while(atts.size()>0){
-				for(Triple<Argument> t: uselessDefences){
-					if(t.getFirst().equals(atts.get(0))){
-						uselessDefences.remove(t);
-						atts.remove(0);
-					}
-				}
-			}
-
 			if(uselessDefences.isEmpty()){
 				GraphInstruction highlight = e.toInstruction(Color.GREEN);
 				ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
