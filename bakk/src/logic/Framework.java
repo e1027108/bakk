@@ -162,7 +162,7 @@ public class Framework {
 		}
 
 		for(Extension e: cf){
-			if(e.isAdmissible()){
+			if(e.isAdmissible(true)){
 				admissible.add(e);
 			}
 		}
@@ -223,69 +223,93 @@ public class Framework {
 		for(Extension e: admissible){
 			String format = e.format();
 			ArrayList<Argument> outside = new ArrayList<Argument>();
-			ArrayList<Triple<Argument>> uselessDefences = new ArrayList<Triple<Argument>>();
 
 			outside.addAll(arguments);
 			outside.removeAll(e.getArguments());
 
-			for(Argument a: outside){
-				ArrayList<String> defences = getDefences(e,a);
+			ArrayList<Argument> acceptable = new ArrayList<Argument>();
+			String accString = "";
 
-				for(String defence: defences){
-					uselessDefences.add(new Triple<Argument>(a, getArgument(defence.charAt(0)), getArgument(defence.charAt(1)))); //a: defended, first: defender, second: attacker
+			for(Argument a: outside){ //create an extension for every argument
+				ArrayList<Argument> tmpArgs = new ArrayList<Argument>(e.getArguments());
+				tmpArgs.add(a);
+				Extension tmp = new Extension(tmpArgs,this);
+
+				if(tmp.isAdmissible(false)){ //if it is admissible, the argument was acceptable and the original extension is not complete
+					acceptable.add(a);
+					accString += a.getName();
 				}
 			}
 
-			if(uselessDefences.isEmpty()){
-				GraphInstruction highlight = e.toInstruction(Color.GREEN);
-				ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
+			GraphInstruction highlight = e.toInstruction(Color.GREEN);
+			ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
+			ArrayList<SingleInstruction> nodeInstructions = new ArrayList<SingleInstruction>();
 
-				for(Argument a: e.getArguments()){
-					ArrayList<String> usefulDefences = getDefences(e,a);
-					for(String defence: usefulDefences){
-						edgeInstructions.add(new SingleInstruction(defence,Color.GREEN));
+			if(acceptable.size()>0){
+				accString = formatNameList(accString);
+
+				for(Argument acc: acceptable){
+					ArrayList<Argument> attackers = getAttackers(acc.getName());
+
+					for(int i = 0; i<attackers.size(); i++){
+						String attackerName = String.valueOf(attackers.get(0).getName());
+						nodeInstructions.add(new SingleInstruction(attackerName,Color.RED));
+						edgeInstructions.add(new SingleInstruction(attackerName+acc.getName(),Color.RED));
+
+						for(Argument in: e.getArguments()){
+							if(in.getAttacks().contains(attackerName)){
+								edgeInstructions.add(new SingleInstruction(in.getName()+attackerName,Color.GREEN));
+							}
+						}
+						if(acc.getAttacks().contains(attackerName)){
+							edgeInstructions.add(new SingleInstruction(acc.getName()+attackerName,Color.GREEN));
+						}
 					}
 				}
 
+				for(Argument acc: acceptable){
+					nodeInstructions.add(new SingleInstruction(""+acc.getName(),Color.BLUE)); //blue color is more important than red
+				}
+
+				highlight.getNodeInstructions().addAll(nodeInstructions);
 				highlight.setEdgeInstructions(edgeInstructions);
 
-				interactor.addToCommands(new Command("The extension " + format + " is a complete extension, because contains every argument it defends.", highlight));
-				complete.add(e);
+				interactor.addToCommands(new Command(format + " defends the argument(s) " + accString + ", which it does not contain. " + format + " is not a complete extension.", highlight));
 			}
 			else{
-				String missing = "";
-				GraphInstruction instruction = e.toInstruction(Color.GREEN);
-				ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
+				complete.add(e);
+				ArrayList<Argument> allAttackers = new ArrayList<Argument>();
 
-				for(Triple<Argument> t: uselessDefences){
-					String defended = "" + t.getFirst().getName();
-					String defender = "" + t.getSecond().getName();
-					String attacker = "" + t.getThird().getName();
-
-					if(!missing.contains(defended)){
-						missing += defended;
-						instruction.getNodeInstructions().add(new SingleInstruction(defended,Color.BLUE));
+				for(Argument in: e.getArguments()){
+					ArrayList<Argument> attackers = getAttackers(in.getName());
+					allAttackers.addAll(attackers);
+					
+					for(Argument att: attackers){
+						if(att.getAttacks().contains(""+in.getName())){
+							nodeInstructions.add(new SingleInstruction(""+att.getName(),Color.RED));
+							edgeInstructions.add(new SingleInstruction(""+att.getName()+in.getName(),Color.RED));
+						}
 					}
-
-					edgeInstructions.add(new SingleInstruction(attacker+defended,Color.RED));
-					edgeInstructions.add(new SingleInstruction(defender+attacker,Color.GREEN));
-					if(!(attacker.equals(defender) && attacker.equals(defended))){
-						instruction.getNodeInstructions().add(new SingleInstruction(attacker,Color.RED));
-					} 
 				}
+				for(Argument att: allAttackers){
+					for(Argument def: e.getArguments()){
+						if(def.getAttacks().contains(""+att.getName())){
+							edgeInstructions.add(new SingleInstruction(""+def.getName()+att.getName(),Color.GREEN));
+						}
+					}
+				}
+				
+				highlight.getNodeInstructions().addAll(nodeInstructions);
+				highlight.setEdgeInstructions(edgeInstructions);
 
-				missing = formatNameList(missing);
-				instruction.setEdgeInstructions(edgeInstructions);
-
-				interactor.addToCommands(new Command("The extension " + format + " defends the argument(s) " + missing + " that it "
-						+ "doesn't contain. Therefore it is not a complete extension.", instruction));
+				interactor.addToCommands(new Command(format + " contains all the arguments it defends and therefore is a complete extension.", highlight)); 
 			}
 		}
 
-		interactor.addToCommands(new Command("The complete extensions are: " + formatExtensions(complete), null));
-
 		previousCompleteExtensions = new ArrayList<Extension>();
 		previousCompleteExtensions.addAll(complete);
+
+		interactor.addToCommands(new Command("The complete extensions are: " + formatExtensions(complete), null));
 
 		return complete;
 	}
@@ -296,7 +320,7 @@ public class Framework {
 	 * @param a the argument that might be defended
 	 * @return a string representing the edge from defender to attacker;
 	 * 		in case a argument doesn't get attacked the string representation is this arguments name twice
-	 */
+	 *///TODO remove?
 	public ArrayList<String> getDefences(Extension e, Argument a) {
 		ArrayList<Argument> attackArgument = getAttackers(a.getName());
 		ArrayList<String> defences = new ArrayList<String>();

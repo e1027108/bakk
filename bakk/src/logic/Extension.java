@@ -103,10 +103,12 @@ public class Extension {
 	/**
 	 * checks if a set is admissible
 	 * @return if all the arguments are defended
-	 */
-	public boolean isAdmissible(){
+	 */ //TODO is it better to if(write) everything to do with the interactor?
+	public boolean isAdmissible(boolean write){
 		if(!isConflictFree(false)){
-			framework.addToInteractor(new Command(format() + " is not a conflict-free set, so it is not an admissible extension.", toInstruction(Color.RED)));
+			if(write){
+				framework.addToInteractor(new Command(format() + " is not a conflict-free set, so it is not an admissible extension.", toInstruction(Color.RED)));
+			}
 			return false;
 		}
 		else{
@@ -149,12 +151,16 @@ public class Extension {
 				}
 			}
 			if(undefended.length() > 0){
-				framework.addToInteractor(new Command(format() + " does not defend against " + framework.formatNameList(undefended) + ", so it is not an admissible extension.", highlight));
+				if(write){
+					framework.addToInteractor(new Command(format() + " does not defend against " + framework.formatNameList(undefended) + ", so it is not an admissible extension.", highlight));
+				}
 				return false;
 			}
 			else{
 				highlight.getEdgeInstructions().addAll(relevantDefenses);
-				framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", highlight));
+				if(write){
+					framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", highlight));
+				}
 				return true;
 			}
 		}
@@ -228,23 +234,23 @@ public class Extension {
 				instruction.getEdgeInstructions().add(new SingleInstruction(argName+argAttacks.charAt(i), Color.GREEN));
 			}
 		}
-		
+
 		if(attacks.length() == (allArguments.size()-getArgumentNames().length())){
 			framework.addToInteractor(new Command(format() + " attacks every argument outside itself, so it is a stable extension.", instruction));
 			return true;
 		}
 		else{
 			String notAttacked = "";
-			
+
 			for(Argument a: allArguments){
 				String argName = String.valueOf(a.getName());
-				
+
 				if(!arguments.contains(a) && !attacks.contains(argName)){
 					instruction.getNodeInstructions().add(new SingleInstruction(argName,Color.RED));
 					notAttacked += argName;
 				}
 			}
-			
+
 			framework.addToInteractor(new Command(format() + " is not a stable extension because it does not attack " + framework.formatNameList(notAttacked) + ".", instruction));
 			return false;
 		}
