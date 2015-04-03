@@ -55,7 +55,7 @@ public class DemonstrationWindowController {
 	@FXML
 	private ChoiceBox<String> setsChoiceBox; //dropdown for
 
-	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, backTip, nextTip, allTip, resultsTip, choiceTip;
+	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, backTip, nextTip, allTip, resultsTip, choiceTip; //tooltips for all buttons etc
 
 	private Framework argumentFramework; //argument framework containing the arguments
 	private ArrayList<Argument> arguments; //arguments of the framework
@@ -258,6 +258,9 @@ public class DemonstrationWindowController {
 		showChoices();
 	}
 
+	/**
+	 * instantly shows only the results, but prevents further use of forward and back buttons
+	 */
 	@FXML
 	public void onResultsClick(){
 		interactor.skipToLastCommand();
@@ -288,6 +291,10 @@ public class DemonstrationWindowController {
 		wrapper.loadMain();
 	}
 
+	/**
+	 * activates the choicebox (dropdown menu) that shows the extensions
+	 * of the chosen type
+	 */
 	public void showChoices(){
 		setsChoiceBox.setDisable(false);
 
@@ -302,6 +309,12 @@ public class DemonstrationWindowController {
 		setsChoiceBox.getSelectionModel().selectFirst();
 	}
 	
+	/**
+	 * the ChoiceListener listens for changes on a choicebox, and computes
+	 * an instruction for the graph to show the newly chosen extension
+	 * @author patrick.bellositz
+	 * @param <Number> the index of the chosen element
+	 */
 	@SuppressWarnings("hiding")
 	private class ChoiceListener<Number> implements ChangeListener<Number>{
 		@Override
@@ -319,6 +332,9 @@ public class DemonstrationWindowController {
 		}
 	}
 	
+	/**
+	 * removes all elements from the choicebox and deactivates it
+	 */
 	public void resetChoices(){
 		setsChoiceBox.getItems().setAll(FXCollections.observableList(new ArrayList<String>()));
 		setsChoiceBox.setDisable(true);
@@ -376,6 +392,9 @@ public class DemonstrationWindowController {
 		return explanationArea;
 	}
 
+	/**
+	 * @return the NodePane containing the graphical representation of the framework
+	 */
 	public NodePane getGraphPane(){
 		return graphPane;
 	}
