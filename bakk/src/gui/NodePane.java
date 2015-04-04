@@ -508,7 +508,8 @@ public class NodePane extends AnchorPane{
 	}
 
 	/**
-	 * resets all nodes' and edges' colors to black
+	 * resets all nodes' and edges' colors to black,
+	 * also sets label colors to white
 	 */
 	private void resetColors() {
 		for(NamedCircle n: nodes){

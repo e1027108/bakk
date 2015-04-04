@@ -22,14 +22,15 @@ public class Interactor {
 
 	private TextArea textArea; //the textArea controlled by the Interactor
 	private NodePane graph; //the anchorpane in which the graph is drawn
-	private DemonstrationWindowController controller;
-	private LinkedList<Command> storedCommands; //queue storing the messages to be shown to the user
-	private LinkedList<Command> history;
+	private DemonstrationWindowController controller; //the controller class of the graph and textArea window
+	private LinkedList<Command> storedCommands; //queue storing the commands to be executed (graph/textarea changes)
+	private LinkedList<Command> history; //queue storing previously executed commands
 	private ArrayList<ArgumentDto> rawArguments; //ArgumentDtos stored for further use in an argument Framework
 
 	/**
 	 * creates an interactor, responsible for interaction between logic, input and output
-	 * @param textArea the textarea to be read by the user
+	 * @param controller the controller containing the textarea and nodepane needed to show
+	 * 		command content (text area messages and graphical changes)
 	 */
 	private Interactor(DemonstrationWindowController controller){
 		this.controller = controller;
@@ -45,7 +46,8 @@ public class Interactor {
 
 	/**
 	 * static method responsible for only creating a single Interactor for all objects
-	 * @param textArea the textArea into which the interactor writes
+	 * @param controller the controller containing the textarea and nodepane needed to show
+	 * 		command content (text area messages and graphical changes)
 	 * @return the only instance of the Interactor
 	 */
 	public static Interactor getInstance(DemonstrationWindowController controller){
@@ -62,7 +64,8 @@ public class Interactor {
 	}
 
 	/**
-	 * prints the first stored message into the textarea, overwriting its previous contents
+	 * executes the first stored command effectively overwriting all
+	 * contents of the textArea with a single message
 	 */
 	private void overwrite(){
 		if(!storedCommands.isEmpty()){
@@ -77,7 +80,8 @@ public class Interactor {
 	}
 
 	/**
-	 * adds the queued message to the textarea's text
+	 * adds the queued message to the textarea's text and 
+	 * changes the graph correspondingly
 	 */
 	public void executeNextCommand(){
 		if(!storedCommands.isEmpty()){
@@ -98,7 +102,8 @@ public class Interactor {
 	}
 
 	/**
-	 * adds all remaining messages in the queue to the textarea
+	 * adds all remaining messages in the queue to the textarea,
+	 * and (effectively) only showing the last instruction in the graph
 	 */
 	public void printAllLines(){
 		while(!storedCommands.isEmpty()){
@@ -107,6 +112,9 @@ public class Interactor {
 		scrollDown();
 	}
 	
+	/**
+	 * executes the last instruction and prints the last line contained in the queue
+	 */
 	public void skipToLastCommand() { //no push to history!
 		if(!storedCommands.isEmpty()){
 			Command cmd = storedCommands.getFirst();
@@ -150,20 +158,24 @@ public class Interactor {
 		}
 	}
 
+	/**
+	 * sends the instruction to the NodePane, where it is executed
+	 * @param instruction the instruction to be executed
+	 */
 	public void manipulateGraph(GraphInstruction instruction){
 		graph.executeInstruction(instruction);
 	}
 
 	/**
-	 * adds a message to the end of the queue
-	 * @param message the message added to the end of the queue
+	 * adds a command to the end of the queue
+	 * @param command the command added to the end of the queue
 	 */
 	public void addToCommands(Command command){
 		storedCommands.push(command);
 	}
 
 	/**
-	 * deletes all the contents from the queue
+	 * deletes all the contents from the queue (and the history)
 	 */
 	public void emptyQueue(){
 		storedCommands = new LinkedList<Command>();

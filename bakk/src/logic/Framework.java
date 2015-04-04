@@ -187,9 +187,6 @@ public class Framework {
 	 * @details for each extension it is checked if it is possible to add another argument from the framework and still receive an admissible set
 	 * 			if it is, the extension in question is not a complete extension
 	 * 			all other extensions are complete extensions
-	 * 
-	 * 			Note: nodes that attack each other but both (on their own) would be 
-	 * 			defended by an extension don't get colored consistently!
 	 * @param usePrevious specifies if previously computed sets for the extensions should be used (true) or computed anew (false)
 	 * @return the set of all complete extensions of the framework
 	 */
@@ -232,8 +229,8 @@ public class Framework {
 
 			for(Argument a: outside){ //create an extension for every argument
 				ArrayList<Argument> tmpArgs = new ArrayList<Argument>(e.getArguments());
-				tmpArgs.add(a);
 				Extension tmp = new Extension(tmpArgs,this);
+				tmp.addArgument(a);
 
 				if(tmp.isAdmissible(false)){ //if it is admissible, the argument was acceptable and the original extension is not complete
 					acceptable.add(a);
@@ -556,6 +553,11 @@ public class Framework {
 		return formatted;
 	}
 
+	/**
+	 * takes a string representation of a set and turns it into a standard (green) graph instruction
+	 * @param item the string representation of the set "{a,b,..}"
+	 * @return a GraphInstruction turning all the elements of the set green
+	 */
 	public GraphInstruction getInstructionFromString(String item) {
 		GraphInstruction instruction = new GraphInstruction(new ArrayList<SingleInstruction>(), null);		
 		item = item.replace("{", "");
@@ -606,6 +608,11 @@ public class Framework {
 		return arguments;
 	}
 
+	/**
+	 * formats a string of argument names to be a readable list in a sentence
+	 * @param input the string to be formatted
+	 * @return the formatted string (now a list, separated by ',' and an 'and' between the last two elements)
+	 */
 	public String formatNameList(String input) {
 		String output = "";
 

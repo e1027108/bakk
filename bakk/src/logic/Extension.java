@@ -58,6 +58,7 @@ public class Extension {
 	/**
 	 * checks if an extension is conflict-free
 	 * @details checks if no argument in the extension attacks another
+	 * @param write whether the results are to be handed to the Interactor
 	 * @return if the extension is conflict-free
 	 */
 	public boolean isConflictFree(boolean write){
@@ -102,6 +103,7 @@ public class Extension {
 
 	/**
 	 * checks if a set is admissible
+	 * @param whether the results are to be handed to the Interactor
 	 * @return if all the arguments are defended
 	 */ //TODO is it better to if(write) everything to do with the interactor?
 	public boolean isAdmissible(boolean write){
