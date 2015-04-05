@@ -1,6 +1,10 @@
 package main;
 
+import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
+import com.sun.javafx.application.HostServicesDelegate;
+
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -13,11 +17,9 @@ import javafx.stage.Stage;
  * @author Patrick Bellositz
  */
 public class Main extends Application{
-	/**
-	 * the wrapper pane for all subsequently shown panes (i.e. input, demonstration)
-	 */
-	static AnchorPane wrapper;
 
+	private static AnchorPane wrapper; //the wrapper pane for all subsequently shown panes (i.e. input, demonstration)
+	
 	/**
 	 * main method
 	 * @param args arguments from terminal
