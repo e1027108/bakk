@@ -88,12 +88,12 @@ public class NodePane extends AnchorPane{
 			return;
 		}
 
-		int width = (int) Math.ceil(this.getPrefWidth()-20);
-		int height = (int) Math.ceil(this.getPrefHeight()-20);
+		int width = (int) Math.ceil(this.getPrefWidth()-15);
+		int height = (int) Math.ceil(this.getPrefHeight());
 
 		layout = new CircleLayout<String, String>(graph);
 		new DefaultVisualizationModel<String, String>(layout, new Dimension(width, height));
-
+		
 		renderGraph(graph, layout, viz);
 
 		arrangePositions();

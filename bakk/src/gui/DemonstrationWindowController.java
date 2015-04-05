@@ -361,7 +361,8 @@ public class DemonstrationWindowController {
 		graphPane = new NodePane();
 		root.getChildren().add(graphPane);
 		graphPane.setPrefHeight(470);
-		graphPane.setPrefWidth(460);
+		graphPane.setPrefWidth(445);
+		graphPane.setLayoutX(15); //prevents arcs from going out of visual bounds
 
 		interactor = Interactor.getInstance(this);
 		readArguments(interactor.getRawArguments());
