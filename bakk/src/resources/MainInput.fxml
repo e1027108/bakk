@@ -9,44 +9,44 @@
 <AnchorPane fx:id="root" prefHeight="550.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.MainInputController">
   <!-- TODO Add Nodes -->
   <children>
-    <Label fx:id="headlineLbl" layoutX="202.0" text="Abstract argumentation frameworks" AnchorPane.topAnchor="30.0">
+    <Label fx:id="headlineLbl" layoutX="252.0" text="Abstract argumentation frameworks" AnchorPane.topAnchor="30.0">
       <font>
         <Font size="25.0" />
       </font>
     </Label>
-    <Label fx:id="useLbl" layoutY="87.0" text="use?" AnchorPane.leftAnchor="50.0" />
-    <Label fx:id="addLbl" text="argument description:" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="87.0" />
-    <Label fx:id="attackLbl" text="attacks:" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="90.0" />
-    <CheckBox fx:id="ABox" mnemonicParsing="false" text="A" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="125.0" />
-    <TextField fx:id="argumentATxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="120.0" />
-    <TextField fx:id="attackATxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="120.0" />
-    <CheckBox fx:id="BBox" mnemonicParsing="false" text="B" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="155.0" />
-    <TextField fx:id="argumentBTxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="150.0" />
-    <TextField fx:id="attackBTxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="150.0" />
-    <CheckBox fx:id="CBox" mnemonicParsing="false" text="C" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="185.0" />
-    <TextField fx:id="argumentCTxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="180.0" />
-    <TextField fx:id="attackCTxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="180.0" />
-    <CheckBox fx:id="DBox" mnemonicParsing="false" text="D" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="215.0" />
-    <TextField fx:id="argumentDTxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="210.0" />
-    <TextField fx:id="attackDTxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="210.0" />
-    <CheckBox fx:id="EBox" mnemonicParsing="false" text="E" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="245.0" />
-    <TextField fx:id="argumentETxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="240.0" />
-    <TextField fx:id="attackETxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="240.0" />
-    <CheckBox fx:id="FBox" mnemonicParsing="false" text="F" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="275.0" />
-    <TextField fx:id="argumentFTxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="270.0" />
-    <TextField fx:id="attackFTxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="270.0" />
-    <CheckBox fx:id="GBox" mnemonicParsing="false" text="G" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="305.0" />
-    <TextField fx:id="argumentGTxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="300.0" />
-    <TextField fx:id="attackGTxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="300.0" />
-    <CheckBox fx:id="HBox" mnemonicParsing="false" text="H" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="335.0" />
-    <TextField fx:id="argumentHTxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="330.0" />
-    <TextField fx:id="attackHTxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="330.0" />
-    <CheckBox fx:id="IBox" mnemonicParsing="false" text="I" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="365.0" />
-    <TextField fx:id="argumentITxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="360.0" />
-    <TextField fx:id="attackITxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="360.0" />
-    <CheckBox fx:id="JBox" mnemonicParsing="false" text="J" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="395.0" />
-    <TextField fx:id="argumentJTxt" prefWidth="400.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="390.0" />
-    <TextField fx:id="attackJTxt" prefWidth="230.0" AnchorPane.leftAnchor="520.0" AnchorPane.topAnchor="390.0" />
+    <Label fx:id="useLbl" layoutY="87.0" text="use?" AnchorPane.leftAnchor="100.0" />
+    <Label fx:id="addLbl" text="argument description:" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="87.0" />
+    <Label fx:id="attackLbl" text="attacks:" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="90.0" />
+    <CheckBox fx:id="ABox" mnemonicParsing="false" text="A" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="125.0" />
+    <TextField fx:id="argumentATxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="120.0" />
+    <TextField fx:id="attackATxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="120.0" />
+    <CheckBox fx:id="BBox" mnemonicParsing="false" text="B" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="155.0" />
+    <TextField fx:id="argumentBTxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="150.0" />
+    <TextField fx:id="attackBTxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="150.0" />
+    <CheckBox fx:id="CBox" mnemonicParsing="false" text="C" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="185.0" />
+    <TextField fx:id="argumentCTxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="180.0" />
+    <TextField fx:id="attackCTxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="180.0" />
+    <CheckBox fx:id="DBox" mnemonicParsing="false" text="D" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="215.0" />
+    <TextField fx:id="argumentDTxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="210.0" />
+    <TextField fx:id="attackDTxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="210.0" />
+    <CheckBox fx:id="EBox" mnemonicParsing="false" text="E" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="245.0" />
+    <TextField fx:id="argumentETxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="240.0" />
+    <TextField fx:id="attackETxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="240.0" />
+    <CheckBox fx:id="FBox" mnemonicParsing="false" text="F" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="275.0" />
+    <TextField fx:id="argumentFTxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="270.0" />
+    <TextField fx:id="attackFTxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="270.0" />
+    <CheckBox fx:id="GBox" mnemonicParsing="false" text="G" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="305.0" />
+    <TextField fx:id="argumentGTxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="300.0" />
+    <TextField fx:id="attackGTxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="300.0" />
+    <CheckBox fx:id="HBox" mnemonicParsing="false" text="H" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="335.0" />
+    <TextField fx:id="argumentHTxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="330.0" />
+    <TextField fx:id="attackHTxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="330.0" />
+    <CheckBox fx:id="IBox" mnemonicParsing="false" text="I" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="365.0" />
+    <TextField fx:id="argumentITxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="360.0" />
+    <TextField fx:id="attackITxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="360.0" />
+    <CheckBox fx:id="JBox" mnemonicParsing="false" text="J" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="395.0" />
+    <TextField fx:id="argumentJTxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="390.0" />
+    <TextField fx:id="attackJTxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="390.0" />
     <Button fx:id="showGraphBtn" mnemonicParsing="false" onAction="#onShowButton" prefWidth="229.0" text="show graph" AnchorPane.leftAnchor="325.0" AnchorPane.rightAnchor="325.0" AnchorPane.topAnchor="450.0" />
     <Label fx:id="errorLbl" alignment="CENTER" prefWidth="700.0" text="errorlabel" textAlignment="CENTER" textFill="RED" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
       <font>
