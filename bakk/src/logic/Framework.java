@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import edu.uci.ics.jung.graph.util.Pair;
+import exceptions.InvalidInputException;
 import javafx.scene.paint.Color;
 
 /**
@@ -28,8 +29,9 @@ public class Framework {
 	/**
 	 * creates an abstract argument framework
 	 * @param arguments the set of arguments that comprise the framework
+	 * @param interactor the Interactor which manages commands for visualization
 	 */
-	public Framework(ArrayList<Argument> arguments, Interactor interactor) throws IllegalArgumentException{
+	public Framework(ArrayList<Argument> arguments, Interactor interactor){
 		this.arguments = arguments;
 		this.interactor = interactor;
 	}
@@ -189,8 +191,9 @@ public class Framework {
 	 * 			all other extensions are complete extensions
 	 * @param usePrevious specifies if previously computed sets for the extensions should be used (true) or computed anew (false)
 	 * @return the set of all complete extensions of the framework
+	 * @throws InvalidInputException if algorithm uses invalid arguments
 	 */
-	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious){
+	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious) throws InvalidInputException{
 		ArrayList<Extension> admissible;
 		ArrayList<Extension> complete = new ArrayList<Extension>();
 
@@ -317,7 +320,7 @@ public class Framework {
 	 * @param a the argument that might be defended
 	 * @return a string representing the edge from defender to attacker;
 	 * 		in case a argument doesn't get attacked the string representation is this arguments name twice
-	 *///TODO remove?
+	 */
 	public ArrayList<String> getDefences(Extension e, Argument a) {
 		ArrayList<Argument> attackArgument = getAttackers(a.getName());
 		ArrayList<String> defences = new ArrayList<String>();
@@ -447,8 +450,9 @@ public class Framework {
 	 * @details the complete extensions are checked for common elements, the least element being the grounded extension
 	 * @param usePrevious specifies if previously computed sets for the extensions should be used (true) or computed anew (false)
 	 * @return the grounded extension of the framework
+	 * @throws InvalidInputException if complete extensions could not be computed due to invalid arguments
 	 */
-	public Extension getGroundedExtension(boolean usePrevious){
+	public Extension getGroundedExtension(boolean usePrevious) throws InvalidInputException{
 		ArrayList<Extension> complete;
 		ArrayList<Argument> grounded = new ArrayList<Argument>();
 

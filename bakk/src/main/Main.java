@@ -1,10 +1,6 @@
 package main;
 
-import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
-import com.sun.javafx.application.HostServicesDelegate;
-
 import javafx.application.Application;
-import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -39,7 +35,7 @@ public class Main extends Application{
 		try{
 			wrapper = FXMLLoader.load(getClass().getResource(fxmlName));
 		} catch (Exception e){
-			e.printStackTrace();
+			System.err.println(e.getStackTrace());
 			System.exit(-1);
 		}
 

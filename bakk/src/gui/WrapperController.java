@@ -4,14 +4,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import main.Main;
-
-import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
-
-import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -22,16 +18,21 @@ import javafx.scene.layout.AnchorPane;
 public class WrapperController {
 	@FXML
 	private AnchorPane root, mainPane, demonstrationPane, contentPane; //panes that can be shown and the root pane (their parent)
-	
+
 	@FXML
 	private Hyperlink paperLink;
+	
+	@FXML
+	private Label descriptionLbl;
+	
+	private String description;
 
 	/**
 	 * at program start shows the main input window
 	 */
 	@FXML
 	void initialize(){
-		paperLink.setText("https://github.com/e1027108/bakk");
+		description = "For further information on abstract argumentation frameworks and this application read my paper at: ";
 		loadMain();
 	}
 
@@ -44,8 +45,10 @@ public class WrapperController {
 			try {
 				mainPane = FXMLLoader.load(getClass().getResource("/MainInput.fxml"));
 				MainInputController.setWrapper(this);
+				initializeLabels();
 			} catch (IOException e) {
-				e.printStackTrace(); //TODO handle
+				descriptionLbl.setStyle("-fx-text-fill: red;");
+				descriptionLbl.setText("Could not load main input window!");
 			}
 		}
 
@@ -61,16 +64,31 @@ public class WrapperController {
 			try {
 				demonstrationPane = FXMLLoader.load(getClass().getResource("/DemonstrationWindow.fxml"));
 				DemonstrationWindowController.setWrapper(this);
+				initializeLabels();
 			} catch (IOException e) {
-				e.printStackTrace(); //TODO handle
+				descriptionLbl.setStyle("-fx-text-fill: red;");
+				descriptionLbl.setText("Could not load demonstration window!");
 			}
 		}
-		
+
 		contentPane.getChildren().setAll(demonstrationPane);
 	}
-	
+
 	@FXML
-	public void onLinkClick() throws IOException, URISyntaxException{ //TODO handle
-		java.awt.Desktop.getDesktop().browse(new URI(paperLink.getText()));
+	public void onLinkClick(){
+		try{
+			java.awt.Desktop.getDesktop().browse(new URI(paperLink.getText()));
+		} catch(IOException | URISyntaxException e){
+			paperLink.setDisable(true);
+			descriptionLbl.setStyle("-fx-text-fill: red;");
+			descriptionLbl.setText("Link could not be loaded!");
+		}
+	}
+	
+	public void initializeLabels(){
+		paperLink.setText("https://github.com/e1027108/bakk");
+		paperLink.setDisable(false);
+		descriptionLbl.setText(description);
+		descriptionLbl.setStyle("-fx-text-fill: black;");
 	}
 }

@@ -7,6 +7,7 @@ import interactor.SingleInstruction;
 import java.util.ArrayList;
 
 import edu.uci.ics.jung.graph.util.Pair;
+import exceptions.InvalidInputException;
 import javafx.scene.paint.Color;
 
 /**
@@ -23,8 +24,9 @@ public class Extension {
 	 * creates a new Extension with a starting node
 	 * @param framework is the framework from which the extension is derived
 	 * @param a is the starting argument
+	 * @throws InvalidInputException if argument that is not in framework should be added
 	 */
-	public Extension(Argument a, Framework framework){
+	public Extension(Argument a, Framework framework) throws InvalidInputException{
 		this.arguments = new ArrayList<Argument>();
 		this.framework = framework;
 		addArgument(a);
@@ -44,10 +46,11 @@ public class Extension {
 	/**
 	 * adds an argument to the Extension
 	 * @param a is the argument to be added
+	 * @throws InvalidInputException if argument that is not in framework should be added
 	 */
-	public void addArgument(Argument a){
+	public void addArgument(Argument a) throws InvalidInputException{
 		if(!framework.getArguments().contains(a)){
-			throw new IllegalArgumentException("Argument is not in framework!"); //TODO handle
+			throw new InvalidInputException("Argument is not in framework!");
 		}
 
 		if(!arguments.contains(a)){

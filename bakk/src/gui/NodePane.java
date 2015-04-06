@@ -14,6 +14,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.DefaultVisualizationModel;
+import exceptions.InvalidInputException;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -82,8 +83,9 @@ public class NodePane extends AnchorPane{
 	/**
 	 * defines where the graph is to be drawn, assigns layout and parent objects,
 	 * initiates the drawing of the graph and rearranges children so they don't overlap
+	 * @throws InvalidInputException throws exception if there is a problem with edge creation
 	 */
-	public void drawGraph() {
+	public void drawGraph() throws InvalidInputException {
 		if(framework == null || graph == null){
 			return;
 		}
@@ -121,8 +123,9 @@ public class NodePane extends AnchorPane{
 	 * @param graph the data source for the graph
 	 * @param layout the layout for the graphical representation
 	 * @param viz the parent object for the graphs' elements
+	 * @throws InvalidInputException throws exception if there is a problem with edge creation
 	 */
-	private void renderGraph(Graph<String, String> graph, Layout<String, String> layout, Group viz) {
+	private void renderGraph(Graph<String, String> graph, Layout<String, String> layout, Group viz) throws InvalidInputException {
 		ArrayList<Point2D> nodePositions = new ArrayList<Point2D>(); 
 		nodes = new ArrayList<NamedCircle>();
 		edges = new ArrayList<DirectedEdge>();
@@ -281,8 +284,9 @@ public class NodePane extends AnchorPane{
 	 * @param pStart the starting point of the arc edge
 	 * @param nodeAngle the angle at which the arc is to be placed
 	 * @param direction the direction of the edge (should be a string repeating a character twice)
+	 * @throws InvalidInputException throws exception if there is a problem with edge creation
 	 */
-	private void drawDirectedArc(Point2D pStart, double nodeAngle, String direction) {
+	private void drawDirectedArc(Point2D pStart, double nodeAngle, String direction) throws InvalidInputException {
 		double arcradius = CIRCLE_RADIUS*0.8;
 		Arc arc = new Arc();
 
@@ -383,8 +387,9 @@ public class NodePane extends AnchorPane{
 	 * @param pStart start position of the line
 	 * @param pEnd end position of the line
 	 * @param direction direction containing from which to which other node the line is to be drawn
+	 * @throws InvalidInputException throws exception if there is a problem with edge creation
 	 */
-	private void drawDirectedEdge(Point2D pStart, Point2D pEnd, String direction){
+	private void drawDirectedEdge(Point2D pStart, Point2D pEnd, String direction) throws InvalidInputException{
 		//draw line
 		Line line = new Line();
 		line.setStartX(pStart.getX());

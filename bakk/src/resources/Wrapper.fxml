@@ -10,7 +10,7 @@
   <children>
     <AnchorPane fx:id="contentPane" layoutX="0.0" layoutY="0.0" prefHeight="550.0" prefWidth="900.0" />
     <Separator layoutX="0.0" prefWidth="900.0" AnchorPane.bottomAnchor="20.0" />
-    <Hyperlink fx:id="paperLink" minHeight="17.0" onAction="#onLinkClick" prefHeight="25.0" text="http://127.0.0.1" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="635.0" />
-    <Label prefWidth="635.0" text="For further information on abstract argumentation frameworks and this application read my paper at: " AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0" />
+    <Hyperlink fx:id="paperLink" minHeight="17.0" onAction="#onLinkClick" prefHeight="25.0" text="http://127.0.0.1" AnchorPane.bottomAnchor="-2.0" AnchorPane.rightAnchor="5.0" />
+    <Label fx:id="descriptionLbl" prefWidth="635.0" text="For further information on abstract argumentation frameworks and this application read my paper at: " AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0" />
   </children>
 </AnchorPane>

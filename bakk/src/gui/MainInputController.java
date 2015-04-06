@@ -193,7 +193,6 @@ public class MainInputController {
 		}
 
 		if(input.length() > 0){
-			System.out.println(input);
 			throw new InvalidInputException("Invalid or duplicate attacks detected: " + input);
 		}
 

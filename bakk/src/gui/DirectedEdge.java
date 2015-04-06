@@ -1,5 +1,6 @@
 package gui;
 
+import exceptions.InvalidInputException;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Line;
@@ -16,31 +17,44 @@ public class DirectedEdge {
 	private Polygon triangle; //the arrow of the edge indicating the edge's direction
 	private Line line; //the line that graphically represents the edge
 	private String direction; //the name of the edge
-	//TODO assert or ensure direction is 2 characters long
 	
 	/**
 	 * Constructor of a directed edge pointing to the edge it originates from
 	 * @param arc the self-pointing arc
 	 * @param triangle the arrow/point of the arc
 	 * @param direction String representing the the arc's direction
+	 * @throws InvalidInputException if directionString is not 2 characters long
 	 */
-	public DirectedEdge(Arc arc, Polygon triangle, String direction){
+	public DirectedEdge(Arc arc, Polygon triangle, String direction) throws InvalidInputException{
 		this.arc = arc;
 		this.line = null;
 		this.triangle = triangle;
-		this.direction = direction;
+		setDirection(direction);
 	}
-	
+
 	/**
 	 * Constructor of a directed edge
 	 * @param arc the line representing the edge
 	 * @param triangle the arrow/point of the edge
 	 * @param direction String representing the the line's direction
+	 * @throws InvalidInputException if directionString is not 2 characters long
 	 */
-	public DirectedEdge(Line line, Polygon triangle, String direction){
+	public DirectedEdge(Line line, Polygon triangle, String direction) throws InvalidInputException{
 		this.line = line;
 		this.arc = null;
 		this.triangle = triangle;
+		setDirection(direction);
+	}
+	
+	/**
+	 * sets the given String as direction if it's 2 characters long
+	 * @param direction the new direction
+	 * @throws InvalidInputException throws Exception if input is not 2 characters long
+	 */
+	private void setDirection(String direction) throws InvalidInputException {
+		if(direction.length() != 2){
+			throw new InvalidInputException("A directed edge needs a direction String of exactly 2 characters! (" + direction.length() + ")");
+		}
 		this.direction = direction;
 	}
 	

@@ -7,7 +7,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import com.sun.prism.paint.Color;
+
 import dto.ArgumentDto;
+import exceptions.InvalidInputException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -162,11 +165,15 @@ public class DemonstrationWindowController {
 	public void onCompleteClick(){
 		interactor.emptyQueue();
 
-		resultSet = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
-
-		//printExtensions(resultSet);
-
-		setUI();
+		try {
+			resultSet = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
+			//printExtensions(resultSet);
+			setUI();
+		} catch (InvalidInputException e) {
+			interactor.emptyQueue();
+			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
+			explanationArea.setStyle("-fx-text-fill: red;");
+		}
 	}
 
 	/**
@@ -204,13 +211,18 @@ public class DemonstrationWindowController {
 	public void onGroundedClick(){
 		interactor.emptyQueue();
 
-		Extension grounded = argumentFramework.getGroundedExtension(previousCheckBox.isSelected());
-		resultSet = new ArrayList<Extension>();
-		resultSet.add(grounded);
-
-		//printExtensions(resultSet);
-
-		setUI();
+		Extension grounded;
+		try {
+			grounded = argumentFramework.getGroundedExtension(previousCheckBox.isSelected());
+			resultSet = new ArrayList<Extension>();
+			resultSet.add(grounded);
+			//printExtensions(resultSet);
+			setUI();
+		} catch (InvalidInputException e) {
+			interactor.emptyQueue();
+			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
+			explanationArea.setStyle("-fx-text-fill: red;");
+		}
 	}
 
 	/**
@@ -346,6 +358,7 @@ public class DemonstrationWindowController {
 	public void setUI(){
 		resetChoices();
 		explanationArea.setText("");
+		explanationArea.setStyle("-fx-text-fill: black;");
 		backBtn.setDisable(true);
 		nextBtn.setDisable(false);
 		showAllBtn.setDisable(false);
@@ -369,9 +382,17 @@ public class DemonstrationWindowController {
 		argumentFramework = new Framework(arguments, interactor);
 
 		graphPane.createGraph(argumentFramework);
-		graphPane.drawGraph();
+		
+		try {
+			graphPane.drawGraph();
+			explanationArea.setText("");
+			explanationArea.setStyle("-fx-text-fill: black;");
+		} catch (InvalidInputException e) {
+			interactor.emptyQueue();
+			explanationArea.setText(e.getMessage() + "\n The graph may not be correctly displayed!");
+			explanationArea.setStyle("-fx-text-fill: red;");
+		}
 
-		explanationArea.setText("");
 		backBtn.setDisable(true);
 		nextBtn.setDisable(true);
 		showAllBtn.setDisable(true);
