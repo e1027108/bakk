@@ -7,8 +7,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import com.sun.prism.paint.Color;
-
 import dto.ArgumentDto;
 import exceptions.InvalidInputException;
 import javafx.beans.value.ChangeListener;
@@ -339,7 +337,13 @@ public class DemonstrationWindowController {
 
 			if(item instanceof String){
 				GraphInstruction instruction = argumentFramework.getInstructionFromString((String) item);
-				graphPane.executeInstruction(instruction);
+				try {
+					graphPane.executeInstruction(instruction);
+				} catch (InvalidInputException e) {
+					interactor.emptyQueue();
+					explanationArea.setText(e.getMessage() + "\n The graph may not be correctly displayed!");
+					explanationArea.setStyle("-fx-text-fill: red;");
+				}
 			}
 		}
 	}

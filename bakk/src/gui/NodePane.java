@@ -2,6 +2,7 @@ package gui;
 
 import interactor.GraphInstruction;
 import interactor.SingleInstruction;
+import interactor.SingleInstruction.Type;
 
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
@@ -163,7 +164,7 @@ public class NodePane extends AnchorPane{
 			tmp.setTextAlignment(TextAlignment.CENTER);
 			tmp.setTooltip(new Tooltip(framework.getArgument(v.charAt(0)).getStatement()));
 			tmp.setLayoutX(p.getX()-CIRCLE_RADIUS*0.3);
-			tmp.setLayoutY(p.getY()-CIRCLE_RADIUS*0.7);
+			tmp.setLayoutY(p.getY()-CIRCLE_RADIUS*0.65);
 			this.getChildren().add(tmp);
 
 			nodes.add(circle);
@@ -438,8 +439,9 @@ public class NodePane extends AnchorPane{
 	/**
 	 * modifies the color of lines and and nodes according to the given instruction
 	 * @param instruction specifying the the colors for every edge and node to be changed
+	 * @throws InvalidInputException if there is a faulty Instruction (false InstructionType)
 	 */
-	public void executeInstruction(GraphInstruction instruction){
+	public void executeInstruction(GraphInstruction instruction) throws InvalidInputException{
 		resetColors();
 
 		if(instruction == null){
@@ -451,6 +453,10 @@ public class NodePane extends AnchorPane{
 
 		if(nodeInstructions != null){
 			for(SingleInstruction i: nodeInstructions){
+				if(i.getType() != Type.NODE){
+					throw new InvalidInputException("Instruction (name: " + i.getName() + ") is not a node instruction.");
+				}
+				
 				NamedCircle tmp = getCircleByName(i.getName());
 
 				if(tmp != null){
@@ -461,6 +467,10 @@ public class NodePane extends AnchorPane{
 
 		if(edgeInstructions != null){
 			for(SingleInstruction i: edgeInstructions){
+				if(i.getType() != Type.EDGE){
+					throw new InvalidInputException("Instruction (name: " + i.getName() + ") is not an edge instruction.");
+				}
+				
 				DirectedEdge tmp = getEdgeByName(i.getName()); //name of edge = direction
 
 				if(tmp != null){

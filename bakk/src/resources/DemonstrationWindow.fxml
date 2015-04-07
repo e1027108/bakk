@@ -36,6 +36,6 @@
     <Button fx:id="groundedBtn" mnemonicParsing="false" onAction="#onGroundedClick" prefWidth="160.0" text="grounded extension" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="225.0" />
     <Separator layoutX="393.0" orientation="VERTICAL" prefHeight="38.0" AnchorPane.bottomAnchor="0.0" />
     <Separator layoutX="397.0" prefWidth="502.9999000000025" AnchorPane.bottomAnchor="35.0" />
-    <CheckBox fx:id="previousCheckBox" layoutX="400.0" mnemonicParsing="false" text="use previously computed sets for further computations" AnchorPane.bottomAnchor="10.0" />
+    <CheckBox fx:id="previousCheckBox" layoutX="400.0" mnemonicParsing="false" selected="true" text="use previously computed sets for further computations" AnchorPane.bottomAnchor="10.0" />
   </children>
 </AnchorPane>

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import dto.ArgumentDto;
+import exceptions.InvalidInputException;
 import javafx.scene.control.TextArea;
 
 /**
@@ -163,7 +164,12 @@ public class Interactor {
 	 * @param instruction the instruction to be executed
 	 */
 	public void manipulateGraph(GraphInstruction instruction){
-		graph.executeInstruction(instruction);
+		try {
+			graph.executeInstruction(instruction);
+		} catch (InvalidInputException e) {
+			emptyQueue();
+			textArea.setText(e.getMessage() + " The graph could not be displayed!");
+		}
 	}
 
 	/**

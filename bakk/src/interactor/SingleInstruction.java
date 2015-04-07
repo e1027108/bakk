@@ -10,6 +10,8 @@ public class SingleInstruction {
 
 	private String name; //the name of the edge or node
 	private Color color; //the color to be applied to the object
+	public enum Type {EDGE, NODE, INVALID};
+	private Type type;
 	//TODO differentiate between edge and node?
 	
 	/**
@@ -20,6 +22,18 @@ public class SingleInstruction {
 	public SingleInstruction(String name, Color green){
 		this.name = name;
 		this.color = green;
+		
+		switch(this.name.length()){
+			case 1:
+				type = Type.NODE;
+				break;
+			case 2:
+				type = Type.EDGE;
+				break;
+			default:
+				type = Type.INVALID;
+				break;
+		}
 	}
 	
 	/**
@@ -34,5 +48,9 @@ public class SingleInstruction {
 	 */
 	public Color getColor(){
 		return color;
+	}
+	
+	public Type getType(){
+		return type;
 	}
 }
