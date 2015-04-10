@@ -1,5 +1,7 @@
 \documentclass{article}
 \usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{placeins}
 
 \newcommand{\nl}{\\[6pt]}
 
@@ -24,36 +26,55 @@
 \textbf{Definition 9} The (unique) \emph{grounded extension} is defined by $\bigcap\limits_{i=1}^n{S_i}$, where $\{S_1,...,S_n\}$ is the set of all complete extensions.\nl
 
 \section{Observations}
-\begin{tikzpicture}[fill=white]
-% left hand
-\scope
-\clip (-2,-2) rectangle (2,2)
-      (1,0) circle (1);
-\fill (0,0) circle (1);
-\endscope
-% right hand
-\scope
-\clip (-2,-2) rectangle (2,2)
-      (0,0) circle (1);
-\fill (1,0) circle (1);
-\endscope
-% (xpos,ypos) circle (radius) (textx,texty) [modifiers] {text}
-\draw (3.5,3.5) circle (4.75) (3.5,7.75) node [text=black,above] {cf}
-	 (3.5,3.5) circle (4) (3.5,7) node [text=black,above] {adm}
-	 (2.25,4.25) circle (1.75) node [text=black] {prf}
-	 (4.75,4.25) circle (1.75) node [text=black] {st}
-	 (3.5,2) circle (1.75) (3.5, 1.5) node [text=black] {co}
-	 (3.5,2.75) circle (.75) (3.5, 2.5) node [text=black] {gr}
-     	 (-2,-2) rectangle (9,9) (3.5,8.75) node [text=black]{all sets};
-\end{tikzpicture}
+
+\FloatBarrier
+	\begin{figure}[!htb]
+		\begin{tikzpicture}[fill=white] %TODO a bit smaller?
+			\scope
+				\clip (-2,-2) rectangle (2,2)
+					(1,0) circle (1);
+				\fill (0,0) circle (1);
+			\endscope
+			\scope
+				\clip (-2,-2) rectangle (2,2)
+					(0,0) circle (1);
+				\fill (1,0) circle (1);
+			\endscope
+			\draw (3.5,3.5) circle (4.75) (3.5,7.75) node [text=black,above] {cf}
+				(3.5,3.5) circle (4) (3.5,7) node [text=black,above] {adm}
+				(2.25,4.25) circle (1.75) node [text=black] {prf}	
+				(4.75,4.25) circle (1.75) node [text=black] {st}
+				(3.5,2) circle (1.75) (3.5, 1.5) node [text=black] {co}
+				(3.5,2.75) circle (.75) (3.5, 2.5) node [text=black] {gr}
+				(-2,-2) rectangle (9,9) (3.5,8.75) node [text=black]{all sets};
+		\end{tikzpicture}
+		\caption{Relation between extension types}
+	\end{figure}
+\FloatBarrier
 
 \section{Application}
 \subsection{Introduction}
 In this section the usage and implementation details of the aforementioned program illustrating the computation of the different extension types is provided.
 
 \subsection{Creation of a framework}
+On starting the application the user is presented with an input mask. It consists of ten rows, each representing an argument and a button labeled "show graph".
+
+\FloatBarrier
+	\begin{figure}[!htb]
+		\includegraphics[scale=0.6]{pics/input.png}
+		\caption{Input mask}
+	\end{figure}
+\FloatBarrier
 
 \subsection{Argumentation graph}
+Once a framework is created and "show graph" was clicked a graphical representation of it is shown alongside buttons to compute extensions and an area dedicated to showing computation results.
+
+\FloatBarrier
+	\begin{figure}[!htb]
+		\includegraphics[scale=0.6]{pics/demo.png}
+		\caption{Demonstration view}
+	\end{figure}
+\FloatBarrier
 
 \subsection{stuff comes here}
 
