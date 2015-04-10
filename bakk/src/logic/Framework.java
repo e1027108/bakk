@@ -6,10 +6,7 @@ import interactor.Interactor;
 import interactor.SingleInstruction;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
-import edu.uci.ics.jung.graph.util.Pair;
 import exceptions.InvalidInputException;
 import javafx.scene.paint.Color;
 
