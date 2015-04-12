@@ -1,9 +1,11 @@
 \documentclass{article}
+
 \usepackage{tikz}
 \usepackage{graphicx}
 \usepackage{placeins}
 
 \newcommand{\nl}{\\[6pt]}
+\newcommand{\dl}{\\[12pt]}
 
 \begin{document}
 \title{Abstract argumentation frameworks - overview and illustration}
@@ -14,22 +16,40 @@
 \section{Introduction}
 
 \section{Definitions}
-\textbf{Definition 1} An \emph{argumentation framework} $F$ is a pair $(A,R)$, where $A$ is a set of arguments and $R$ is a set of attack relations.\nl
-\textbf{Definition 2} \emph{Attack relations} $R\subseteq A\times A$ represent attacks. The pair $(a,b)$, where $a,b\in A$ means $a$ \emph{attacks} $b$.\nl
-\textbf{Remark 1} Let $S$ be a set of arguments. If $a\in S$ and there is an attack $(a,b)\in R$ we say $S$ \emph{attacks} $b$.\nl
-\textbf{Definition 3} Let $S$ be a set of arguments. It is \emph{conflict-free}, if $\forall a \forall b\ a,b\in S, (a,b)\notin R$.\nl
-\textbf{Definition 4} An argument $a$ is \emph{defended} by a set $S$, if for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\nl
-\textbf{Definition 5} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\nl
-\textbf{Definition 6} Let $S$ be an admissible extension. It is called a \emph{preferred extension} if for each $S'\subseteq A$, that is an admissible extension, $S\not\subset S'$.\nl
-\textbf{Definition 7} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there is exists an attack $(b,a)\in R$ where $b\in S$.\nl
-\textbf{Definition 8} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S\cup \{a\}$ is not an admissible extension.\nl
-\textbf{Definition 9} The (unique) \emph{grounded extension} is defined by $\bigcap\limits_{i=1}^n{S_i}$, where $\{S_1,...,S_n\}$ is the set of all complete extensions.\nl
+\textbf{Definition 1} An \emph{argumentation framework} $F$ is a pair $(A,R)$, where $A$ is a set of arguments and $R$ is a set of attack relations.\dl
+\textbf{Definition 2} \emph{Attack relations} $R\subseteq A\times A$ represent attacks. The pair $(a,b)$, where $a,b\in A$ means $a$ \emph{attacks} $b$.\dl
+\textbf{Example 1} Imagine we have 3 arguments $a_1$, $a_2$, and $b$.\nl
+			\begin{tabular}{p{0.5cm}p{0.5cm}l}
+			& $a_1$ & = ''Blue is the most beautiful of all colors.''\\
+			& $b$ & = ''No, black is much more beautiful!''\\
+			& $a_2$ & = ''That's wrong, black isn't even a color.''
+			\end{tabular}\nl
+These arguments obviously contain 2 attacks. Argument $b$ attacks argument $a_1$ and in turn argument $a_2$ attacks argument $b$.\nl
+This results in the framework $F=(A,R)$, where $A=\{a_1,a_2,b\}$ and $R=\{(b,a_1),(a_2,b)\}$.\dl
+As writing an argument framework in sets might become hard to read with increasing set sizes, it is also possible to write every framework as a graph $(V,E)$, where $V=A$ and $E=R$. The graph in our example looks like this:\dl
+
+\FloatBarrier
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=\linewidth]{graphs/ex1.png} %causes underfull hbox and Remark 1 isn't in line with the other txtbf's
+		\caption{Example graph 1}
+	\end{figure}
+\FloatBarrier
+
+\textbf{Remark 1} Let $S$ be a set of arguments. If $a\in S$ and there is an attack $(a,b)\in R$ we say $S$ \emph{attacks} $b$.\dl
+\textbf{Definition 3} Let $S$ be a set of arguments. It is \emph{conflict-free}, if $\forall a \forall b\ a,b\in S, (a,b)\notin R$.\dl
+\textbf{Definition 4} An argument $a$ is \emph{defended} by a set $S$, if for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\dl
+\textbf{Definition 5} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\dl
+\textbf{Definition 6} Let $S$ be an admissible extension. It is called a \emph{preferred extension} if for each $S'\subseteq A$, that is an admissible extension, $S\not\subset S'$.\dl
+\textbf{Definition 7} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there is exists an attack $(b,a)\in R$ where $b\in S$.\dl
+\textbf{Definition 8} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S\cup \{a\}$ is not an admissible extension.\dl
+\textbf{Definition 9} The (unique) \emph{grounded extension} is defined by $\bigcap\limits_{i=1}^n{S_i}$, where $\{S_1,...,S_n\}$ is the set of all complete extensions.\dl
 
 \section{Observations}
 
 \FloatBarrier
 	\begin{figure}[!htb]
-		\begin{tikzpicture}[fill=white] %TODO a bit smaller?
+		\begin{tikzpicture}[fill=white]
 			\scope
 				\clip (-2,-2) rectangle (2,2)
 					(1,0) circle (1);
@@ -61,7 +81,7 @@ On starting the application the user is presented with an input mask. It consist
 
 \FloatBarrier
 	\begin{figure}[!htb]
-		\includegraphics[scale=0.6]{pics/input.png}
+		\includegraphics[width=\linewidth]{pics/input.png}
 		\caption{Input mask}
 	\end{figure}
 \FloatBarrier
@@ -71,7 +91,7 @@ Once a framework is created and "show graph" was clicked a graphical representat
 
 \FloatBarrier
 	\begin{figure}[!htb]
-		\includegraphics[scale=0.6]{pics/demo.png}
+		\includegraphics[width=\linewidth]{pics/demo.png}
 		\caption{Demonstration view}
 	\end{figure}
 \FloatBarrier
