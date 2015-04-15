@@ -3,9 +3,10 @@
 \usepackage{tikz}
 \usepackage{graphicx}
 \usepackage{placeins}
+\usepackage{verbatim} %for multilne comments
 
-\newcommand{\nl}{\\[6pt]}
-\newcommand{\dl}{\\[12pt]}
+\newcommand{\nl}{\par\medskip\noindent}
+\newcommand{\dl}{\par\bigskip\noindent}
 
 \begin{document}
 \title{Abstract argumentation frameworks - overview and illustration}
@@ -16,9 +17,13 @@
 \section{Introduction}
 
 \section{Definitions}
-\textbf{Definition 1} An \emph{argumentation framework} $F$ is a pair $(A,R)$, where $A$ is a set of arguments and $R$ is a set of attack relations.\dl
-\textbf{Definition 2} \emph{Attack relations} $R\subseteq A\times A$ represent attacks. The pair $(a,b)$, where $a,b\in A$ means $a$ \emph{attacks} $b$.\dl
-\textbf{Example 1} Imagine we have 3 arguments $a_1$, $a_2$, and $b$.\nl
+
+To work with argumentation frameworks, first we must define their properties. This section will lay out the basic structure of argumentation frameworks as well as provide extension types for further analysis.\nl
+
+\noindent
+\textbf{Definition 1.} An \emph{argumentation framework} $F$ is a pair $(A,R)$, where $A$ is a set of arguments and $R$ is a set of attack relations.\dl
+\textbf{Definition 2.} \emph{Attack relations} $R\subseteq A\times A$ represent attacks. The pair $(a,b)$, where $a,b\in A$ means $a$ \emph{attacks} $b$.\dl
+\textbf{Example 1.} Imagine we have 3 arguments $a_1$, $a_2$, and $b$.\nl
 			\begin{tabular}{p{0.5cm}p{0.5cm}l}
 			& $a_1$ & = ''Blue is the most beautiful of all colors.''\\
 			& $b$ & = ''No, black is much more beautiful!''\\
@@ -29,35 +34,43 @@ This results in the framework $F=(A,R)$, where $A=\{a_1,a_2,b\}$ and $R=\{(b,a_1
 As writing an argument framework in sets might become hard to read with increasing set sizes, it is also possible to write every framework as a graph $(V,E)$, where $V=A$ and $E=R$. The graph in our example looks like this:\dl
 
 \FloatBarrier
-	\begin{figure}[h]
+	\begin{figure}[!htb]
 		\centering
 		\includegraphics[width=\linewidth]{graphs/ex1.png} %causes underfull hbox and Remark 1 isn't in line with the other txtbf's
-		\caption{Example graph 1}
+		\caption{An argument framework about colors.}
 	\end{figure}
 \FloatBarrier
 
-\textbf{Remark 1} Let $S$ be a set of arguments. If $a\in S$ and there is an attack $(a,b)\in R$ we say $S$ \emph{attacks} $b$.\dl
-\textbf{Definition 3} Let $S$ be a set of arguments. It is \emph{conflict-free}, if $\forall a \forall b\ a,b\in S, (a,b)\notin R$.\dl
-\textbf{Example 2} (Continuation of Example 1) As no argument attacks itself, $\{a_1\}$, $\{a_2\}$ and $\{b\}$ each are conflict-free. $\{a_1,a_2\}$ is also a conflict-free set, since there exists no attack relation containing $a_1$ and $a_2$. The empty set is always conflict-free.\\
+\noindent
+\textbf{Remark 1.} Let $S$ be a set of arguments. If $a\in S$ and there is an attack $(a,b)\in R$ we say $S$ \emph{attacks} $b$.\dl
+\textbf{Definition 3.} Let $S$ be a set of arguments. It is \emph{conflict-free}, if $\forall a \forall b\ a,b\in S, (a,b)\notin R$.\dl
+\textbf{Example 2.} (Continuation of Example 1) As no argument attacks itself, $\{a_1\}$, $\{a_2\}$ and $\{b\}$ each are conflict-free. $\{a_1,a_2\}$ is also a conflict-free set, since there exists no attack relation containing $a_1$ and $a_2$. The empty set is always conflict-free.\\
 Since there is an attack relation between $b$ and each of the other arguments, there are no other conflict-free sets.\nl
 Thus the set of conflict-free sets is $cf(F)=\{\emptyset,\{a_1\},\{a_2\},\{b\},\{a_1,a_2\}\}$.\dl
-\textbf{Definition 4} An argument $a$ is \emph{defended} by a set $S$, if for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\dl
-\textbf{Definition 5} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\dl
-\textbf{Example 3} (Continuation of Example 2) Of the conflict-free sets only $\{a_2\}$ and \(\emptyset\) don't get attacked. They are admissible. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_2,b)$, making it also admissible.\\
+\textbf{Definition 4.} An argument $a$ is \emph{defended} by a set $S$, if for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\dl
+\textbf{Definition 5.} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\dl
+\textbf{Example 3.} (Continuation of Example 2) Of the conflict-free sets only $\{a_2\}$ and \(\emptyset\) don't get attacked. They are admissible. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_2,b)$, making it also admissible.\\
 $\{b\}$ and $\{a_1\}$ are not admissible since they don't defend their arguments.\nl
 Thus the set of admissible extensions is $adm(F)=\{\emptyset,\{a_1,a_2\},\{a_2\}\}$.\dl
-\textbf{Definition 6} Let $S$ be an admissible extension. It is called a \emph{preferred extension} if for each $S'\subseteq A$, that is an admissible extension, $S\not\subset S'$.\dl
-\textbf{Example 4} (Continuation of Example 3) $\emptyset\subset\{a_2\}$, therefore \(\emptyset\) is not a preferred extension. $\{a_2\}\subset\{a_1,a_2\}$, therefore $\{a_2\}$ is not a preferred extension.\\
+\textbf{Definition 6.} Let $S$ be an admissible extension. It is called a \emph{preferred extension} if for each $S'\subseteq A$, that is an admissible extension, $S\not\subset S'$.\dl
+\textbf{Example 4.} (Continuation of Example 3) Since $\emptyset\subset\{a_2\}$, \(\emptyset\) is not a preferred extension. $\{a_2\}\subset\{a_1,a_2\}$, therefore $\{a_2\}$ is not a preferred extension.\\
 Since all other admissible extensions are proper subsets of $\{a_1,a_2\}$, it is a preferred extension.\nl
 Thus the set of preferred extensions is $prf(F)=\{\{a_1,a_2\}\}$.\dl
-\textbf{Definition 7} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there is exists an attack $(b,a)\in R$ where $b\in S$.\dl
-\textbf{Example 5} (Continuation of Example 2) \dl %is it, was the definition really of conflict-free sets, not admissible ones?
-\textbf{Definition 8} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S\cup \{a\}$ is not an admissible extension.\dl
-\textbf{Example 6} (Continuation of Example 3) \dl %todo
-\textbf{Definition 9} The (unique) \emph{grounded extension} is defined by $\bigcap\limits_{i=1}^n{S_i}$, where $\{S_1,...,S_n\}$ is the set of all complete extensions.\dl
-\textbf{Example 7} (Continuation of Example 6) \dl %todo
+\textbf{Definition 7.} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there is exists an attack $(b,a)\in R$ where $b\in S$.\dl
+\textbf{Example 5.} (Continuation of Example 2) The conflict-free sets $\emptyset$ and $\{a_1\}$ don't attack any of the other arguments, $\{a_2\}$ only attacks $\{b\}$, missing an attack on $\{a_1\}$. $\{b\}$ misses an attack on $\{a_2\}$. They are not stable extensions.\\
+$\{a_1,a_2\}$ attacks all other arguments in $\{b\}$ (attack relation $(a_2,b)$) and therefore is a stable extension.\nl
+Thus the set of stable extensions is $st(F)=\{\{a_1,a_2\}\}$.\dl
+\textbf{Definition 8.} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S\cup \{a\}$ is not an admissible extension.\dl
+\textbf{Example 6.} (Continuation of Example 3) The admissible extension $\emptyset$ is not a complete extension because it defends $a_2$ which it doesn't contain. $\{a_2\}$ defends $a_1$ and is therefore also not a complete extension.\\
+$\{a_1,a_2\}$ attacks $b$ and as there are no other arguments which could be defended it is a complete extension.\nl
+Thus the set of complete extensions is $co(F)=\{\{a_1,a_2\}\}$.\dl
+\textbf{Definition 9.} The (unique) \emph{grounded extension} is defined by $\bigcap\limits_{i=1}^n{S_i}$, where $\{S_1,...,S_n\}$ is the set of all complete extensions.\dl
+\textbf{Example 7.} (Continuation of Example 6) Since there is only one complete extension $\{a_1,a_2\}$, it also is the grounded extension $gr(F)$.\dl
 
 \section{Observations}
+
+As we have seen in the previous section%change sentence if it is not the previous one anymore
+, often there may be overlaps between the different extension types beyond what their definitions explicitly state. In this section we will discuss those relations between extension types.\dl
 
 \FloatBarrier
 	\begin{figure}[!htb]
@@ -80,7 +93,7 @@ Thus the set of preferred extensions is $prf(F)=\{\{a_1,a_2\}\}$.\dl
 				(3.5,2.75) circle (.75) (3.5, 2.5) node [text=black] {gr}
 				(-2,-2) rectangle (9,9) (3.5,8.75) node [text=black]{all sets};
 		\end{tikzpicture}
-		\caption{Relation between extension types}
+		\caption{Relations between extension types}
 	\end{figure}
 \FloatBarrier
 
