@@ -4,10 +4,10 @@
 	<classpathentry kind="src" path="src/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_45"/>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Patrick/Desktop/Bachelor/jung2-2_0_1/collections-generic-4.01.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Patrick/Desktop/Bachelor/jung2-2_0_1/jung-algorithms-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Patrick/Desktop/Bachelor/jung2-2_0_1/jung-api-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Patrick/Desktop/Bachelor/jung2-2_0_1/jung-graph-impl-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Patrick/Desktop/Bachelor/jung2-2_0_1/jung-visualization-2.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/patrick.bellositz/Desktop/Daten/jung2-2_0_1/used/collections-generic-4.01.jar"/>
+	<classpathentry kind="lib" path="C:/Users/patrick.bellositz/Desktop/Daten/jung2-2_0_1/used/jung-algorithms-2.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/patrick.bellositz/Desktop/Daten/jung2-2_0_1/used/jung-api-2.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/patrick.bellositz/Desktop/Daten/jung2-2_0_1/used/jung-graph-impl-2.0.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/patrick.bellositz/Desktop/Daten/jung2-2_0_1/used/jung-visualization-2.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
