@@ -18,9 +18,11 @@
 
 \usepackage{tikz}
 \usepackage{placeins}
+\usepackage{amsmath}
 
-\newcommand{\hl}{\par\medskip\noindent}
-\newcommand{\dl}{\par\bigskip\noindent}
+\newcommand{\hl}{\par\medskip}
+\newcommand{\dl}{\par\bigskip}
+\setlength{\parindent}{0pt} %should remove all intendations
 
 \setsecnumdepth{subsection} % enumerate subsections
 
@@ -85,9 +87,10 @@ Enter your text here.
 
 To work with argumentation frameworks, first we must define their properties. This section will lay out the basic structure of argumentation frameworks as well as provide extension types for further analysis.\hl
 
-\noindent
 \textbf{Definition 1.} An \emph{argumentation framework} $F$ is a pair $(A,R)$, where $A$ is a set of arguments and $R$ is a set of attack relations.\dl
+
 \textbf{Definition 2.} \emph{Attack relations} $R\subseteq A\times A$ represent attacks. The pair $(a,b)$, where $a,b\in A$ means $a$ \emph{attacks} $b$.\dl
+
 \textbf{Example 1.} Imagine we have 3 arguments $a_1$, $a_2$, and $b$.\hl
 			\begin{tabular}{p{0.5cm}p{0.5cm}l}
 			& $a_1$ & = ''Blue is the most beautiful of all colors.''\\
@@ -106,36 +109,64 @@ As writing an argument framework in sets might become hard to read with increasi
 	\end{figure}
 \FloatBarrier
 
-\noindent
 \textbf{Remark 1.} Let $S$ be a set of arguments. If $a\in S$ and there is an attack $(a,b)\in R$ we say $S$ \emph{attacks} $b$.\dl
-\textbf{Definition 3.} Let $S$ be a set of arguments. It is \emph{conflict-free}, if $\forall a \forall b\ a,b\in S, (a,b)\notin R$.\dl
+
+Depending on their properties, arguments can be grouped into \emph{extensions}.\dl
+
+\textbf{Definition 3.} Let $S$ be a set of arguments. It is \emph{conflict-free}, if $\forall a \forall b\ a,b\in S, (a,b)\notin R$.\\
+The set of all conflict-free sets of an argumentation framework $F$ is denoted $cf(F)$.\dl
+
 \textbf{Example 2.} (Continuation of Example 1) As no argument attacks itself, $\{a_1\}$, $\{a_2\}$ and $\{b\}$ each are conflict-free. $\{a_1,a_2\}$ is also a conflict-free set, since there exists no attack relation containing $a_1$ and $a_2$. The empty set is always conflict-free.\\
 Since there is an attack relation between $b$ and each of the other arguments, there are no other conflict-free sets.\hl
-Thus the set of conflict-free sets is $cf(F)=\{\emptyset,\{a_1\},\{a_2\},\{b\},\{a_1,a_2\}\}$.\dl
+It follows that $cf(F)=\{\emptyset,\{a_1\},\{a_2\},\{b\},\{a_1,a_2\}\}$.\dl
+
 \textbf{Definition 4.} An argument $a$ is \emph{defended} by a set $S$, if for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\dl
-\textbf{Definition 5.} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\dl
+
+\textbf{Definition 5.} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\\
+The set of all admissible extensions of an argumentation framework $F$ is denoted $adm(F)$.\dl
+
 \textbf{Example 3.} (Continuation of Example 2) Of the conflict-free sets only $\{a_2\}$ and \(\emptyset\) don't get attacked. They are admissible. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_2,b)$, making it also admissible.\\
 $\{b\}$ and $\{a_1\}$ are not admissible since they don't defend their arguments.\hl
-Thus the set of admissible extensions is $adm(F)=\{\emptyset,\{a_1,a_2\},\{a_2\}\}$.\dl
-\textbf{Definition 6.} Let $S$ be an admissible extension. It is called a \emph{preferred extension} if for each $S'\subseteq A$, that is an admissible extension, $S\not\subset S'$.\dl
+It follows that $adm(F)=\{\emptyset,\{a_1,a_2\},\{a_2\}\}$.\dl
+
+\textbf{Definition 6.} Let $S$ be an admissible extension. It is called a \emph{preferred extension} if for each $S'\subseteq A$, that is an admissible extension, $S\not\subset S'$.\\
+The set of all preferred extensions of an argumentation framework $F$ is denoted $pr(F)$.\dl
+
 \textbf{Example 4.} (Continuation of Example 3) Since $\emptyset\subset\{a_2\}$, \(\emptyset\) is not a preferred extension. $\{a_2\}\subset\{a_1,a_2\}$, therefore $\{a_2\}$ is not a preferred extension.\\
 Since all other admissible extensions are proper subsets of $\{a_1,a_2\}$, it is a preferred extension.\hl
-Thus the set of preferred extensions is $prf(F)=\{\{a_1,a_2\}\}$.\dl
-\textbf{Definition 7.} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there is exists an attack $(b,a)\in R$ where $b\in S$.\dl
+It follows that $prf(F)=\{\{a_1,a_2\}\}$.\dl
+
+\textbf{Definition 7.} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there is exists an attack $(b,a)\in R$ where $b\in S$.\\
+The set of all stable extensions of an argumentation framework $F$ is denoted $st(F)$.\dl
+
 \textbf{Example 5.} (Continuation of Example 2) The conflict-free sets $\emptyset$ and $\{a_1\}$ don't attack any of the other arguments, $\{a_2\}$ only attacks $\{b\}$, missing an attack on $\{a_1\}$. $\{b\}$ misses an attack on $\{a_2\}$. They are not stable extensions.\\
 $\{a_1,a_2\}$ attacks all other arguments in $\{b\}$ (attack relation $(a_2,b)$) and therefore is a stable extension.\hl
-Thus the set of stable extensions is $st(F)=\{\{a_1,a_2\}\}$.\dl
-\textbf{Definition 8.} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S\cup \{a\}$ is not an admissible extension.\dl
+It follows that $st(F)=\{\{a_1,a_2\}\}$.\dl
+
+\textbf{Definition 8.} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S\cup \{a\}$ is not an admissible extension.\\
+The set of all complete extensions of an argumentation framework $F$ is denoted $co(F)$.\dl
+
 \textbf{Example 6.} (Continuation of Example 3) The admissible extension $\emptyset$ is not a complete extension because it defends $a_2$ which it doesn't contain. $\{a_2\}$ defends $a_1$ and is therefore also not a complete extension.\\
 $\{a_1,a_2\}$ attacks $b$ and as there are no other arguments which could be defended it is a complete extension.\hl
-Thus the set of complete extensions is $co(F)=\{\{a_1,a_2\}\}$.\dl
-\textbf{Definition 9.} The (unique) \emph{grounded extension} is defined by $\bigcap\limits_{i=1}^n{S_i}$, where $\{S_1,...,S_n\}$ is the set of all complete extensions.\dl
+It follows that $co(F)=\{\{a_1,a_2\}\}$.\dl
+
+\textbf{Definition 9.} The (unique) \emph{grounded extension} is defined by $\bigcap\limits_{i=1}^n{S_i}$, where $\{S_1,...,S_n\}$ is the set of all complete extensions.\\
+The grounded extension of an argumentation framework $F$ is denoted $gr(F)$\dl
+
 \textbf{Example 7.} (Continuation of Example 6) Since there is only one complete extension $\{a_1,a_2\}$, it also is the grounded extension $gr(F)$.\dl
 
 \chapter{Observations}
 
-As we have seen in the previous section%change sentence if it is not the previous one anymore
-, often there may be overlaps between the different extension types beyond what their definitions explicitly state. In this section we will discuss those relations between extension types.\dl
+As we have seen in the previous section, often there may be overlaps between the different extension types. In this section we will discuss those relations between extension types.\dl
+
+As per the definitions of the extension there are the following relations:
+\begin{align}
+adm(F)\subseteq cf(F)\\
+st(F)\subseteq cf(F)\\
+prf(F)\subseteq adm(F)\\
+co(F)\subseteq adm(F)\\
+gr(F)\subseteq co(F)
+\end{align}\dl
 
 \FloatBarrier
 	\begin{figure}[!htb]
@@ -151,13 +182,13 @@ As we have seen in the previous section%change sentence if it is not the previou
 					(0,0) circle (1);
 				\fill (1,0) circle (1);
 			\endscope
-			\draw (3.5,3.5) circle (4.75) (3.5,7.75) node [text=black,above] {cf}
-				(3.5,3.5) circle (4) (3.5,7) node [text=black,above] {adm}
-				(2.25,4.25) circle (1.75) node [text=black] {prf}	
-				(4.75,4.25) circle (1.75) node [text=black] {st}
-				(3.5,2) circle (1.75) (3.5, 1.5) node [text=black] {co}
-				(3.5,2.75) circle (.75) (3.5, 2.5) node [text=black] {gr}
-				(-2,-2) rectangle (9,9) (3.5,8.75) node [text=black]{all sets};
+			\draw (3.5,3.5) circle (4.75) (3.5,7.5) node [text=black,above] {$cf(F)$}
+				(3.5,3.5) circle (4) (3.5,6.5) node [text=black,above] {$adm(F)$}
+				(2.25,4.25) circle (1.75) node [text=black] {$prf(F)$}	
+				(4.75,4.25) circle (1.75) node [text=black] {$st(F)$}
+				(3.5,2) circle (1.75) (3.5, 1.5) node [text=black] {$co(F)$}
+				(3.5,2.75) circle (.75) (3.5, 2.5) node [text=black] {$gr(F)$}
+				(-2,-2) rectangle (9,9) (3.5,8.75) node [text=black]{$sets(F)$};
 		\end{tikzpicture}
 		\caption{Relations between extension types}
 	\end{figure}
