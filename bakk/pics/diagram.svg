@@ -1,0 +1,88 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:latexdraw="http://latexdraw.sourceforge.net/namespaces/latexdraw"
+    version="1.1" baseProfile="full">
+    <g>
+        <g latexdraw:type="square" id="id2134429270">
+            <rect x="261.0" y="141.0" width="558.0" height="558.0"
+                latexdraw:borderPos="outer" stroke-width="2.0"
+                stroke="black" fill="none"/>
+        </g>
+        <g latexdraw:type="circle" id="id1930770097">
+            <circle cx="540.0" cy="420.0" r="259.0"
+                latexdraw:borderPos="outer" stroke-width="2.0"
+                stroke="black" fill="none"/>
+        </g>
+        <g latexdraw:type="circle" id="id1920779230">
+            <circle cx="540.0" cy="420.0" r="219.0"
+                latexdraw:borderPos="outer" stroke-width="2.0"
+                stroke="black" fill="none"/>
+        </g>
+        <g latexdraw:type="circle" id="id571183969">
+            <circle cx="520.0" cy="370.0" r="129.0"
+                latexdraw:borderPos="outer" stroke-width="2.0"
+                stroke="black" fill="none"/>
+        </g>
+        <g latexdraw:type="circle" id="id528662607">
+            <circle cx="520.0" cy="490.0" r="129.0"
+                latexdraw:borderPos="outer" stroke-width="2.0"
+                stroke="black" fill="none"/>
+        </g>
+        <g latexdraw:type="circle" id="id360330565">
+            <circle cx="520.0" cy="370.0" r="79.0"
+                latexdraw:borderPos="outer" stroke-width="2.0"
+                stroke="black" fill="none"/>
+        </g>
+        <g latexdraw:type="circle" id="id858659429">
+            <circle cx="635.0" cy="435.0" r="84.0"
+                latexdraw:borderPos="outer" stroke-width="2.0"
+                stroke="black" fill="none"/>
+        </g>
+        <g latexdraw:type="text" id="id1501000991" fill="black" latexdraw:position="bl">
+            <text x="280.0" y="170.0"><![CDATA[$sets(F)$]]></text>
+        </g>
+        <g latexdraw:type="text" id="id1118235271" fill="black" latexdraw:position="">
+            <text x="541.0" y="183.0"><![CDATA[$cf(F)$]]></text>
+        </g>
+        <g latexdraw:type="text" id="id1825080968" fill="black" latexdraw:position="">
+            <text x="540.0" y="222.0"><![CDATA[$adm(F)$]]></text>
+        </g>
+        <g latexdraw:type="text" id="id1682525799" fill="black" latexdraw:position="">
+            <text x="519.0" y="264.0"><![CDATA[$prf(F)$]]></text>
+        </g>
+        <g latexdraw:type="text" id="id343184695" fill="black" latexdraw:position="">
+            <text x="519.0" y="324.0"><![CDATA[$st(F)$]]></text>
+        </g>
+        <g latexdraw:type="text" id="id1479331664" fill="black" latexdraw:position="">
+            <text x="679.0" y="434.0"><![CDATA[$gr(F)$]]></text>
+        </g>
+        <g latexdraw:type="text" id="id1369382748" fill="black" latexdraw:position="">
+            <text x="519.0" y="564.0"><![CDATA[$co(F)$]]></text>
+        </g>
+    </g>
+    <defs/>
+    <metadata>
+        <latexdraw:metadata>
+            <latexdraw:latexIncludes><![CDATA[
+
+
+]]></latexdraw:latexIncludes>
+            <latexdraw:displayXScale>true</latexdraw:displayXScale>
+            <latexdraw:displayYScale>true</latexdraw:displayYScale>
+            <latexdraw:unit>CM</latexdraw:unit>
+            <latexdraw:zoom>1.0</latexdraw:zoom>
+            <latexdraw:magneticGridStyle>CUSTOMISED</latexdraw:magneticGridStyle>
+            <latexdraw:gridGap>10</latexdraw:gridGap>
+            <latexdraw:magneticGrid>true</latexdraw:magneticGrid>
+            <latexdraw:version>3.3.1</latexdraw:version>
+            <latexdraw:size>
+                <latexdraw:width>2568</latexdraw:width>
+                <latexdraw:height>1416</latexdraw:height>
+            </latexdraw:size>
+            <latexdraw:position>
+                <latexdraw:x>0.0</latexdraw:x>
+                <latexdraw:y>0.0</latexdraw:y>
+            </latexdraw:position>
+        </latexdraw:metadata>
+    </metadata>
+</svg>

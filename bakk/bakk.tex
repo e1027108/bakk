@@ -104,7 +104,7 @@ As writing an argument framework in sets might become hard to read with increasi
 \FloatBarrier
 	\begin{figure}[!htb]
 		\centering
-		\includegraphics[width=\linewidth]{graphs/ex1.png} %causes underfull hbox and Remark 1 isn't in line with the other txtbf's
+		\includegraphics[width=\linewidth]{graphs/ex1.png}
 		\caption{An argument framework about colors.}
 	\end{figure}
 \FloatBarrier
@@ -157,40 +157,44 @@ The grounded extension of an argumentation framework $F$ is denoted $gr(F)$\dl
 
 \chapter{Observations}
 
-As we have seen in the previous section, often there may be overlaps between the different extension types. In this section we will discuss those relations between extension types.\dl
+As we have seen in the previous section, often there may be overlaps between the different extension types. In this section we will discuss those relations between extension types. Additionally we will explore their unique features.\dl
 
 As per the definitions of the extension there are the following relations:
-\begin{align}
-adm(F)\subseteq cf(F)\\
-st(F)\subseteq cf(F)\\
-prf(F)\subseteq adm(F)\\
-co(F)\subseteq adm(F)\\
-gr(F)\subseteq co(F)
+\begin{align} %find structure that instead centers
+	adm(F)\subseteq cf(F)\\
+	st(F)\subseteq cf(F)\\
+	prf(F)\subseteq adm(F)\\
+	co(F)\subseteq adm(F)\\
 \end{align}\dl
+
+\textbf{Lemma 1.} %TODO provide proof
+Each stable extension is a preferred extension, but not every preferred extension is a stable extension.\\
+\begin{align}
+	st(F)\subseteq prf(F)\\
+	prf(F)\not\subseteq st(F)
+\end{align}
+Therefore each stable extension also is an admissible extension.\dl
+
+\textbf{Lemma 2.} %check for something better
+The grounded extension is always admissible. %and, something?
+\begin{align}
+	gr(F)\subseteq adm(F)
+\end{align}
+
+%others, TODO split within text
+
+\begin{align}
+	co(F)\not\subseteq prf(F)\\
+	prf(F)\not\subseteq co(F)\\
+	\exists F\ prf(F)\cap co(F) \not = \emptyset\\
+	\exists F\ st(F)\cap co(F) \not = \emptyset 
+\end{align}
 
 \FloatBarrier
 	\begin{figure}[!htb]
 		\centering
-		\begin{tikzpicture}[fill=white]
-			\scope
-				\clip (-2,-2) rectangle (2,2)
-					(1,0) circle (1);
-				\fill (0,0) circle (1);
-			\endscope
-			\scope
-				\clip (-2,-2) rectangle (2,2)
-					(0,0) circle (1);
-				\fill (1,0) circle (1);
-			\endscope
-			\draw (3.5,3.5) circle (4.75) (3.5,7.5) node [text=black,above] {$cf(F)$}
-				(3.5,3.5) circle (4) (3.5,6.5) node [text=black,above] {$adm(F)$}
-				(2.25,4.25) circle (1.75) node [text=black] {$prf(F)$}	
-				(4.75,4.25) circle (1.75) node [text=black] {$st(F)$}
-				(3.5,2) circle (1.75) (3.5, 1.5) node [text=black] {$co(F)$}
-				(3.5,2.75) circle (.75) (3.5, 2.5) node [text=black] {$gr(F)$}
-				(-2,-2) rectangle (9,9) (3.5,8.75) node [text=black]{$sets(F)$};
-		\end{tikzpicture}
-		\caption{Relations between extension types}
+		\includegraphics[scale=0.6]{pics/diagram.png}
+		\caption{Relations between extensions}
 	\end{figure}
 \FloatBarrier
 
