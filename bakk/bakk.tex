@@ -75,7 +75,7 @@ Enter your text here.
 \selectlanguage{english}
 
 % Add a table of contents (toc)
-\tableofcontents % starred version, i.e., \tableofcontents*, removes the self-entry
+\tableofcontents* % starred version, i.e., \tableofcontents*, removes the self-entry
 
 % Switch to arabic numbering and start the enumeration of chapters in the table of content.
 \mainmatter
@@ -104,7 +104,7 @@ As writing an argument framework in sets might become hard to read with increasi
 \FloatBarrier
 	\begin{figure}[!htb]
 		\centering
-		\includegraphics[width=\linewidth]{graphs/ex1.png}
+		\includegraphics[width=\linewidth]{graphs/ex1.pdf}
 		\caption{An argument framework about colors.}
 	\end{figure}
 \FloatBarrier
@@ -174,6 +174,20 @@ Each stable extension is a preferred extension, but not every preferred extensio
 	prf(F)\not\subseteq st(F)
 \end{align}
 Therefore each stable extension also is an admissible extension.\dl
+
+\textbf{Example 7.} Let $F$ be an argumentation framework $(A,R)$ such that $A={a,b,c}$ and $R={(b,a),(b,c),(a,a),(c,b)}$.
+
+\FloatBarrier
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[width=\linewidth]{graphs/ex2.pdf}
+		\caption{Example for the difference between stable and preferred extensions}
+	\end{figure}
+\FloatBarrier
+
+It can be computed that $cf(F)=adm(F)=\{\{b\},\{c\}\}$. So we only have to consider two extensions for further computations.\hl
+As can be seen, $\{b\}$ is the only conflict-free set that attacks all other arguments. Therefore $st(F)=\{\{b\}\}$.\hl
+We know that $\{b\}$ has to be a preferred extension, because of Lemma 1. $\{c\}$ attacks only it's attacker $b$, but not $a$. Therefore it is preferred and $prf(F)=\{\{b\},\{c\}\}$.\dl
 
 \textbf{Lemma 2.} %check for something better
 The grounded extension is always admissible. %and, something?

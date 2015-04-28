@@ -3,48 +3,46 @@
     xmlns:latexdraw="http://latexdraw.sourceforge.net/namespaces/latexdraw"
     version="1.1" baseProfile="full">
     <g>
-        <g latexdraw:type="circle" id="id340560313">
-            <circle cx="200.0" cy="300.0" r="19.0"
+        <g latexdraw:type="circle" id="id313198750">
+            <circle cx="20.0" cy="20.0" r="19.0"
                 latexdraw:borderPos="outer" stroke-width="2.0"
                 stroke="black" fill="black"/>
         </g>
-        <g latexdraw:type="joinedLines" id="id506224307">
-            <polyline points="420.0,300.0 220.0,300.0 "
-                stroke-width="2.0" stroke="black"
-                latexdraw:rotationAngle="0.0" marker-start="url(#arrow0-506224307)"/>
+        <g latexdraw:type="joinedLines" id="id1248234528">
+            <polyline points="240.0,20.0 40.0,20.0 " stroke-width="2.0"
+                stroke="black" latexdraw:rotationAngle="0.0" marker-start="url(#arrow0-1248234528)"/>
         </g>
-        <g latexdraw:type="joinedLines" id="id2036637304">
-            <polyline points="660.0,300.0 460.0,300.0 "
-                stroke-width="2.0" stroke="black"
-                latexdraw:rotationAngle="0.0" marker-start="url(#arrow0-2036637304)"/>
+        <g latexdraw:type="joinedLines" id="id739564398">
+            <polyline points="480.0,20.0 280.0,20.0 " stroke-width="2.0"
+                stroke="black" latexdraw:rotationAngle="0.0" marker-start="url(#arrow0-739564398)"/>
         </g>
-        <g latexdraw:type="circle" id="id521375235">
-            <circle cx="440.0" cy="300.0" r="19.0"
+        <g latexdraw:type="circle" id="id1744598431">
+            <circle cx="260.0" cy="20.0" r="19.0"
                 latexdraw:borderPos="outer" stroke-width="2.0"
                 stroke="black" fill="black"/>
         </g>
-        <g latexdraw:type="circle" id="id1005732876">
-            <circle cx="680.0" cy="300.0" r="19.0"
+        <g latexdraw:type="circle" id="id90573615">
+            <circle cx="500.0" cy="20.0" r="19.0"
                 latexdraw:borderPos="outer" stroke-width="2.0"
                 stroke="black" fill="black"/>
         </g>
-        <g latexdraw:type="text" id="id1790075169" fill="black" latexdraw:position="b">
-            <text x="200.0" y="340.0"><![CDATA[$a_2$]]></text>
+        <g latexdraw:type="text" id="id590222317" fill="black" latexdraw:position="b">
+            <text x="20.0" y="60.0"><![CDATA[$a_2$]]></text>
         </g>
-        <g latexdraw:type="text" id="id796814180" fill="black" latexdraw:position="b">
-            <text x="440.0" y="340.0"><![CDATA[$b$]]></text>
+        <g latexdraw:type="text" id="id1306084574" fill="black" latexdraw:position="b">
+            <text x="260.0" y="60.0"><![CDATA[$b$]]></text>
         </g>
-        <g latexdraw:type="text" id="id1190913506" fill="black" latexdraw:position="b">
-            <text x="680.0" y="340.0"><![CDATA[$a_1$]]></text>
+        <g latexdraw:type="text" id="id1735123130" fill="black" latexdraw:position="b">
+            <text x="500.0" y="60.0"><![CDATA[$a_1$]]></text>
         </g>
     </g>
     <defs>
-        <marker overflow="visible" orient="auto" id="arrow0-506224307">
+        <marker overflow="visible" orient="auto" id="arrow0-1248234528">
             <path
                 d="M 0.0 0.0 L 12.96875 2.1614583333333335 L 12.96875 0.0 L 12.96875 -2.1614583333333335 z "
                 latexdraw:arrSizeNum="3.0" fill="black"/>
         </marker>
-        <marker overflow="visible" orient="auto" id="arrow0-2036637304">
+        <marker overflow="visible" orient="auto" id="arrow0-739564398">
             <path
                 d="M 0.0 0.0 L 12.96875 2.1614583333333335 L 12.96875 0.0 L 12.96875 -2.1614583333333335 z "
                 latexdraw:arrSizeNum="3.0" fill="black"/>
@@ -53,6 +51,7 @@
     <metadata>
         <latexdraw:metadata>
             <latexdraw:latexIncludes><![CDATA[
+
 
 ]]></latexdraw:latexIncludes>
             <latexdraw:displayXScale>true</latexdraw:displayXScale>
@@ -68,8 +67,8 @@
                 <latexdraw:height>1416</latexdraw:height>
             </latexdraw:size>
             <latexdraw:position>
-                <latexdraw:x>-4.0</latexdraw:x>
-                <latexdraw:y>-4.0</latexdraw:y>
+                <latexdraw:x>0.0</latexdraw:x>
+                <latexdraw:y>0.0</latexdraw:y>
             </latexdraw:position>
         </latexdraw:metadata>
     </metadata>
