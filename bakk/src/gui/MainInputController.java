@@ -184,6 +184,7 @@ public class MainInputController {
 				if(input.contains(stringValue)){ //check for uppercase
 					attackValues += stringValue;
 					input = input.replace(stringValue, "");
+					input = input.replace(stringValue.toLowerCase(), "");
 				}
 				else if(input.contains(stringValue.toLowerCase())){ //check for lowercase
 					attackValues += stringValue;

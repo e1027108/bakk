@@ -59,17 +59,14 @@
 \addtitlepage{english} % English title page
 \addstatementpage
 
-\begin{danksagung*}
-Ihr Text hier.
-\end{danksagung*}
-
 \begin{acknowledgements*}
-Enter your text here.
+I want to thank my family for supporting me and Dr. Ferm{\"u}ller for guiding me in the process of creating this bachelor thesis.
 \end{acknowledgements*}
 
-\begin{abstract}
-Enter your text here.
-\end{abstract}
+\begin{abstract*}
+This bachelor thesis explains the concept of the abstract argumentation framework, its properties as well as its extensions. It further analyzes the relations between different types of extensions.\hl
+The main part of the thesis is the modelling of the explained concepts as code and the developement of a JAVA application which is capable of creating custom argumentation frameworks, their visualisation as graphs and the computation of extensions. The application is created in a way such that students can study argumentation frameworks in an easily digestable way including step-by-step explanations of how the extensions are computed accompanied by colored highlighting of important aspects of the frameworks' graphs.\\ %TODO work in progress
+\end{abstract*}
 
 % Select the language of the thesis, e.g., english or naustrian.
 \selectlanguage{english}
@@ -215,21 +212,29 @@ The grounded extension is always admissible. %and, something?
 \chapter{Application}
 
 \section{Introduction}
-In this section the usage and implementation details of the aforementioned program illustrating the computation of the different extension types is provided.
+In this section the usage and implementation details of the aforementioned program illustrating the computation of the different extension types is provided. The application consists of two views: the input mask and the graph view
 
-\section{Creation of a framework}
-On starting the application the user is presented with an input mask. It consists of ten rows, each representing an argument and a button labeled "show graph".
+\section{Input mask}
+On starting the application the user is presented with an input mask. It consists of ten rows representing the arguments of an argumentation framework. The number of arguments is limited to ten because a higher number of arguments doesn't provide any further benefit to a user wanting to learn about the basics of argumentation frameworks.\\
+Each row consists of a checkbox and two textfields.\hl
+Each checkbox is labeled with the name of the argument the row represents. If a checkbox is selected the program will use the represented argument for further computations and visualisations.\hl
+The first textfield of each row contains the optional description of the argument in question. The argument description is optional because it is only used in a cosmetic, non-functional way in the rest of the program.\hl
+The second textfield of each row contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can be, but don't have to be, seperated either by ',' or spaces.\dl
+The "show graph" button checks input in selected rows for problems. It detects attacks against non-existent arguments, while treating multiple attacks of an argument against another argument are ignored. It further provides error messages, so the user knows about issues. Note that unselected rows are ignored, even if there is a description or attacks already defined. This enables the user to quickly add or remove arguments for comparison in the next window.
 
 \FloatBarrier
-	\centering
 	\begin{figure}[!htb]
+		\centering
 		\includegraphics[width=\linewidth]{pics/input.png}
 		\caption{Input mask}
 	\end{figure}
 \FloatBarrier
 
-\section{Argumentation graph}
-Once a framework is created and "show graph" was clicked a graphical representation of it is shown alongside buttons to compute extensions and an area dedicated to showing computation results.
+%TODO update figure name?
+Figure 4.1 shows the input mask with input representing the argumentation framework $F=(A,R)$ with $A=\{a,b,c,d\}$ and $R=\{(a,b),(b,c),(c,a),(d,b)\}$.
+
+\section{Graph view}
+Once a framework is created and "show graph" was clicked and no problems were detected a graphical representation of it is shown alongside buttons to compute extensions and an area dedicated to showing computation results.
 
 \FloatBarrier
 	\centering
