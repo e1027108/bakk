@@ -212,15 +212,16 @@ The grounded extension is always admissible. %and, something?
 \chapter{Application}
 
 \section{Introduction}
-In this section the usage and implementation details of the aforementioned program illustrating the computation of the different extension types is provided. The application consists of two views: the input mask and the graph view
+In this section the usage and implementation details of the aforementioned program illustrating the computation of the different extension types is provided. The application consists of two views: the input mask and the graph view.
 
 \section{Input mask}
 On starting the application the user is presented with an input mask. It consists of ten rows representing the arguments of an argumentation framework. The number of arguments is limited to ten because a higher number of arguments doesn't provide any further benefit to a user wanting to learn about the basics of argumentation frameworks.\\
 Each row consists of a checkbox and two textfields.\hl
 Each checkbox is labeled with the name of the argument the row represents. If a checkbox is selected the program will use the represented argument for further computations and visualisations.\hl
 The first textfield of each row contains the optional description of the argument in question. The argument description is optional because it is only used in a cosmetic, non-functional way in the rest of the program.\hl
-The second textfield of each row contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can be, but don't have to be, seperated either by ',' or spaces.\dl
-The "show graph" button checks input in selected rows for problems. It detects attacks against non-existent arguments, while treating multiple attacks of an argument against another argument are ignored. It further provides error messages, so the user knows about issues. Note that unselected rows are ignored, even if there is a description or attacks already defined. This enables the user to quickly add or remove arguments for comparison in the next window.
+The second textfield of each row contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can be, but don't have to be, seperated either by ',' or spaces.\hl
+The ``show graph'' button checks input in selected rows for problems. It detects attacks against non-existent arguments, while treating multiple attacks of an argument against another argument are ignored. It further provides error messages, so the user knows about issues. Note that unselected rows are ignored, even if there is a description or attacks already defined. This enables the user to quickly add or remove arguments for comparison in the next window.\hl
+To make using the application easier, every item seen on screen shows a tooltip explaining the purpose of that element.
 
 \FloatBarrier
 	\begin{figure}[!htb]
@@ -234,17 +235,53 @@ The "show graph" button checks input in selected rows for problems. It detects a
 Figure 4.1 shows the input mask with input representing the argumentation framework $F=(A,R)$ with $A=\{a,b,c,d\}$ and $R=\{(a,b),(b,c),(c,a),(d,b)\}$.
 
 \section{Graph view}
-Once a framework is created and "show graph" was clicked and no problems were detected a graphical representation of it is shown alongside buttons to compute extensions and an area dedicated to showing computation results.
+Once an argument framework is created, ``show graph'' clicked and no problems detected the graph view is shown.
 
 \FloatBarrier
-	\centering
 	\begin{figure}[!htb]
+		\centering
 		\includegraphics[width=\linewidth]{pics/demo.png}
-		\caption{Demonstration view}
+		\caption{Graph view resulting from Figure 4.1}
 	\end{figure}
 \FloatBarrier
 
-\section{stuff comes here}
+Upon loading the graph view the user can see the graph representing the argument framework defined in the input mask to the left. Every argument is represented by a node labelled with that arguments name.\hl
+The user then has the option to choose to compute one of six extension types:
+
+\begin{itemize}[noitemsep]
+	\item conflict-free set
+	\item admissible extension
+	\item preferred extension
+	\item stable extension
+	\item complete extension
+	\item grounded extension
+\end{itemize}
+
+If the checkbox to ``use previously computed sets for further computations'' is selected, each computation takes into account the results of preceding computations, if applicable. If this option is not selected the program will compute every extension type needed, prior to computing the chosen extension.\hl
+Each computation triggers the text area to the right to display explanations of how the computed extensions came to pass. This explanation can either be shown step-by-step, all at once or be skipped and only the results be shown. Figure 4.3 shows an example of the explanation area after all steps were shown for the graph in Figure 4.2.
+
+\FloatBarrier
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics{pics/explanation.png}
+		\caption{Text explaining the computation of admissible extensions.}
+	\end{figure}
+\FloatBarrier
+
+To further illustrate the explanations shown the application recolors the graph for each step, using three easily distinguishable colors:\hl
+Green is used for arguments included in the considered set and their relevant attacks needed to qualify for an extension type.\\
+Red is used for conflicting arguments and attacks preventing a set of arguments from qualifying for an extension type.\\
+Blue is used for arguments missing from a set for it to qualify for an extension type.
+
+\FloatBarrier
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics{pics/colored.png}
+		\caption{\{A,D\} does not defend against C, so it is not an admissible extension.}
+	\end{figure}
+\FloatBarrier
+
+\subsection{stuff comes here}
 
 \backmatter
 
