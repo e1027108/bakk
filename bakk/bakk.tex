@@ -116,7 +116,7 @@ To work with argumentation frameworks, first we must define their properties. Th
 
 \textbf{Definition 1.} An \emph{argumentation framework} $F$ is a pair $(A,R)$, where $A$ is a set of arguments and $R$ is a set of attack relations.\cl
 
-\textbf{Definition 2.} \emph{Attack relations} $R\subseteq A\times A$ represent attacks. The pair $(a,b)$, where $a,b\in A$ means $a$ \emph{attacks} $b$.\cl
+\textbf{Definition 2.} \emph{Attack relations} $R\subseteq A\times A$ represent attacks as pairs $(a,b)$, where $a,b\in A$ means $a$ \emph{attacks} $b$.\cl
 
 \textbf{Remark 1.} Let $S$ be a set of arguments. If $a\in S$ and there is an attack $(a,b)\in R$ we say $S$ \emph{attacks} $b$.\cl
 
@@ -126,7 +126,7 @@ To work with argumentation frameworks, first we must define their properties. Th
 			& $b$ & = ''No, black is much more beautiful!''\\
 			& $a_2$ & = ''That's wrong, black isn't even a color.''
 			\end{tabular}\hl
-These arguments obvioucly contain 2 attacks. Argument $b$ attacks argument $a_1$ and in turn argument $a_2$ attacks argument $b$.\hl
+These arguments obviously contain two attacks. Argument $b$ attacks argument $a_1$ and in turn argument $a_2$ attacks argument $b$.\hl
 This results in the framework $F=(A,R)$, where $A=\{a_1,a_2,b\}$ and $R=\{(b,a_1),(a_2,b)\}$.\cl
 
 A big argument framework in might become hard to read with increasing set sizes, so it is also possible to represent every framework as a graph $(V,E)$, where $V=A$ and $E=R$. The graph of our example looks like this:
@@ -181,7 +181,7 @@ It follows that $st(F)=\{\{a_1,a_2\}\}$.\dl
 
 In contrast to credulous reasoning stands sceptical reasoning. The extension fitting sceptical reasoning within the context of argument frameworks is the complete extension.\cl
 
-\textbf{Definition 8.} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S\cup \{a\}$ is not an admissible extension.\\
+\textbf{Definition 8.} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S$ does not defend $a$.\\
 The set of all complete extensions of an argumentation framework $F$ is denoted $co(F)$.\cl
 
 \textbf{Example 6.} (Continuation of Example 3) The admissible extension $\emptyset$ is not a complete extension because it defends $a_2$ which it doesn't contain. $\{a_2\}$ defends $a_1$ and is therefore also not a complete extension.\\

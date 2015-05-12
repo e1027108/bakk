@@ -224,17 +224,37 @@ public class Framework {
 			outside.addAll(arguments);
 			outside.removeAll(e.getArguments());
 
-			ArrayList<Argument> acceptable = new ArrayList<Argument>();
-			String accString = "";
+			ArrayList<Argument> defended = new ArrayList<Argument>();
+			String defString = "";
 
 			for(Argument a: outside){ //create an extension for every argument
 				ArrayList<Argument> tmpArgs = new ArrayList<Argument>(e.getArguments());
 				Extension tmp = new Extension(tmpArgs,this);
 				tmp.addArgument(a);
 
-				if(tmp.isAdmissible(false)){ //if it is admissible, the argument was acceptable and the original extension is not complete
+				/*if(tmp.isAdmissible(false)){ //if it is admissible, the argument was acceptable and the original extension is not complete
 					acceptable.add(a);
 					accString += a.getName();
+				}*/
+				
+				ArrayList<Argument> attackers = getAttackers(a.getName());
+				
+				if(attackers.isEmpty()){
+					defended.add(a);
+					defString += a.getName();
+					continue;
+				}
+
+				int defences = 0;
+				for(Argument att: attackers){
+					if(e.getAttacks().contains(String.valueOf(att.getName()))){
+						defences++;
+					}
+				}
+				
+				if(defences == attackers.size()){
+					defended.add(a);
+					defString += a.getName();
 				}
 			}
 
@@ -242,10 +262,10 @@ public class Framework {
 			ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
 			ArrayList<SingleInstruction> nodeInstructions = new ArrayList<SingleInstruction>();
 
-			if(acceptable.size()>0){
-				accString = formatNameList(accString);
+			if(defended.size()>0){
+				defString = formatNameList(defString);
 
-				for(Argument acc: acceptable){
+				for(Argument acc: defended){
 					ArrayList<Argument> attackers = getAttackers(acc.getName());
 
 					for(int i = 0; i<attackers.size(); i++){
@@ -264,14 +284,14 @@ public class Framework {
 					}
 				}
 
-				for(Argument acc: acceptable){
+				for(Argument acc: defended){
 					nodeInstructions.add(new SingleInstruction(""+acc.getName(),Color.BLUE)); //blue color is more important than red
 				}
 
 				highlight.getNodeInstructions().addAll(nodeInstructions);
 				highlight.setEdgeInstructions(edgeInstructions);
 
-				interactor.addToCommands(new Command(format + " defends the argument(s) " + accString + ", which it does not contain. " + format + " is not a complete extension.", highlight));
+				interactor.addToCommands(new Command(format + " defends the argument(s) " + defString + ", which it does not contain. " + format + " is not a complete extension.", highlight));
 			}
 			else{
 				complete.add(e);

@@ -33,7 +33,7 @@ public class Extension {
 	}
 
 	/**
-	 * creates a complete Extension
+	 * creates a whole Extension
 	 * @param framework is the framework from which the extension is derived
 	 * @param arguments is a set of Arguments
 	 */
