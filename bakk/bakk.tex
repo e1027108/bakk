@@ -152,10 +152,10 @@ It follows that $cf(F)=\{\emptyset,\{a_1\},\{a_2\},\{b\},\{a_1,a_2\}\}$.\dl
 
 To be able to find a set of arguments that can't be reasoned against, it does not suffice if that set is only not in itself conflicted, but each argument should also not be an invitation for an easy counter-argument. Therefore it is necessary to only accept arguments into a set that don't hurt its defendability.\cl
 
-\textbf{Definition 4.} An argument $a$ is \emph{defended} by a set $S$, if for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\dl
+\textbf{Definition 4.} An argument $a$ is \emph{defended} by a set $S$, if for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\cl
 
 \textbf{Definition 5.} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\\
-The set of all admissible extensions of an argumentation framework $F$ is denoted $adm(F)$.\dl
+The set of all admissible extensions of an argumentation framework $F$ is denoted $adm(F)$.\cl
 
 \textbf{Example 3.} (Continuation of Example 2) Of the conflict-free sets only $\{a_2\}$ and \(\emptyset\) don't get attacked. They are admissible. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_2,b)$, making it also admissible.\\
 $\{b\}$ and $\{a_1\}$ are not admissible since they don't defend their arguments.\hl
@@ -225,14 +225,14 @@ Therefore each stable extension also is an admissible extension.\cl
 	\end{figure}
 \FloatBarrier
 
-It can be computed that $cf(F)=adm(F)=\{\{b\},\{c\}\}$. So we only have to consider two extensions for further computations.\hl
+It can be computed that $cf(F)=adm(F)=\{\emptyset,\{b\},\{c\}\}$. So we only have to consider three extensions for further computations.\hl
 As can be seen, $\{b\}$ is the only conflict-free set that attacks all other arguments. Therefore $st(F)=\{\{b\}\}$.\hl
 We know that $\{b\}$ has to be a preferred extension, because of Lemma 1. $\{c\}$ attacks only it's attacker $b$, but not $a$. Therefore it is preferred and $prf(F)=\{\{b\},\{c\}\}$.\dl
 
 \textbf{Lemma 2.} %check for something better, needs proof?
-The grounded extension is always admissible. %and, something?
+The grounded extension is always complete. %and, something?
 \begin{align}
-	gr(F)\subseteq adm(F)
+	gr(F)\subseteq co(F)
 \end{align}
 
 %others, TODO split within text
@@ -247,7 +247,7 @@ The grounded extension is always admissible. %and, something?
 \FloatBarrier
 	\begin{figure}[!htb]
 		\centering
-		\includegraphics[scale=0.5]{pics/diagram.png}
+		\includegraphics{pics/diagram.pdf}
 		\caption{Relations between extensions}
 	\end{figure}
 \FloatBarrier
