@@ -19,6 +19,7 @@
 \usepackage{tikz}
 \usepackage{placeins}
 \usepackage{amsmath}
+\usepackage[]{algorithm2e}
 
 \newcommand{\hl}{\par\vspace{6pt}} %used within the same context, as new paragraph
 \newcommand{\cl}{\par\vspace{12pt}} %used between paragraphs with the same topic, but not textually flowing into each other
@@ -252,7 +253,7 @@ The grounded extension is always complete. %and, something?
 	\end{figure}
 \FloatBarrier
 
-\chapter{Application}
+\chapter{Implementation}
 
 \section{Introduction}
 In this section the usage and implementation details of the aforementioned program illustrating the computation of the different extension types is provided. The application consists of two views: the input mask and the graph view.
@@ -328,26 +329,33 @@ Blue is used for arguments missing from a set for it to qualify for an extension
 After showing the results of a computation a dropdown menu becomes availiable to the right bottom side of the explanation area, containing all computed extensions. They can be selected and are then highlighted in green in the graph.\hl
 The graph view also allows the user to go back to the input mask using the `<' button. The input mask will still contain the input from before switching to the graph view.
 
-\subsection{Algorithms}
-This section shows how the extension types are computed. For each type it is assumed that if a set of other extensions is prerequisite for the computation, this set already exists.
+\subsection{Implementation details}
+This section lays out which technologies where used to create the program, how they where used and explains why the program was implemented in such a way.\cl %alter
 
-\subsubsection{Conflict-free sets}
-text
+\subsubsection{Technologies used}
+The application was written in Java (version 1.8) using eclipse Kepler as a working environment.\hl
+To control the graphical user interface JavaFX was used, the design being created as .fxml files via JavaFX Scene Builder.\hl
+Java Universal Network/Graph Framework (JUNG) was used for the data structure of the frameworks' graphs.
 
-\subsubsection{Admissible extensions}
-text
+\subsubsection{Data structure}
+Rather than implementing the sets $A$ and $R$ separately, I instead opted for storing each outgoing attack of an argument directly within the argument. The general data structure used is\\
+\[F=\{a_1,...,a_n\} \text{, where } a_i=D \text{ and } D\subseteq F, D \text{ being arguments attacked by } a_i.\]\hl
 
-\subsubsection{Stable extensions}
-text
+A simple example of a naive algorithm using that data structure follows:\hl
 
-\subsubsection{Preferred extensions}
-text
-
-\subsubsection{Complete extensions}
-text
-
-\subsubsection{Grounded extension}
-text
+\begin{algorithm}[H]
+ \KwData{set $S$ of arguments}
+ \KwResult{whether $S$ is conflict-free}
+ \ForEach{$a \in S$}{
+ 	\ForEach{$b \in S$}{
+ 		\If{$b \in a$}{
+			return $False$;
+   		}
+ 	}
+ }
+ return $True$;
+ \caption{Check whether a set is conflict-free}
+\end{algorithm}\hl
 
 \backmatter
 
