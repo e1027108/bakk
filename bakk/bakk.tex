@@ -19,11 +19,9 @@
 \usepackage{tikz}
 \usepackage{placeins}
 \usepackage{amsmath}
-\usepackage[]{algorithm2e}
 
 \newcommand{\hl}{\par\vspace{6pt}} %used within the same context, as new paragraph
 \newcommand{\cl}{\par\vspace{12pt}} %used between paragraphs with the same topic, but not textually flowing into each other
-\newcommand{\dl}{\par\vspace{24pt}} %used to get to the next topic
 \setlength{\parindent}{0pt} %should remove all intendations
 
 \setsecnumdepth{subsection} % enumerate subsections
@@ -113,7 +111,9 @@ Following that we look at an application written for this thesis and specificall
 
 \chapter{Definitions}
 
-To work with argumentation frameworks, first we must define their properties. This section will lay out the basic structure of argumentation frameworks as well as provide extension types for further analysis.\dl
+To work with argumentation frameworks, first we must define their properties. This section will lay out the basic structure of argumentation frameworks as well as provide extension types that can be used for further analysis.\cl
+
+\section{Argumentation Frameworks}
 
 \textbf{Definition 1.} An \emph{argumentation framework} $F$ is a pair $(A,R)$, where $A$ is a set of arguments and $R$ is a set of attack relations.\cl
 
@@ -140,7 +140,9 @@ A big argument framework in might become hard to read with increasing set sizes,
 	\end{figure}
 \FloatBarrier
 
-Depending on their properties, arguments can be grouped into \emph{extensions} in order to obtain additional knowledge about the framework.\dl
+Depending on their properties, arguments can be grouped into \emph{extensions} in order to obtain additional knowledge about the framework.\cl
+
+\section{Conflict-free sets}
 
 As a basis we introduce the \emph{conflict-free set}, since no extension should contain arguments that are in conflict with each other (i.e. there can't be attacks within an extension).\cl
 
@@ -149,7 +151,9 @@ The set of all conflict-free sets of an argumentation framework $F$ is denoted $
 
 \textbf{Example 2.} (Continuation of Example 1) As no argument attacks itself, $\{a_1\}$, $\{a_2\}$ and $\{b\}$ each are conflict-free. $\{a_1,a_2\}$ is also a conflict-free set, since there exists no attack relation containing $a_1$ and $a_2$. The empty set is always conflict-free.\hl
 Since there is an attack relation between $b$ and each of the other arguments, there are no other conflict-free sets.\hl
-It follows that $cf(F)=\{\emptyset,\{a_1\},\{a_2\},\{b\},\{a_1,a_2\}\}$.\dl
+It follows that $cf(F)=\{\emptyset,\{a_1\},\{a_2\},\{b\},\{a_1,a_2\}\}$.\cl
+
+\section{Admissible extensions}
 
 To be able to find a set of arguments that can't be reasoned against, it does not suffice if that set is only not in itself conflicted, but each argument should also not be an invitation for an easy counter-argument. Therefore it is necessary to only accept arguments into a set that don't hurt its defendability.\cl
 
@@ -160,7 +164,9 @@ The set of all admissible extensions of an argumentation framework $F$ is denote
 
 \textbf{Example 3.} (Continuation of Example 2) Of the conflict-free sets only $\{a_2\}$ and \(\emptyset\) don't get attacked. They are admissible. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_2,b)$, making it also admissible.\\
 $\{b\}$ and $\{a_1\}$ are not admissible since they don't defend their arguments.\hl
-It follows that $adm(F)=\{\emptyset,\{a_1,a_2\},\{a_2\}\}$.\dl
+It follows that $adm(F)=\{\emptyset,\{a_1,a_2\},\{a_2\}\}$.\cl
+
+\section{Preferred extensions}
 
 Using admissible extensions we now can reduce the number of relevant extensions by eliminating redundant extensions, all containing the same arguments, by only taking the biggest ones, that include smaller extensions. The resulting preferred extensions are an example of a credulous reasoning, since they contain all arguments that are contained in admissible extensions.\cl
 
@@ -169,7 +175,9 @@ The set of all preferred extensions of an argumentation framework $F$ is denoted
 
 \textbf{Example 4.} (Continuation of Example 3) Since $\emptyset\subset\{a_2\}$, \(\emptyset\) is not a preferred extension. $\{a_2\}\subset\{a_1,a_2\}$, therefore $\{a_2\}$ is not a preferred extension. Since all other admissible extensions are proper subsets of $\{a_1,a_2\}$, it is a preferred extension.\hl
 It follows that $prf(F)=\{\{a_1,a_2\}\}$.\hl
-As we can see, all arguments contained in admissible extensions still are contained in a preferred extension, even though the number of results is smaller.\dl
+As we can see, all arguments contained in admissible extensions still are contained in a preferred extension, even though the number of results is smaller.\cl
+
+\section{Stable extensions}
 
 Additionally we can define a stricter version of the admissible extension, that not only requires arguments to be defended, but also needs to attack all arguments not contained within it.\cl
 
@@ -178,7 +186,9 @@ The set of all stable extensions of an argumentation framework $F$ is denoted $s
 
 \textbf{Example 5.} (Continuation of Example 2) The conflict-free sets $\emptyset$ and $\{a_1\}$ don't attack any of the other arguments, $\{a_2\}$ only attacks $\{b\}$, missing an attack on $\{a_1\}$. $\{b\}$ misses an attack on $\{a_2\}$. They are not stable extensions.\\
 $\{a_1,a_2\}$ attacks all other arguments in $\{b\}$ (attack relation $(a_2,b)$) and therefore is a stable extension.\hl
-It follows that $st(F)=\{\{a_1,a_2\}\}$.\dl
+It follows that $st(F)=\{\{a_1,a_2\}\}$.\cl
+
+\section{Complete extensions}
 
 In contrast to credulous reasoning stands sceptical reasoning. The extension fitting sceptical reasoning within the context of argument frameworks is the complete extension.\cl
 
@@ -187,18 +197,22 @@ The set of all complete extensions of an argumentation framework $F$ is denoted 
 
 \textbf{Example 6.} (Continuation of Example 3) The admissible extension $\emptyset$ is not a complete extension because it defends $a_2$ which it doesn't contain. $\{a_2\}$ defends $a_1$ and is therefore also not a complete extension.\\
 $\{a_1,a_2\}$ attacks $b$ and as there are no other arguments which could be defended it is a complete extension.\hl
-It follows that $co(F)=\{\{a_1,a_2\}\}$.\dl
+It follows that $co(F)=\{\{a_1,a_2\}\}$.\cl
+
+\section{Grounded extension}
 
 As before, we can again reduce the number of relevant extensions. In this case we search for the common denominator, meaning exactly those arguments all complete extensions can ``agree'' on. This results in the grounded extension\cl
 
 \textbf{Definition 9.} The (unique) \emph{grounded extension} is defined by $\bigcap\limits_{i=1}^n{S_i}$, where $\{S_1,...,S_n\}$ is the set of all complete extensions.\\
 The grounded extension of an argumentation framework $F$ is denoted $gr(F)$\cl
 
-\textbf{Example 7.} (Continuation of Example 6) Since there is only one complete extension $\{a_1,a_2\}$, it also is the grounded extension $gr(F)$.\dl
+\textbf{Example 7.} (Continuation of Example 6) Since there is only one complete extension $\{a_1,a_2\}$, it also is the grounded extension $gr(F)$.\cl
 
 \chapter{Observations}
 
-As we have seen in the previous section, often there may be overlaps between the different extension types. In this section we will discuss those relations between extension types. Additionally we will explore their unique features.\dl
+As we have seen in the previous section, often there may be overlaps between the different extension types. In this section we will discuss those relations between extension types. Additionally we will explore their unique features.\cl
+
+\section{Relations between extension types}
 
 As per the definitions of the extension there are the following relations:
 \begin{align} %find structure that instead centers
@@ -206,9 +220,9 @@ As per the definitions of the extension there are the following relations:
 	st(F)\subseteq cf(F)\\
 	prf(F)\subseteq adm(F)\\
 	co(F)\subseteq adm(F)
-\end{align}\dl
+\end{align}\cl
 
-\textbf{Lemma 1.} %TODO provide proof
+\textbf{Lemma 1.}
 Each stable extension is a preferred extension, but not every preferred extension is a stable extension.\\
 \begin{align}
 	st(F)\subseteq prf(F)\\
@@ -228,7 +242,7 @@ Therefore each stable extension also is an admissible extension.\cl
 
 It can be computed that $cf(F)=adm(F)=\{\emptyset,\{b\},\{c\}\}$. So we only have to consider three extensions for further computations.\hl
 As can be seen, $\{b\}$ is the only conflict-free set that attacks all other arguments. Therefore $st(F)=\{\{b\}\}$.\hl
-We know that $\{b\}$ has to be a preferred extension, because of Lemma 1. $\{c\}$ attacks only it's attacker $b$, but not $a$. Therefore it is preferred and $prf(F)=\{\{b\},\{c\}\}$.\dl
+We know that $\{b\}$ has to be a preferred extension, because of Lemma 1. $\{c\}$ attacks only it's attacker $b$, but not $a$. Therefore it is preferred and $prf(F)=\{\{b\},\{c\}\}$.\cl
 
 \textbf{Lemma 2.} %check for something better, needs proof?
 The grounded extension is always complete. %and, something?
@@ -329,15 +343,15 @@ Blue is used for arguments missing from a set for it to qualify for an extension
 After showing the results of a computation a dropdown menu becomes availiable to the right bottom side of the explanation area, containing all computed extensions. They can be selected and are then highlighted in green in the graph.\hl
 The graph view also allows the user to go back to the input mask using the `<' button. The input mask will still contain the input from before switching to the graph view.
 
-\subsection{Implementation details}
+\section{Implementation details}
 This section lays out which technologies where used to create the program, how they where used and explains why the program was implemented in such a way.\cl %alter
 
-\subsubsection{Technologies used}
+\subsection{Technologies used}
 The application was written in Java (version 1.8) using eclipse Kepler as a working environment.\hl
 To control the graphical user interface JavaFX was used, the design being created as .fxml files via JavaFX Scene Builder.\hl
 Java Universal Network/Graph Framework (JUNG) was used for the data structure of the frameworks' graphs.
 
-\subsubsection{Data structure}
+\subsection{Data structure}
 Rather than implementing the sets $A$ and $R$ separately, I instead opted for storing each outgoing attack of an argument directly within the argument. The general data structure used is\\
 \[F=\{a_1,...,a_n\} \text{, where } a_i=D \text{ and } D\subseteq F, D \text{ being arguments attacked by } a_i.\]\hl
 
