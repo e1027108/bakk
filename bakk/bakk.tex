@@ -127,15 +127,15 @@ To work with argumentation frameworks, first we must define their properties. Th
 			& $b$ & = ''No, black is much more beautiful!''\\
 			& $a_2$ & = ''That's wrong, black isn't even a color.''
 			\end{tabular}\hl
-These arguments obviously contain two attacks. Argument $b$ attacks argument $a_1$ and in turn argument $a_2$ attacks argument $b$.\hl
-This results in the framework $F=(A,R)$, where $A=\{a_1,a_2,b\}$ and $R=\{(b,a_1),(a_2,b)\}$.\cl
+We can see that these arguments contain three attacks. Argument $b$ attacks argument $a_1$ and vice versa. Additionally argument $a_2$ attacks argument $b$.\hl
+This results in the framework $F=(A,R)$, where $A=\{a_1,a_2,b\}$ and $R=\{(b,a_1),(a_1,b),(a_2,b)\}$.\cl
 
 A big argument framework in might become hard to read with increasing set sizes, so it is also possible to represent every framework as a graph $(V,E)$, where $V=A$ and $E=R$. The graph of our example looks like this:
 
 \FloatBarrier
 	\begin{figure}[!htb]
 		\centering
-		\includegraphics[width=\linewidth]{graphs/ex1.pdf}
+		\includegraphics[width=\linewidth]{graphs/ex1_v2.pdf}
 		\caption{An argument framework about colors.}
 	\end{figure}
 \FloatBarrier
@@ -162,9 +162,9 @@ To be able to find a set of arguments that can't be reasoned against, it does no
 \textbf{Definition 5.} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\\
 The set of all admissible extensions of an argumentation framework $F$ is denoted $adm(F)$.\cl
 
-\textbf{Example 3.} (Continuation of Example 2) Of the conflict-free sets only $\{a_2\}$ and \(\emptyset\) don't get attacked. They are admissible. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_2,b)$, making it also admissible.\\
-$\{b\}$ and $\{a_1\}$ are not admissible since they don't defend their arguments.\hl
-It follows that $adm(F)=\{\emptyset,\{a_1,a_2\},\{a_2\}\}$.\cl
+\textbf{Example 3.} (Continuation of Example 2) Of the conflict-free sets only \(\emptyset\) and $\{a_2\}$ don't get attacked. Therefore they are is admissible extensions. $\{a_1\}$ defends itself from its only attacker $b$ via the attack relation $(a_1,b)$, making it an admissible extension. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_1,b)$ and $(a_2,b)$, also making it an admissible extension.\\
+$\{b\}$ is not admissible since it doesn't defend its argument.\hl
+It follows that $adm(F)=\{\emptyset,\{a_1\},\{a_2\},\{a_1,a_2\}\}$.\cl
 
 \section{Preferred extensions}
 
@@ -173,7 +173,7 @@ Using admissible extensions we now can reduce the number of relevant extensions 
 \textbf{Definition 6.} Let $S$ be an admissible extension. It is called a \emph{preferred extension} if for each $S'\subseteq A$, that is an admissible extension, $S\not\subset S'$.\\
 The set of all preferred extensions of an argumentation framework $F$ is denoted $pr(F)$.\cl
 
-\textbf{Example 4.} (Continuation of Example 3) Since $\emptyset\subset\{a_2\}$, \(\emptyset\) is not a preferred extension. $\{a_2\}\subset\{a_1,a_2\}$, therefore $\{a_2\}$ is not a preferred extension. Since all other admissible extensions are proper subsets of $\{a_1,a_2\}$, it is a preferred extension.\hl
+\textbf{Example 4.} (Continuation of Example 3) Since $\emptyset\subset\{a_2\}$, \(\emptyset\) is not a preferred extension. Since $\{a_1\}\subset\{a_1,a_2\}$ and $\{a_2\}\subset\{a_1,a_2\}$, $\{a_1\}$ and $\{a_2\}$ are not a preferred extensions. Since all other admissible extensions are proper subsets of $\{a_1,a_2\}$, it is a preferred extension.\hl
 It follows that $prf(F)=\{\{a_1,a_2\}\}$.\hl
 As we can see, all arguments contained in admissible extensions still are contained in a preferred extension, even though the number of results is smaller.\cl
 
@@ -184,8 +184,8 @@ Additionally we can define a stricter version of the admissible extension, that 
 \textbf{Definition 7.} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there is exists an attack $(b,a)\in R$ where $b\in S$.\\
 The set of all stable extensions of an argumentation framework $F$ is denoted $st(F)$.\cl
 
-\textbf{Example 5.} (Continuation of Example 2) The conflict-free sets $\emptyset$ and $\{a_1\}$ don't attack any of the other arguments, $\{a_2\}$ only attacks $\{b\}$, missing an attack on $\{a_1\}$. $\{b\}$ misses an attack on $\{a_2\}$. They are not stable extensions.\\
-$\{a_1,a_2\}$ attacks all other arguments in $\{b\}$ (attack relation $(a_2,b)$) and therefore is a stable extension.\hl
+\textbf{Example 5.} (Continuation of Example 2) The conflict-free set $\emptyset$ doesn't attack any of the other arguments, $\{a_1\}$ and $\{a_2\}$ only attack $\{b\}$, missing an attack on $\{a_2\}$ or $\{a_1\}$ respectively. $\{b\}$ misses an attack on $\{a_2\}$. They are not stable extensions.\\
+$\{a_1,a_2\}$ attacks all other arguments (i.e. $b$, attack relation $(a_2,b)$) and therefore is a stable extension.\hl
 It follows that $st(F)=\{\{a_1,a_2\}\}$.\cl
 
 \section{Complete extensions}
@@ -195,7 +195,7 @@ In contrast to credulous reasoning stands sceptical reasoning. The extension fit
 \textbf{Definition 8.} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S$ does not defend $a$.\\
 The set of all complete extensions of an argumentation framework $F$ is denoted $co(F)$.\cl
 
-\textbf{Example 6.} (Continuation of Example 3) The admissible extension $\emptyset$ is not a complete extension because it defends $a_2$ which it doesn't contain. $\{a_2\}$ defends $a_1$ and is therefore also not a complete extension.\\
+\textbf{Example 6.} (Continuation of Example 3) The admissible extension $\emptyset$ is not a complete extension because it defends $a_2$ which it doesn't contain. The same is true for $\{a_1\}$. $\{a_2\}$ defends $a_1$ and is therefore also not a complete extension.\\
 $\{a_1,a_2\}$ attacks $b$ and as there are no other arguments which could be defended it is a complete extension.\hl
 It follows that $co(F)=\{\{a_1,a_2\}\}$.\cl
 
@@ -235,7 +235,7 @@ Therefore each stable extension also is an admissible extension.\cl
 \FloatBarrier
 	\begin{figure}[!htb]
 		\centering
-		\includegraphics[width=\linewidth]{graphs/ex2.pdf}
+		\includegraphics[width=\linewidth]{graphs/ex2_v2.pdf}
 		\caption{Example for the difference between stable and preferred extensions}
 	\end{figure}
 \FloatBarrier
