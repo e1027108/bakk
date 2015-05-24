@@ -19,6 +19,7 @@
 \usepackage{tikz}
 \usepackage{placeins}
 \usepackage{amsmath}
+\usepackage[nounderscore]{syntax}
 
 \newcommand{\hl}{\par\vspace{6pt}} %used within the same context, as new paragraph
 \newcommand{\cl}{\par\vspace{12pt}} %used between paragraphs with the same topic, but not textually flowing into each other
@@ -64,8 +65,8 @@ I want to thank my family for supporting me and Dr. Ferm{\"u}ller for guiding me
 \end{acknowledgements*}
 
 \begin{abstract*}
-This bachelor thesis explains the concept of the abstract argumentation framework, its properties as well as its extensions. It further analyzes the relations between different types of extensions.\hl
-The main part of the thesis is the modelling of the explained concepts as code and the developement of a JAVA application which is capable of creating custom argumentation frameworks, their visualisation as graphs and the computation of extensions. The application is created in a way such that students can study argumentation frameworks in an easily digestable way including step-by-step explanations of how the extensions are computed accompanied by colored highlighting of important aspects of the frameworks' graphs.\\ %TODO work in progress
+This bachelor thesis explains the concept of abstract argumentation frameworks, its properties as well as semantics to compute sets of arguments, so-called extensions. It further analyzes the relations between different types of extensions.\hl %so-called?
+The main part of this thesis is the the developement of a JAVA application which is capable of creating custom argumentation frameworks, their representation as argumentation graphs and the computation of their extensions. The application is created in a way such that students can study argumentation frameworks in an easily digestable way including step-by-step explanations of how the extensions are computed accompanied by colored highlighting of important aspects of the frameworks' graphs.\\ %TODO work in progress
 \end{abstract*}
 
 % Select the language of the thesis, e.g., english or naustrian.
@@ -78,36 +79,7 @@ The main part of the thesis is the modelling of the explained concepts as code a
 \mainmatter
 
 \chapter{Introduction}
-Most humans argue on a daily basis. Often argument is followed by counter-argument is followed by another counter-argument until one of the participants is defeated.\hl
-Each of these arguments consists of the following ingredients:
-
-\begin{itemize}
-	\item Premises
-	\item Conclusions
-\end{itemize}
-
-A counter-argument now tries to either disprove a premise or a conclusion. For example:\hl
-\[
-	\underbrace{\text{All birds can fly.}}_\text{premise}\text{ }
-	\underbrace{\text{Tweety is a bird.}}_\text{premise}\text{ }
-	\underbrace{\text{Therefore Tweety can fly.}}_\text{conclusion}
-\]
-One now could bring up the fact, that penguins are birds that can't fly, thus disproving the first premise. It could also be argued, that Tweety is not a bird, but rather a virtual character which can not be compared to the real world, attacking the second premise.\hl
-
-Now lets change our argument slightly:\hl
-\[
-	\underbrace{\text{All birds can fly.}}_\text{premise}\text{ }
-	\underbrace{\text{Tweety can fly.}}_\text{premise}\text{ }
-	\underbrace{\text{Therefore Tweety is a bird.}}_\text{conclusion}
-\]\hl
-Now the conclusion of the argument could also be attacked.\cl
-
-In reality arguments are not always contructed in a way, where premises and conclusions can so easily be spotted, because they are often implicit. For example\hl
-\[\text{Dirty things need to be cleaned. The floor is dirty.}\]\hl
-consists only of premises and does not have an explicit conclusion.\hl
-While humans automatically grasp implicit premises or conclusions for simple arguments, this is not always the case. Complicated discussions or negotiations often are too complex to immediately understand. Computers gernerally also don't understand arguments very well. To use the optimal set of arguments one could now formalise the arguments and especially how they relate to each other to come to an optimal solution.\hl %did I connect dung well enough with complex argumentation structures?
-In this paper we look at the concept of argumentation frameworks as proposed by Dung in {year}. %reference and year here
-Following that we look at an application written for this thesis and specifically designed to illustrate and explain how such sets of arguments can be obtained.
+Introduction here.
 
 \chapter{Definitions}
 
@@ -277,7 +249,19 @@ On starting the application the user is presented with an input mask. It consist
 Each row consists of a checkbox and two textfields.\hl
 Each checkbox is labeled with the name of the argument the row represents. If a checkbox is selected the program will use the represented argument for further computations and visualisations.\hl
 The first textfield of each row contains the optional description of the argument in question. The argument description is optional because it is only used in a cosmetic, non-functional way in the rest of the program.\hl
-The second textfield of each row contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can be, but don't have to be, seperated either by ',' or spaces.\hl
+The second textfield of each row contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can, optionally, be seperated either by ',' or spaces. This results in the following EBNF syntax.\hl %not really ``EBNF'' though .. more like BNF
+
+\begin{grammar}%first version, replace with other regular expression? prohibit multiple seperators in a row?
+	<argument> ::= `a' | `b' | `c' | `d' | `e' | `f'
+				| `g' | `h' | `i' | `j' | `A' | `B'
+				| `C' | `D' | `E' | `F' | `G' | `H'
+				| `I' | `J'
+
+	<seperator> ::= `,' | ` '
+	
+	<input> ::= \{ <argument> , \{ <seperator> \} \}
+\end{grammar}\hl
+
 The ``show graph'' button checks input in selected rows for problems. It detects attacks against non-existent arguments, while treating multiple attacks of an argument against another argument are ignored. It further provides error messages, so the user knows about issues. Note that unselected rows are ignored, even if there is a description or attacks already defined. This enables the user to quickly add or remove arguments for comparison in the next window.\hl
 To make using the application easier, every item seen on screen shows a tooltip explaining the purpose of that element.
 
