@@ -54,7 +54,7 @@ public class DemonstrationWindowController {
 	private AnchorPane root; //root pane containing all the UI elements
 
 	@FXML
-	private ChoiceBox<String> setsChoiceBox; //dropdown for
+	private ChoiceBox<String> setsChoiceBox; //dropdown for result sets
 
 	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, backTip, nextTip, allTip, resultsTip, choiceTip; //tooltips for all buttons etc
 

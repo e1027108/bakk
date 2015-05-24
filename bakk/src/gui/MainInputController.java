@@ -1,5 +1,7 @@
 package gui;
 
+import gui.Example;
+import gui.Line;
 import interactor.Interactor;
 
 import java.net.URL;
@@ -9,9 +11,13 @@ import java.util.ResourceBundle;
 
 import dto.ArgumentDto;
 import exceptions.InvalidInputException;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -47,12 +53,15 @@ public class MainInputController {
 	private CheckBox ABox, BBox, CBox, DBox, EBox, FBox, GBox, HBox, IBox, JBox; //checkboxes selecting which textfields to be read from
 
 	@FXML
-	private Label useLbl, addLbl, attackLbl, headlineLbl, errorLbl; //descriptive labels
+	private Label useLbl, addLbl, attackLbl, headlineLbl, errorLbl, presetLbl; //descriptive labels
 
 	@FXML
 	private Button showGraphBtn; //button to go to next window
+	
+	@FXML
+	private ChoiceBox<String> presetChoiceBox;
 
-	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip; //tooltips describing what to input or what happens
+	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip, choiceTip; //tooltips describing what to input or what happens
 
 	private Interactor interactor; //Interactor controlling the results the user sees
 	private ArrayList<ArgumentDto> arguments; //arguments read from the text fields
@@ -60,6 +69,7 @@ public class MainInputController {
 	private ArrayList<TextField> statements; //list of textfields containing argument describing statments
 	private ArrayList<TextField> attacks; //list of textfields containing the attack information
 	private ArrayList<?> alphabetical[]; //array of input containing lists
+	private ArrayList<Example> examples;
 
 	/**
 	 * gets an Interactor and adds tooltips for elements
@@ -107,6 +117,98 @@ public class MainInputController {
 		generalAttackTip = new Tooltip("Set attacks between arguments.");
 		attackLbl.setTooltip(generalAttackTip);
 		
+		choiceTip = new Tooltip("You can choose a preset to load an example framework into the textfields above.");
+		presetChoiceBox.setTooltip(choiceTip);
+		
+		examples = initializeExamples();
+		
+		showChoices();
+	}
+
+	private ArrayList<Example> initializeExamples() {
+		ArrayList<Example> exampleSet = new ArrayList<Example>();
+		
+		exampleSet.add(new Example("",null));
+		
+		exampleSet.add(new Example("DUNG Example 1",
+				new Line[] {
+					new Line('a', "I: My government can not negotiate with your government because your government doesn’t even recognize my government.", "b"),
+					new Line('b', "A: Your government doesn’t recognize my government either.", "a"),
+					new Line('c', "I: But your government is a terrorist government.", "b")
+		}));
+		
+		exampleSet.add(new Example("Nixon Diamond",
+				new Line[] {
+					new Line('a', "Nixon is anti-pacifist since he is a republican.", "b"),
+					new Line('b', "Nixon is a pacifist since he is a quaker.", "a"),
+		}));
+		
+		//TODO provide additional examples
+		
+		return exampleSet;
+	}
+	
+	
+	public void showChoices(){
+		ArrayList<String> formatList = new ArrayList<String>();
+		
+		for(Example e: examples){
+			formatList.add(e.getName());
+		}
+
+		presetChoiceBox.setItems(FXCollections.observableArrayList(formatList));
+		presetChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChoiceListener<Number>());
+		presetChoiceBox.getSelectionModel().selectFirst();
+	}
+	
+	@SuppressWarnings("hiding")
+	private class ChoiceListener<Number> implements ChangeListener<Number>{
+		@Override
+		public void changed(ObservableValue<? extends Number> oval, Number sval, Number nval){
+			if((Integer) nval == -1){
+				return;
+			}
+			
+			Object item = presetChoiceBox.getItems().get((Integer) nval); 
+
+			if(item instanceof String){
+				resetMask();
+				loadExample((String) item);
+			}
+		}
+
+		private void loadExample(String item) {
+			for(Example e: examples){
+				if(e.getName().equals(item) && e.getLines() != null){
+					for(Line l: e.getLines()){
+						Object cb = alphabetical[0].get(l.getNumber());
+						Object t1 = alphabetical[1].get(l.getNumber());
+						Object t2 = alphabetical[2].get(l.getNumber());
+						
+						if(cb instanceof CheckBox && t1 instanceof TextField && t2 instanceof TextField){
+							((CheckBox) cb).selectedProperty().set(true);
+							((TextField) t1).setText(l.getDescription());
+							((TextField) t2).setText(l.getAttacks());
+						}
+					}
+					break;
+				}
+			}
+		}
+	}
+	
+	private void resetMask() {
+		for(int i = 0; i<alphabetical[0].size(); i++){
+			Object a = alphabetical[0].get(i);
+			Object b = alphabetical[1].get(i);
+			Object c = alphabetical[2].get(i);
+			
+			if(a instanceof CheckBox && b instanceof TextField && c instanceof TextField){
+				((CheckBox) a).selectedProperty().set(false);
+				((TextField) b).setText("");
+				((TextField) c).setText("");
+			}
+		}
 	}
 
 	/**
