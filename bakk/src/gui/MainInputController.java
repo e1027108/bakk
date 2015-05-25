@@ -14,6 +14,7 @@ import exceptions.InvalidInputException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -21,6 +22,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -109,7 +111,7 @@ public class MainInputController {
 			f.setTooltip(descriptionTip);
 		}
 
-		attackTip = new Tooltip("Write the name of the arguments\nthis argument should attack here.");
+		attackTip = new Tooltip("Write the names of the arguments\nthis argument should attack here.");
 		for(TextField f: attacks){
 			f.setTooltip(attackTip);
 		}
@@ -141,6 +143,28 @@ public class MainInputController {
 				new Line[] {
 					new Line('a', "Nixon is anti-pacifist since he is a republican.", "b"),
 					new Line('b', "Nixon is a pacifist since he is a quaker.", "a"),
+		}));
+		
+		exampleSet.add(new Example("Thesis Example 1-7",
+				new Line[] {
+					new Line('a', "A: Blue is the most beautiful of all colors.", "b"),
+					new Line('b', "B: No, black is much more beautiful!", "a"),
+					new Line('c', "A: That's wrong, black isn't even a color.", "b")
+		}));
+		
+		exampleSet.add(new Example("Thesis Example 8",
+				new Line[] {
+					new Line('a', "", "a"),
+					new Line('b', "", "ac"),
+					new Line('c', "", "b")
+		}));
+		
+		exampleSet.add(new Example("Thesis Figure 4.1",
+				new Line[] {
+					new Line('a', "", "b"),
+					new Line('b', "", "c"),
+					new Line('c', "", "a"),
+					new Line('d', "", "b")
 		}));
 		
 		//TODO provide additional examples

@@ -202,7 +202,7 @@ Each stable extension is a preferred extension, but not every preferred extensio
 \end{align}
 Therefore each stable extension also is an admissible extension.\cl
 
-\textbf{Example 7.} Let $F$ be an argumentation framework $(A,R)$ such that $A={a,b,c}$ and $R={(b,a),(b,c),(a,a),(c,b)}$.
+\textbf{Example 8.} Let $F$ be an argumentation framework $(A,R)$ such that $A={a,b,c}$ and $R={(b,a),(b,c),(a,a),(c,b)}$.
 
 \FloatBarrier
 	\begin{figure}[!htb]
@@ -234,15 +234,15 @@ The grounded extension is always complete. %and, something?
 \FloatBarrier
 	\begin{figure}[!htb]
 		\centering
-		\includegraphics{pics/diagram.pdf}
-		\caption{Relations between extensions}
+		\includegraphics[width=\linewidth]{graphs/diagram_2.pdf}
+		\caption{Relations between extensions, an arrow from set X to set Y means $X\subseteq Y$}
 	\end{figure}
 \FloatBarrier
 
 \chapter{Implementation}
 
 \section{Introduction}
-In this section the usage and implementation details of the aforementioned program illustrating the computation of the different extension types is provided. The application consists of two views: the input mask and the graph view.
+In this chapter the usage and implementation details of the aforementioned program illustrating the computation of the different extension types is provided. The application consists of two views: the input mask and the graph view.
 
 \section{Input mask}
 On starting the application the user is presented with an input mask. It consists of ten rows representing the arguments of an argumentation framework. The number of arguments is limited to ten because a higher number of arguments doesn't provide any further benefit to a user wanting to learn about the basics of argumentation frameworks.\\
@@ -263,7 +263,6 @@ The second textfield of each row contains the names of the arguments the argumen
 \end{grammar}\hl
 
 The ``show graph'' button checks input in selected rows for problems. It detects attacks against non-existent arguments, while treating multiple attacks of an argument against another argument are ignored. It further provides error messages, so the user knows about issues. Note that unselected rows are ignored, even if there is a description or attacks already defined. This enables the user to quickly add or remove arguments for comparison in the next window.\hl
-To make using the application easier, every item seen on screen shows a tooltip explaining the purpose of that element.
 
 \FloatBarrier
 	\begin{figure}[!htb]
@@ -274,7 +273,11 @@ To make using the application easier, every item seen on screen shows a tooltip 
 \FloatBarrier
 
 %TODO update figure name?
-Figure 4.1 shows the input mask with input representing the argumentation framework $F=(A,R)$ with $A=\{a,b,c,d\}$ and $R=\{(a,b),(b,c),(c,a),(d,b)\}$.
+Figure 4.1 shows the input mask with input representing the argumentation framework $F=(A,R)$ with $A=\{a,b,c,d\}$ and $R=\{(a,b),(b,c),(c,a),(d,b)\}$.\hl
+
+Alternatively there are some preset examples to be chosen from via the drop-down menu titled ``choose preset''. Once an example is chosen, the input mask is filled with the corresponding data.\hl
+Examples include the examples used by Dung [citation here?], [fill in other authors] as well as the examples used in this thesis.\hl
+To make using the application easier, every item seen on screen shows a tooltip explaining the purpose of that element.
 
 \section{Graph view}
 Once an argument framework is created, ``show graph'' clicked and no problems detected the graph view is shown.
@@ -288,6 +291,16 @@ Once an argument framework is created, ``show graph'' clicked and no problems de
 \FloatBarrier
 
 Upon loading the graph view the user can see the graph representing the argument framework defined in the input mask to the left. Every argument is represented by a node labelled with that arguments name. The argument nodes are laid out in a circle for better distinguishability.\hl
+It is possible to view the arguments' descriptions by hovering over them. In case no description was given for an argument, the application displays this information.\hl
+
+\FloatBarrier
+	\begin{figure}[!htb]
+		\centering
+		\includegraphics[scale=2]{pics/argdes.png}
+		\caption{Tooltip as shown hovering over an argument without description.}
+	\end{figure}
+\FloatBarrier
+
 The user then has the option to choose to compute one of six extension types:
 
 \begin{itemize}[noitemsep]
