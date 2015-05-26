@@ -12,12 +12,14 @@
 	\node[state] (complete) [below left = of admissible] {$co(F)$};
 	\node[state] (preferred) [below left = of complete] {$prf(F)$};
 	\node[state] (grounded) [below right = of complete] {$gr(F)$};
-	\node[state] (stable) [below left = of preferred] {$st(F)$};
+	\node[state] (semi-stable) [below left = of preferred] {$sst(F)$};
+	\node[state] (stable) [below left = of semi-stable] {$st(F)$};
 
 	\path (admissible) edge (conflict-free);
         \path (complete) edge (admissible);
 	\path (preferred) edge (complete);
 	\path (grounded) edge (complete);
-	\path (stable) edge (preferred);
+	\path (stable) edge (semi-stable);
+	\path (semi-stable) edge (preferred);
 \end{tikzpicture}
 \end{document}

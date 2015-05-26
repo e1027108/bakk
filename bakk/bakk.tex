@@ -105,7 +105,7 @@ This results in the framework $F=(A,R)$, where $A=\{a_1,a_2,b\}$ and $R=\{(b,a_1
 A big argument framework in might become hard to read with increasing set sizes, so it is also possible to represent every framework as a graph $(V,E)$, where $V=A$ and $E=R$. The graph of our example looks like this:
 
 \FloatBarrier
-	\begin{figure}[!htb]
+	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=\linewidth]{graphs/ex1_v2.pdf}
 		\caption{An argument framework about colors.}
@@ -153,7 +153,7 @@ As we can see, all arguments contained in admissible extensions still are contai
 
 Additionally we can define a stricter version of the admissible extension, that not only requires arguments to be defended, but also needs to attack all arguments not contained within it.\cl
 
-\textbf{Definition 7.} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there is exists an attack $(b,a)\in R$ where $b\in S$.\\
+\textbf{Definition 7.} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there exists an attack $(b,a)\in R$ where $b\in S$.\\
 The set of all stable extensions of an argumentation framework $F$ is denoted $st(F)$.\cl
 
 \textbf{Example 5.} (Continuation of Example 2) The conflict-free set $\emptyset$ doesn't attack any of the other arguments, $\{a_1\}$ and $\{a_2\}$ only attack $\{b\}$, missing an attack on $\{a_2\}$ or $\{a_1\}$ respectively. $\{b\}$ misses an attack on $\{a_2\}$. They are not stable extensions.\\
@@ -180,9 +180,9 @@ The grounded extension of an argumentation framework $F$ is denoted $gr(F)$\cl
 
 \textbf{Example 7.} (Continuation of Example 6) Since there is only one complete extension $\{a_1,a_2\}$, it also is the grounded extension $gr(F)$.\cl
 
-\chapter{Observations}
+\chapter{Observations} %change to something more clear
 
-As we have seen in the previous section, often there may be overlaps between the different extension types. In this section we will discuss those relations between extension types. Additionally we will explore their unique features.\cl
+As we have seen in the previous section, often there may be overlaps between the different extension types. In this section we will discuss those relations between extension types, explore their features and provide additional extension semantics.\cl %evtl dann doch gleich oben reinziehen?
 
 \section{Relations between extension types}
 
@@ -191,21 +191,25 @@ As per the definitions of the extension there are the following relations:
 	adm(F)\subseteq cf(F)\\
 	st(F)\subseteq cf(F)\\
 	prf(F)\subseteq adm(F)\\
-	co(F)\subseteq adm(F)
+	co(F)\subseteq adm(F)\\
+	gr(F)\subseteq co(F)
 \end{align}\cl
 
+Additional to relations already given in their definitions, there are further relations to be mentioned.\hl
+Dung [X] provides the following Lemma regarding the relation between stable and preferred extensions.\hl %sourcing here
+
 \textbf{Lemma 1.}
-Each stable extension is a preferred extension, but not every preferred extension is a stable extension.\\
+Each stable extension is a preferred extension, but not every preferred extension is a stable extension.
 \begin{align}
 	st(F)\subseteq prf(F)\\
 	prf(F)\not\subseteq st(F)
 \end{align}
-Therefore each stable extension also is an admissible extension.\cl
+Therefore each stable extension also is an admissible extension.\hl
 
 \textbf{Example 8.} Let $F$ be an argumentation framework $(A,R)$ such that $A={a,b,c}$ and $R={(b,a),(b,c),(a,a),(c,b)}$.
 
 \FloatBarrier
-	\begin{figure}[!htb]
+	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=\linewidth]{graphs/ex2_v2.pdf}
 		\caption{Example for the difference between stable and preferred extensions}
@@ -216,25 +220,47 @@ It can be computed that $cf(F)=adm(F)=\{\emptyset,\{b\},\{c\}\}$. So we only hav
 As can be seen, $\{b\}$ is the only conflict-free set that attacks all other arguments. Therefore $st(F)=\{\{b\}\}$.\hl
 We know that $\{b\}$ has to be a preferred extension, because of Lemma 1. $\{c\}$ attacks only it's attacker $b$, but not $a$. Therefore it is preferred and $prf(F)=\{\{b\},\{c\}\}$.\cl
 
-\textbf{Lemma 2.} %check for something better, needs proof?
-The grounded extension is always complete. %and, something?
+Further we look at the relation between preferred, complete and grounded extensions. Dung [X] provides and prooves a Theorem clarifying the following relationships.\hl %Satz ändern, is schirch
+
+\textbf{Lemma 2.}
+Each preferred extension is a complete extension, but not vice versa.
+\begin{align}
+	prf(F)\subseteq co(F)\\
+	co(F)\not\subseteq prf(F)
+\end{align}\hl
+
+%TODO provide example
+
+\textbf{Lemma 3.}
+The grounded extension is the least (wrt set inclusion) complete extension.\hl
+That means that the following holds:
 \begin{align}
 	gr(F)\subseteq co(F)
-\end{align}
+\end{align}\cl
 
-%others, TODO split within text
+%TODO provide example
+
+We now know all the relations between extensions proposed by Dung. The only one of those extensions not to exist for every argumentation framework is the stable extension. A related, but less strict extension was definded by Caminada in [X]: the semi-stable extension.\hl
+
+\textbf{Definition 10.} Let S be a complete extension. It is called a \emph{semi-stable} extension if for each $a\not\in S$ there exists an attack $(b,a)\in R$ where $b\in S$.\\ %same as stable, but for complete
+The set of all semi-stable extensions of an argumentation framework $F$ is denoted $sst(F)$.\hl
+
+%TODO provide example
+
+Since there always is a complete extension, there is always a semi-stable extension. One can also see that the following holds:
 
 \begin{align}
-	co(F)\not\subseteq prf(F)\\
-	prf(F)\not\subseteq co(F)\\
-	\exists F\ prf(F)\cap co(F) \not = \emptyset\\
-	\exists F\ st(F)\cap co(F) \not = \emptyset 
-\end{align}
+	st(F)\subseteq sst(F)
+\end{align}\cl
+
+%TODO ideal extensions (and more?) come here
+
+We can now represent the relationships between all extension types mentioned in this thesis as the following graph.\hl
 
 \FloatBarrier
-	\begin{figure}[!htb]
+	\begin{figure}[!h]
 		\centering
-		\includegraphics[width=\linewidth]{graphs/diagram_2.pdf}
+		\includegraphics[scale=1]{graphs/diagram_2.pdf}
 		\caption{Relations between extensions, an arrow from set X to set Y means $X\subseteq Y$}
 	\end{figure}
 \FloatBarrier
@@ -265,7 +291,7 @@ The second textfield of each row contains the names of the arguments the argumen
 The ``show graph'' button checks input in selected rows for problems. It detects attacks against non-existent arguments, while treating multiple attacks of an argument against another argument are ignored. It further provides error messages, so the user knows about issues. Note that unselected rows are ignored, even if there is a description or attacks already defined. This enables the user to quickly add or remove arguments for comparison in the next window.\hl
 
 \FloatBarrier
-	\begin{figure}[!htb]
+	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=\linewidth]{pics/input.png}
 		\caption{Input mask}
@@ -283,7 +309,7 @@ To make using the application easier, every item seen on screen shows a tooltip 
 Once an argument framework is created, ``show graph'' clicked and no problems detected the graph view is shown.
 
 \FloatBarrier
-	\begin{figure}[!htb]
+	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=\linewidth]{pics/demo.png}
 		\caption{Graph view resulting from Figure 4.1}
@@ -294,14 +320,14 @@ Upon loading the graph view the user can see the graph representing the argument
 It is possible to view the arguments' descriptions by hovering over them. In case no description was given for an argument, the application displays this information.\hl
 
 \FloatBarrier
-	\begin{figure}[!htb]
+	\begin{figure}[!h]
 		\centering
 		\includegraphics[scale=2]{pics/argdes.png}
 		\caption{Tooltip as shown hovering over an argument without description.}
 	\end{figure}
 \FloatBarrier
 
-The user then has the option to choose to compute one of six extension types:
+The user then has the option to choose to compute one of six types of sets:
 
 \begin{itemize}[noitemsep]
 	\item conflict-free set
@@ -317,7 +343,7 @@ That means if conflict-free sets were already computed one can compute stable ex
 Each computation triggers the text area (called the explanation area) to the right to display explanations of how the computed extensions came to pass. This explanation can either be shown step-by-step, all at once or be skipped and only the results be shown. Using previoucly computed extensions the explanation area does not show the explanation for already computed extensions again.
 
 \FloatBarrier
-	\begin{figure}[!htb]
+	\begin{figure}[!h]
 		\centering
 		\includegraphics{pics/explanation.png}
 		\caption{Text explaining the computation of admissible extensions.}
@@ -330,7 +356,7 @@ Red is used for conflicting arguments and attacks preventing a set of arguments 
 Blue is used for arguments missing from a set for it to qualify for an extension type.\hl
 
 \FloatBarrier
-	\begin{figure}[!htb]
+	\begin{figure}[!h]
 		\centering
 		\includegraphics{pics/colored.png}
 		\caption{\{A,D\} does not defend against C, so it is not an admissible extension.}
