@@ -1,0 +1,23 @@
+\documentclass[tikz,pgf]{standalone}
+
+\usetikzlibrary{arrows,automata,positioning}
+
+\begin{document}
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=1cm,semithick]
+	\tikzstyle{every state}=[rectangle,fill=none,draw=none]
+	%modified from Instantiating abstract argumentation with classical logic arguments: Postulates and properties by Nikos Gorogiannis; Anthony Hunter (Artificial Intelligence, 175 (2011) 1479–1497.)
+
+	\node[state] (conflict-free) {$cf(F)$};
+	\node[state] (admissible) [below left =  of  conflict-free] {$adm(F)$};
+	\node[state] (complete) [below left = of admissible] {$co(F)$};
+	\node[state] (preferred) [below left = of complete] {$prf(F)$};
+	\node[state] (grounded) [below right = of complete] {$gr(F)$};
+	\node[state] (stable) [below left = of preferred] {$st(F)$};
+
+	\path (admissible) edge (conflict-free);
+        \path (complete) edge (admissible);
+	\path (preferred) edge (complete);
+	\path (grounded) edge (complete);
+	\path (stable) edge (preferred);
+\end{tikzpicture}
+\end{document}
