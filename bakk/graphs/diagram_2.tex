@@ -3,23 +3,25 @@
 \usetikzlibrary{arrows,automata,positioning}
 
 \begin{document}
-\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=1cm,semithick]
-	\tikzstyle{every state}=[rectangle,fill=none,draw=none]
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=0.8cm,semithick,custom/.style={rectangle,draw=none}]
 	%modified from Instantiating abstract argumentation with classical logic arguments: Postulates and properties by Nikos Gorogiannis; Anthony Hunter (Artificial Intelligence, 175 (2011) 1479–1497.)
 
-	\node[state] (conflict-free) {$cf(F)$};
-	\node[state] (admissible) [below left =  of  conflict-free] {$adm(F)$};
-	\node[state] (complete) [below left = of admissible] {$co(F)$};
-	\node[state] (preferred) [below left = of complete] {$prf(F)$};
-	\node[state] (grounded) [below right = of complete] {$gr(F)$};
-	\node[state] (semi-stable) [below left = of preferred] {$sst(F)$};
-	\node[state] (stable) [below left = of semi-stable] {$st(F)$};
+	\node[custom] (conflict-free) {$cf(F)$};
+	\node[custom] (admissible) [below left =  of  conflict-free] {$adm(F)$};
+	\node[custom] (complete) [below left = of admissible] {$co(F)$};
+	\node[custom] (preferred) [below left = of complete] {$prf(F)$};
+	\node[custom] (semi-stable) [below left = of preferred] {$sst(F)$};
+	\node[custom] (stable) [below left = of semi-stable] {$st(F)$};
+	\node[custom] (ideal) [below right = of complete] {$id(F)$};
+	\node[custom] (grounded) [below right = of ideal] {$gr(F)$};
 
 	\path (admissible) edge (conflict-free);
         \path (complete) edge (admissible);
 	\path (preferred) edge (complete);
-	\path (grounded) edge (complete);
+	\path (ideal) edge (complete);
+	\path (grounded) edge (ideal);
 	\path (stable) edge (semi-stable);
 	\path (semi-stable) edge (preferred);
+	
 \end{tikzpicture}
 \end{document}
