@@ -253,18 +253,49 @@ That means that the following holds:
 
 %TODO provide example?
 
-We now know all the relations between extensions proposed by Dung. The only one of those extensions not to exist for every argumentation framework is the stable extension. A related, but less strict extension was definded by Caminada in [X]: the semi-stable extension.\hl
+We now know all the relations between extensions proposed by Dung. The only one of those extensions not to exist for every argumentation framework is the stable extension. A related, but less strict extension was definded by Caminada, Carnielli and Dunne in [X], the semi-stable extension. The following definition comes from Gorogiannis and Hunter [X]:\hl
 
-\textbf{Definition 10.} Let S be a complete extension. It is called a \emph{semi-stable extension} if for each $a\not\in S$ there exists an attack $(b,a)\in R$ where $b\in S$.\\ %same as stable, but for complete
+\textbf{Definition 10.} Let S be a complete extension of the argumentation framework $F=(A,R)$. It is called a \emph{semi-stable extension} if the set $S\cup\{a\in A\text{ | } S\text{ attacks }a\}$ is maximal wrt set inclusion.\\ %same as stable, but for complete
 The set of all semi-stable extensions of an argumentation framework $F$ is denoted $sst(F)$.\hl
 
-Since there always is a complete extension, there is always a semi-stable extension. One can also see that the following holds:
+Since there always is a complete extension, there is always a semi-stable extension. Caminada ... [X] also provide proof for the following relations: %TODO sentence
+
+%give proof yourself?
 
 \begin{align}
-	st(F)\subseteq sst(F)
+	st(F)\subset sst(F)\\
+	sst(F)\subset prf(F)
 \end{align}\cl
 
-%TODO provide jcl semi-stable by cacadu example with citation
+Caminada, Carnielli and Dunne [X] themselves provide the following two examples.
+\textbf{Example 10.} Let $F$ be an argumentation framework $(A,R)$ such that $A=\{a,b,c,d\}$ and $R=\{(a,a),(a,c),(b,c),(c,d)\}$\hl
+
+\FloatBarrier
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[scale=1.5]{graphs/ex4.pdf}
+		\caption{An argument framework $F$, where $st(F)\subset sst(F)$}
+	\end{figure}
+\FloatBarrier
+
+It can be computed that $adm(F)=\{\emptyset,\{b\},\{b,d\}\}$ and $co(F)=\{\{b,d\}\}$.\hl
+There is no extension within $adm(F)$, that attacks all arguments it doesn't contain. Therefore $st(F)=\emptyset$.\hl
+$\{b,d\}$ is the only complete extension, $\{b,d\}\cup \{c\}$ is maximal wrt set inclusion, so it is semi-stable. It follows that $sst(F)=\{\{b,d\}\}$.\hl
+As we can see (3.11) is satisfied.\hl
+
+\textbf{Example 11.} Let $F$ be an argumentation framework $(A,R)$ such that $A=\{a,b,c,d,e\}$ and $R=\{(a,b),(b,a),(b,c),(c,d),(d,e),(e,c)\}$\hl
+
+\FloatBarrier
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[width=\linewidth]{graphs/ex5.pdf}
+		\caption{An argument framework $F$, where $sst(F)\subset prf(F)$}
+	\end{figure}
+\FloatBarrier
+
+It can be computed that $co(F)=\{\emptyset,\{a\},\{b,d\}$ and $prf(F)=\{\{a\},\{b,d\}$.\hl
+The unions of complete extensions and all arguments they attack are $\emptyset$ regarding $\emptyset$, $\{a,b\}$ regarding $\{a\}$ and $\{a,b,c,d,e\}$ regarding $\{b,d\}$. The latter one is the only maximal set computed, so $sst(F)=\{\{b,d\}\}$.\hl
+As we can see (3.12) is satisfied.\cl
 
 %TODO provide textual flow to ideal extensions
 There also is an alternative semantic to the grounded extension. Ideal extension semantics as mentioned by Gorogiannis and Hunter [X] and Baronia and Giacomin [X] stem from Alferes, Dung and Peireira [X] and also produce a unique sceptical set, albeit a less strict one.\hl
