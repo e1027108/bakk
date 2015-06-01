@@ -180,23 +180,31 @@ The grounded extension of an argumentation framework $F$ is denoted $gr(F)$\cl
 
 \textbf{Example 7.} (Continuation of Example 6) Since there is only one complete extension $\{a_1,a_2\}$, it also is the grounded extension $gr(F)$.\cl
 
-\chapter{Observations} %change to something more clear
+\chapter{Relations and additional semantics} %change to something more clear?
 
-As we have seen in the previous section, often there may be overlaps between the different extension types. In this section we will discuss those relations between extension types, explore their features and provide additional extension semantics.\cl %evtl dann doch gleich oben reinziehen?
+As we have seen in the previous chapter, often there may be overlaps between the different extension types. In this chapter we look at the relations between extension types, explore their features and provide additional extension semantics.\cl %evtl dann doch gleich oben reinziehen?
+
+\FloatBarrier %TODO enhance with other extension types mentioned, TODO mention why it was changed from gorogiannis and hunter?, TODO write full extension name?
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[scale=1]{graphs/diagram_2.pdf}
+		\caption{Relations between extensions, an arrow from set X to set Y means $X\subseteq Y$}
+	\end{figure}
+\FloatBarrier
 
 \section{Relations between extension types}
+In this section we will examine relations between different types of extensions.\hl
 
-As per the definitions of the extension there are the following relations:
+As per the definitions of the extensions there are the following relations:
 \begin{align} %find structure that instead centers
 	adm(F)\subseteq cf(F)\\
 	st(F)\subseteq cf(F)\\
 	prf(F)\subseteq adm(F)\\
-	co(F)\subseteq adm(F)\\
-	gr(F)\subseteq co(F)
+	co(F)\subseteq adm(F)
 \end{align}\cl
 
 Additional to relations already given in their definitions, there are further relations to be mentioned.\hl
-Dung [X] provides the following Lemma regarding the relation between stable and preferred extensions.\hl %sourcing here
+Dung [X] provides the following Lemma regarding the relation between stable and preferred extensions.\cl %sourcing here
 
 \textbf{Lemma 1.}
 Each stable extension is a preferred extension, but not every preferred extension is a stable extension.
@@ -220,7 +228,7 @@ It can be computed that $cf(F)=adm(F)=\{\emptyset,\{b\},\{c\}\}$. So we only hav
 As can be seen, $\{b\}$ is the only conflict-free set that attacks all other arguments. Therefore $st(F)=\{\{b\}\}$.\hl
 We know that $\{b\}$ has to be a preferred extension, because of Lemma 1. $\{c\}$ attacks only it's attacker $b$, but not $a$. Therefore it is preferred and $prf(F)=\{\{b\},\{c\}\}$.\cl
 
-Further we look at the relation between preferred, complete and grounded extensions. Dung [X] provides and prooves a Theorem clarifying the following relationships.\hl %Satz ändern, is schirch
+Further we look at the relation between preferred, complete and grounded extensions. Dung [X] prooves the following relationships.\hl %Satz ändern, is schirch
 
 \textbf{Lemma 2.}
 Each preferred extension is a complete extension, but not vice versa.
@@ -242,7 +250,7 @@ Each preferred extension is a complete extension, but not vice versa.
 It can be computed that $adm(F)=\{\emptyset,\{a\},\{c\},\{d\},\{a,c\},\{a,d\},\{b,d\}\}$.\hl
 All admissible extensions except $\{c\}$ contain all the arguments they defend. Hence they are complete. $\{c\}$ defends $a$, which it doesn't contain and therefore is not complete. It follows that $co(F)=\{\emptyset,\{a\},\{d\},\{a,c\},\{a,d\},\{b,d\}\}$\hl
 Of the admissible extensions $\emptyset,\{a\}$ and $\{d\}$ are subsets of $\{a,d\}$, while $\{c\}$ is a subset of $\{a,c\}$. Those are not preferred extensions. We get $prf(F)=\{\{a,c\},\{a,d\},\{b,d\}\}$, since these sets are not subsets of each other.\hl
-As we can see (3.8) and (3.9) are both satisfied.\cl
+As we can see (3.7) and (3.8) are both satisfied.\cl
 
 \textbf{Lemma 3.}
 The grounded extension is the least (wrt set inclusion) complete extension.\hl
@@ -251,9 +259,11 @@ That means that the following holds:
 	gr(F)\subseteq co(F)
 \end{align}\cl
 
-%TODO provide example?
+\section{Additional semantics}
+In this section we will look at a few additional extension semantics and how they relate to the ones mentioned above.
 
-We now know all the relations between extensions proposed by Dung. The only one of those extensions not to exist for every argumentation framework is the stable extension. A related, but less strict extension was definded by Caminada, Carnielli and Dunne in [X], the semi-stable extension. The following definition comes from Gorogiannis and Hunter [X]:\hl
+\subsection{Semi-stable extensions}
+The only one of Dung's original extensions not to exist for every argumentation framework is the stable extension. A related, but less strict extension was definded by Caminada, Carnielli and Dunne in [X], the semi-stable extension. The following definition comes from Gorogiannis and Hunter [X]:\hl
 
 \textbf{Definition 10.} Let S be a complete extension of the argumentation framework $F=(A,R)$. It is called a \emph{semi-stable extension} if the set $S\cup\{a\in A\text{ | } S\text{ attacks }a\}$ is maximal wrt set inclusion.\\ %same as stable, but for complete
 The set of all semi-stable extensions of an argumentation framework $F$ is denoted $sst(F)$.\hl
@@ -267,7 +277,8 @@ Since there always is a complete extension, there is always a semi-stable extens
 	sst(F)\subset prf(F)
 \end{align}\cl
 
-Caminada, Carnielli and Dunne [X] themselves provide the following two examples.
+Caminada, Carnielli and Dunne [X] themselves provide the following two examples:\hl
+
 \textbf{Example 10.} Let $F$ be an argumentation framework $(A,R)$ such that $A=\{a,b,c,d\}$ and $R=\{(a,a),(a,c),(b,c),(c,d)\}$\hl
 
 \FloatBarrier
@@ -281,7 +292,7 @@ Caminada, Carnielli and Dunne [X] themselves provide the following two examples.
 It can be computed that $adm(F)=\{\emptyset,\{b\},\{b,d\}\}$ and $co(F)=\{\{b,d\}\}$.\hl
 There is no extension within $adm(F)$, that attacks all arguments it doesn't contain. Therefore $st(F)=\emptyset$.\hl
 $\{b,d\}$ is the only complete extension, $\{b,d\}\cup \{c\}$ is maximal wrt set inclusion, so it is semi-stable. It follows that $sst(F)=\{\{b,d\}\}$.\hl
-As we can see (3.11) is satisfied.\hl
+As we can see (3.10) is satisfied.\cl
 
 \textbf{Example 11.} Let $F$ be an argumentation framework $(A,R)$ such that $A=\{a,b,c,d,e\}$ and $R=\{(a,b),(b,a),(b,c),(c,d),(d,e),(e,c)\}$\hl
 
@@ -295,9 +306,9 @@ As we can see (3.11) is satisfied.\hl
 
 It can be computed that $co(F)=\{\emptyset,\{a\},\{b,d\}$ and $prf(F)=\{\{a\},\{b,d\}$.\hl
 The unions of complete extensions and all arguments they attack are $\emptyset$ regarding $\emptyset$, $\{a,b\}$ regarding $\{a\}$ and $\{a,b,c,d,e\}$ regarding $\{b,d\}$. The latter one is the only maximal set computed, so $sst(F)=\{\{b,d\}\}$.\hl
-As we can see (3.12) is satisfied.\cl
+As we can see (3.11) is satisfied.\cl
 
-%TODO provide textual flow to ideal extensions
+\subsection{Ideal extension}
 There also is an alternative semantic to the grounded extension. Ideal extension semantics as mentioned by Gorogiannis and Hunter [X] and Baronia and Giacomin [X] stem from Alferes, Dung and Peireira [X] and also produce a unique sceptical set, albeit a less strict one.\hl
 
  \textbf{Definition 11.} Let S be an admissible extension. It is called the \emph{ideal extension} if it is the maximal set (wrt set inclusion) contained in every preferred extension.\\
@@ -313,16 +324,6 @@ The ideal extension is a superset of the grounded extension. It always is a comp
 \end{align}\cl
 
 %TODO more extension types come here?
-
-We can now represent the relationships between all extension types mentioned in this thesis as the following graph.\hl
-
-\FloatBarrier %TODO enhance with other extension types mentioned, TODO mention why it was changed from gorogiannis and hunter?
-	\begin{figure}[!h]
-		\centering
-		\includegraphics[scale=1]{graphs/diagram_2.pdf}
-		\caption{Relations between extensions, an arrow from set X to set Y means $X\subseteq Y$}
-	\end{figure}
-\FloatBarrier
 
 \chapter{Implementation}
 
