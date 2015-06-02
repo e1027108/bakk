@@ -102,7 +102,7 @@ To work with argumentation frameworks, first we must define their properties. Th
 We can see that these arguments contain three attacks. Argument $b$ attacks argument $a_1$ and vice versa. Additionally argument $a_2$ attacks argument $b$.\hl
 This results in the framework $F=(A,R)$, where $A=\{a_1,a_2,b\}$ and $R=\{(b,a_1),(a_1,b),(a_2,b)\}$.\cl
 
-A big argument framework in might become hard to read with increasing set sizes, so it is also possible to represent every framework as a graph $(V,E)$, where $V=A$ and $E=R$. The graph of our example looks like this:
+It is also possible to represent every framework as a graph $(V,E)$, where $V=A$ and $E=R$. The graph representing the framework in our example looks like this:
 
 \FloatBarrier
 	\begin{figure}[!h]
@@ -112,7 +112,9 @@ A big argument framework in might become hard to read with increasing set sizes,
 	\end{figure}
 \FloatBarrier
 
-Depending on their properties, arguments can be grouped into \emph{extensions} in order to obtain additional knowledge about the framework.\cl
+\textbf{Remark 2.} From now on, when mentioning $A$ or $R$, we refer to the sets of an arbitrary, fixed argumentation framework $F=(A,R)$, except if otherwise stated.
+
+Depending on their properties, arguments can be grouped into \emph{extensions} in order to obtain additional knowledge about the framework.\cl %hier auch semantics benutzen
 
 \section{Conflict-free sets}
 
@@ -129,7 +131,7 @@ It follows that $cf(F)=\{\emptyset,\{a_1\},\{a_2\},\{b\},\{a_1,a_2\}\}$.\cl
 
 To be able to find a set of arguments that can't be reasoned against, it does not suffice if that set is only not in itself conflicted, but each argument should also not be an invitation for an easy counter-argument. Therefore it is necessary to only accept arguments into a set that don't hurt its defendability.\cl
 
-\textbf{Definition 4.} An argument $a$ is \emph{defended} by a set $S$, if for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\cl
+\textbf{Definition 4.} An argument $a$ is \emph{defended} by a set $S$, iff for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\cl
 
 \textbf{Definition 5.} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\\
 The set of all admissible extensions of an argumentation framework $F$ is denoted $adm(F)$.\cl
@@ -182,13 +184,13 @@ The grounded extension of an argumentation framework $F$ is denoted $gr(F)$\cl
 
 \chapter{Relations and additional semantics} %change to something more clear?
 
-As we have seen in the previous chapter, often there may be overlaps between the different extension types. In this chapter we look at the relations between extension types, explore their features and provide additional extension semantics.\cl %evtl dann doch gleich oben reinziehen?
+As we have seen in the previous chapter, often there may be overlaps between the different extension types. In this chapter we look at the relations between extension types, explore their features and provide additional extension semantics. In advance the relations between extension types, including additional extension types are shown in Figure 3.1.\cl %unsure about sentence reg. fig.
 
-\FloatBarrier %TODO enhance with other extension types mentioned, TODO mention why it was changed from gorogiannis and hunter?, TODO write full extension name?
+\FloatBarrier %TODO enhance with other extension types mentioned, TODO mention why it was changed from gorogiannis and hunter?
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[scale=1]{graphs/diagram_2.pdf}
-		\caption{Relations between extensions, an arrow from set X to set Y means $X\subseteq Y$}
+		\caption{Relations between sets of an argumentation framework. An arrow from X to Y means that, if a set is X it also is Y}
 	\end{figure}
 \FloatBarrier
 
@@ -256,7 +258,7 @@ As we can see (3.7) and (3.8) are both satisfied.\cl
 The grounded extension is the least (wrt set inclusion) complete extension.\hl
 That means that the following holds:
 \begin{align}
-	gr(F)\subseteq co(F)
+	gr(F)\in co(F)
 \end{align}\cl
 
 \section{Additional semantics}
@@ -265,12 +267,12 @@ In this section we will look at a few additional extension semantics and how the
 \subsection{Semi-stable extensions}
 The only one of Dung's original extensions not to exist for every argumentation framework is the stable extension. A related, but less strict extension was definded by Caminada, Carnielli and Dunne in [X], the semi-stable extension. The following definition comes from Gorogiannis and Hunter [X]:\hl
 
-\textbf{Definition 10.} Let S be a complete extension of the argumentation framework $F=(A,R)$. It is called a \emph{semi-stable extension} if the set $S\cup\{a\in A\text{ | } S\text{ attacks }a\}$ is maximal wrt set inclusion.\\ %same as stable, but for complete
+\textbf{Definition 10.} Let $S$ be a complete extension. It is called a \emph{semi-stable extension} if the set $S\cup\{a\in A\text{ | } S\text{ attacks }a\}$ is maximal wrt set inclusion.\\ %same as stable, but for complete
 The set of all semi-stable extensions of an argumentation framework $F$ is denoted $sst(F)$.\hl
 
 Since there always is a complete extension, there is always a semi-stable extension. Caminada ... [X] also provide proof for the following relations: %TODO sentence
 
-%give proof yourself?
+%provide proof here?
 
 \begin{align}
 	st(F)\subset sst(F)\\
@@ -309,19 +311,30 @@ The unions of complete extensions and all arguments they attack are $\emptyset$ 
 As we can see (3.11) is satisfied.\cl
 
 \subsection{Ideal extension}
-There also is an alternative semantic to the grounded extension. Ideal extension semantics as mentioned by Gorogiannis and Hunter [X] and Baronia and Giacomin [X] stem from Alferes, Dung and Peireira [X] and also produce a unique sceptical set, albeit a less strict one.\hl
+There also is an alternative semantic to the grounded extension. Ideal extension semantics as mentioned by Gorogiannis and Hunter [X] and Baronia and Giacomin [X] were introduced by Alferes, Dung and Peireira [X] and also produce a unique sceptical set, albeit a less strict one.\hl %zu viel?
 
- \textbf{Definition 11.} Let S be an admissible extension. It is called the \emph{ideal extension} if it is the maximal set (wrt set inclusion) contained in every preferred extension.\\
+\textbf{Definition 11.} Let $S$ be an admissible extension. It is called the \emph{ideal extension} if it is the maximal (wrt set inclusion) admissible extension contained in every preferred extension.\\ %umformulieren?
  The ideal extension of an argumentation framework $F$ is denoted $id(F)$.\hl
-
-%TODO provide example
 
 The ideal extension is a superset of the grounded extension. It always is a complete extension.
 
 \begin{align}
-	gr(F)\subseteq id(F)\\ %baronia and giacomin
-	id(F)\subseteq co(F) %gorogiannis and hunter
+	gr(F)\subset id(F)\\ %baronia and giacomin
+	id(F)\in co(F) %gorogiannis and hunter
 \end{align}\cl
+
+\textbf{Example 12.} Let $F$ be an argumentation $(A,R)$ such that $A=\{a,b,c,d,e\}$ and $R=\{(a,b),(b,d),(c,b),(d,a),(d,e),(e,c)\}$.\hl
+
+\FloatBarrier
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[scale=1.5]{graphs/ex6.pdf}
+		\caption{An argument framework $F$, where $gr(F)\subset id(F)$ and $id(F)\in co(F)$}
+	\end{figure}
+\FloatBarrier
+
+It can be computed that $prf(F)=\{\{c,d\}\}$ and $co(F)=\{\emptyset,\{c,d\}\}$.\hl
+It follows that $gr(F)=\emptyset$, while $id(F)=\{c,d\}$, so that (3.12) and (3.13) hold.\cl
 
 %TODO more extension types come here?
 

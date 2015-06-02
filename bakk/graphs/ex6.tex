@@ -1,0 +1,22 @@
+\documentclass[crop,tikz,pgf]{standalone}
+
+\usetikzlibrary{arrows,automata,positioning}
+
+\begin{document}
+\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm,semithick]
+	\tikzstyle{every state}=[fill=black,draw=none,text=white]
+
+	\node[state] (A) {$a$};
+	\node[state] (B) [right of = A] {$b$};
+	\node[state] (C) [right of = B] {$c$};
+	\node[state] (D) [below right = 1.3 and 0.4 of A] {$d$};
+	\node[state] (E) [below left = 1.3 and 0.4 of C] {$e$};
+
+	\path (A) edge (B);
+        \path (B) edge (D);
+        \path (C) edge (B);
+        \path (D) edge (A);
+        \path (D) edge (E);
+        \path (E) edge (C);
+\end{tikzpicture}
+\end{document}
