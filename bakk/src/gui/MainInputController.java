@@ -157,6 +157,14 @@ public class MainInputController {
 					new Line('c', "", "b")
 		}));
 		
+		exampleSet.add(new Example("Thesis Example 9",
+				new Line[] {
+					new Line('a', "", "b"),
+					new Line('b', "", "a"),
+					new Line('c', "", "bd"),
+					new Line('d', "", "c")
+		}));
+		
 		exampleSet.add(new Example("Thesis Figure 4.1",
 				new Line[] {
 					new Line('a', "", "b"),
