@@ -132,8 +132,8 @@ public class MainInputController {
 		
 		exampleSet.add(new Example("DUNG Example 1",
 				new Line[] {
-					new Line('a', "I: My government can not negotiate with your government because your government doesn’t even recognize my government.", "b"),
-					new Line('b', "A: Your government doesn’t recognize my government either.", "a"),
+					new Line('a', "I: My government can not negotiate with your government because your government doesnï¿½t even recognize my government.", "b"),
+					new Line('b', "A: Your government doesn't recognize my government either.", "a"),
 					new Line('c', "I: But your government is a terrorist government.", "b")
 		}));
 		
