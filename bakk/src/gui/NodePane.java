@@ -26,6 +26,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.TextAlignment;
 import logic.Argument;
+import logic.Attack;
 import logic.Framework;
 
 public class NodePane extends AnchorPane{
@@ -68,16 +69,12 @@ public class NodePane extends AnchorPane{
 		for(Argument a: framework.getArguments()){
 			graph.addVertex(String.valueOf(a.getName()));
 		}
+		
+		for(Attack att: framework.getAttacks()){
+			String attacked = String.valueOf(att.getAttacked().getName()).toUpperCase();
+			String attacker = String.valueOf(att.getAttacker().getName()).toUpperCase();
 
-		for(Argument a: framework.getArguments()){
-			String argumentName = String.valueOf(a.getName());
-			String attacks = a.getAttacks();
-
-			for(int i = 0; i < attacks.length(); i++){
-				String attacked = String.valueOf(attacks.charAt(i)).toUpperCase();
-
-				graph.addEdge(argumentName + attacked, new Pair<String>(argumentName, attacked), DIRECTED);
-			}
+			graph.addEdge(attacker + attacked, new Pair<String>(attacker, attacked), DIRECTED);
 		}
 	}
 
