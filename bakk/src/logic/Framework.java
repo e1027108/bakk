@@ -17,7 +17,7 @@ public class Framework {
 	private ArrayList<Extension> previousConflictFreeSets; //a stored, previously computed set of conflict-free sets
 	private ArrayList<Extension> previousAdmissibleSets; //a stored, previously computed set of admissible extensions
 	private ArrayList<Extension> previousCompleteExtensions; //a stored, previously computed set of complete extensions
-
+	private String notification;
 	
 	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor) {
 		this.arguments = arguments;
@@ -85,9 +85,74 @@ public class Framework {
 		return formatted;
 	}
 
-	public ArrayList<Extension> getAdmissibleSets(boolean selected) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Extension> getAdmissibleSets(boolean usePrevious) {
+		ArrayList<Extension> cf;
+		ArrayList<Extension> admissible = new ArrayList<Extension>();
+
+		if(!usePrevious || (previousConflictFreeSets == null)){
+			interactor.addToCommands(new Command("Computing conflict-free sets to compute admissible extensions!", null));
+			cf = getConflictFreeSets();
+		}
+		else{
+			cf = previousConflictFreeSets;
+			notification = "Using previously computed conflict-free sets to compute admissible extensions: ";
+
+			if(cf.size() == 0){
+				notification += "There are no conflict-free sets!";
+			}
+			else{
+				notification += formatExtensions(cf);
+			}
+
+			interactor.addToCommands(new Command(notification, null));
+		}
+
+		if(invalidityCheck(cf, "conflict-free sets", "admissible extensions")){
+			return null;
+		}
+
+		for(Extension e: cf){
+			if(e.isAdmissible(true)){
+				admissible.add(e);
+			}
+		}
+
+		if(admissible.size() > 0){
+			notification = "The admissible extensions are: "; 
+			notification += formatExtensions(admissible);
+		}
+		else{
+			notification = "There are no admissible extensions!";
+		}
+		interactor.addToCommands(new Command(notification, null));
+
+		previousAdmissibleSets = new ArrayList<Extension>();
+		previousAdmissibleSets.addAll(admissible);
+
+		return admissible;
+	}
+	
+	/**
+	 * checks if the list can be used for further computation
+	 * @details the set is checked if it is empty or even null
+	 * 			making it unfit to be used in further computations
+	 * @param list the list to be checked
+	 * @param cause cause of the possible problem
+	 * @param effect what is not computable because of a problem
+	 * @return if there is a problem with the set for further computation
+	 */
+	public boolean invalidityCheck(ArrayList<Extension> list, String cause, String effect){
+		if(list == null || list.isEmpty()){ //shouldn't be possible
+			String are = ", there are no ";
+
+			if(effect.contains("grounded")){
+				are = are.replace("are", "is");
+			}
+
+			interactor.addToCommands(new Command("Since there are no " + cause + are + effect + "!", null));
+			return true;
+		}
+		return false;
 	}
 
 	public ArrayList<Extension> getCompleteExtensions(boolean selected) {
@@ -177,6 +242,16 @@ public class Framework {
 		return output;
 	}
 
+	public String formatArgumentList(ArrayList<Argument> input) {
+		String argNames = "";
+		
+		for(Argument a: input){
+			argNames += a.getName();
+		}
+		
+		return formatNameList(argNames);
+	}
+	
 	/**
 	 * stores a message at the end of the queue of the Interactor
 	 * @param message message to be stored by Interactor
