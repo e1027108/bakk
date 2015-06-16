@@ -17,11 +17,11 @@ public class SingleInstruction {
 	/**
 	 * Creates a SingleInstruction object, containing name and color of a graph's element
 	 * @param name the name of the element
-	 * @param green the future color of the element in the graph
+	 * @param color the future color of the element in the graph
 	 */
-	public SingleInstruction(String name, Color green){
+	public SingleInstruction(String name, Color color){
 		this.name = name;
-		this.color = green;
+		this.color = color;
 		
 		switch(this.name.length()){
 			case 1:
@@ -34,6 +34,12 @@ public class SingleInstruction {
 				type = Type.INVALID;
 				break;
 		}
+	}
+	
+	public SingleInstruction(char name, Color color){
+		this.name = String.valueOf(name);
+		this.color = color;
+		type = Type.NODE;
 	}
 	
 	/**

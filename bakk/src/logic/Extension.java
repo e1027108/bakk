@@ -5,6 +5,7 @@ import interactor.GraphInstruction;
 import interactor.SingleInstruction;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javafx.scene.paint.Color;
 import edu.uci.ics.jung.graph.util.Pair;
@@ -13,13 +14,36 @@ public class Extension {
 
 	private ArrayList<Argument> arguments; //arguments of extension
 	private Framework framework; //framework from which the extension is derived
-	private ArrayList<Attack> attacks;
+	private ArrayList<Attack> outgoingAttacks;
+	private ArrayList<Argument> extensionAttacks;
+	private ArrayList<Attack> incomingAttacks;
 	
 	public Extension(ArrayList<Argument> arguments, Framework framework) {
 		this.arguments = new ArrayList<Argument>();
 		this.framework = framework;
 		this.arguments.addAll(arguments);
-		this.attacks = framework.getAttacks();
+		
+		outgoingAttacks = new ArrayList<Attack>();
+		extensionAttacks = new ArrayList<Argument>();
+		incomingAttacks = new ArrayList<Attack>();
+		readAttacks(framework.getAttacks());
+	}
+
+	private void readAttacks(ArrayList<Attack> attacks) {
+		for(Attack a: attacks){
+			Argument attacker = a.getAttacker();
+			Argument attacked = a.getAttacked();
+			
+			if(arguments.contains(a.getAttacked())){
+				incomingAttacks.add(a);
+			}
+			if(arguments.contains(attacker)){
+				outgoingAttacks.add(a);
+				if(!extensionAttacks.contains(attacker)){
+					extensionAttacks.add(attacked);
+				}
+			}
+		}
 	}
 
 	public boolean isConflictFree(boolean write) {
@@ -58,8 +82,87 @@ public class Extension {
 		}
 		return true;
 	}
+	
+	public boolean isAdmissible(boolean write) {
+		ArrayList<Attack> defeated = new ArrayList<Attack>();
+		ArrayList<Attack> undefeated = new ArrayList<Attack>();
+		GraphInstruction highlight = toInstruction(Color.GREEN);
+		//ArrayList<SingleInstruction> defenceInstructions = new ArrayList<SingleInstruction>();
+		ArrayList<SingleInstruction> attackerInstructions = new ArrayList<SingleInstruction>();
+		ArrayList<SingleInstruction> undefeatedInstructions = new ArrayList<SingleInstruction>();
+		
+		for(Attack inc: incomingAttacks){			
+			if(extensionAttacks.contains(inc.getAttacker())){
+				defeated.add(inc);
+				/*for(Attack out: outgoingAttacks){
+					if(inc.equals(out.getAttacked())){
+						defenceInstructions.add(new SingleInstruction(""+out.getAttacker().getName()+
+								out.getAttacked().getName(),Color.GREEN));
+					}
+				}*/
+			}
+			else{
+				undefeated.add(inc);
+				attackerInstructions.add(new SingleInstruction(inc.getAttacker().getName(),Color.RED));
+				undefeatedInstructions.add(new SingleInstruction("" + inc.getAttacker().getName() +
+						inc.getAttacked().getName(),Color.RED));
+			}
+		}
+		
+		highlight.setEdgeInstructions(undefeatedInstructions);
+		highlight.getNodeInstructions().addAll(attackerInstructions);
+		
+		if(undefeated.isEmpty()){
+			if(write){
+				framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", highlight));
+			}
+			return true;
+		}
+		else{
+			if(write){
+				framework.addToInteractor(new Command(format() + " does not defend against " + framework.formatAttackList(undefeated,1) + ", so it is not an admissible extension.", highlight));
+			}
+			return false;
+		}
+	}
 
-	private GraphInstruction toInstruction(Color color) {
+	public boolean isPreferred(ArrayList<Extension> admissible) {
+		for(Extension e: admissible){
+			if(e.equals(this)){
+				continue;
+			}
+			else if(isSubsetOf(e)){
+				String format = format();
+				GraphInstruction instruction = e.toInstruction(Color.GREEN);
+
+				for(Argument a: e.getArguments()){
+					if(!getArguments().contains(a)){
+						instruction.getNodeInstructions().add(new SingleInstruction(""+a.getName(),Color.BLUE));
+					}
+				}
+
+				framework.addToInteractor(new Command("Since " + format + " is a subset of " + e.format() + ", " + format + " is not preferred.", instruction));
+				return false;
+			}
+		}
+
+		framework.addToInteractor(new Command(format() + " is not the subset of another admissible extension, so it is a preferred extension.", toInstruction(Color.GREEN)));
+		return true;
+	}
+	
+	private boolean isSubsetOf(Extension e) {
+		ArrayList<Argument> extArg = e.getArguments();
+
+		for(Argument a: arguments){
+			if(!extArg.contains(a)){
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public GraphInstruction toInstruction(Color color) {
 		ArrayList<SingleInstruction> nodeInstructions = new ArrayList<SingleInstruction>();
 
 		for(Argument a: arguments){
@@ -69,7 +172,7 @@ public class Extension {
 
 		return new GraphInstruction(nodeInstructions, null);
 	}
-
+	
 	public String format() {
 		String formatted = "{";
 
@@ -85,72 +188,9 @@ public class Extension {
 
 		return formatted;
 	}
-
-	/**
-	 * checks if a set is admissible
-	 * @param whether the results are to be handed to the Interactor
-	 * @return if all the arguments are defended
-	 */ //TODO is it better to if(write) everything to do with the interactor?
-	public boolean isAdmissible(boolean write){
-		if(!isConflictFree(false)){
-			if(write){
-				framework.addToInteractor(new Command(format() + " is not a conflict-free set, so it is not an admissible extension.", toInstruction(Color.RED)));
-			}
-			return false;
-		}
-		else{
-			GraphInstruction highlight = toInstruction(Color.GREEN);
-			highlight.setEdgeInstructions(new ArrayList<SingleInstruction>());
-			ArrayList<SingleInstruction> relevantDefenses = new ArrayList<SingleInstruction>();
-			ArrayList<SingleInstruction> relevantAttackers = new ArrayList<SingleInstruction>();
-			
-			ArrayList<Argument> attackers = new ArrayList<Argument>();
-			ArrayList<Argument> undefended = new ArrayList<Argument>();
-			
-			for(Attack att: attacks){
-				if(arguments.contains(att.getAttacked())){
-					attackers.add(att.getAttacker());
-				}
-			}
-			
-			undefended.addAll(attackers);
-			
-			for(Attack att: attacks){
-				if(attackers.contains(att.getAttacked()) && arguments.contains(att.getAttacker())){
-					undefended.remove(att.getAttacked());
-					relevantDefenses.add(new SingleInstruction(""+att.getAttacker().getName()+att.getAttacked().getName(), Color.GREEN));
-					relevantAttackers.add(new SingleInstruction(""+att.getAttacked().getName(),Color.RED));
-				}
-				/*else if(attackers.contains(att.getAttacker()) && arguments.contains(att.getAttacked())){
-					String attName = "" + att.getAttacker().getName();
-					highlight.getNodeInstructions().add(new SingleInstruction(attName, Color.RED));			
-					highlight.getEdgeInstructions().add(new SingleInstruction(attName+att.getAttacked().getName(), Color.RED));
-				}*/ //TODO uncomment if attacks are always to be shown, comment for-loop below then
-			}
-			
-			for(Attack att: attacks){
-				if(undefended.contains(att.getAttacker())){
-					String attName = "" + att.getAttacker().getName();
-					highlight.getNodeInstructions().add(new SingleInstruction(attName, Color.RED));					
-					highlight.getEdgeInstructions().add(new SingleInstruction(attName+att.getAttacked().getName(), Color.RED));
-				}
-			}
-			
-			if(undefended.isEmpty()){
-				highlight.getEdgeInstructions().addAll(relevantDefenses);
-				highlight.getNodeInstructions().addAll(relevantAttackers);
-				if(write){
-					framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", highlight));
-				}
-				return true;
-			}
-			else{
-				if(write){
-					framework.addToInteractor(new Command(format() + " does not defend against " + framework.formatArgumentList(undefended) + ", so it is not an admissible extension.", highlight));
-				}
-				return false;
-			}
-		}
+	
+	public ArrayList<Argument> getArguments() {
+		return arguments;
 	}
 
 }

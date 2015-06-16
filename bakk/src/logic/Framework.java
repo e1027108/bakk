@@ -118,7 +118,7 @@ public class Framework {
 		}
 
 		if(admissible.size() > 0){
-			notification = "The admissible extensions are: "; 
+			notification = "The admissible extensions are: ";
 			notification += formatExtensions(admissible);
 		}
 		else{
@@ -155,13 +155,8 @@ public class Framework {
 		return false;
 	}
 
-	public ArrayList<Extension> getCompleteExtensions(boolean selected) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ArrayList<Extension> getPreferredExtensions(boolean selected) {
-		// TODO Auto-generated method stub
+	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious) {
+		
 		return null;
 	}
 
@@ -175,6 +170,11 @@ public class Framework {
 		return null;
 	}
 
+	public ArrayList<Extension> getPreferredExtensions(boolean selected) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public GraphInstruction getInstructionFromString(String item) {
 		GraphInstruction instruction = new GraphInstruction(new ArrayList<SingleInstruction>(), null);		
 		item = item.replace("{", "");
@@ -218,6 +218,16 @@ public class Framework {
 		
 		return argumentAttacks;
 	}
+	
+	public ArrayList<Argument> getAttackedBy(char attacker) {
+		ArrayList<Argument> attacked = new ArrayList<Argument>();
+		
+		for(Attack att: getAttacks(attacker)){
+			attacked.add(att.getAttacked());
+		}
+		
+		return attacked;
+	}
 
 	/**
 	 * formats a string of argument names to be a readable list in a sentence
@@ -252,6 +262,22 @@ public class Framework {
 		return formatNameList(argNames);
 	}
 	
+	public String formatAttackList(ArrayList<Attack> input,int pos) {
+		String argNames = "";
+
+		for(Attack a: input){
+			if(pos == 1){
+				argNames += a.getAttacker().getName();
+			}
+			else if(pos == 2){
+				argNames += a.getAttacked().getName();
+			}
+			//TODO other numbers not defined, add to doc
+		}
+		
+		return formatNameList(argNames);
+	}
+	
 	/**
 	 * stores a message at the end of the queue of the Interactor
 	 * @param message message to be stored by Interactor
@@ -259,5 +285,6 @@ public class Framework {
 	public void addToInteractor(Command command){
 		interactor.addToCommands(command);
 	}
+
 
 }
