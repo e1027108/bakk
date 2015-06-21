@@ -1,4 +1,4 @@
-package logic;
+package logic.old;
 
 import interactor.Command;
 import interactor.GraphInstruction;

@@ -1,4 +1,4 @@
-package logic;
+package logic.old;
 
 /**
  * The Argument class describes an argument in an abstract argumentation framework

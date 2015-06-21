@@ -1,7 +1,5 @@
 package logic;
 
-import java.util.ArrayList;
-
 public class Argument {
 	private String statement; //statement describing the argument
 	private char name; //arguments the argument attacks

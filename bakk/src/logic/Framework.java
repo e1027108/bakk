@@ -279,7 +279,7 @@ public class Framework {
 		return stable;
 	}
 
-	public Extension getGroundedExtension(boolean usePrevious) { //TODO doesn't works
+	public Extension getGroundedExtension(boolean usePrevious) {
 		ArrayList<Extension> co;
 		ArrayList<Argument> grounded = new ArrayList<Argument>();
 
@@ -293,7 +293,7 @@ public class Framework {
 			notification = "Using previously computed complete extensions to compute the grounded extension: ";
 
 			if(co.size() == 0){
-				notification += "There are no complete extensions!"; //TODO remove these impossible parts?
+				notification += "There are no complete extensions!";
 			}
 			else{
 				notification += formatExtensions(co);
@@ -350,7 +350,7 @@ public class Framework {
 							". Therefore our new candidate is " + tmp.format(), highlight));
 				}
 				else{
-					interactor.addToCommands(new Command("Since " + eFormat + " contains all the arguments of " + tmp.format() + " our candidate doesn't change.", highlight));
+					interactor.addToCommands(new Command("Since " + eFormat + " contains all the arguments of " + tmp.format() + ", our candidate doesn't change.", highlight));
 				}
 
 				if(grounded.isEmpty()){
@@ -463,7 +463,9 @@ public class Framework {
 			else if(pos == 2){
 				argNames += a.getAttacked().getName();
 			}
-			//TODO other numbers not defined, add to doc
+			else{
+				continue;
+			}
 		}
 		
 		return formatNameList(argNames);

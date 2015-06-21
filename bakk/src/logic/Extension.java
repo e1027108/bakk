@@ -5,10 +5,8 @@ import interactor.GraphInstruction;
 import interactor.SingleInstruction;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import javafx.scene.paint.Color;
-import edu.uci.ics.jung.graph.util.Pair;
 
 public class Extension {
 
@@ -17,7 +15,7 @@ public class Extension {
 	private ArrayList<Attack> outgoingAttacks;
 	private ArrayList<Argument> extensionAttacks;
 	private ArrayList<Attack> incomingAttacks;
-	private boolean cf, adm, co;
+	private boolean cf, adm;
 
 	public Extension(ArrayList<Argument> arguments, Framework framework) {
 		this.arguments = new ArrayList<Argument>();
@@ -205,7 +203,7 @@ public class Extension {
 		}
 	}
 
-	public boolean isComplete(boolean write){ //TODO re-write, because it doesn't work
+	public boolean isComplete(boolean write){
 		ArrayList<Argument> outside = new ArrayList<Argument>();
 		ArrayList<Argument> uselessDefences = new ArrayList<Argument>();
 		GraphInstruction highlight = toInstruction(Color.GREEN);
@@ -261,13 +259,12 @@ public class Extension {
 				framework.addToInteractor(new Command(format() + " contains all the arguments it defends and therefore is a complete extension.", highlight));
 			}
 
-			co = true;
 			return true;
 		}
 		else{
 			if(write){
 				highlight.getNodeInstructions().addAll(nodeIns);
-				
+
 				if(highlight.getEdgeInstructions() != null){
 					highlight.getEdgeInstructions().addAll(edgeIns);
 				}
