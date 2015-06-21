@@ -154,25 +154,216 @@ public class Framework {
 		}
 		return false;
 	}
-
+	
 	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious) {
+		ArrayList<Extension> adm;
+		ArrayList<Extension> complete = new ArrayList<Extension>();
+
+		if(!usePrevious || (previousAdmissibleSets == null)){
+			interactor.addToCommands(new Command("Computing admissible extensions to compute complete extensions!", null));
+			adm = getAdmissibleSets(usePrevious);
+		}
+		else{
+			adm = previousAdmissibleSets;
+			notification = "Using previously computed admissible extensions to compute admissible extensions: ";
+
+			if(adm.size() == 0){
+				notification += "There are no admissible sets!";
+			}
+			else{
+				notification += formatExtensions(adm);
+			}
+
+			interactor.addToCommands(new Command(notification, null));
+		}
+
+		if(invalidityCheck(adm, "admissible extensions", "complete extensions")){
+			return null;
+		}
+
+		for(Extension e: adm){
+			if(e.isComplete(true)){
+				complete.add(e);
+			}
+		}
+
+		if(complete.size() > 0){
+			notification = "The complete extensions are: ";
+			notification += formatExtensions(complete);
+		}
+		else{
+			notification = "There are no complete extensions!";
+		}
 		
-		return null;
+		interactor.addToCommands(new Command(notification, null));
+
+		previousCompleteExtensions = new ArrayList<Extension>();
+		previousCompleteExtensions.addAll(complete);
+
+		return complete;
+	}
+	
+	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious) {
+		ArrayList<Extension> adm;
+		ArrayList<Extension> preferred = new ArrayList<Extension>();
+
+		if(!usePrevious || (previousAdmissibleSets == null)){
+			interactor.addToCommands(new Command("Computing admissible extensions to compute preferred extensions!", null));
+			adm = getAdmissibleSets(usePrevious);
+		}
+		else{
+			adm = previousAdmissibleSets;
+
+			notification = "Using previously computed admissible extensions to compute preferred extensions: ";
+
+			if(adm.size() == 0){
+				notification += "There are no admissible extensions!";
+			}
+			else{
+				notification += formatExtensions(adm);
+			}
+
+			interactor.addToCommands(new Command(notification, null));
+		}
+
+		if(invalidityCheck(adm, "admissible extensions", "preferred extensions")){
+			return null;
+		}
+
+		for(Extension e: adm){
+			if(e.isPreferred(adm)){
+				preferred.add(e);
+			}
+		}
+
+		interactor.addToCommands(new Command("The preferred extensions are: " + formatExtensions(preferred), null));
+
+		return preferred;
 	}
 
-	public ArrayList<Extension> getStableExtensions(boolean selected) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Extension> getStableExtensions(boolean usePrevious) {
+		ArrayList<Extension> cf;
+		ArrayList<Extension> stable = new ArrayList<Extension>();
+
+		if(!usePrevious || (previousConflictFreeSets == null)){
+			interactor.addToCommands(new Command("Computing conflict-free sets to compute stable extensions!", null));
+			cf = getConflictFreeSets();
+		}
+		else{
+			cf = previousConflictFreeSets;
+
+			notification = "Using previously computed conflict-free sets to compute stable extensions: ";
+
+			if(cf.size() == 0){
+				notification += "There are no conflict-free sets!";
+			}
+			else{
+				notification += formatExtensions(cf);
+			}
+
+			interactor.addToCommands(new Command(notification, null));
+		}
+
+		if(invalidityCheck(cf, "conflict-free sets", "stable extensions")){
+			return null;
+		}
+
+		for(Extension e: cf){
+			if(e.isStable()){
+				stable.add(e);
+			}
+		}
+
+		interactor.addToCommands(new Command("The stable extensions are: " + formatExtensions(stable), null));
+
+		return stable;
 	}
 
-	public Extension getGroundedExtension(boolean selected) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Extension getGroundedExtension(boolean usePrevious) { //TODO doesn't works
+		ArrayList<Extension> co;
+		ArrayList<Argument> grounded = new ArrayList<Argument>();
 
-	public ArrayList<Extension> getPreferredExtensions(boolean selected) {
-		// TODO Auto-generated method stub
-		return null;
+		if(!usePrevious || (previousCompleteExtensions == null)){
+			interactor.addToCommands(new Command("Computing complete extensions to compute the grounded extension!", null));
+			co = getCompleteExtensions(usePrevious);
+		}
+		else{
+			co = previousCompleteExtensions;
+
+			notification = "Using previously computed complete extensions to compute the grounded extension: ";
+
+			if(co.size() == 0){
+				notification += "There are no complete extensions!"; //TODO remove these impossible parts?
+			}
+			else{
+				notification += formatExtensions(co);
+			}
+
+			interactor.addToCommands(new Command(notification, null));
+		}
+
+		if(invalidityCheck(co, "complete extensions", "grounded extension")){
+			return null;
+		}
+		
+		if(co.size() == 1){
+			interactor.addToCommands(new Command("The only complete extension " + co.get(0).format() + " is the grounded extension.", co.get(0).toInstruction(Color.GREEN)));
+			return co.get(0);
+		}
+
+		for(Extension e: co){
+			if(e.getArguments().size() == 0){
+				interactor.addToCommands(new Command("Since there is a complete extension {}, the grounded extension is {}", null));
+				return new Extension(grounded, this);
+			}
+		}
+
+		for(Extension e: co){
+			String eFormat = e.format();
+
+			if(grounded.isEmpty()){ //if no elements in grounded, e is first extension
+				grounded.addAll(e.getArguments());
+				interactor.addToCommands(new Command("The extension " + eFormat + " is the first candidate for grounded extension.", e.toInstruction(Color.GREEN)));
+			}
+			else{ //else check for common elements in extension
+				ArrayList<Argument> missing = new ArrayList<Argument>();
+				String missingString = "";
+
+				GraphInstruction highlight = new GraphInstruction(new ArrayList<SingleInstruction>(), new ArrayList<SingleInstruction>());
+
+				for(Argument a: grounded){
+					String aName = String.valueOf(a.getName());
+					if(!e.getArguments().contains(a)){
+						missingString += aName;
+						missing.add(a);
+						highlight.getNodeInstructions().add(new SingleInstruction(aName,Color.BLUE));
+					}
+				}
+
+				grounded.retainAll(e.getArguments());
+
+				Extension tmp = new Extension(grounded, this);
+				highlight.getNodeInstructions().addAll(tmp.toInstruction(Color.GREEN).getNodeInstructions());
+
+				if(missing.size() > 0){
+					interactor.addToCommands(new Command(eFormat + " doesn't contain the argument(s) " + formatNameList(missingString) + 
+							". Therefore our new candidate is " + tmp.format(), highlight));
+				}
+				else{
+					interactor.addToCommands(new Command("Since " + eFormat + " contains all the arguments of " + tmp.format() + " our candidate doesn't change.", highlight));
+				}
+
+				if(grounded.isEmpty()){
+					break;
+				}
+			}
+		}
+
+		Extension groundedExtension = new Extension(grounded,this);
+
+		interactor.addToCommands(new Command("The grounded extension is: " + groundedExtension.format(), groundedExtension.toInstruction(Color.GREEN)));
+
+		return groundedExtension;
 	}
 	
 	public GraphInstruction getInstructionFromString(String item) {

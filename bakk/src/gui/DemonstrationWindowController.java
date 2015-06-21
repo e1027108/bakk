@@ -186,6 +186,7 @@ public class DemonstrationWindowController {
 			//printExtensions(resultSet);
 			setUI();
 		} catch (Exception e/*InvalidInputException e*/) { //TODO implement exception in new framework
+			//e.printStackTrace();
 			interactor.emptyQueue();
 			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
 			explanationArea.setStyle("-fx-text-fill: red;");
