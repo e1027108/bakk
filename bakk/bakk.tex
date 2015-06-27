@@ -15,11 +15,15 @@
 \usepackage{nag}       % Issues warnings when best practices in writing LaTeX documents are violated.
 \usepackage{hyperref}  % Enables cross linking in the electronic document version. This package has to be included second to last.
 \usepackage[acronym,toc]{glossaries} % Enables the generation of glossaries and lists fo acronyms. This package has to be included last.
-
 \usepackage{tikz}
 \usepackage{placeins}
 \usepackage{amsmath}
 \usepackage[nounderscore]{syntax}
+\usepackage[style=ieee, backend=bibtex]{biblatex}
+\usepackage{csquotes}
+
+\AtBeginDocument{\renewcommand{\bibname}{References}} % rename bibliography to references
+\bibliography{bakk}
 
 \newcommand{\hl}{\par\vspace{6pt}} %used within the same context, as new paragraph
 \newcommand{\cl}{\par\vspace{12pt}} %used between paragraphs with the same topic, but not textually flowing into each other
@@ -30,7 +34,7 @@
 % Use an optional index
 \makeindex
 % Use an optional glossary
-\makeglossaries
+%\makeglossaries
 %\glstocfalse % remove the glossaries from the table of contents
 
 % Set persons with 4 arguments:
@@ -66,7 +70,7 @@ I want to thank my family for supporting me and Dr. Ferm{\"u}ller for guiding me
 
 \begin{abstract*}
 This bachelor thesis explains the concept of abstract argumentation frameworks, its properties as well as semantics to compute sets of arguments, so-called extensions. It further analyzes the relations between different types of extensions.\hl %so-called?
-The main part of this thesis is the the developement of a JAVA application which is capable of creating custom argumentation frameworks, their representation as argumentation graphs and the computation of their extensions. The application is created in a way such that students can study argumentation frameworks in an easily digestable way including step-by-step explanations of how the extensions are computed accompanied by colored highlighting of important aspects of the frameworks' graphs.\\ %TODO work in progress
+The main part of this thesis is the the developement of a JAVA application which is capable of creating custom argumentation frameworks, their representation as argumentation graphs and the computation of their extensions. The application is created in a way such that students can study argumentation frameworks in an easily digestable way including step-by-step explanations of how the extensions are computed accompanied by coloured highlighting of important aspects of the frameworks' graphs.\\ %TODO work in progress
 \end{abstract*}
 
 % Select the language of the thesis, e.g., english or naustrian.
@@ -79,15 +83,21 @@ The main part of this thesis is the the developement of a JAVA application which
 \mainmatter
 
 \chapter{Introduction}
-Introduction here.
+Most humans argue daily. A argument is made followed by a counter-argument and so on until there is a resolution. This way decisions can be made that satisfy the needs of the arguing parties, be it in a large group of people or a single person weighing all the information they have, the decision depending on the arguments that ``win''.\hl
+In 1995 Dung, in \cite{Dung}, introduced \emph{argumentation frameworks} as a basic theory to implement human argumentation mechanisms on computers.\hl
+In this bachelor thesis we will provide information on Dung's original concept and explore relations between different semantics of argumentation frameworks. Further we will take a look of additional semantics provided by other authors. Finally we will introduce a computer program written alongside this thesis, which demonstrates how argumentation frameworks can be represented and their semantics computed.\hl %Add chapter regarding nonmonotonic reasoning, logic programming and n-person games?
 
 \chapter{Definitions}
 
-To work with argumentation frameworks, first we must define their properties. This section will lay out the basic structure of argumentation frameworks as well as provide extension types that can be used for further analysis.\cl
+To work with argumentation frameworks, first we must define their properties. In this section we will introduce the basic semantics for argumentation frameworks. If not otherwise mentioned the following definitions were proposed by Dung \cite{Dung}.\cl
 
 \section{Argumentation Frameworks}
 
+First we define argumentation frameworks as pairs of arguments and attack relations.\hl
+
 \textbf{Definition 1.} An \emph{argumentation framework} $F$ is a pair $(A,R)$, where $A$ is a set of arguments and $R$ is a set of attack relations.\cl
+
+The aforementioned attacks are defined as follows.\hl
 
 \textbf{Definition 2.} \emph{Attack relations} $R\subseteq A\times A$ represent attacks as pairs $(a,b)$, where $a,b\in A$ means $a$ \emph{attacks} $b$.\cl
 
@@ -95,9 +105,9 @@ To work with argumentation frameworks, first we must define their properties. Th
 
 \textbf{Example 1.} Imagine we have 3 arguments $a_1$, $a_2$, and $b$.\hl
 			\begin{tabular}{p{0.5cm}p{0.5cm}l}
-			& $a_1$ & = ''Blue is the most beautiful of all colors.''\\
+			& $a_1$ & = ''Blue is the most beautiful of all colours.''\\
 			& $b$ & = ''No, black is much more beautiful!''\\
-			& $a_2$ & = ''That's wrong, black isn't even a color.''
+			& $a_2$ & = ''That's wrong, black isn't even a colour.''
 			\end{tabular}\hl
 We can see that these arguments contain three attacks. Argument $b$ attacks argument $a_1$ and vice versa. Additionally argument $a_2$ attacks argument $b$.\hl
 This results in the framework $F=(A,R)$, where $A=\{a_1,a_2,b\}$ and $R=\{(b,a_1),(a_1,b),(a_2,b)\}$.\cl
@@ -105,55 +115,55 @@ This results in the framework $F=(A,R)$, where $A=\{a_1,a_2,b\}$ and $R=\{(b,a_1
 It is also possible to represent every framework as a graph $(V,E)$, where $V=A$ and $E=R$. The graph representing the framework in our example looks like this:
 
 \FloatBarrier
-	\begin{figure}[!h]
+	\begin{figure}[!ht]
 		\centering
 		\includegraphics[width=\linewidth]{graphs/ex1_v2.pdf}
-		\caption{An argument framework about colors.}
+		\caption{An argument framework about colours.}
 	\end{figure}
 \FloatBarrier
 
-\textbf{Remark 2.} From now on, when mentioning $A$ or $R$, we refer to the sets of an arbitrary, fixed argumentation framework $F=(A,R)$, except if otherwise stated.
+\textbf{Remark 2.} From now on, when mentioning $A$ or $R$, we refer to the sets of an arbitrary, fixed argumentation framework $F=(A,R)$, except if otherwise stated.\cl
 
 Depending on their properties, arguments can be grouped into \emph{extensions} in order to obtain additional knowledge about the framework.\cl %hier auch semantics benutzen
 
 \section{Conflict-free sets}
 
-As a basis we introduce the \emph{conflict-free set}, since no extension should contain arguments that are in conflict with each other (i.e. there can't be attacks within an extension).\cl
+As a basis we introduce the \emph{conflict-free set}, since no extension should contain arguments that are in conflict with each other (i.e. there can be no attack relation consisting of two arguments of the same set).\cl
 
-\textbf{Definition 3.} Let $S$ be a set of arguments. It is \emph{conflict-free}, if $\forall a \forall b\ a,b\in S, (a,b)\notin R$.\\
+\textbf{Definition 3.} Let $S$ be a set of arguments. It is \emph{conflict-free}, if $\nexists (a,b)\in R$, where $a,b\in S$.\\
 The set of all conflict-free sets of an argumentation framework $F$ is denoted $cf(F)$.\cl
 
-\textbf{Example 2.} (Continuation of Example 1) As no argument attacks itself, $\{a_1\}$, $\{a_2\}$ and $\{b\}$ each are conflict-free. $\{a_1,a_2\}$ is also a conflict-free set, since there exists no attack relation containing $a_1$ and $a_2$. The empty set is always conflict-free.\hl
+\textbf{Example 2.} (Continuation of Example 1.) As no argument attacks itself, $\{a_1\}$, $\{a_2\}$ and $\{b\}$ each are conflict-free. $\{a_1,a_2\}$ is also a conflict-free set, since there exists no attack relation consisting of both $a_1$ and $a_2$. The empty set is always conflict-free.\hl
 Since there is an attack relation between $b$ and each of the other arguments, there are no other conflict-free sets.\hl
 It follows that $cf(F)=\{\emptyset,\{a_1\},\{a_2\},\{b\},\{a_1,a_2\}\}$.\cl
 
 \section{Admissible extensions}
 
-To be able to find a set of arguments that can't be reasoned against, it does not suffice if that set is only not in itself conflicted, but each argument should also not be an invitation for an easy counter-argument. Therefore it is necessary to only accept arguments into a set that don't hurt its defendability.\cl
+To be able to find a set of arguments that can defend itself, it does not suffice that a set is not in conflict with itself. Additionally each of its arguments should also be defended from outside attackers as is the case with admissible semantics.\hl
 
 \textbf{Definition 4.} An argument $a$ is \emph{defended} by a set $S$, iff for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\cl
 
 \textbf{Definition 5.} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\\
 The set of all admissible extensions of an argumentation framework $F$ is denoted $adm(F)$.\cl
 
-\textbf{Example 3.} (Continuation of Example 2) Of the conflict-free sets only \(\emptyset\) and $\{a_2\}$ don't get attacked. Therefore they are is admissible extensions. $\{a_1\}$ defends itself from its only attacker $b$ via the attack relation $(a_1,b)$, making it an admissible extension. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_1,b)$ and $(a_2,b)$, also making it an admissible extension.\\
+\textbf{Example 3.} (Continuation of Example 2.) Of the conflict-free sets only \(\emptyset\) and $\{a_2\}$ don't get attacked. Therefore they are is admissible extensions. $\{a_1\}$ defends itself from its only attacker $b$ via the attack relation $(a_1,b)$, making it an admissible extension. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_1,b)$ and $(a_2,b)$, also making it an admissible extension.\\
 $\{b\}$ is not admissible since it doesn't defend its argument.\hl
 It follows that $adm(F)=\{\emptyset,\{a_1\},\{a_2\},\{a_1,a_2\}\}$.\cl
 
 \section{Preferred extensions}
 
-Using admissible extensions we now can reduce the number of relevant extensions by eliminating redundant extensions, all containing the same arguments, by only taking the biggest ones, that include smaller extensions. The resulting preferred extensions are an example of a credulous reasoning, since they contain all arguments that are contained in admissible extensions.\cl
+Most given argumentation frameworks produce big numbers of admissible extension. Preferred semantics reduce the number of relevant extensions by eliminating redundant extensions, only taking the biggest ones (which include smaller extensions). The resulting preferred extensions represent a credulous approach of reasoning, since they contain all arguments that are contained in admissible extensions.\cl %TODO since?
 
 \textbf{Definition 6.} Let $S$ be an admissible extension. It is called a \emph{preferred extension} if for each $S'\subseteq A$, that is an admissible extension, $S\not\subset S'$.\\
 The set of all preferred extensions of an argumentation framework $F$ is denoted $pr(F)$.\cl
 
-\textbf{Example 4.} (Continuation of Example 3) Since $\emptyset\subset\{a_2\}$, \(\emptyset\) is not a preferred extension. Since $\{a_1\}\subset\{a_1,a_2\}$ and $\{a_2\}\subset\{a_1,a_2\}$, $\{a_1\}$ and $\{a_2\}$ are not a preferred extensions. Since all other admissible extensions are proper subsets of $\{a_1,a_2\}$, it is a preferred extension.\hl
+\textbf{Example 4.} (Continuation of Example 3.) Since $\emptyset\subset\{a_2\}$, \(\emptyset\) is not a preferred extension. Since $\{a_1\}\subset\{a_1,a_2\}$ and $\{a_2\}\subset\{a_1,a_2\}$, $\{a_1\}$ and $\{a_2\}$ are not a preferred extensions. Since all other admissible extensions are proper subsets of $\{a_1,a_2\}$, it is a preferred extension.\hl
 It follows that $prf(F)=\{\{a_1,a_2\}\}$.\hl
 As we can see, all arguments contained in admissible extensions still are contained in a preferred extension, even though the number of results is smaller.\cl
 
 \section{Stable extensions}
 
-Additionally we can define a stricter version of the admissible extension, that not only requires arguments to be defended, but also needs to attack all arguments not contained within it.\cl
+Additionally we can define a stricter version of the admissible extension, that not only requires arguments to be defended, but also attacks all arguments not contained within it.\cl
 
 \textbf{Definition 7.} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there exists an attack $(b,a)\in R$ where $b\in S$.\\
 The set of all stable extensions of an argumentation framework $F$ is denoted $st(F)$.\cl
@@ -164,23 +174,23 @@ It follows that $st(F)=\{\{a_1,a_2\}\}$.\cl
 
 \section{Complete extensions}
 
-In contrast to credulous reasoning stands sceptical reasoning. The extension fitting sceptical reasoning within the context of argument frameworks is the complete extension.\cl
+Credulous reasoning contrasts sceptical reasoning. The extension fitting sceptical reasoning within the context of argument frameworks is the complete extension.\cl
 
 \textbf{Definition 8.} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S$ does not defend $a$.\\
 The set of all complete extensions of an argumentation framework $F$ is denoted $co(F)$.\cl
 
-\textbf{Example 6.} (Continuation of Example 3) The admissible extension $\emptyset$ is not a complete extension because it defends $a_2$ which it doesn't contain. The same is true for $\{a_1\}$. $\{a_2\}$ defends $a_1$ and is therefore also not a complete extension.\\
+\textbf{Example 6.} (Continuation of Example 3.) The admissible extension $\emptyset$ is not a complete extension because it defends $a_2$ which it doesn't contain. The same is true for $\{a_1\}$. $\{a_2\}$ defends $a_1$ and is therefore also not a complete extension.\\
 $\{a_1,a_2\}$ attacks $b$ and as there are no other arguments which could be defended it is a complete extension.\hl
 It follows that $co(F)=\{\{a_1,a_2\}\}$.\cl
 
 \section{Grounded extension}
 
-As before, we can again reduce the number of relevant extensions. In this case we search for the common denominator, meaning exactly those arguments all complete extensions can ``agree'' on. This results in the grounded extension\cl
+As before, we can again reduce the number of relevant extensions. In this case we search for the common denominator, meaning exactly those arguments all complete extensions can ``agree'' on. This results in the grounded extension as defined in \cite{Egly}.\cl
 
 \textbf{Definition 9.} The (unique) \emph{grounded extension} is defined by $\bigcap\limits_{i=1}^n{S_i}$, where $\{S_1,...,S_n\}$ is the set of all complete extensions.\\
 The grounded extension of an argumentation framework $F$ is denoted $gr(F)$\cl
 
-\textbf{Example 7.} (Continuation of Example 6) Since there is only one complete extension $\{a_1,a_2\}$, it also is the grounded extension $gr(F)$.\cl
+\textbf{Example 7.} (Continuation of Example 6.) Since there is only one complete extension $\{a_1,a_2\}$, it also is the grounded extension $gr(F)$.\cl
 
 \chapter{Relations and additional semantics} %change to something more clear?
 
@@ -206,7 +216,7 @@ As per the definitions of the extensions there are the following relations:
 \end{align}\cl
 
 Additional to relations already given in their definitions, there are further relations to be mentioned.\hl
-Dung [X] provides the following Lemma regarding the relation between stable and preferred extensions.\cl %sourcing here
+Dung \cite{Dung} provides the following Lemma regarding the relation between stable and preferred extensions.\cl %sourcing here
 
 \textbf{Lemma 1.}
 Each stable extension is a preferred extension, but not every preferred extension is a stable extension.
@@ -214,7 +224,7 @@ Each stable extension is a preferred extension, but not every preferred extensio
 	st(F)\subseteq prf(F)\\
 	prf(F)\not\subseteq st(F)
 \end{align}
-Therefore each stable extension also is an admissible extension.\hl
+Therefore each stable extension also is an admissible extension.\cl
 
 \textbf{Example 8.} Let $F$ be an argumentation framework $(A,R)$ such that $A=\{a,b,c\}$ and $R=\{(b,a),(b,c),(a,a),(c,b)\}$.\hl
 
@@ -230,7 +240,7 @@ It can be computed that $cf(F)=adm(F)=\{\emptyset,\{b\},\{c\}\}$. So we only hav
 As can be seen, $\{b\}$ is the only conflict-free set that attacks all other arguments. Therefore $st(F)=\{\{b\}\}$.\hl
 We know that $\{b\}$ has to be a preferred extension, because of Lemma 1. $\{c\}$ attacks only it's attacker $b$, but not $a$. Therefore it is preferred and $prf(F)=\{\{b\},\{c\}\}$.\cl
 
-Further we look at the relation between preferred, complete and grounded extensions. Dung [X] prooves the following relationships.\hl %Satz ändern, is schirch
+Further we look at the relation between preferred, complete and grounded extensions. Dung \cite{Dung} provides the following Lemma.\hl %Satz ändern, is schirch
 
 \textbf{Lemma 2.}
 Each preferred extension is a complete extension, but not vice versa.
@@ -254,7 +264,7 @@ All admissible extensions except $\{c\}$ contain all the arguments they defend. 
 Of the admissible extensions $\emptyset,\{a\}$ and $\{d\}$ are subsets of $\{a,d\}$, while $\{c\}$ is a subset of $\{a,c\}$. Those are not preferred extensions. We get $prf(F)=\{\{a,c\},\{a,d\},\{b,d\}\}$, since these sets are not subsets of each other.\hl
 As we can see (3.7) and (3.8) are both satisfied.\cl
 
-Regarding the relation between grounded and complete extensions, Dung [X] provides the following information:\hl
+Regarding the relation between grounded and complete extensions, Dung \cite{Dung} provides the following information:\hl
 
 \textbf{Lemma 3.} The grounded extension is the least (wrt set inclusion) complete extension.
 \begin{align}
@@ -265,12 +275,12 @@ Regarding the relation between grounded and complete extensions, Dung [X] provid
 In this section we will look at a few additional extension semantics and how they relate to the ones mentioned above.
 
 \subsection{Semi-stable extensions}
-The only one of Dung's original extensions not to exist for every argumentation framework is the stable extension. A related, but less strict extension was definded by Caminada, Carnielli and Dunne in [X], the semi-stable extension. The following definition comes from Gorogiannis and Hunter [X]:\hl
+The only one of Dung's original extensions not to exist for every argumentation framework is the stable extension. A related, but less strict extension was definded by Caminada \cite{Caminada}, the semi-stable extension. The following definition stems from Gorogiannis \cite{Gorogiannis}:\hl
 
 \textbf{Definition 10.} Let $S$ be a complete extension. It is called a \emph{semi-stable extension} if the set $S\cup\{a\in A\text{ | } S\text{ attacks }a\}$ is maximal wrt set inclusion.\\ %same as stable, but for complete
 The set of all semi-stable extensions of an argumentation framework $F$ is denoted $sst(F)$.\hl
 
-Since there always is a complete extension, there is always a semi-stable extension. Caminada ... [X] also provide proof for the following relations: %TODO sentence
+Since there always is a complete extension, there is always a semi-stable extension. Caminada \cite{Caminada} also provide proof for the following relations: %TODO sentence
 
 %provide proof here?
 
@@ -279,7 +289,7 @@ Since there always is a complete extension, there is always a semi-stable extens
 	sst(F)\subset prf(F)
 \end{align}\cl
 
-Caminada, Carnielli and Dunne [X] themselves provide the following two examples:\hl
+The two following examples can originally be found in Caminada \cite{Caminada}:\hl
 
 \textbf{Example 10.} Let $F$ be an argumentation framework $(A,R)$ such that $A=\{a,b,c,d\}$ and $R=\{(a,a),(a,c),(b,c),(c,d)\}$\hl
 
@@ -311,17 +321,17 @@ The unions of complete extensions and all arguments they attack are $\emptyset$ 
 As we can see (3.11) is satisfied.\cl
 
 \subsection{Ideal extension}
-There also is an alternative semantic to the grounded extension. Ideal extension semantics as mentioned by Gorogiannis and Hunter [X] and Baronia and Giacomin [X] were introduced by Alferes, Dung and Peireira [X] and also produce a unique sceptical set, albeit a less strict one.\hl %zu viel?
+There also is an alternative semantic to the grounded extension. Ideal extension semantics were introduced by Alferes \cite{Alferes} and also produce a unique sceptical set, albeit a less strict one.\hl
 
 \textbf{Definition 11.} Let $S$ be an admissible extension. It is called the \emph{ideal extension} if it is the maximal (wrt set inclusion) admissible extension contained in every preferred extension.\\ %umformulieren?
  The ideal extension of an argumentation framework $F$ is denoted $id(F)$.\hl
 
-The ideal extension is a superset of the grounded extension. It always is a complete extension.
+Dung \cite{Dung2} shows that the ideal extension is a superset of the grounded extension. Baroni \cite{Baroni} shows that the ideal extension is always a complete extension. %TODO check if really in baroni
 
 \begin{align}
-	gr(F)\subset id(F)\\ %baronia and giacomin
-	id(F)\in co(F) %gorogiannis and hunter
-\end{align}\cl
+	gr(F)\subset id(F)\\
+	id(F)\in co(F)
+\end{align}\hl
 
 \textbf{Example 12.} Let $F$ be an argumentation $(A,R)$ such that $A=\{a,b,c,d,e\}$ and $R=\{(a,b),(b,d),(c,b),(d,a),(d,e),(e,c)\}$.\hl
 
@@ -341,45 +351,39 @@ It follows that $gr(F)=\emptyset$, while $id(F)=\{c,d\}$, so that (3.12) and (3.
 \chapter{Implementation}
 
 \section{Introduction}
-In this chapter the usage and implementation details of the aforementioned program illustrating the computation of the different extension types is provided. The application consists of two views: the input mask and the graph view.
+In this chapter the usage and implementation details of the aforementioned program illustrating the computation of the different extension types is provided. The program contains the following functionality:\hl
+
+\begin{itemize}
+\item Definition of argumentation frameworks
+\item Loading of preset argumentation frameworks
+\item Visualisation of argumentation frameworks as graphs
+\item Computation of extensions (including step-by-step explanations)
+\item Highlighting of extensions in the graph
+\end{itemize}
+
+The application consists of two views: the input mask and the graph view.
 
 \section{Input mask}
 On starting the application the user is presented with an input mask. It consists of ten rows representing the arguments of an argumentation framework. The number of arguments is limited to ten because a higher number of arguments doesn't provide any further benefit to a user wanting to learn about the basics of argumentation frameworks.\\
 Each row consists of a checkbox and two textfields.\hl
-Each checkbox is labeled with the name of the argument the row represents. If a checkbox is selected the program will use the represented argument for further computations and visualisations.\hl
-The first textfield of each row contains the optional description of the argument in question. The argument description is optional because it is only used in a cosmetic, non-functional way in the rest of the program.\hl
-The second textfield of each row contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can, optionally, be seperated either by ',' or spaces. This results in the following EBNF syntax.\hl %not really ``EBNF'' though .. more like BNF
+Each checkbox is labelled with the name of the argument the row represents in capital letters ($A$ ... $J$). If a checkbox is selected the program will use the represented argument for further computations and visualisations.\hl
+The first textfield of each row contains the argument's description. This can be a string of any form. The argument description is optional because it is only used in a cosmetic, non-functional fashion in the rest of the program.\hl
+The second textfield of each row contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can optionally be seperated either by ',' or spaces. Duplicate attacks are ignored. This means the attack fields accept the following syntax: \[[a-jA-J\text{ },]*\]\hl %slightly imprecise sentence
 
-\begin{grammar}%first version, replace with other regular expression? prohibit multiple seperators in a row?
-	<argument> ::= `a' | `b' | `c' | `d' | `e' | `f'
-				| `g' | `h' | `i' | `j' | `A' | `B'
-				| `C' | `D' | `E' | `F' | `G' | `H'
-				| `I' | `J'
-
-	<seperator> ::= `,' | ` '
-	
-	<input> ::= \{ <argument> , \{ <seperator> \} \}
-\end{grammar}\hl
-
-The ``show graph'' button checks input in selected rows for problems. It detects attacks against non-existent arguments, while treating multiple attacks of an argument against another argument are ignored. It further provides error messages, so the user knows about issues. Note that unselected rows are ignored, even if there is a description or attacks already defined. This enables the user to quickly add or remove arguments for comparison in the next window.\hl
+There are some preset examples to be chosen from via the drop-down menu labelled ``choose preset''. Once an example is chosen, selection and text fields are updated corresponding to the chosen preset. Presets include Dung's \cite{Dung} examples, [fill in other authors] as well as examples used in this thesis.\hl %TODO more examples
+On clicking the ``show graph'' button, the application checks if the attack fields conform to the syntax for selected arguments and if they contain arguments that are not selected (meaning they don't exist and can therefore not be attacked). If there is invalid input an error message is displayed, if not the argumentation framework is created and the graph view displayed.\hl
 
 \FloatBarrier
-	\begin{figure}[!h]
+	\begin{figure}[!ht]
 		\centering
 		\includegraphics[width=\linewidth]{pics/input.png}
 		\caption{Input mask}
 	\end{figure}
 \FloatBarrier
 
-%TODO update figure name?
 Figure 4.1 shows the input mask with input representing the argumentation framework $F=(A,R)$ with $A=\{a,b,c,d\}$ and $R=\{(a,b),(b,c),(c,a),(d,b)\}$.\hl
 
-Alternatively there are some preset examples to be chosen from via the drop-down menu titled ``choose preset''. Once an example is chosen, the input mask is filled with the corresponding data.\hl
-Examples include the examples used by Dung [citation here?], [fill in other authors] as well as the examples used in this thesis.\hl
-To make using the application easier, every item seen on screen shows a tooltip explaining the purpose of that element.
-
 \section{Graph view}
-Once an argument framework is created, ``show graph'' clicked and no problems detected the graph view is shown.
 
 \FloatBarrier
 	\begin{figure}[!h]
@@ -389,7 +393,7 @@ Once an argument framework is created, ``show graph'' clicked and no problems de
 	\end{figure}
 \FloatBarrier
 
-Upon loading the graph view the user can see the graph representing the argument framework defined in the input mask to the left. Every argument is represented by a node labelled with that arguments name. The argument nodes are laid out in a circle for better distinguishability.\hl
+Upon loading the graph view (shown in Figure 4.2) the user can see the graph representing the argument framework defined in the input mask to the left. Every argument is represented by a node labelled with that arguments name. The argument nodes are arranged in a circle for better distinguishability.\hl
 It is possible to view the arguments' descriptions by hovering over them. In case no description was given for an argument, the application displays this information.\hl
 
 \FloatBarrier
@@ -411,72 +415,75 @@ The user then has the option to choose to compute one of six types of sets:
 	\item grounded extension
 \end{itemize}
 
-If the checkbox to ``use previoucly computed sets for further computations'' is selected, each computation takes into account the results of preceding computations, if applicable. If this option is not selected the program will compute every extension type needed, prior to computing the chosen extension.\\
+If the checkbox to ``use previously computed sets for further computations'' is selected, each computation takes into account the results of preceding computations, if applicable. If this option is not selected the program will compute every extension type needed, prior to computing the chosen extension.\\
 That means if conflict-free sets were already computed one can compute stable extensions without the need to compute conflict-free sets again, but when trying to compute preferred extensions the set of admissible extensions would have to be freshly computed (the computation of the admissible extensions using the already computed conflict-free extensions).\hl
-Each computation triggers the text area (called the explanation area) to the right to display explanations of how the computed extensions came to pass. This explanation can either be shown step-by-step, all at once or be skipped and only the results be shown. Using previoucly computed extensions the explanation area does not show the explanation for already computed extensions again.
+Each computation triggers the text area to the right (from now on called the explanation area) to display explanations of how the computed extensions came to pass. These explanations can either be shown step-by-step, all at once or be skipped so only the results of the computation are shown. Using previously computed extensions the explanation area does not show the explanation for already computed extensions again.\hl
+Figure 4.4 shows the explanation shown during the computation of the complete extensions of the argumentation framework shown in Figure 4.1. Note that in this case, admissible extensions (as a prerequisite to compute complete extensions) did not need to be computed, because they had been computed beforehand.
 
 \FloatBarrier
 	\begin{figure}[!h]
 		\centering
 		\includegraphics{pics/explanation.png}
-		\caption{Text explaining the computation of admissible extensions.}
+		\caption{Text explaining the computation of complete extensions.}
 	\end{figure}
 \FloatBarrier
 
-To further illustrate the explanations shown the application recolors the graph for each step, using three easily distinguishable colors:\hl
+To further illustrate the explanations shown the application recolours the graph for each step, using three easily distinguishable colours:\hl
 Green is used for arguments included in the considered set and their relevant attacks needed to qualify for an extension type.\\
 Red is used for conflicting arguments and attacks preventing a set of arguments from qualifying for an extension type.\\
 Blue is used for arguments missing from a set for it to qualify for an extension type.\hl
+Figure 4.5 is an example where all three colours are used to illustrate the applications reasoning in computing complete extensions.\hl
 
 \FloatBarrier
 	\begin{figure}[!h]
 		\centering
 		\includegraphics{pics/colored.png}
-		\caption{\{A,D\} does not defend against C, so it is not an admissible extension.}
+		\caption{$\{D\}$ defends the argument $C$, which it does not contain. $\{D\}$ is not a complete extension.}
 	\end{figure}
 \FloatBarrier
 
-After showing the results of a computation a dropdown menu becomes availiable to the right bottom side of the explanation area, containing all computed extensions. They can be selected and are then highlighted in green in the graph.\hl
+After showing the results of a computation a dropdown menu becomes availiable beneath the right bottom corner of the explanation area, containing all computed extensions. They can be selected and are then highlighted in green in the graph.\hl
 The graph view also allows the user to go back to the input mask using the `<' button. The input mask will still contain the input from before switching to the graph view.
 
 \section{Implementation details}
 This section lays out which technologies where used to create the program, how they where used and explains why the program was implemented in such a way.\cl %alter
 
-\subsection{Technologies used}
+\subsection{Technologies and Resources used}
 The application was written in Java (version 1.8) using eclipse Kepler as a working environment.\hl
 To control the graphical user interface JavaFX was used, the design being created as .fxml files via JavaFX Scene Builder.\hl
 Java Universal Network/Graph Framework (JUNG) was used for the data structure of the frameworks' graphs.
+%put code sources you stole here to make it legitimate
 
 \subsection{Data structure}
-Rather than implementing the sets $A$ and $R$ separately, I instead opted for storing each outgoing attack of an argument directly within the argument. The general data structure used is\\
-\[F=\{a_1,...,a_n\} \text{, where } a_i=D \text{ and } D\subseteq F, D \text{ being arguments attacked by } a_i.\]\hl
+write something here
 
-A simple example of a naive algorithm using that data structure follows:\hl
+%A simple example of a naive algorithm using that data structure follows:\hl
 
-\begin{algorithm}[H]
- \KwData{set $S$ of arguments}
- \KwResult{whether $S$ is conflict-free}
- \ForEach{$a \in S$}{
- 	\ForEach{$b \in S$}{
- 		\If{$b \in a$}{
-			return $False$;
-   		}
- 	}
- }
- return $True$;
- \caption{Check whether a set is conflict-free}
-\end{algorithm}\hl
+%\begin{algorithm}[H]
+ %\KwData{set $S$ of arguments}
+% \KwResult{whether $S$ is conflict-free}
+ %\ForEach{$a \in S$}{
+% 	\ForEach{$b \in S$}{
+% 		\If{$b \in a$}{
+%			return $False$;
+  % 		}
+ %	}
+ %}
+ %return $True$;
+ %\caption{Check whether a set is conflict-free}
+%\end{algorithm}\hl
 
 \backmatter
 
 % Add a bibliography
-\bibliographystyle{alpha}
-\bibliography{intro}
+%\bibliographystyle{alpha}
+%\bibliography{intro}
+\printbibliography
 
 % Add an index
-\printindex
+%\printindex
 
 % Add a glossary
-\printglossaries
+%\printglossaries
 
 \end{document}
