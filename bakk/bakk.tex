@@ -69,7 +69,7 @@ I want to thank my family for supporting me and Dr. Ferm{\"u}ller for guiding me
 \end{acknowledgements*}
 
 \begin{abstract*}
-This bachelor thesis explains the concept of abstract argumentation frameworks, its properties as well as semantics to compute sets of arguments, so-called extensions. It further analyzes the relations between different types of extensions.\hl %so-called?
+This bachelor thesis explains the concept and provides the most important semantics for argumentation frameworks. It further analyzes the relations between different types of extension semantics.\hl %TODO still not good enough
 The main part of this thesis is the the developement of a JAVA application which is capable of creating custom argumentation frameworks, their representation as argumentation graphs and the computation of their extensions. The application is created in a way such that students can study argumentation frameworks in an easily digestable way including step-by-step explanations of how the extensions are computed accompanied by coloured highlighting of important aspects of the frameworks' graphs.\\ %TODO work in progress
 \end{abstract*}
 
@@ -85,7 +85,7 @@ The main part of this thesis is the the developement of a JAVA application which
 \chapter{Introduction}
 Most humans argue daily. A argument is made followed by a counter-argument and so on until there is a resolution. This way decisions can be made that satisfy the needs of the arguing parties, be it in a large group of people or a single person weighing all the information they have, the decision depending on the arguments that ``win''.\hl
 In 1995 Dung, in \cite{Dung}, introduced \emph{argumentation frameworks} as a basic theory to implement human argumentation mechanisms on computers.\hl
-In this bachelor thesis we will provide information on Dung's original concept and explore relations between different semantics of argumentation frameworks. Further we will take a look of additional semantics provided by other authors. Finally we will introduce a computer program written alongside this thesis, which demonstrates how argumentation frameworks can be represented and their semantics computed.\hl %Add chapter regarding nonmonotonic reasoning, logic programming and n-person games?
+In this bachelor thesis we will provide information on Dung's original concept and explore relations between different semantics of argumentation frameworks. Further we will take a look of additional semantics provided by other authors. Finally we will introduce a computer program written alongside this thesis, which demonstrates how argumentation frameworks can be represented and their semantics computed.\hl %TODO longer?
 
 \chapter{Definitions}
 
@@ -124,11 +124,11 @@ It is also possible to represent every framework as a graph $(V,E)$, where $V=A$
 
 \textbf{Remark 2.} From now on, when mentioning $A$ or $R$, we refer to the sets of an arbitrary, fixed argumentation framework $F=(A,R)$, except if otherwise stated.\cl
 
-Depending on their properties, arguments can be grouped into \emph{extensions} in order to obtain additional knowledge about the framework.\cl %hier auch semantics benutzen
+Depending on their properties, arguments can be grouped into \emph{extensions} in order to obtain additional knowledge about the framework.\cl
 
 \section{Conflict-free sets}
 
-As a basis we introduce the \emph{conflict-free set}, since no extension should contain arguments that are in conflict with each other (i.e. there can be no attack relation consisting of two arguments of the same set).\cl
+As a basis we introduce \emph{conflict-free sets}. Since no extension should contain arguments that are in conflict with each other, there should be no attack relation consisting of two arguments of the same set.\cl
 
 \textbf{Definition 3.} Let $S$ be a set of arguments. It is \emph{conflict-free}, if $\nexists (a,b)\in R$, where $a,b\in S$.\\
 The set of all conflict-free sets of an argumentation framework $F$ is denoted $cf(F)$.\cl
@@ -208,7 +208,7 @@ As we have seen in the previous chapter, often there may be overlaps between the
 In this section we will examine relations between different types of extensions.\hl
 
 As per the definitions of the extensions there are the following relations:
-\begin{align} %find structure that instead centers
+\begin{align}
 	adm(F)\subseteq cf(F)\\
 	st(F)\subseteq cf(F)\\
 	prf(F)\subseteq adm(F)\\
@@ -216,7 +216,7 @@ As per the definitions of the extensions there are the following relations:
 \end{align}\cl
 
 Additional to relations already given in their definitions, there are further relations to be mentioned.\hl
-Dung \cite{Dung} provides the following Lemma regarding the relation between stable and preferred extensions.\cl %sourcing here
+Dung \cite{Dung} provides the following Lemma regarding the relation between stable and preferred extensions.\cl
 
 \textbf{Lemma 1.}
 Each stable extension is a preferred extension, but not every preferred extension is a stable extension.
@@ -240,7 +240,7 @@ It can be computed that $cf(F)=adm(F)=\{\emptyset,\{b\},\{c\}\}$. So we only hav
 As can be seen, $\{b\}$ is the only conflict-free set that attacks all other arguments. Therefore $st(F)=\{\{b\}\}$.\hl
 We know that $\{b\}$ has to be a preferred extension, because of Lemma 1. $\{c\}$ attacks only it's attacker $b$, but not $a$. Therefore it is preferred and $prf(F)=\{\{b\},\{c\}\}$.\cl
 
-Further we look at the relation between preferred, complete and grounded extensions. Dung \cite{Dung} provides the following Lemma.\hl %Satz ändern, is schirch
+Further we look at the relation between preferred, complete and grounded extensions. Dung \cite{Dung} provides the following Lemma.\hl
 
 \textbf{Lemma 2.}
 Each preferred extension is a complete extension, but not vice versa.
@@ -277,7 +277,7 @@ In this section we will look at a few additional extension semantics and how the
 \subsection{Semi-stable extensions}
 The only one of Dung's original extensions not to exist for every argumentation framework is the stable extension. A related, but less strict extension was definded by Caminada \cite{Caminada}, the semi-stable extension. The following definition stems from Gorogiannis \cite{Gorogiannis}:\hl
 
-\textbf{Definition 10.} Let $S$ be a complete extension. It is called a \emph{semi-stable extension} if the set $S\cup\{a\in A\text{ | } S\text{ attacks }a\}$ is maximal wrt set inclusion.\\ %same as stable, but for complete
+\textbf{Definition 10.} Let $S$ be a complete extension. It is called a \emph{semi-stable extension} if the set $S\cup\{a\in A\text{ | } S\text{ attacks }a\}$ is maximal wrt set inclusion.\\
 The set of all semi-stable extensions of an argumentation framework $F$ is denoted $sst(F)$.\hl
 
 Since there always is a complete extension, there is always a semi-stable extension. Caminada \cite{Caminada} also provide proof for the following relations: %TODO sentence
@@ -323,8 +323,8 @@ As we can see (3.11) is satisfied.\cl
 \subsection{Ideal extension}
 There also is an alternative semantic to the grounded extension. Ideal extension semantics were introduced by Alferes \cite{Alferes} and also produce a unique sceptical set, albeit a less strict one.\hl
 
-\textbf{Definition 11.} Let $S$ be an admissible extension. It is called the \emph{ideal extension} if it is the maximal (wrt set inclusion) admissible extension contained in every preferred extension.\\ %umformulieren?
- The ideal extension of an argumentation framework $F$ is denoted $id(F)$.\hl
+\textbf{Definition 11.} Let $S$ be an admissible extension. It is called the \emph{ideal extension} if it is the maximal (wrt set inclusion) admissible extension contained in every preferred extension.\\
+The ideal extension of an argumentation framework $F$ is denoted $id(F)$.\hl
 
 Dung \cite{Dung2} shows that the ideal extension is a superset of the grounded extension. Baroni \cite{Baroni} shows that the ideal extension is always a complete extension. %TODO check if really in baroni
 
@@ -370,7 +370,7 @@ Each checkbox is labelled with the name of the argument the row represents in ca
 The first textfield of each row contains the argument's description. This can be a string of any form. The argument description is optional because it is only used in a cosmetic, non-functional fashion in the rest of the program.\hl
 The second textfield of each row contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can optionally be seperated either by ',' or spaces. Duplicate attacks are ignored. This means the attack fields accept the following syntax: \[[a-jA-J\text{ },]*\]\hl %slightly imprecise sentence
 
-There are some preset examples to be chosen from via the drop-down menu labelled ``choose preset''. Once an example is chosen, selection and text fields are updated corresponding to the chosen preset. Presets include Dung's \cite{Dung} examples, [fill in other authors] as well as examples used in this thesis.\hl %TODO more examples
+There are some preset examples to be chosen from via the drop-down menu labelled ``choose preset''. Once an example is chosen, selection and text fields are updated corresponding to the chosen preset. Presets include examples given by Dung \cite{Dung} and Egly \cite{Egly} as well as examples used in this thesis.\hl
 On clicking the ``show graph'' button, the application checks if the attack fields conform to the syntax for selected arguments and if they contain arguments that are not selected (meaning they don't exist and can therefore not be attacked). If there is invalid input an error message is displayed, if not the argumentation framework is created and the graph view displayed.\hl
 
 \FloatBarrier
@@ -452,7 +452,6 @@ This section lays out which technologies where used to create the program, how t
 The application was written in Java (version 1.8) using eclipse Kepler as a working environment.\hl
 To control the graphical user interface JavaFX was used, the design being created as .fxml files via JavaFX Scene Builder.\hl
 Java Universal Network/Graph Framework (JUNG) was used for the data structure of the frameworks' graphs.
-%put code sources you stole here to make it legitimate
 
 \subsection{Data structure}
 write something here

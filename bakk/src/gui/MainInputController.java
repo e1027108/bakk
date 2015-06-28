@@ -173,6 +173,23 @@ public class MainInputController {
 					new Line('d', "", "b")
 		}));
 		
+		exampleSet.add(new Example("Thesis Figure 4.1",
+				new Line[] {
+					new Line('a', "", "b"),
+					new Line('b', "", "c"),
+					new Line('c', "", "a"),
+					new Line('d', "", "b")
+		}));
+		
+		exampleSet.add(new Example("Egly Example 1",
+				new Line[] {
+					new Line('a', "", "b"),
+					new Line('b', "", ""),
+					new Line('c', "", "bd"),
+					new Line('d', "", "ce"),
+					new Line('e', "", "e")
+		}));
+		
 		//TODO provide additional examples
 		
 		return exampleSet;
