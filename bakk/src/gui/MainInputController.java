@@ -190,8 +190,6 @@ public class MainInputController {
 					new Line('e', "", "e")
 		}));
 		
-		//TODO provide additional examples
-		
 		return exampleSet;
 	}
 	

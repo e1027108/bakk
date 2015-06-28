@@ -12,7 +12,6 @@ public class SingleInstruction {
 	private Color color; //the color to be applied to the object
 	public enum Type {EDGE, NODE, INVALID};
 	private Type type;
-	//TODO differentiate between edge and node?
 	
 	/**
 	 * Creates a SingleInstruction object, containing name and color of a graph's element

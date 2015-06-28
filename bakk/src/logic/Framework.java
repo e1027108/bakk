@@ -7,6 +7,7 @@ import interactor.SingleInstruction;
 
 import java.util.ArrayList;
 
+import exceptions.InvalidInputException;
 import javafx.scene.paint.Color;
 
 public class Framework {
@@ -155,7 +156,7 @@ public class Framework {
 		return false;
 	}
 	
-	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious) {
+	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious) throws InvalidInputException {
 		ArrayList<Extension> adm;
 		ArrayList<Extension> complete = new ArrayList<Extension>();
 
@@ -279,7 +280,7 @@ public class Framework {
 		return stable;
 	}
 
-	public Extension getGroundedExtension(boolean usePrevious) {
+	public Extension getGroundedExtension(boolean usePrevious) throws InvalidInputException{
 		ArrayList<Extension> co;
 		ArrayList<Argument> grounded = new ArrayList<Argument>();
 

@@ -185,8 +185,7 @@ public class DemonstrationWindowController {
 			resultSet = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
 			//printExtensions(resultSet);
 			setUI();
-		} catch (Exception e/*InvalidInputException e*/) { //TODO implement exception in new framework
-			//e.printStackTrace();
+		} catch (InvalidInputException e) {
 			interactor.emptyQueue();
 			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
 			explanationArea.setStyle("-fx-text-fill: red;");
@@ -235,7 +234,7 @@ public class DemonstrationWindowController {
 			resultSet.add(grounded);
 			//printExtensions(resultSet);
 			setUI();
-		} catch (Exception /*InvalidInputException*/ e) {//TODO implement
+		} catch (InvalidInputException e) {
 			interactor.emptyQueue();
 			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
 			explanationArea.setStyle("-fx-text-fill: red;");
