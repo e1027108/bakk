@@ -68,6 +68,8 @@ public class WrapperController {
 			} catch (IOException e) {
 				descriptionLbl.setStyle("-fx-text-fill: red;");
 				descriptionLbl.setText("Could not load demonstration window!");
+				e.printStackTrace();
+				return;
 			}
 		}
 

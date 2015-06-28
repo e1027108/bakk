@@ -1,40 +1,14 @@
 package logic;
 
-/**
- * The Argument class describes an argument in an abstract argumentation framework
- * @author Patrick Bellositz
- */
 public class Argument {
-	private char name; //name of the argument
 	private String statement; //statement describing the argument
-	private String attacks; //arguments the argument attacks
+	private char name; //arguments the argument attacks
 	
-	/**
-	 * creates a new argument for argument frameworks
-	 * @param name name of the argument
-	 * @param statement statement describing the argument
-	 * @param attacks arguments the argument attacks
-	 */
-	public Argument(char name, String statement, String attacks){
+	public Argument (char name, String statement){
 		this.setName(name);
 		this.setStatement(statement);
-		this.setAttacks(attacks);
 	}
-
-	/**
-	 * @return arguments the argument attacks
-	 */
-	public String getAttacks() {
-		return attacks;
-	}
-
-	/**
-	 * @param attacks arguments the argument attacks
-	 */
-	public void setAttacks(String attacks) {
-		this.attacks = attacks;
-	}
-
+	
 	/**
 	 * @return statement describing the argument
 	 */

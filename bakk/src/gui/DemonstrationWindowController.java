@@ -20,6 +20,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import logic.Argument;
+import logic.Attack;
 import logic.Extension;
 import logic.Framework;
 
@@ -60,6 +61,7 @@ public class DemonstrationWindowController {
 
 	private Framework argumentFramework; //argument framework containing the arguments
 	private ArrayList<Argument> arguments; //arguments of the framework
+	private ArrayList<Attack> attacks; //attacks of the framework
 	private Interactor interactor; //Interactor controlling the results the user sees
 	private ArrayList<Extension> resultSet; //set containing computation results
 	private NodePane graphPane; //pane where node illustrations are shown
@@ -120,14 +122,30 @@ public class DemonstrationWindowController {
 	 */
 	private void readArguments(ArrayList<ArgumentDto> rawArguments) {
 		arguments = new ArrayList<Argument>();
-
-		if(null != rawArguments && !rawArguments.isEmpty()){
-			for(ArgumentDto a: rawArguments){
-				arguments.add(new Argument(a.getName(), a.getStatement(), a.getAttacks()));
+		attacks = new ArrayList<Attack>();
+		
+		for(ArgumentDto a: rawArguments){
+			arguments.add(new Argument(a.getName(),a.getStatement()));
+		}
+		
+		for(ArgumentDto a: rawArguments){
+			char attackString[] = a.getAttacks().toCharArray();
+			for(char att: attackString){
+				attacks.add(new Attack(getArgument(arguments,a.getName()),getArgument(arguments,att)));
 			}
 		}
 	}
                                                                                                                                                                                                                                                                                                                                          
+	private Argument getArgument(ArrayList<Argument> args, char att) {
+		for(Argument a: args){
+			if(a.getName() == att){
+				return a; 
+			}
+		}
+		
+		return null;
+	}
+
 	/**
 	 * initiates the computation of the conflict free sets of the framework
 	 */
@@ -167,7 +185,8 @@ public class DemonstrationWindowController {
 			resultSet = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
 			//printExtensions(resultSet);
 			setUI();
-		} catch (InvalidInputException e) {
+		} catch (Exception e/*InvalidInputException e*/) { //TODO implement exception in new framework
+			//e.printStackTrace();
 			interactor.emptyQueue();
 			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
 			explanationArea.setStyle("-fx-text-fill: red;");
@@ -216,7 +235,7 @@ public class DemonstrationWindowController {
 			resultSet.add(grounded);
 			//printExtensions(resultSet);
 			setUI();
-		} catch (InvalidInputException e) {
+		} catch (Exception /*InvalidInputException*/ e) {//TODO implement
 			interactor.emptyQueue();
 			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
 			explanationArea.setStyle("-fx-text-fill: red;");
@@ -383,7 +402,7 @@ public class DemonstrationWindowController {
 
 		interactor = Interactor.getInstance(this);
 		readArguments(interactor.getRawArguments());
-		argumentFramework = new Framework(arguments, interactor);
+		argumentFramework = new Framework(arguments, attacks, interactor);
 
 		graphPane.createGraph(argumentFramework);
 		
