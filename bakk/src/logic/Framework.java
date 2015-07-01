@@ -16,7 +16,7 @@ public class Framework {
 	private ArrayList<Attack> attacks;
 	private Interactor interactor;
 	private ArrayList<Extension> previousConflictFreeSets; //a stored, previously computed set of conflict-free sets
-	private ArrayList<Extension> previousAdmissibleSets; //a stored, previously computed set of admissible extensions
+	private ArrayList<Extension> previousAdmissibleExtensions; //a stored, previously computed set of admissible extensions
 	private ArrayList<Extension> previousCompleteExtensions; //a stored, previously computed set of complete extensions
 	private String notification;
 	
@@ -86,7 +86,7 @@ public class Framework {
 		return formatted;
 	}
 
-	public ArrayList<Extension> getAdmissibleSets(boolean usePrevious) {
+	public ArrayList<Extension> getAdmissibleExtensions(boolean usePrevious) {
 		ArrayList<Extension> cf;
 		ArrayList<Extension> admissible = new ArrayList<Extension>();
 
@@ -127,8 +127,8 @@ public class Framework {
 		}
 		interactor.addToCommands(new Command(notification, null));
 
-		previousAdmissibleSets = new ArrayList<Extension>();
-		previousAdmissibleSets.addAll(admissible);
+		previousAdmissibleExtensions = new ArrayList<Extension>();
+		previousAdmissibleExtensions.addAll(admissible);
 
 		return admissible;
 	}
@@ -160,12 +160,12 @@ public class Framework {
 		ArrayList<Extension> adm;
 		ArrayList<Extension> complete = new ArrayList<Extension>();
 
-		if(!usePrevious || (previousAdmissibleSets == null)){
+		if(!usePrevious || (previousAdmissibleExtensions == null)){
 			interactor.addToCommands(new Command("Computing admissible extensions to compute complete extensions!", null));
-			adm = getAdmissibleSets(usePrevious);
+			adm = getAdmissibleExtensions(usePrevious);
 		}
 		else{
-			adm = previousAdmissibleSets;
+			adm = previousAdmissibleExtensions;
 			notification = "Using previously computed admissible extensions to compute admissible extensions: ";
 
 			if(adm.size() == 0){
@@ -208,12 +208,12 @@ public class Framework {
 		ArrayList<Extension> adm;
 		ArrayList<Extension> preferred = new ArrayList<Extension>();
 
-		if(!usePrevious || (previousAdmissibleSets == null)){
+		if(!usePrevious || (previousAdmissibleExtensions == null)){
 			interactor.addToCommands(new Command("Computing admissible extensions to compute preferred extensions!", null));
-			adm = getAdmissibleSets(usePrevious);
+			adm = getAdmissibleExtensions(usePrevious);
 		}
 		else{
-			adm = previousAdmissibleSets;
+			adm = previousAdmissibleExtensions;
 
 			notification = "Using previously computed admissible extensions to compute preferred extensions: ";
 

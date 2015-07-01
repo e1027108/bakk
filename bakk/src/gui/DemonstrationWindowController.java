@@ -167,7 +167,7 @@ public class DemonstrationWindowController {
 	public void onAdmissibleClick(){
 		interactor.emptyQueue();
 
-		resultSet = argumentFramework.getAdmissibleSets(previousCheckBox.isSelected());
+		resultSet = argumentFramework.getAdmissibleExtensions(previousCheckBox.isSelected());
 
 		//printExtensions(resultSet);
 

@@ -457,36 +457,40 @@ The application was written in Java (version 1.8) using eclipse Kepler as a work
 As the graphical user interface JavaFX was used, the design being created as .fxml files via JavaFX Scene Builder.\hl
 Java Universal Network/Graph Framework (JUNG) was used for the data structure of the graphs.
 
-\subsection{Data structure}
-There exist four classes in the application which model argumentation frameworks:
+\subsection{Program structure}
+There exist four classes in the application which model argumentation frameworks: %TODO how much do i tell? Change section title?
 
 \begin{itemize}[noitemsep]
-	\item Framework.java
 	\item Argument.java
 	\item Attack.java
+	\item Framework.java
 	\item Extension.java
 \end{itemize}
 
-These classes have the following relationship:
+These classes have the following relationships:
 
 \FloatBarrier
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=\linewidth]{graphs/classes.pdf} %TODO improve and check if multiplicities are correctly placed
+	\includegraphics[width=\linewidth]{graphs/classes.pdf} %TODO visibility needs to be in there
 	\caption{Argumentation framework class diagram}
 \end{figure}
 \FloatBarrier
 
-\subsubsection{Framework}
-text
 \subsubsection{Argument}
-text
-\subsubsection{Attack}
-text
-\subsubsection{Extension}
-text
+An \emph{Argument} object is a pair consisting of a key and a value. The key is the name of the argument (representing an argument $a\in A$), while the value is the argument's statement.%TODO statement, argument itself, how do I call the text of the argument?
 
-%A simple example of a naive algorithm using that data structure follows:\hl
+\subsubsection{Attack}
+An \emph{Attack} object stores a pair of Argument objects. The first argument is called the ``attacker'', the second the ``attacked'' argument representing an attack relation $(a,b)\in R$.
+
+\subsubsection{Framework}
+A \emph{Framework} object represents an argumentation framework $F=(A,R)$. It contains a list of all arguments ($A$) and a list of all attacks ($R$). It also stores all the extensions.\hl
+If a user wants to compute the extensions of a specific type (except the grounded extension), the framework calls the corresponding method of every extension candidate to find out if it indeed is of that extension type. For this purpose the framework can store multiple lists of extension candidates (e.g. The framework can store a list of conflict-free sets, which then can be used to compute admissible or stable extensions). After each candidate has returned its status, the frameworks returns a list of extensions that satisfy the criteria of the extension type in question.\hl
+To compute the grounded extension the framework simply compares the arguments of its complete extensions, without any algorithms of the extension object being called.
+
+\subsubsection{Extension}
+An \emph{Extension} object represents a set $S\subseteq A$. For that purpose it stores a list of Argument objects. Every extension object stores a reference to the framework it belongs to, to compute and store lists of outgoing and incoming attacks.\hl
+Each extension object can compute if it is of a certain extension type (except for grounded extensions, see above). %TODO algorithm here?
 
 %\begin{algorithm}[H]
  %\KwData{set $S$ of arguments}
