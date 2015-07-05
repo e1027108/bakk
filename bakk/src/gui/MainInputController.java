@@ -165,20 +165,21 @@ public class MainInputController {
 					new Line('d', "", "c")
 		}));
 		
-		exampleSet.add(new Example("Thesis Figure 4.1",
+		/*exampleSet.add(new Example("Thesis Figure 4.1",
 				new Line[] {
 					new Line('a', "", "b"),
 					new Line('b', "", "c"),
 					new Line('c', "", "a"),
 					new Line('d', "", "b")
-		}));
+		}));*/
 		
 		exampleSet.add(new Example("Thesis Figure 4.1",
 				new Line[] {
-					new Line('a', "", "b"),
-					new Line('b', "", "c"),
-					new Line('c', "", "a"),
-					new Line('d', "", "b")
+					new Line('a', "", ""),
+					new Line('b', "", "ac"),
+					new Line('c', "", "bd"),
+					new Line('d', "", "ace"),
+					new Line('e', "", "e")
 		}));
 		
 		exampleSet.add(new Example("Egly Example 1",

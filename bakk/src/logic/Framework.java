@@ -166,7 +166,7 @@ public class Framework {
 		}
 		else{
 			adm = previousAdmissibleExtensions;
-			notification = "Using previously computed admissible extensions to compute admissible extensions: ";
+			notification = "Using previously computed admissible extensions to compute complete extensions: ";
 
 			if(adm.size() == 0){
 				notification += "There are no admissible sets!";
