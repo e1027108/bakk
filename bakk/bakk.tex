@@ -2,19 +2,18 @@
 
 \documentclass[draft,final]{vutinfth} % Remove option 'final' to obtain debug information.
 
-% Extended LaTeX functionality is enables by including packages with \usepackage{...}.
-\usepackage{fixltx2e}  % Provides fixes for several errors in LaTeX2e.
-\usepackage{amsmath}   % Extended typesetting of mathematical expression.
-\usepackage{amssymb}   % Provides a multitude of mathematical symbols.
-\usepackage{mathtools} % Further extensions of mathematical typesetting.
-\usepackage{microtype} % Small-scale typographic enhancements.
-\usepackage{enumitem}  % User control over the layout of lists (itemize, enumerate, description).
-\usepackage{multirow}  % Allows table elements to span several rows.
-\usepackage{booktabs}  % Improves the typesettings of tables.
-\usepackage[ruled,linesnumbered,algochapter]{algorithm2e} % Enables the writing of pseudo code.
-\usepackage{nag}       % Issues warnings when best practices in writing LaTeX documents are violated.
-\usepackage{hyperref}  % Enables cross linking in the electronic document version. This package has to be included second to last.
-\usepackage[acronym,toc]{glossaries} % Enables the generation of glossaries and lists fo acronyms. This package has to be included last.
+\usepackage{fixltx2e}
+\usepackage{amsmath} 
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{booktabs}
+%\usepackage[ruled,linesnumbered,algochapter]{algorithm2e}
+\usepackage{nag} 
+\usepackage{hyperref}
+\usepackage[acronym,toc]{glossaries}
 \usepackage{tikz}
 \usepackage{placeins}
 \usepackage{amsmath}
@@ -31,19 +30,14 @@
 
 \setsecnumdepth{subsection} % enumerate subsections
 
-% Use an optional index
 \makeindex
-% Use an optional glossary
 %\makeglossaries
 %\glstocfalse % remove the glossaries from the table of contents
 
-% Set persons with 4 arguments:
 %  {title before name}{name}{title after name}{gender}
-%  where both titles are optional (i.e. can be given as empty brackets {})
 \setauthor{}{Patrick Bellositz}{}{male}
 \setadvisor{Ao.Prof.Dipl.-Ing.Dr.techn.}{Christian Georg Ferm{\"u}ller}{}{male}
 
-% Required data
 \setaddress{Eichkogelstra{\ss}e 10/10/9, 2353 Guntramsdorf}
 \setregnumber{1027108}
 \setdate{01}{06}{2015}
@@ -140,34 +134,34 @@ The set of all conflict-free sets of an argumentation framework $F$ is denoted $
 Since there is an attack relation between $b$ and each of the other arguments, there are no other conflict-free sets.\hl
 It follows that $cf(F)=\{\emptyset,\{a_1\},\{a_2\},\{b\},\{a_1,a_2\}\}$.\cl
 
-\section{Admissible extensions}
+\section{Admissible sets}
 
 To be able to find a set of arguments that can defend itself, it does not suffice that a set is not in conflict with itself. Additionally each of its arguments should also be defended from outside attackers as is the case with admissible semantics.\hl
 
 \textbf{Definition 4.} An argument $a$ is \emph{defended} by a set $S$, iff for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\cl
 
-\textbf{Definition 5.} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\\
-The set of all admissible extensions of an argumentation framework $F$ is denoted $adm(F)$.\cl
+\textbf{Definition 5.} Let $S$ be a conflict-free set. It is called an \emph{admissible set} if it defends each $a\in S$.\\
+The set of all admissible sets of an argumentation framework $F$ is denoted $adm(F)$.\cl
 
-\textbf{Example 3.} (Continuation of Example 2.) Of the conflict-free sets only \(\emptyset\) and $\{a_2\}$ don't get attacked. Therefore they are admissible extensions. $\{a_1\}$ defends itself from its only attacker $b$ via the attack relation $(a_1,b)$, making it an admissible extension. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_1,b)$ and $(a_2,b)$, also making it an admissible extension.\\
+\textbf{Example 3.} (Continuation of Example 2.) Of the conflict-free sets only \(\emptyset\) and $\{a_2\}$ don't get attacked. Therefore they are admissible sets. $\{a_1\}$ defends itself from its only attacker $b$ via the attack relation $(a_1,b)$, making it an admissible set. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_1,b)$ and $(a_2,b)$, also making it an admissible set.\\
 $\{b\}$ is not admissible since it doesn't defend its argument.\hl
 It follows that $adm(F)=\{\emptyset,\{a_1\},\{a_2\},\{a_1,a_2\}\}$.\cl
 
 \section{Preferred extensions}
 
-Most given argumentation frameworks produce big numbers of admissible extension. Preferred semantics reduce the number of extensions, only taking the biggest ones. The resulting preferred extensions represent a credulous approach of reasoning, since they contain all arguments that are contained in admissible extensions.\hl
+Most given argumentation frameworks produce big numbers of admissible sets. Preferred semantics reduce the number of sets, only taking the biggest ones. The resulting preferred extensions represent a credulous approach of reasoning, since they contain all arguments that are contained in admissible sets.\hl
 They were defined in \cite{Egly} as follows:\cl
 
-\textbf{Definition 6.} Let $S$ be an admissible extension. It is called a \emph{preferred extension} if for each $S'\subseteq A$, that is an admissible extension, $S\not\subset S'$.\\
+\textbf{Definition 6.} Let $S$ be an admissible set. It is called a \emph{preferred extension} if for each $S'\subseteq A$, that is an admissible set, $S\not\subset S'$.\\
 The set of all preferred extensions of an argumentation framework $F$ is denoted $prf(F)$.\cl
 
-\textbf{Example 4.} (Continuation of Example 3.) Since $\emptyset\subset\{a_2\}$, \(\emptyset\) is not a preferred extension. Since $\{a_1\}\subset\{a_1,a_2\}$ and $\{a_2\}\subset\{a_1,a_2\}$, $\{a_1\}$ and $\{a_2\}$ are not a preferred extensions. Since all other admissible extensions are proper subsets of $\{a_1,a_2\}$, it is a preferred extension.\hl
+\textbf{Example 4.} (Continuation of Example 3.) Since $\emptyset\subset\{a_2\}$, \(\emptyset\) is not a preferred extension. Since $\{a_1\}\subset\{a_1,a_2\}$ and $\{a_2\}\subset\{a_1,a_2\}$, $\{a_1\}$ and $\{a_2\}$ are not a preferred extensions. Since all other admissible sets are proper subsets of $\{a_1,a_2\}$, it is a preferred extension.\hl
 It follows that $prf(F)=\{\{a_1,a_2\}\}$.\hl
-As we can see, all arguments contained in admissible extensions still are contained in a preferred extension, even though the number of results is smaller.\cl
+As we can see, all arguments contained in admissible sets still are contained in a preferred extension, even though the number of results is smaller.\cl
 
 \section{Stable extensions}
 
-Additionally we can define a stricter version of the admissible extension, that not only requires arguments to be defended, but also attacks all arguments not contained within it.\cl
+Additionally we can define a stricter version of the admissible set, that not only requires arguments to be defended, but also attacks all arguments not contained within it.\cl
 
 \textbf{Definition 7.} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there exists an attack $(b,a)\in R$ where $b\in S$.\\
 The set of all stable extensions of an argumentation framework $F$ is denoted $st(F)$.\cl
@@ -180,10 +174,10 @@ It follows that $st(F)=\{\{a_1,a_2\}\}$.\cl
 
 Credulous reasoning contrasts sceptical reasoning. The extension fitting sceptical reasoning within the context of argument frameworks is the complete extension.\cl
 
-\textbf{Definition 8.} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S$ does not defend $a$.\\
+\textbf{Definition 8.} Let $S$ be an admissible set. It is called a \emph{complete extension} if for each $a\not\in S$, $S$ does not defend $a$.\\
 The set of all complete extensions of an argumentation framework $F$ is denoted $co(F)$.\cl
 
-\textbf{Example 6.} (Continuation of Example 3.) The admissible extension $\emptyset$ is not a complete extension because it defends $a_2$ which it doesn't contain. The same is true for $\{a_1\}$. $\{a_2\}$ defends $a_1$ and is therefore also not a complete extension.\\
+\textbf{Example 6.} (Continuation of Example 3.) The admissible set $\emptyset$ is not a complete extension because it defends $a_2$ which it doesn't contain. The same is true for $\{a_1\}$. $\{a_2\}$ defends $a_1$ and is therefore also not a complete extension.\\
 $\{a_1,a_2\}$ attacks $b$ and as there are no other arguments which could be defended it is a complete extension.\hl
 It follows that $co(F)=\{\{a_1,a_2\}\}$.\cl
 
@@ -208,6 +202,8 @@ As we have seen in the previous chapter, often there may be overlaps between the
 	\end{figure}
 \FloatBarrier
 
+Note that there was a slight change due to \cite{Baroni} stating that the ideal extension is always a superset of the grounded extension and \cite{Dung2} stating that an ideal extension is always a complete extension.
+
 \section{Relations between extension types}
 In this section we will examine relations between different types of extensions.\hl
 
@@ -228,7 +224,7 @@ Each stable extension is a preferred extension, but not every preferred extensio
 	st(F)\subseteq prf(F)\\
 	prf(F)\not\subseteq st(F)
 \end{align}
-Therefore each stable extension also is an admissible extension.\cl
+Therefore each stable extension also is an admissible set.\cl
 
 \textbf{Example 8.} Let $F$ be an argumentation framework $(A,R)$ such that $A=\{a,b,c\}$ and $R=\{(b,a),(b,c),(a,a),(c,b)\}$.\hl
 
@@ -264,8 +260,8 @@ Each preferred extension is a complete extension, but not vice versa.
 \FloatBarrier
 
 It can be computed that $adm(F)=\{\emptyset,\{a\},\{c\},\{d\},\{a,c\},\{a,d\},\{b,d\}\}$.\hl
-All admissible extensions except $\{c\}$ contain all the arguments they defend. Hence they are complete. $\{c\}$ defends $a$, which it doesn't contain and therefore is not complete. It follows that $co(F)=\{\emptyset,\{a\},\{d\},\{a,c\},\{a,d\},\{b,d\}\}$\hl
-Of the admissible extensions $\emptyset,\{a\}$ and $\{d\}$ are subsets of $\{a,d\}$, while $\{c\}$ is a subset of $\{a,c\}$. Those are not preferred extensions. We get $prf(F)=\{\{a,c\},\{a,d\},\{b,d\}\}$, since these sets are not subsets of each other.\hl
+All admissible sets except $\{c\}$ contain all the arguments they defend. Hence they are complete. $\{c\}$ defends $a$, which it doesn't contain and therefore is not complete. It follows that $co(F)=\{\emptyset,\{a\},\{d\},\{a,c\},\{a,d\},\{b,d\}\}$\hl
+Of the admissible sets $\emptyset,\{a\}$ and $\{d\}$ are subsets of $\{a,d\}$, while $\{c\}$ is a subset of $\{a,c\}$. Those are not preferred extensions. We get $prf(F)=\{\{a,c\},\{a,d\},\{b,d\}\}$, since these sets are not subsets of each other.\hl
 As we can see (\ref{eq7}) and (\ref{eq8}) are both satisfied.\cl
 
 Regarding the relation between grounded and complete extensions,\cite{Dung} contains the following information:\hl
@@ -274,6 +270,8 @@ Regarding the relation between grounded and complete extensions,\cite{Dung} cont
 \begin{align}
 	gr(F)\in co(F)
 \end{align}\cl
+
+\input{modulartex/otherproperties.tex} %TODO use?
 
 \section{Additional semantics}
 In this section we will look at a few additional extension semantics and how they relate to the ones mentioned above.
@@ -323,9 +321,9 @@ The unions of complete extensions and all arguments they attack are $\emptyset$ 
 As we can see (\ref{eq11}) is satisfied.\cl
 
 \subsection{Ideal extension}
-There also is an alternative semantic to the grounded extension. Ideal extension semantics were introduced within \cite{Alferes} and also produce a unique sceptical set, albeit a less strict one.\hl
+There also is an alternative semantic to the grounded extension. Ideal extension semantics were introduced within \cite{Alferes} and also produce a unique sceptical set, albeit a less strict one. They are defined in \cite{Baroni} as follows.\hl
 
-\textbf{Definition 11.} Let $S$ be an admissible extension. It is called the \emph{ideal extension} if it is the maximal (wrt set inclusion) admissible extension contained in every preferred extension.\\
+\textbf{Definition 11.} Let $S$ be an admissible sets. It is called the \emph{ideal extension} if it is the maximal (wrt set inclusion) admissible set contained in every preferred extension.\\
 The ideal extension of an argumentation framework $F$ is denoted $id(F)$.\hl
 
 Ideal extension is a superset of the grounded extension according to \cite{Dung2}. In \cite{Baroni} it is shown that the ideal extension is always a complete extension.
@@ -347,6 +345,8 @@ Ideal extension is a superset of the grounded extension according to \cite{Dung2
 
 It can be computed that $prf(F)=\{\{c,d\}\}$ and $co(F)=\{\emptyset,\{c,d\}\}$.\hl
 It follows that $gr(F)=\emptyset$, while $id(F)=\{c,d\}$, so that (\ref{eq12}) and (\ref{eq13}) hold.\cl
+
+\input{modulartex/furthertopics.tex} %TODO use?
 
 \chapter{Implementation}
 
@@ -408,7 +408,7 @@ The user then has the option to choose to compute one of six types of sets:
 
 \begin{itemize}[noitemsep]
 	\item conflict-free set
-	\item admissible extension
+	\item admissible set
 	\item preferred extension
 	\item stable extension
 	\item complete extension
@@ -416,9 +416,9 @@ The user then has the option to choose to compute one of six types of sets:
 \end{itemize}
 
 If the checkbox to ``use previously computed sets for further computations'' is selected, each computation takes into account the results of preceding computations, if applicable. If this option is not selected the program will compute every extension type needed, prior to computing the chosen extension.\\
-That means if conflict-free sets were already computed one can compute stable extensions without the need to compute conflict-free sets again, but when trying to compute preferred extensions the set of admissible extensions would have to be freshly computed (the computation of the admissible extensions using the already computed conflict-free extensions).\hl
+That means if conflict-free sets were already computed one can compute stable extensions without the need to compute conflict-free sets again, but when trying to compute preferred extensions the set of admissible sets would have to be freshly computed (the computation of the admissible sets using the already computed conflict-free extensions).\hl
 Each computation triggers the text area to the right (from now on called the explanation area) to display explanations of how the computed extensions came to pass. These explanations can either be shown step-by-step, all at once or be skipped so only the results of the computation are shown. Using previously computed extensions the explanation area does not show the explanation for already computed extensions again.\hl
-Figure 4.4 shows the explanation shown during the computation of the complete extensions of the argumentation framework shown in Figure 4.1. Note that in this case, admissible extensions (as a prerequisite to compute complete extensions) did not need to be computed, because they had been computed beforehand.
+Figure 4.4 shows the explanation shown during the computation of the complete extensions of the argumentation framework shown in Figure 4.1. Note that in this case, admissible sets (as a prerequisite to compute complete extensions) did not need to be computed, because they had been computed beforehand.
 
 \FloatBarrier
 	\begin{figure}[!h]
@@ -481,7 +481,7 @@ An \emph{Attack} object stores a pair of Argument objects. The first argument is
 
 \subsubsection{Framework}
 A \emph{Framework} object represents an argumentation framework $F=(A,R)$. It contains a list of all arguments ($A$) and a list of all attacks ($R$). It also stores all the extensions.\hl
-If a user wants to compute the extensions of a specific type (except the grounded extension), the framework calls the corresponding method of every extension candidate to find out if it indeed is of that extension type. For this purpose the framework can store multiple lists of extension candidates (e.g. The framework can store a list of conflict-free sets, which then can be used to compute admissible or stable extensions). After each candidate has returned its status, the frameworks returns a list of extensions that satisfy the criteria of the extension type in question.\hl
+If a user wants to compute the extensions of a specific type (except the grounded extension), the framework calls the corresponding method of every extension candidate to find out if it indeed is of that extension type. For this purpose the framework can store multiple lists of extension candidates (e.g. The framework can store a list of conflict-free sets, which then can be used to compute admissible sets or stable extensions). After each candidate has returned its status, the frameworks returns a list of extensions that satisfy the criteria of the extension type in question.\hl
 To compute the grounded extension the framework simply compares the arguments of its complete extensions, without any algorithms of the extension object being called.
 
 \subsubsection{Extension}
