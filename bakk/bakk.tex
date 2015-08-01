@@ -69,7 +69,7 @@ I want to thank my family for supporting me and Dr. Ferm{\"u}ller for guiding me
 \end{acknowledgements*}
 
 \begin{abstract*}
-This bachelor thesis explains argumentation frameworks and provides their most important semantics. It further analyzes the relations between different types of extension semantics.\hl %TODO still not good enough
+This bachelor thesis explains argumentation frameworks and provides their most important semantics. It further analyzes the relations between different types of extension semantics.\hl
 The main part of this thesis is the the developement of a JAVA application which is capable of creating custom argumentation frameworks, their representation as graphs and the computation of extensions. The application is created in a way such that students can study argumentation frameworks in an easily digestable way including step-by-step explanations of how to compute extensions accompanied by coloured highlighting of important aspects of the frameworks' graphs.
 \end{abstract*}
 
@@ -83,7 +83,7 @@ The main part of this thesis is the the developement of a JAVA application which
 \mainmatter
 
 \chapter{Introduction}
-Most humans argue daily. A argument is made followed by a counter-argument and so on until there is a resolution. This way decisions can be made that satisfy the needs of the arguing parties, be it in a large group of people or a single person weighing all the information they have, the decision depending on the arguments that ``win''.\hl
+Most humans argue daily. A statement is made, which is followed by a counter-argument and so on until there is a resolution. This way decisions can be made that satisfy the needs of the arguing parties, be it in a large group of people or a single person weighing all the information they have, the decision depending on the arguments that ``win''.\hl
 In 1995 Dung in \cite{Dung} introduced \emph{argumentation frameworks} as a basic theory to implement human argumentation mechanisms on computers.\cl
 First we will define argumentation frameworks and analyse semantics for them representing both credulous and sceptical approaches to reasoning. An example is provided to illustrate the diffences in computing the sets (called extensions) these semantics yield.\hl
 Next we examine how the different extension types are related to each other. We also will look at additional semantics and compare them to Dung's original ones they build upon using additional examples.\hl
@@ -96,23 +96,23 @@ To work with argumentation frameworks, first we must define their properties. In
 
 \section{Argumentation Frameworks}
 
-First we define argumentation frameworks as pairs of arguments and attack relations.\hl
+First we define argumentation frameworks as pairs of arguments and attacks relations.\hl
 
-\textbf{Definition 1.} An \emph{argumentation framework} $F$ is a pair $(A,R)$, where $A$ is a set of arguments and $R$ is a set of attack relations.\cl
+\textbf{Definition 1.} An \emph{argumentation framework} $F$ is a pair $(A,R)$, where $A$ is a set of arguments and $R$ is an attack relation.\cl
 
 The aforementioned attacks are defined as follows.\hl
 
-\textbf{Definition 2.} \emph{Attack relations} $R\subseteq A\times A$ represent attacks as pairs $(a,b)$, where $a,b\in A$ means $a$ \emph{attacks} $b$.\cl
+\textbf{Definition 2.} An \emph{attack relation} $R\subseteq A\times A$ is a set of pairs $(a,b)$, where $a,b\in A$ means $a$ \emph{attacks} $b$.\cl
 
 \textbf{Remark 1.} Let $S$ be a set of arguments. If $a\in S$ and there is an attack $(a,b)\in R$ we say $S$ \emph{attacks} $b$.\cl
 
-\textbf{Example 1.} Imagine we have 3 arguments $a_1$, $a_2$, and $b$.\hl
+\textbf{Example 1.} Imagine we have three arguments $a_1$, $a_2$, and $b$.\hl
 			\begin{tabular}{p{0.5cm}p{0.5cm}l}
 			& $a_1$ & = ''Blue is the most beautiful of all colours.''\\
 			& $b$ & = ''No, black is much more beautiful!''\\
 			& $a_2$ & = ''That's wrong, black isn't even a colour.''
 			\end{tabular}\hl
-We can see that these arguments contain three attacks. Argument $b$ attacks argument $a_1$ and vice versa. Additionally argument $a_2$ attacks argument $b$.\hl
+We can extract three attacks from these arguments. Argument $b$ attacks argument $a_1$ and vice versa. Additionally argument $a_2$ attacks argument $b$.\hl
 This results in the framework $F=(A,R)$, where $A=\{a_1,a_2,b\}$ and $R=\{(b,a_1),(a_1,b),(a_2,b)\}$.\cl
 
 It is also possible to represent every framework as a graph $(V,E)$, where $V=A$ and $E=R$. The graph representing the framework in our example looks like this:
@@ -125,19 +125,19 @@ It is also possible to represent every framework as a graph $(V,E)$, where $V=A$
 	\end{figure}
 \FloatBarrier
 
-\textbf{Remark 2.} From now on, when mentioning $A$ or $R$, we refer to the sets of an arbitrary, fixed argumentation framework $F=(A,R)$, except if otherwise stated.\cl
+\textbf{Remark 2.} From now on, when mentioning $A$ or $R$, we refer to the sets of an arbitrary, fixed argumentation framework $F=(A,R)$, except if it is otherwise stated.\cl
 
-Depending on their properties, arguments can be grouped into different sets, called \emph{extensions}.\cl
+The semantics of argumentation frameworks is captured by singling out certain so-called extensions intended to collect maximal subsets of arguments that are jointly maintainable according to various criteria with respect to the other arguments present in the argumentation framework.\cl
 
 \section{Conflict-free sets}
 
-As a basis for extensions we introduce \emph{conflict-free sets}. Since no extension should contain arguments that are in conflict with each other, there should be no attack relation consisting of two arguments of the same set.\cl
+As a basis for extensions we introduce \emph{conflict-free sets}. Since no extension should contain arguments that are in conflict with each other, there should be no attack consisting of two arguments of the same set.\cl
 
-\textbf{Definition 3.} Let $S$ be a set of arguments. It is \emph{conflict-free}, if $\nexists (a,b)\in R$, where $a,b\in S$.\\
-The set of all conflict-free sets of an argumentation framework $F$ is denoted $cf(F)$.\cl
+\textbf{Definition 3.} Given an argumentation framework $F=(A,R)$, let $S\subseteq A$ be a set of arguments. It is \emph{conflict-free}, if $\nexists (a,b)\in R$, where $a,b\in S$.\\
+The set of all conflict-free sets of $F$ is denoted $cf(F)$.\cl
 
-\textbf{Example 2.} (Continuation of Example 1.) As no argument attacks itself, $\{a_1\}$, $\{a_2\}$ and $\{b\}$ each are conflict-free. $\{a_1,a_2\}$ is also a conflict-free set, since there exists no attack relation consisting of both $a_1$ and $a_2$. The empty set is always conflict-free.\hl
-Since there is an attack relation between $b$ and each of the other arguments, there are no other conflict-free sets.\hl
+\textbf{Example 2.} (Continuation of Example 1.) As no argument attacks itself, $\{a_1\}$, $\{a_2\}$ and $\{b\}$ each are conflict-free. $\{a_1,a_2\}$ is also a conflict-free set, since there exists no attack consisting of both $a_1$ and $a_2$. The empty set is always conflict-free.\hl
+Since there is an attack between $b$ and each of the other arguments, there are no other conflict-free sets.\hl
 It follows that $cf(F)=\{\emptyset,\{a_1\},\{a_2\},\{b\},\{a_1,a_2\}\}$.\cl
 
 \section{Admissible extensions}
@@ -149,8 +149,8 @@ To be able to find a set of arguments that can defend itself, it does not suffic
 \textbf{Definition 5.} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\\
 The set of all admissible extensions of an argumentation framework $F$ is denoted $adm(F)$.\cl
 
-\textbf{Example 3.} (Continuation of Example 2.) Of the conflict-free sets only \(\emptyset\) and $\{a_2\}$ don't get attacked. Therefore they are admissible extensions. $\{a_1\}$ defends itself from its only attacker $b$ via the attack relation $(a_1,b)$, making it an admissible extension. $\{a_1,a_2\}$ gets attacked via the attack relation $(b,a_1)$, but $a_1$ gets defended through $(a_1,b)$ and $(a_2,b)$, also making it an admissible extension.\\
-$\{b\}$ is not admissible since it doesn't defend its argument.\hl
+\textbf{Example 3.} (Continuation of Example 2.) Of the conflict-free sets only \(\emptyset\) and $\{a_2\}$ don't get attacked. Therefore they are admissible extensions. $\{a_1\}$ defends itself from its only attacker $b$ via the attack $(a_1,b)$, making it an admissible extension. $\{a_1,a_2\}$ gets attacked via the attack $(b,a_1)$, but $a_1$ gets defended through $(a_1,b)$ and $(a_2,b)$, also making it an admissible extension.\\
+$\{b\}$ is not admissible since it doesn't defend its argument against the attacks by $a_1$ and $a_2$.\hl
 It follows that $adm(F)=\{\emptyset,\{a_1\},\{a_2\},\{a_1,a_2\}\}$.\cl
 
 \section{Preferred extensions}
@@ -163,7 +163,7 @@ The set of all preferred extensions of an argumentation framework $F$ is denoted
 
 \textbf{Example 4.} (Continuation of Example 3.) Since $\emptyset\subset\{a_2\}$, \(\emptyset\) is not a preferred extension. Since $\{a_1\}\subset\{a_1,a_2\}$ and $\{a_2\}\subset\{a_1,a_2\}$, $\{a_1\}$ and $\{a_2\}$ are not a preferred extensions. Since all other admissible extensions are proper subsets of $\{a_1,a_2\}$, it is a preferred extension.\hl
 It follows that $prf(F)=\{\{a_1,a_2\}\}$.\hl
-As we can see, all arguments contained in admissible extensions still are contained in a preferred extension, even though the number of results is smaller.\cl
+As we can see, all arguments contained in admissible extensions still are contained in a preferred extension.\cl
 
 \section{Stable extensions}
 
@@ -172,13 +172,13 @@ Additionally we can define a stricter version of the admissible extension, that 
 \textbf{Definition 7.} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there exists an attack $(b,a)\in R$ where $b\in S$.\\
 The set of all stable extensions of an argumentation framework $F$ is denoted $st(F)$.\cl
 
-\textbf{Example 5.} (Continuation of Example 2) The conflict-free set $\emptyset$ doesn't attack any of the other arguments, $\{a_1\}$ and $\{a_2\}$ only attack $\{b\}$, missing an attack on $\{a_2\}$ or $\{a_1\}$ respectively. $\{b\}$ misses an attack on $\{a_2\}$. They are not stable extensions.\\
-$\{a_1,a_2\}$ attacks all other arguments (i.e. $b$, attack relation $(a_2,b)$) and therefore is a stable extension.\hl
+\textbf{Example 5.} (Continuation of Example 2) The conflict-free set $\emptyset$ doesn't attack any of the other arguments, $\{a_1\}$ and $\{a_2\}$ only attack $b$, missing an attack on $a_2$ or $a_1$ respectively. $\{b\}$ misses an attack on $a_2$. They are not stable extensions.\\
+$\{a_1,a_2\}$ attacks the only other argument (i.e. $b$, via attack $(a_2,b)$) and therefore is a stable extension.\hl
 It follows that $st(F)=\{\{a_1,a_2\}\}$.\cl
 
 \section{Complete extensions}
 
-Credulous reasoning contrasts sceptical reasoning. The extension fitting sceptical reasoning within the context of argument frameworks is the complete extension.\cl
+Credulous reasoning contrasts sceptical reasoning. An extension matching sceptical reasoning within the context of argument frameworks is the complete extension.\cl
 
 \textbf{Definition 8.} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S$ does not defend $a$.\\
 The set of all complete extensions of an argumentation framework $F$ is denoted $co(F)$.\cl
@@ -189,16 +189,16 @@ It follows that $co(F)=\{\{a_1,a_2\}\}$.\cl
 
 \section{Grounded extension}
 
-As before, we can again reduce the number of extensions. In this case we search for the common denominator, meaning exactly those arguments all complete extensions can ``agree'' on. This results in the grounded extension as defined in \cite{Egly}.\cl
+As before, we can again reduce the number of extensions. In this case we search for the common denominator, meaning exactly those arguments all complete extensions can ``agree'' on. This set is called the grounded extension as defined in \cite{Egly}.\cl
 
 \textbf{Definition 9.} The (unique) \emph{grounded extension} is defined by $\bigcap\limits_{i=1}^n{S_i}$, where $\{S_1,...,S_n\}$ is the set of all complete extensions.\\
 The grounded extension of an argumentation framework $F$ is denoted $gr(F)$\cl
 
 \textbf{Example 7.} (Continuation of Example 6.) Since there is only one complete extension $\{a_1,a_2\}$, it also is the grounded extension $gr(F)$.\cl
 
-\chapter{Relations and additional semantics} %change to something more clear?
+\chapter{Relations and additional semantics}
 
-As we have seen in the previous chapter, often there may be overlaps between the different extension types. In this chapter we look at the relations between extension types, explore their features and provide additional extension semantics. In advance the relations between extension types, including additional extension types, are shown in Figure 3.1 which was adapted from \cite{Gorogiannis}.\cl %erklären inwiefern?
+As we have seen in the previous chapter, often there are overlaps between the different extension types. In this chapter we look at the relations between extension types, explore their features and provide additional extension semantics. In advance the relations between extension types, including additional extension types, are shown in Figure 3.1 which was adapted from \cite{Gorogiannis}.\cl %erklären inwiefern?
 
 \FloatBarrier
 	\begin{figure}[!h]
@@ -236,7 +236,7 @@ Therefore each stable extension also is an admissible extension.\cl
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=\linewidth]{graphs/ex2_v2.pdf}
-		\caption{An argument framework $F$, where $st(F)\subset prf(F)$}
+		\caption{An argumentation framework $F$, where $st(F)\subsetneq prf(F)$}
 	\end{figure}
 \FloatBarrier
 
@@ -477,7 +477,7 @@ These classes have the following relationships:
 An \emph{Argument} object is a pair consisting of a key and a value. The key is the name of the argument (representing an argument $a\in A$), while the value is the argument's statement.
 
 \subsubsection{Attack}
-An \emph{Attack} object stores a pair of Argument objects. The first argument is called the ``attacker'', the second the ``attacked'' argument representing an attack relation $(a,b)\in R$.
+An \emph{Attack} object stores a pair of Argument objects. The first argument is called the ``attacker'', the second the ``attacked'' argument representing an attack $(a,b)\in R$.
 
 \subsubsection{Framework}
 A \emph{Framework} object represents an argumentation framework $F=(A,R)$. It contains a list of all arguments ($A$) and a list of all attacks ($R$). It also stores all the extensions.\hl

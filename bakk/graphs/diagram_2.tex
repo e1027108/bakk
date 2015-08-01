@@ -6,14 +6,14 @@
 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=0.8cm,semithick,custom/.style={rectangle,draw=none}]
 	%modified from Instantiating abstract argumentation with classical logic arguments: Postulates and properties by Nikos Gorogiannis; Anthony Hunter (Artificial Intelligence, 175 (2011) 1479–1497.)
 
-	\node[custom] (conflict-free) {$conflict-free$};
-	\node[custom] (admissible) [below left =  of conflict-free] {$admissible$};
-	\node[custom] (complete) [below left = of admissible] {$complete$};
-	\node[custom] (preferred) [below left = of complete] {$preferred$};
-	\node[custom] (semi-stable) [below left = of preferred] {$semi-stable$};
-	\node[custom] (stable) [below left = of semi-stable] {$stable$};
-	\node[custom] (ideal) [below right = of complete] {$ideal$};
-	\node[custom] (grounded) [below right = of ideal] {$grounded$};
+	\node[custom] (conflict-free) {\it{conflict-free}};
+	\node[custom] (admissible) [below left =  of conflict-free] {\it{admissible}};
+	\node[custom] (complete) [below left = of admissible] {\it{complete}};
+	\node[custom] (preferred) [below left = of complete] {\it{preferred}};
+	\node[custom] (semi-stable) [below left = of preferred] {\it{semi-stable}};
+	\node[custom] (stable) [below left = of semi-stable] {\it{stable}};
+	\node[custom] (ideal) [below right = of complete] {\it{ideal}};
+	\node[custom] (grounded) [below right = of ideal] {\it{grounded}};
 
 	\path (admissible) edge (conflict-free);
         \path (complete) edge (admissible);
