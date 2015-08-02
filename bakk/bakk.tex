@@ -121,7 +121,7 @@ It is also possible to represent every framework as a graph $(V,E)$, where $V=A$
 	\begin{figure}[!ht]
 		\centering
 		\includegraphics[width=\linewidth]{graphs/ex1_v2.pdf}
-		\caption{An argument framework about colours.}
+		\caption{An argumentation framework about colours.}
 	\end{figure}
 \FloatBarrier
 
@@ -178,7 +178,7 @@ It follows that $st(F)=\{\{a_1,a_2\}\}$.\cl
 
 \section{Complete extensions}
 
-Credulous reasoning contrasts sceptical reasoning. An extension matching sceptical reasoning within the context of argument frameworks is the complete extension.\cl
+Credulous reasoning contrasts sceptical reasoning. An extension matching sceptical reasoning within the context of argumentation frameworks is the complete extension.\cl
 
 \textbf{Definition 8.} Let $S$ be an admissible extension. It is called a \emph{complete extension} if for each $a\not\in S$, $S$ does not defend $a$.\\
 The set of all complete extensions of an argumentation framework $F$ is denoted $co(F)$.\cl
@@ -259,18 +259,18 @@ Each preferred extension is a complete extension, but not vice versa.
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=\linewidth]{graphs/ex3.pdf}
-		\caption{An argument framework $F$, where $prf(F)\subset co(F)$}
+		\caption{An argumentation framework $F$, where $prf(F)\subset co(F)$}
 	\end{figure}
 \FloatBarrier
 
-It can be computed that $adm(F)=\{\emptyset,\{a\},\{c\},\{d\},\{a,c\},\{a,d\},\{b,d\}\}$.\hl
+It can be computed $adm(F)=\{\emptyset,\{a\},\{c\},\{d\},\{a,c\},\{a,d\},\{b,d\}\}$.\hl
 All admissible extensions except $\{c\}$ contain all the arguments they defend. Hence they are complete. $\{c\}$ defends $a$, which it doesn't contain and therefore is not complete. It follows that $co(F)=\{\emptyset,\{a\},\{d\},\{a,c\},\{a,d\},\{b,d\}\}$\hl
 Of the admissible extensions $\emptyset,\{a\}$ and $\{d\}$ are subsets of $\{a,d\}$, while $\{c\}$ is a subset of $\{a,c\}$. Those are not preferred extensions. We get $prf(F)=\{\{a,c\},\{a,d\},\{b,d\}\}$, since these sets are not subsets of each other.\hl
 As we can see (\ref{eq7}) and (\ref{eq8}) are both satisfied.\cl
 
 Regarding the relation between grounded and complete extensions,\cite{Dung} contains the following information:\hl
 
-\textbf{Lemma 3.} The grounded extension is the least (wrt set inclusion) complete extension.
+\textbf{Lemma 3.} The grounded extension is the least (w.r.t. set inclusion) complete extension.
 \begin{align}
 	gr(F)\in co(F)
 \end{align}\cl
@@ -279,16 +279,16 @@ Regarding the relation between grounded and complete extensions,\cite{Dung} cont
 In this section we will look at a few additional extension semantics and how they relate to the ones mentioned above.
 
 \subsection{Semi-stable extensions}
-The only one of Dung's original extensions not to exist for every argumentation framework is the stable extension. A related, but less strict extension was definded in \cite{Caminada}, the semi-stable extension. The following definition stems from \cite{Gorogiannis}:\hl
+The only one of Dung's original extensions that doesn't exist for every argumentation framework is the stable extension. A related, but less strict extension was definded in \cite{Caminada}, the semi-stable extension. In \cite{Gorogiannis} it is defined as follows:\hl
 
-\textbf{Definition 10.} Let $S$ be a complete extension. It is called a \emph{semi-stable extension} if the set $S\cup\{a\in A\text{ | } S\text{ attacks }a\}$ is maximal wrt set inclusion.\\
+\textbf{Definition 10.} Let $S$ be a complete extension. It is called a \emph{semi-stable extension} if the set $S\cup\{a\in A\text{ | } S\text{ attacks }a\}$ is maximal w.r.t. set inclusion.\\
 The set of all semi-stable extensions of an argumentation framework $F$ is denoted $sst(F)$.\hl
 
-Since there always is a complete extension, there is always a semi-stable extension.  Proof for the following relations is provided in \cite{Caminada}.
+Since there always is a complete extension, there is always a semi-stable extension.  Proofs for the following relations are provided in \cite{Caminada}.
 
 \begin{align}
-	\label{eq10} st(F)\subset sst(F) \\ 
-	\label{eq11} sst(F)\subset prf(F) 
+	\label{eq10} st(F)\subseteq sst(F) \\ 
+	\label{eq11} sst(F)\subseteq prf(F) 
 \end{align}\cl
 
 The two following examples can originally be found in \cite{Caminada}:\hl
@@ -299,13 +299,13 @@ The two following examples can originally be found in \cite{Caminada}:\hl
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[scale=1.5]{graphs/ex4.pdf}
-		\caption{An argument framework $F$, where $st(F)\subset sst(F)$}
+		\caption{An argumentation framework $F$, where $st(F)\subset sst(F)$}
 	\end{figure}
 \FloatBarrier
 
 It can be computed that $adm(F)=\{\emptyset,\{b\},\{b,d\}\}$ and $co(F)=\{\{b,d\}\}$.\hl
 There is no extension within $adm(F)$, that attacks all arguments it doesn't contain. Therefore $st(F)=\emptyset$.\hl
-$\{b,d\}$ is the only complete extension, $\{b,d\}\cup \{c\}$ is maximal wrt set inclusion, so it is semi-stable. It follows that $sst(F)=\{\{b,d\}\}$.\hl
+$\{b,d\}$ is the only complete extension, $\{b,d\}\cup \{c\}$ is maximal w.r.t. set inclusion, so it is semi-stable. It follows that $sst(F)=\{\{b,d\}\}$.\hl
 As we can see (\ref{eq10}) is satisfied.\cl
 
 \textbf{Example 11.} Let $F$ be an argumentation framework $(A,R)$ such that $A=\{a,b,c,d,e\}$ and $R=\{(a,b),(b,a),(b,c),(c,d),(d,e),(e,c)\}$\hl
@@ -314,18 +314,18 @@ As we can see (\ref{eq10}) is satisfied.\cl
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=\linewidth]{graphs/ex5.pdf}
-		\caption{An argument framework $F$, where $sst(F)\subset prf(F)$}
+		\caption{An argumentation framework $F$, where $sst(F)\subset prf(F)$}
 	\end{figure}
 \FloatBarrier
 
-It can be computed that $co(F)=\{\emptyset,\{a\},\{b,d\}$ and $prf(F)=\{\{a\},\{b,d\}$.\hl
+It can be computed that $co(F)=\{\emptyset,\{a\},\{b,d\}\}$ and $prf(F)=\{\{a\},\{b,d\}\}$.\hl
 The unions of complete extensions and all arguments they attack are $\emptyset$ regarding $\emptyset$, $\{a,b\}$ regarding $\{a\}$ and $\{a,b,c,d,e\}$ regarding $\{b,d\}$. The latter one is the only maximal set computed, so $sst(F)=\{\{b,d\}\}$.\hl
 As we can see (\ref{eq11}) is satisfied.\cl
 
 \subsection{Ideal extension}
-There also is an alternative semantic to the grounded extension. Ideal extension semantics were introduced within \cite{Alferes} and also produce a unique sceptical set, albeit a less strict one.\hl
+There also is an alternative semantics to the grounded extension. Ideal extension semantics were introduced in \cite{Alferes} and also produce a unique sceptical set, albeit a less strict one.\hl
 
-\textbf{Definition 11.} Let $S$ be an admissible extension. It is called the \emph{ideal extension} if it is the maximal (wrt set inclusion) admissible extension contained in every preferred extension.\\
+\textbf{Definition 11.} Let $S$ be an admissible extension. It is called the \emph{ideal extension} if it is the maximal (w.r.t. set inclusion) admissible extension contained in every preferred extension.\\
 The ideal extension of an argumentation framework $F$ is denoted $id(F)$.\hl
 
 Ideal extension is a superset of the grounded extension according to \cite{Dung2}. In \cite{Baroni} it is shown that the ideal extension is always a complete extension.
@@ -341,7 +341,7 @@ Ideal extension is a superset of the grounded extension according to \cite{Dung2
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[scale=1.5]{graphs/ex6.pdf}
-		\caption{An argument framework $F$, where $gr(F)\subset id(F)$ and $id(F)\in co(F)$}
+		\caption{An argumentation framework $F$, where $gr(F)\subset id(F)$ and $id(F)\in co(F)$}
 	\end{figure}
 \FloatBarrier
 
@@ -393,7 +393,7 @@ Figure 4.1 shows the input mask with input representing the argumentation framew
 	\end{figure}
 \FloatBarrier
 
-Upon loading the graph view (shown in Figure 4.2) the user can see the graph representing the argument framework defined in the input mask to the left. Every argument is represented by a node labelled with that arguments name. The argument nodes are arranged in a circle for better distinguishability.\hl
+Upon loading the graph view (shown in Figure 4.2) the user can see the graph representing the argumentation framework defined in the input mask to the left. Every argument is represented by a node labelled with that arguments name. The argument nodes are arranged in a circle for better distinguishability.\hl
 It is possible to view the arguments' descriptions by hovering over them. In case no description was given for an argument, the application displays this information.\hl
 
 \FloatBarrier
