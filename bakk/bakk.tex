@@ -112,7 +112,7 @@ The aforementioned attacks are defined as follows.\hl
 			& $b$ & = ''No, black is much more beautiful!''\\
 			& $a_2$ & = ''That's wrong, black isn't even a colour.''
 			\end{tabular}\hl
-We can extract three attacks from these arguments. Argument $b$ attacks argument $a_1$ and vice versa. Additionally argument $a_2$ attacks argument $b$.\hl
+We can see that argument $b$ attacks argument $a_1$ and vice versa. Additionally argument $a_2$ attacks argument $b$.\hl
 This results in the framework $F=(A,R)$, where $A=\{a_1,a_2,b\}$ and $R=\{(b,a_1),(a_1,b),(a_2,b)\}$.\cl
 
 It is also possible to represent every framework as a graph $(V,E)$, where $V=A$ and $E=R$. The graph representing the framework in our example looks like this:
@@ -125,7 +125,7 @@ It is also possible to represent every framework as a graph $(V,E)$, where $V=A$
 	\end{figure}
 \FloatBarrier
 
-\textbf{Remark 2.} From now on, when mentioning $A$ or $R$, we refer to the sets of an arbitrary, fixed argumentation framework $F=(A,R)$, except if it is otherwise stated.\cl
+\textbf{Remark 2.} From now on, when mentioning $A$ or $R$, we refer to the sets of an arbitrary, fixed argumentation framework $F=(A,R)$, unless otherwise stated.\cl
 
 The semantics of argumentation frameworks is captured by singling out certain so-called extensions intended to collect maximal subsets of arguments that are jointly maintainable according to various criteria with respect to the other arguments present in the argumentation framework.\cl
 
@@ -144,7 +144,7 @@ It follows that $cf(F)=\{\emptyset,\{a_1\},\{a_2\},\{b\},\{a_1,a_2\}\}$.\cl
 
 To be able to find a set of arguments that can defend itself, it does not suffice that a set is not in conflict with itself. Additionally each of its arguments should also be defended from outside attackers as is the case with admissible semantics.\hl
 
-\textbf{Definition 4.} An argument $a$ is \emph{defended} by a set $S$, iff for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$. If this is the case $S$ \emph{defends} $a$.\cl
+\textbf{Definition 4.} An argument $a$ is \emph{defended} by a set $S$, iff for every attack $(b,a)\in R$ there is an attack $(c,b)$, where $c\in S$.\cl
 
 \textbf{Definition 5.} Let $S$ be a conflict-free set. It is called an \emph{admissible extension} if it defends each $a\in S$.\\
 The set of all admissible extensions of an argumentation framework $F$ is denoted $adm(F)$.\cl
@@ -172,7 +172,7 @@ Additionally we can define a stricter version of the admissible extension, that 
 \textbf{Definition 7.} Let $S$ be a conflict-free set. It is called a \emph{stable extension} if for each $a\not\in S$ there exists an attack $(b,a)\in R$ where $b\in S$.\\
 The set of all stable extensions of an argumentation framework $F$ is denoted $st(F)$.\cl
 
-\textbf{Example 5.} (Continuation of Example 2) The conflict-free set $\emptyset$ doesn't attack any of the other arguments, $\{a_1\}$ and $\{a_2\}$ only attack $b$, missing an attack on $a_2$ or $a_1$ respectively. $\{b\}$ misses an attack on $a_2$. They are not stable extensions.\\
+\textbf{Example 5.} (Continuation of Example 2) The conflict-free set $\emptyset$ doesn't attack any of the other arguments, $\{a_1\}$ and $\{a_2\}$ only attack $b$, not attacking $a_2$ or $a_1$ respectively. $\{b\}$ doesn't attack $a_2$. Since they don't attack all arguments they don't contain, these sets are not stable extensions.\\
 $\{a_1,a_2\}$ attacks the only other argument (i.e. $b$, via attack $(a_2,b)$) and therefore is a stable extension.\hl
 It follows that $st(F)=\{\{a_1,a_2\}\}$.\cl
 
@@ -198,7 +198,7 @@ The grounded extension of an argumentation framework $F$ is denoted $gr(F)$\cl
 
 \chapter{Relations and additional semantics}
 
-As we have seen in the previous chapter, often there are overlaps between the different extension types. In this chapter we look at the relations between extension types, explore their features and provide additional extension semantics. In advance the relations between extension types, including additional extension types, are shown in Figure 3.1 which was adapted from \cite{Gorogiannis}.\cl %erklären inwiefern?
+As we have seen in the previous chapter, there often are sets meeting the criteria for more than one extension type. In this chapter we look at the relations between extension types, explore their features and provide additional extension semantics. In advance the relations between extension types, including additional extension types, are shown in Figure 3.1 which was adapted from \cite{Gorogiannis}.\cl
 
 \FloatBarrier
 	\begin{figure}[!h]
@@ -235,14 +235,14 @@ Therefore each stable extension also is an admissible extension.\cl
 \FloatBarrier
 	\begin{figure}[!h]
 		\centering
+
 		\includegraphics[width=\linewidth]{graphs/ex2_v2.pdf}
 		\caption{An argumentation framework $F$, where $st(F)\subsetneq prf(F)$}
 	\end{figure}
 \FloatBarrier
 
 It can be computed that $cf(F)=adm(F)=\{\emptyset,\{b\},\{c\}\}$. So we only have to consider three extensions for further computations.\hl
-As can be seen, $\{b\}$ is the only conflict-free set that attacks all other arguments. Therefore $st(F)=\{\{b\}\}$.\hl
-We know that $\{b\}$ has to be a preferred extension, because of Lemma 1. $\{c\}$ attacks only it's attacker $b$, but not $a$. Therefore it is preferred and $prf(F)=\{\{b\},\{c\}\}$.\cl
+As can be seen, $\{b\}$ is the only conflict-free set that attacks all other arguments. Therefore $st(F)=\{\{b\}\}$ and it becomes obvious that $st(F)\subsetneq prf(F)$.\cl
 
 Further we look at the relation between preferred, complete and grounded extensions. Dung provides the following Lemma in \cite{Dung}.\hl
 
@@ -263,7 +263,7 @@ Each preferred extension is a complete extension, but not vice versa.
 	\end{figure}
 \FloatBarrier
 
-It can be computed $adm(F)=\{\emptyset,\{a\},\{c\},\{d\},\{a,c\},\{a,d\},\{b,d\}\}$.\hl
+To compute complete extensions as well as preferred extensions we use the set of admissible extensions $adm(F)=\{\emptyset,\{a\},\{c\},\{d\},\{a,c\},\{a,d\},\{b,d\}\}$.\hl
 All admissible extensions except $\{c\}$ contain all the arguments they defend. Hence they are complete. $\{c\}$ defends $a$, which it doesn't contain and therefore is not complete. It follows that $co(F)=\{\emptyset,\{a\},\{d\},\{a,c\},\{a,d\},\{b,d\}\}$\hl
 Of the admissible extensions $\emptyset,\{a\}$ and $\{d\}$ are subsets of $\{a,d\}$, while $\{c\}$ is a subset of $\{a,c\}$. Those are not preferred extensions. We get $prf(F)=\{\{a,c\},\{a,d\},\{b,d\}\}$, since these sets are not subsets of each other.\hl
 As we can see (\ref{eq7}) and (\ref{eq8}) are both satisfied.\cl
@@ -319,7 +319,7 @@ As we can see (\ref{eq10}) is satisfied.\cl
 \FloatBarrier
 
 It can be computed that $co(F)=\{\emptyset,\{a\},\{b,d\}\}$ and $prf(F)=\{\{a\},\{b,d\}\}$.\hl
-The unions of complete extensions and all arguments they attack are $\emptyset$ regarding $\emptyset$, $\{a,b\}$ regarding $\{a\}$ and $\{a,b,c,d,e\}$ regarding $\{b,d\}$. The latter one is the only maximal set computed, so $sst(F)=\{\{b,d\}\}$.\hl
+To obtain $sst(F)$ we need to compute $S\cup\{a\in A\text{ | } S\text{ attacks }a\}$ for all $S\in co(F)$. $\emptyset\cup\emptyset=\emptyset$, $\{a\}\cup\{b\}=\{a,b\}$ and $\{b,d\}\cup\{a,c,e\}=A$, only $A$ being maximal w.r.t. set inclusion. Therefore $sst(F)=\{\{b,d\}\}$.\hl
 As we can see (\ref{eq11}) is satisfied.\cl
 
 \subsection{Ideal extension}
@@ -345,7 +345,7 @@ Ideal extension is a superset of the grounded extension according to \cite{Dung2
 	\end{figure}
 \FloatBarrier
 
-It can be computed that $prf(F)=\{\{c,d\}\}$ and $co(F)=\{\emptyset,\{c,d\}\}$.\hl
+We know that $prf(F)=\{\{c,d\}\}$ and $co(F)=\{\emptyset,\{c,d\}\}$.\hl
 It follows that $gr(F)=\emptyset$, while $id(F)=\{c,d\}$, so that (\ref{eq12}) and (\ref{eq13}) hold.\cl
 
 \chapter{Implementation}
