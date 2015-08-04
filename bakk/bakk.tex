@@ -84,11 +84,11 @@ The main part of this thesis is the the developement of a JAVA application which
 \mainmatter
 
 \chapter{Introduction}
-Most humans argue daily. A statement is made, which is followed by a counter-argument and so on until there is a resolution. This way decisions can be made that satisfy the needs of the arguing parties, be it in a large group of people or a single person weighing all the information they have, the decision depending on the arguments that ``win''.\hl
-In 1995 Dung in \cite{Dung} introduced \emph{argumentation frameworks} as a basic theory to implement human argumentation mechanisms on computers.\cl
+Most humans argue daily. An argument is made, which is followed by a counter-argument and so on until there is a resolution. This way decisions can be made that satisfy the needs of the arguing parties, be it in a large group of people or a single person weighing all the information they have, the decision depending on the arguments that ``win''.\hl
+In 1995 Dung introduced \emph{argumentation frameworks} as a basic theory to implement human argumentation mechanisms on computers in \cite{Dung}.\cl
 First we will define argumentation frameworks and analyse semantics for them representing both credulous and sceptical approaches to reasoning. An example is provided to illustrate the diffences in computing the sets (called extensions) these semantics yield.\hl
 Next we examine how the different extension types are related to each other. We also will look at additional semantics and compare them to Dung's original ones they build upon using additional examples.\hl
-In the last chapter we take a look at a computer program, specifically written along with this bachelor thesis, that allows the user to define argumentation frameworks (or, alternatively, choose from a set of examples) and that explains how the extensions of these frameworks are computed.\cl %erwähnt nicht alles was passiert
+In the last chapter we take a look at a computer program, specifically written along with this bachelor thesis, that allows the user to define argumentation frameworks (or, alternatively, choose from a set of examples) and that explains how the extensions of these frameworks are computed.\cl
 The goal of this thesis is to enable students to more easily acquire knowledge about argumentation frameworks by giving them the necessary information and providing them with a tool to aid them in their understanding of this topic.
 
 \chapter{Definitions}
@@ -365,7 +365,7 @@ In this chapter the usage and implementation details of the aforementioned progr
 The application consists of two views: the input mask and the graph view.
 
 \section{Input mask}
-On starting the application the user is presented with an input mask. It consists of ten rows representing the arguments of an argumentation framework. The number of arguments is limited to ten because a higher number of arguments doesn't provide any further benefit to a user wanting to learn about the basics of argumentation frameworks.\\
+On starting the application, the user is presented with an input mask. It consists of ten rows representing the arguments of an argumentation framework. The number of arguments is limited to ten because a higher number of arguments doesn't provide any further benefit to a user wanting to learn about the basics of argumentation frameworks.\\
 Each row consists of a checkbox and two textfields.\hl
 Each checkbox is labelled with the name of the argument the row represents in capital letters ($A$ ... $J$). If a checkbox is selected the program will use the represented argument for further computations and visualisations.\hl
 The first textfield of each row contains the argument's description. This can be a string of any form. The argument description is optional because it is only used in a cosmetic, non-functional fashion in the rest of the program.\hl
