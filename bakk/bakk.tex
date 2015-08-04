@@ -365,11 +365,10 @@ In this chapter the usage and implementation details of the aforementioned progr
 The application consists of two views: the input mask and the graph view.
 
 \section{Input mask}
-On starting the application, the user is presented with an input mask. It consists of ten rows representing the arguments of an argumentation framework. The number of arguments is limited to ten because a higher number of arguments doesn't provide any further benefit to a user wanting to learn about the basics of argumentation frameworks.\\
-Each row consists of a checkbox and two textfields.\hl
-Each checkbox is labelled with the name of the argument the row represents in capital letters ($A$ ... $J$). If a checkbox is selected the program will use the represented argument for further computations and visualisations.\hl
-The first textfield of each row contains the argument's description. This can be a string of any form. The argument description is optional because it is only used in a cosmetic, non-functional fashion in the rest of the program.\hl
-The second textfield of each row contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can optionally be seperated either by ',' or spaces. Duplicate attacks are ignored. This means the attack fields accept the following syntax: \[[a-jA-J\text{ },]*\]\hl %slightly imprecise sentence
+On starting the application, the user is presented with an input mask. Here the user can choose from up to ten arguments. The number of arguments is limited because more than ten arguments don't provide any further benefit to a user wanting to learn about the basics of argumentation frameworks.\hl
+There is a checkbox for every possible argument that is labelled with the name of the argument in capital letters ($A$ ... $J$). If a checkbox is selected the program will use the represented argument for further computations and visualisations.\hl
+The user also has the option to give descriptions for arguments. They can be a strings of any form.\hl
+Each argument has a textfield that contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can optionally be seperated either by ',' or spaces. Duplicate attacks are ignored. This means the attack fields accept the following syntax: \[[a-jA-J\text{ },]*\]\hl
 
 There are some preset examples to be chosen from via the drop-down menu labelled ``choose preset''. Once an example is chosen, selection and text fields are updated corresponding to the chosen preset. Presets include examples given in \cite{Dung} and \cite{Egly} as well as examples used in this thesis.\hl
 On clicking the ``show graph'' button, the application checks if the attack fields conform to the syntax for selected arguments and if they contain arguments that are not selected (meaning they don't exist and can therefore not be attacked). If there is invalid input an error message is displayed, if not the argumentation framework is created and the graph view displayed.\hl
@@ -447,7 +446,7 @@ After showing the results of a computation a dropdown menu becomes availiable be
 The graph view also allows the user to go back to the input mask using the `<' button. The input mask still contains the input from before switching to the graph view to allow the user to make small adjustments without having to redefine the whole framework.
 
 \section{Implementation details}
-This section lays out which technologies where used to create the program, what class structure was used to represent argumentation frameworks and what these classes do.\cl %alter?
+This section lists which technologies where used to create the program, what class structure was used to represent argumentation frameworks and what these classes do.\cl
 
 \subsection{Technologies and Resources used}
 The application was written in Java (version 1.8) using eclipse Kepler as a working environment.\hl
@@ -455,7 +454,7 @@ As the graphical user interface JavaFX was used, the design being created as .fx
 Java Universal Network/Graph Framework (JUNG) was used for the data structure of the graphs.
 
 \subsection{Program structure}
-There exist four classes in the application which model argumentation frameworks: %TODO how much do i tell? Change section title?
+There exist four classes in the application which model argumentation frameworks:
 
 \begin{itemize}[noitemsep]
 	\item Argument.java
@@ -469,7 +468,7 @@ These classes have the following relationships:
 \FloatBarrier
 \begin{figure}[!h]
 	\centering
-	\includegraphics[width=\linewidth]{graphs/classes.pdf} %TODO visibility needs to be in there
+	\includegraphics[width=\linewidth]{graphs/classes.pdf}
 	\caption{Argumentation framework class diagram}
 \end{figure}
 \FloatBarrier
@@ -487,21 +486,7 @@ To compute the grounded extension the framework simply compares the arguments of
 
 \subsubsection{Extension}
 An \emph{Extension} object represents a set $S\subseteq A$. For that purpose it stores a list of Argument objects. Every extension object stores a reference to the framework it belongs to, to compute and store lists of outgoing and incoming attacks.\hl
-Each extension object can compute if it is of a certain extension type (except for grounded extensions, see above). %TODO algorithm here?
-
-%\begin{algorithm}[H]
- %\KwData{set $S$ of arguments}
-% \KwResult{whether $S$ is conflict-free}
- %\ForEach{$a \in S$}{
-% 	\ForEach{$b \in S$}{
-% 		\If{$b \in a$}{
-%			return $False$;
-  % 		}
- %	}
- %}
- %return $True$;
- %\caption{Check whether a set is conflict-free}
-%\end{algorithm}\hl
+Each extension object can compute if it is of a certain extension type (except for grounded extensions, see above).
 
 \backmatter
 
