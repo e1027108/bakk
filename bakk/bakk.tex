@@ -190,7 +190,7 @@ It follows that $co(F)=\{\{a_1,a_2\}\}$.\cl
 
 \section{Grounded extension}
 
-As before, we can again reduce the number of extensions. In this case we search for the common denominator, meaning exactly those arguments all complete extensions can ``agree'' on. This set is called the grounded extension as defined in \cite{Egly}.\cl
+Argumentation frameworks can also produce big numbers of complete extensions. In that case we search for their intersection, i.e. the set of all arguments that are part of every complete extension. This set is called the grounded extension as defined in \cite{Egly}.\cl
 
 \textbf{Definition 9.} The (unique) \emph{grounded extension} is defined by $\bigcap\limits_{i=1}^n{S_i}$, where $\{S_1,...,S_n\}$ is the set of all complete extensions.\\
 The grounded extension of an argumentation framework $F$ is denoted $gr(F)$\cl
@@ -365,10 +365,10 @@ In this chapter the usage and implementation details of the aforementioned progr
 The application consists of two views: the input mask and the graph view.
 
 \section{Input mask}
-On starting the application, the user is presented with an input mask. Here the user can choose from up to ten arguments. The number of arguments is limited because more than ten arguments don't provide any further benefit to a user wanting to learn about the basics of argumentation frameworks.\hl
+On starting the application, the user is presented with an input mask. Here the user can select up to ten arguments for an argumentation framework. The number of arguments is limited because more than ten arguments don't provide any further benefit to a user wanting to learn about the basics of argumentation frameworks.\hl
 There is a checkbox for every possible argument that is labelled with the name of the argument in capital letters ($A$ ... $J$). If a checkbox is selected the program will use the represented argument for further computations and visualisations.\hl
 The user also has the option to give descriptions for arguments. They can be a strings of any form.\hl
-Each argument has a textfield that contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can optionally be seperated either by ',' or spaces. Duplicate attacks are ignored. This means the attack fields accept the following syntax: \[[a-jA-J\text{ },]*\]\hl
+For each argument there is a textfield that contains the names of the arguments the argument in question attacks. Argument names are case-insensitive and can optionally be seperated either by ',' or spaces. Duplicate attacks are ignored. This means the attack fields accept the following syntax: \[[a-jA-J\text{ },]*\]\hl
 
 There are some preset examples to be chosen from via the drop-down menu labelled ``choose preset''. Once an example is chosen, selection and text fields are updated corresponding to the chosen preset. Presets include examples given in \cite{Dung} and \cite{Egly} as well as examples used in this thesis.\hl
 On clicking the ``show graph'' button, the application checks if the attack fields conform to the syntax for selected arguments and if they contain arguments that are not selected (meaning they don't exist and can therefore not be attacked). If there is invalid input an error message is displayed, if not the argumentation framework is created and the graph view displayed.\hl
@@ -393,7 +393,7 @@ Figure 4.1 shows the input mask with input representing the argumentation framew
 	\end{figure}
 \FloatBarrier
 
-Upon loading the graph view (shown in Figure 4.2) the user can see the graph representing the argumentation framework defined in the input mask to the left. Every argument is represented by a node labelled with that arguments name. The argument nodes are arranged in a circle for better distinguishability.\hl
+Upon loading the graph view (shown in Figure 4.2) the user can see the graph representing the argumentation framework, that was defined in the input mask, to the left. Every argument is represented by a node labelled with that argument's name. The argument nodes are arranged in a circle for better distinguishability.\hl
 It is possible to view the arguments' descriptions by hovering over them. In case no description was given for an argument, the application displays this information.\hl
 
 \FloatBarrier
@@ -416,8 +416,8 @@ The user then has the option to choose to compute one of six types of sets:
 \end{itemize}
 
 If the checkbox to ``use previously computed sets for further computations'' is selected, each computation takes into account the results of preceding computations, if applicable. If this option is not selected the program will compute every extension type needed, prior to computing the chosen extension.\\
-That means if conflict-free sets were already computed one can compute stable extensions without the need to compute conflict-free sets again, but when trying to compute preferred extensions the set of admissible extensions would have to be freshly computed (the computation of the admissible extensions using the already computed conflict-free extensions).\hl
-Each computation triggers the text area to the right (from now on called the explanation area) to display explanations of how the computed extensions came to pass. These explanations can either be shown step-by-step, all at once or be skipped so only the results of the computation are shown. Using previously computed extensions the explanation area does not show the explanation for already computed extensions again.\hl
+For example, if conflict-free sets were already computed one can compute stable extensions without the need to compute conflict-free sets again, but when trying to compute preferred extensions the set of admissible extensions would have to be freshly computed (the computation of the admissible extensions using the already computed conflict-free sets).\hl
+Each computation triggers the text area to the right (from now on called the explanation area) to display explanations of how the computed extensions came to pass. These explanations can either be shown step-by-step, all at once or be skipped so only the results of the computation are shown. Using previously computed extensions, the explanation area does not show the explanation for already computed extensions again.\hl
 Figure 4.4 shows the explanation shown during the computation of the complete extensions of the argumentation framework shown in Figure 4.1. Note that in this case, admissible extensions (as a prerequisite to compute complete extensions) did not need to be computed, because they had been computed beforehand.
 
 \FloatBarrier
@@ -428,10 +428,10 @@ Figure 4.4 shows the explanation shown during the computation of the complete ex
 	\end{figure}
 \FloatBarrier
 
-To further illustrate the explanations shown the application recolours the graph for each step, using three easily distinguishable colours:\hl
-Green is used for arguments included in the considered set and their relevant attacks needed to qualify for an extension type.\\
-Red is used for conflicting arguments and attacks preventing a set of arguments from qualifying for an extension type.\\
-Blue is used for arguments missing from a set for it to qualify for an extension type.\hl
+To further illustrate the explanations shown, the application recolours the graph for each step, using three easily distinguishable colours:\hl
+Green is used for arguments included in the considered set and their relevant attacks needed to meet the criteria of an extension type.\\
+Red is used for conflicting arguments and attacks preventing a set of arguments from meeting an extension type's criteria.\\
+Blue is used for arguments not in the considered set, which would need to be elements of that set for it to meet the criteria of the extension type in question.\hl
 Figure 4.5 is an example where all three colours are used to illustrate the applications reasoning in computing complete extensions.\hl
 
 \FloatBarrier
@@ -443,7 +443,7 @@ Figure 4.5 is an example where all three colours are used to illustrate the appl
 \FloatBarrier
 
 After showing the results of a computation a dropdown menu becomes availiable beneath the right bottom corner of the explanation area, containing all computed extensions. They can be selected and are then highlighted in green in the graph.\hl
-The graph view also allows the user to go back to the input mask using the `<' button. The input mask still contains the input from before switching to the graph view to allow the user to make small adjustments without having to redefine the whole framework.
+The graph view also allows the user to go back to the input mask using the `<' button. The input mask still contains the input from before switching to the graph view to allow the user to make small adjustments without having to redefine the whole argumentation framework.
 
 \section{Implementation details}
 This section lists which technologies where used to create the program, what class structure was used to represent argumentation frameworks and what these classes do.\cl
@@ -474,15 +474,15 @@ These classes have the following relationships:
 \FloatBarrier
 
 \subsubsection{Argument}
-An \emph{Argument} object is a pair consisting of a key and a value. The key is the name of the argument (representing an argument $a\in A$), while the value is the argument's statement.
+An \emph{Argument} object is a pair consisting of a key and a value. The key is the name of the argument (representing an argument $a\in A$), while the value is the argument's statement.\hl
 
 \subsubsection{Attack}
-An \emph{Attack} object stores a pair of Argument objects. The first argument is called the ``attacker'', the second the ``attacked'' argument representing an attack $(a,b)\in R$.
+An \emph{Attack} object stores a pair of Argument objects. The first argument is called the ``attacker'', the second the ``attacked'' argument representing an attack $(a,b)\in R$.\hl
 
 \subsubsection{Framework}
 A \emph{Framework} object represents an argumentation framework $F=(A,R)$. It contains a list of all arguments ($A$) and a list of all attacks ($R$). It also stores all the extensions.\hl
 If a user wants to compute the extensions of a specific type (except the grounded extension), the framework calls the corresponding method of every extension candidate to find out if it indeed is of that extension type. For this purpose the framework can store multiple lists of extension candidates (e.g. The framework can store a list of conflict-free sets, which then can be used to compute admissible or stable extensions). After each candidate has returned its status, the frameworks returns a list of extensions that satisfy the criteria of the extension type in question.\hl
-To compute the grounded extension the framework simply compares the arguments of its complete extensions, without any algorithms of the extension object being called.
+To compute the grounded extension the framework simply compares the arguments of its complete extensions, without any methods of the extension object being called.\hl
 
 \subsubsection{Extension}
 An \emph{Extension} object represents a set $S\subseteq A$. For that purpose it stores a list of Argument objects. Every extension object stores a reference to the framework it belongs to, to compute and store lists of outgoing and incoming attacks.\hl
