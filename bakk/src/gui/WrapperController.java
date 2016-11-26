@@ -32,7 +32,7 @@ public class WrapperController {
 	 */
 	@FXML
 	void initialize(){
-		description = "For further information on abstract argumentation frameworks and this application read my paper at: ";
+		description = "Not sure what to refer to here";
 		loadMain();
 	}
 
@@ -88,7 +88,7 @@ public class WrapperController {
 	}
 	
 	public void initializeLabels(){
-		paperLink.setText("https://github.com/e1027108/bakk");
+		paperLink.setText("unsure about link");
 		paperLink.setDisable(false);
 		descriptionLbl.setText(description);
 		descriptionLbl.setStyle("-fx-text-fill: black;");

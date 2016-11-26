@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -56,12 +57,16 @@ public class MainInputController {
 	private Label useLbl, addLbl, attackLbl, headlineLbl, errorLbl, presetLbl; //descriptive labels
 
 	@FXML
-	private Button showGraphBtn; //button to go to next window
+	private Button showGraphBtn, previousBtn, nextBtn, compareBtn, computeBtn;
 	
 	@FXML
-	private ChoiceBox<String> presetChoiceBox;
+	private ChoiceBox<String> presetChoiceBox; //TODO replace with combobox?
+	
+	@FXML
+	private ComboBox<String> comparisonComboBox; //TODO rename?
 
 	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip, choiceTip; //tooltips describing what to input or what happens
+	//TODO add missing tips for comparision stuff (late)
 
 	private Interactor interactor; //Interactor controlling the results the user sees
 	private ArrayList<ArgumentDto> arguments; //arguments read from the text fields
@@ -71,6 +76,8 @@ public class MainInputController {
 	private ArrayList<?> alphabetical[]; //array of input containing lists
 	private ArrayList<Example> examples;
 
+	//TODO implement naming/numbering of frameworks
+	
 	/**
 	 * gets an Interactor and adds tooltips for elements
 	 */
@@ -120,12 +127,14 @@ public class MainInputController {
 		choiceTip = new Tooltip("You can choose a preset to load an example framework into the textfields above.");
 		presetChoiceBox.setTooltip(choiceTip);
 		
+		//TODO tooltips for next and previous missing
+		
 		examples = initializeExamples();
 		
 		showChoices();
 	}
 
-	private ArrayList<Example> initializeExamples() {
+	private ArrayList<Example> initializeExamples() { // TODO rework examples to fit new problem?
 		ArrayList<Example> exampleSet = new ArrayList<Example>();
 		
 		exampleSet.add(new Example("",null));
@@ -195,7 +204,7 @@ public class MainInputController {
 	}
 	
 	
-	public void showChoices(){
+	public void showChoices(){ //TODO replace with combobox?
 		ArrayList<String> formatList = new ArrayList<String>();
 		
 		for(Example e: examples){
@@ -297,6 +306,18 @@ public class MainInputController {
 		interactor.setDemonstrationValues();
 		wrapper.loadDemonstration();
 	}
+	
+	@FXML
+	public void onPreviousButton(){
+		/*TODO implement switching
+		 * includes saving inputs in new data structure and clearing last inputs
+		 */
+	}
+	
+	@FXML
+	public void onNextButton(){
+		//TODO implement switching (analogous to above)
+	}
 
 	/**
 	 * creates standard description for an argument or returns given one
@@ -346,6 +367,13 @@ public class MainInputController {
 		}
 
 		return attackValues;
+	}
+	
+	//TODO implement comparing mechanism (choose extension to compare totally new?)
+	//TODO maybe rename to equivalence check or something
+	@FXML
+	public void onCompareClick(){
+		//TODO implement
 	}
 
 	/**

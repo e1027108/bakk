@@ -6,18 +6,18 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="root" layoutX="0.0" layoutY="0.0" prefHeight="550.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.DemonstrationWindowController">
+<AnchorPane fx:id="root" layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.DemonstrationWindowController">
   <!-- TODO Add Nodes -->
   <children>
     <TextArea fx:id="explanationArea" editable="false" prefHeight="420.0" prefWidth="330.0" wrapText="true" AnchorPane.leftAnchor="460.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-    <Button id="backButton" fx:id="backBtn" cancelButton="false" disable="true" mnemonicParsing="false" onAction="#onBackClick" prefWidth="55.0" text="back" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="380.0" />
-    <Button id="nextButton" fx:id="nextBtn" disable="true" mnemonicParsing="false" onAction="#onNextClick" prefWidth="55.0" text="next" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="320.0" />
-    <Separator orientation="VERTICAL" prefHeight="30.0" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="310.0" AnchorPane.topAnchor="435.0" />
-    <Button id="showAllButton" fx:id="showAllBtn" disable="true" graphicTextGap="4.0" mnemonicParsing="false" onAction="#onShowAllClick" prefWidth="-1.0" text="show steps" textAlignment="LEFT" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="220.0" />
-    <Separator orientation="VERTICAL" prefHeight="25.0" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="435.0" />
-    <Button id="showAllButton" fx:id="resultsBtn" disable="true" mnemonicParsing="false" onAction="#onResultsClick" prefWidth="-1.0" text="results" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="145.0" />
-    <Separator orientation="VERTICAL" prefHeight="25.0" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="435.0" />
-    <ChoiceBox id="setChoiceBox" fx:id="setsChoiceBox" disable="true" prefWidth="105.0" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="20.0">
+    <Button id="backButton" fx:id="backBtn" cancelButton="false" disable="true" mnemonicParsing="false" onAction="#onBackClick" prefWidth="55.0" text="back" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="380.0" />
+    <Button id="nextButton" fx:id="nextBtn" disable="true" mnemonicParsing="false" onAction="#onNextClick" prefWidth="55.0" text="next" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="320.0" />
+    <Separator orientation="VERTICAL" prefHeight="30.0" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="313.0" AnchorPane.topAnchor="435.0" />
+    <Button id="showAllButton" fx:id="showAllBtn" disable="true" graphicTextGap="4.0" mnemonicParsing="false" onAction="#onShowAllClick" prefWidth="-1.0" text="show steps" textAlignment="LEFT" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="220.0" />
+    <Separator orientation="VERTICAL" prefHeight="25.0" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="435.0" />
+    <Button id="showAllButton" fx:id="resultsBtn" disable="true" mnemonicParsing="false" onAction="#onResultsClick" prefWidth="-1.0" text="results" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="145.0" />
+    <Separator orientation="VERTICAL" prefHeight="25.0" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="135.0" AnchorPane.topAnchor="435.0" />
+    <ChoiceBox id="setChoiceBox" fx:id="setsChoiceBox" disable="true" prefWidth="105.0" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="20.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Item 1" />
@@ -27,15 +27,32 @@
       </items>
     </ChoiceBox>
     <Separator prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="470.0" />
-    <Button id="arrowButton" fx:id="arrowBtn" mnemonicParsing="false" onAction="#onArrowClick" text="&lt;" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="10.0" />
-    <Button fx:id="conflictFreeBtn" mnemonicParsing="false" onAction="#onConflictFreeClick" prefWidth="165.0" text="conflict-free sets" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="55.0" />
-    <Button fx:id="admissibleBtn" mnemonicParsing="false" onAction="#onAdmissibleClick" prefWidth="165.0" text="admissible extensions" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="230.0" />
-    <Button fx:id="preferredBtn" mnemonicParsing="false" onAction="#onPreferredClick" prefWidth="165.0" text="preferred extensions" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="405.0" />
-    <Button fx:id="stableBtn" mnemonicParsing="false" onAction="#onStableClick" prefWidth="165.0" text="stable extensions" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="580.0" />
-    <Button fx:id="completeBtn" mnemonicParsing="false" onAction="#onCompleteClick" prefWidth="165.0" text="complete extensions" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="55.0" />
-    <Button fx:id="groundedBtn" mnemonicParsing="false" onAction="#onGroundedClick" prefWidth="165.0" text="grounded extension" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="230.0" />
-    <Separator layoutX="403.0" orientation="VERTICAL" prefHeight="38.0" AnchorPane.bottomAnchor="0.0" />
-    <Separator layoutX="403.0" prefWidth="502.9999000000025" AnchorPane.bottomAnchor="35.0" />
-    <CheckBox fx:id="previousCheckBox" layoutX="410.0" mnemonicParsing="false" selected="true" text="use previously computed sets for further computations" AnchorPane.bottomAnchor="10.0" />
+    <Button id="arrowButton" fx:id="arrowBtn" mnemonicParsing="false" onAction="#onArrowClick" text="&lt;" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="10.0" />
+    <Separator layoutX="56.0" orientation="VERTICAL" prefHeight="45.0" AnchorPane.bottomAnchor="85.0" AnchorPane.topAnchor="470.0" />
+    <Label fx:id="extensionLbl" text="extension type:" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="70.0" />
+    <ChoiceBox fx:id="extensionChoiceBox" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="170.0">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="Item 1" />
+          <String fx:value="Item 2" />
+          <String fx:value="Item 3" />
+        </FXCollections>
+      </items>
+    </ChoiceBox>
+    <Button fx:id="computeBtn" mnemonicParsing="false" onAction="#onComputeClick" text="Compute" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="315.0" AnchorPane.rightAnchor="505.0" />
+    <Separator layoutX="450.0" orientation="VERTICAL" prefHeight="45.0" AnchorPane.bottomAnchor="85.0" AnchorPane.topAnchor="470.0" />
+    <CheckBox fx:id="previousCheckBox" layoutX="500.0" mnemonicParsing="false" selected="true" text="use previously computed sets for further computations" AnchorPane.bottomAnchor="100.0" />
+    <Separator prefWidth="900.0" AnchorPane.bottomAnchor="82.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+    <Label layoutX="70.0" layoutY="528.0" text="compare to:" />
+    <ComboBox fx:id="comparisonComboBox" layoutX="170.0" layoutY="521.0" prefWidth="90.0">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="Item 1" />
+          <String fx:value="Item 2" />
+          <String fx:value="Item 3" />
+        </FXCollections>
+      </items>
+    </ComboBox>
+    <Button fx:id="compareBtn" layoutX="315.0" layoutY="522.0" mnemonicParsing="false" onAction="#onCompareClick" text="Compare" />
   </children>
 </AnchorPane>

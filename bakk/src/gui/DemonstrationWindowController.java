@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
@@ -43,7 +44,7 @@ public class DemonstrationWindowController {
 	private URL location; //location of file
 
 	@FXML
-	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, completeBtn, preferredBtn, stableBtn, groundedBtn, conflictFreeBtn, admissibleBtn; //buttons in demonstration window
+	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, computeBtn; //buttons in demonstration window
 
 	@FXML
 	private CheckBox previousCheckBox; //checkbox whether to use previously computed sets or extensions
@@ -54,10 +55,15 @@ public class DemonstrationWindowController {
 	@FXML
 	private AnchorPane root; //root pane containing all the UI elements
 
+	//TODO replace with comboboxes?
 	@FXML
-	private ChoiceBox<String> setsChoiceBox; //dropdown for result sets
+	private ChoiceBox<String> setsChoiceBox, extensionChoiceBox; //dropdown for result sets
+	
+	@FXML
+	private Label extensionLbl;
 
-	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, backTip, nextTip, allTip, resultsTip, choiceTip; //tooltips for all buttons etc
+	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, 
+	backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip; //tooltips for all buttons etc
 
 	private Framework argumentFramework; //argument framework containing the arguments
 	private ArrayList<Argument> arguments; //arguments of the framework
@@ -97,23 +103,23 @@ public class DemonstrationWindowController {
 				+ "\nbut instead use the previous computations' results for further computations.");
 		previousCheckBox.setTooltip(previousTip);
 
+		extensionTip = new Tooltip("Choose the type of extension semantics you want to compute!");
+		extensionChoiceBox.setTooltip(extensionTip);
+		extensionLbl.setTooltip(extensionTip);
+		
+		/* use on hover over option in dropdown
 		conflictFreeTip = new Tooltip("A set of arguments is conflict-free,\nif none of it's arguments attack another.\n\nClick to compute all conflict-free sets.");
-		conflictFreeBtn.setTooltip(conflictFreeTip);
 
 		admissibleTip = new Tooltip("A conflict-free set is an admissible extension,\nif it defends each of it's arguments.\n\nClick to compute all admissible extensions.");
-		admissibleBtn.setTooltip(admissibleTip);
 
 		completeTip = new Tooltip("An admissible extension is a complete extension,\nif it contains every argument it defends.\n\nClick to compute all complete extensions.");
-		completeBtn.setTooltip(completeTip);
 
 		stableTip = new Tooltip("A conflict-free set is a stable extension,\nif it attacks every argument it doesn't contain.\n\nClick to compute all stable extensions.");
-		stableBtn.setTooltip(stableTip);
 
 		preferredTip = new Tooltip("An admissible extension is a preferred extension,\nif it is not a subset of another admissible extension.\n\nClick to compute all preferred extensions.");
-		preferredBtn.setTooltip(preferredTip);
 
 		groundedTip = new Tooltip("The extension containing all arguments that all\ncomplete extensions have in common is the grounded extension.\n\nClick to compute the grounded extension.");
-		groundedBtn.setTooltip(groundedTip);
+		*/
 	}
 	
 	/**
@@ -149,8 +155,7 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the conflict free sets of the framework
 	 */
-	@FXML
-	public void onConflictFreeClick() {
+	public void conflictFreeComputation() {
 		interactor.emptyQueue();
 
 		resultSet = argumentFramework.getConflictFreeSets();
@@ -163,8 +168,7 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the admissible sets of the framework
 	 */
-	@FXML
-	public void onAdmissibleClick(){
+	public void admissibleComputation(){
 		interactor.emptyQueue();
 
 		resultSet = argumentFramework.getAdmissibleExtensions(previousCheckBox.isSelected());
@@ -177,8 +181,7 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the complete extensions of the framework
 	 */
-	@FXML
-	public void onCompleteClick(){
+	public void completeComputation(){
 		interactor.emptyQueue();
 
 		try {
@@ -195,8 +198,7 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the preferred extensions of the framework
 	 */
-	@FXML
-	public void onPreferredClick(){
+	public void preferredComputation(){
 		interactor.emptyQueue();
 
 		resultSet = argumentFramework.getPreferredExtensions(previousCheckBox.isSelected());
@@ -209,8 +211,7 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the stable extensions of the framework
 	 */
-	@FXML
-	public void onStableClick(){
+	public void stableComputation(){
 		interactor.emptyQueue();
 
 		resultSet = argumentFramework.getStableExtensions(previousCheckBox.isSelected());
@@ -223,8 +224,7 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the grounded extension of the framework
 	 */
-	@FXML
-	public void onGroundedClick(){
+	public void groundedComputation(){
 		interactor.emptyQueue();
 
 		Extension grounded;
@@ -252,7 +252,7 @@ public class DemonstrationWindowController {
 
 		if(!interactor.hasNext()){
 			disableForwardButtons();
-			showChoices();
+			showSetChoices();
 		}
 	}
 
@@ -267,7 +267,7 @@ public class DemonstrationWindowController {
 			backBtn.setDisable(true);
 		}
 
-		resetChoices();
+		resetSetChoices();
 		showAllBtn.setDisable(false);
 		nextBtn.setDisable(false);
 		resultsBtn.setDisable(false);
@@ -283,7 +283,7 @@ public class DemonstrationWindowController {
 		backBtn.setDisable(false);
 
 		disableForwardButtons();
-		showChoices();
+		showSetChoices();
 	}
 
 	/**
@@ -296,7 +296,7 @@ public class DemonstrationWindowController {
 		
 		backBtn.setDisable(true);
 		disableForwardButtons();
-		showChoices();
+		showSetChoices();
 	}
 
 	/**
@@ -314,7 +314,7 @@ public class DemonstrationWindowController {
 	@FXML
 	public void onArrowClick(){
 		explanationArea.setText("");
-		resetChoices();
+		resetSetChoices();
 
 		wrapper.loadMain();
 	}
@@ -323,7 +323,7 @@ public class DemonstrationWindowController {
 	 * activates the choicebox (dropdown menu) that shows the extensions
 	 * of the chosen type
 	 */
-	public void showChoices(){
+	public void showSetChoices(){
 		setsChoiceBox.setDisable(false);
 
 		ArrayList<String> formatList = new ArrayList<String>();
@@ -335,6 +335,14 @@ public class DemonstrationWindowController {
 		setsChoiceBox.setItems(FXCollections.observableArrayList(formatList));
 		setsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChoiceListener<Number>());
 		setsChoiceBox.getSelectionModel().selectFirst();
+	}
+	
+	/**
+	 * removes all elements from the choicebox and deactivates it
+	 */
+	public void resetSetChoices(){
+		setsChoiceBox.getItems().setAll(FXCollections.observableList(new ArrayList<String>()));
+		setsChoiceBox.setDisable(true);
 	}
 	
 	/**
@@ -365,20 +373,55 @@ public class DemonstrationWindowController {
 			}
 		}
 	}
+
+	//TODO add extensiontypes to choicebox and redirect behaviour
+
+	@FXML
+	public void onComputeClick(){
+		//TODO read from extensionChoiceBox what is chosen, then proceed as if that "button" where clicked
+		
+		int exChoice = 0;
+		
+		//TODO exChoice=getExtensionChoice();
+		
+		//TODO keep this ordering for choiceBox
+		switch(exChoice){
+			case 0:
+				explanationArea.setText("No extension type was chosen, no computation performed!");
+				break;
+			case 1:
+				conflictFreeComputation();
+				break;
+			case 2:
+				admissibleComputation();
+				break;
+			case 3:
+				completeComputation();
+				break;
+			case 4:
+				preferredComputation();
+				break;
+			case 5:
+				stableComputation();
+				break;
+			case 6:
+				groundedComputation();
+				break;
+			default:
+				explanationArea.setText("Invalid extension type was chosen, no computation performed!");
+				break;
+		}
+	}
 	
-	/**
-	 * removes all elements from the choicebox and deactivates it
-	 */
-	public void resetChoices(){
-		setsChoiceBox.getItems().setAll(FXCollections.observableList(new ArrayList<String>()));
-		setsChoiceBox.setDisable(true);
+	public void showExtensionChoices(){
+		//TODO implement similar to above
 	}
 
 	/**
 	 * brings the UI into a state where viewing of the computation process is possible
 	 */
 	public void setUI(){
-		resetChoices();
+		resetSetChoices();
 		explanationArea.setText("");
 		explanationArea.setStyle("-fx-text-fill: black;");
 		backBtn.setDisable(true);
