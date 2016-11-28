@@ -8,6 +8,8 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import datacontainers.DirectedEdge;
+import datacontainers.NamedCircle;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;

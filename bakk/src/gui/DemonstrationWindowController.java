@@ -416,6 +416,11 @@ public class DemonstrationWindowController {
 	public void showExtensionChoices(){
 		//TODO implement similar to above
 	}
+	
+	@FXML
+	public void onCompareClick(){
+		//TODO implement equivalency comparison
+	}
 
 	/**
 	 * brings the UI into a state where viewing of the computation process is possible

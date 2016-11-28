@@ -1,7 +1,5 @@
 package gui;
 
-import gui.Example;
-import gui.Line;
 import interactor.Interactor;
 
 import java.net.URL;
@@ -9,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
+import datacontainers.Example;
+import datacontainers.Line;
 import dto.ArgumentDto;
 import exceptions.InvalidInputException;
 import javafx.beans.value.ChangeListener;
@@ -60,23 +60,22 @@ public class MainInputController {
 	private Button showGraphBtn, previousBtn, nextBtn, compareBtn, computeBtn;
 	
 	@FXML
-	private ChoiceBox<String> presetChoiceBox; //TODO replace with combobox?
-	
-	@FXML
-	private ComboBox<String> comparisonComboBox; //TODO rename?
+	private ComboBox<String> comparisonComboBox, presetComboBox;
 
-	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip, choiceTip; //tooltips describing what to input or what happens
-	//TODO add missing tips for comparision stuff (late)
+	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip, choiceTip, nextTip, previousTip; //tooltips describing what to input or what happens
 
+	/*
+	 * TODO implement naming/numbering of frameworks -->
+	 * create new class that contains alphabetical, which then contains checkboxes, arguments, statements, attacks
+	 * maybe rename choose preset to choose between saved frameworks? and add them to list with generic name?
+	 */
 	private Interactor interactor; //Interactor controlling the results the user sees
 	private ArrayList<ArgumentDto> arguments; //arguments read from the text fields
 	private ArrayList<CheckBox> checkBoxes; //list of checkboxes selecting information to be used
-	private ArrayList<TextField> statements; //list of textfields containing argument describing statments
+	private ArrayList<TextField> statements; //list of textfields containing argument describing statements
 	private ArrayList<TextField> attacks; //list of textfields containing the attack information
 	private ArrayList<?> alphabetical[]; //array of input containing lists
 	private ArrayList<Example> examples;
-
-	//TODO implement naming/numbering of frameworks
 	
 	/**
 	 * gets an Interactor and adds tooltips for elements
@@ -99,6 +98,8 @@ public class MainInputController {
 		Collections.addAll(attacks, attackATxt, attackBTxt, attackCTxt, attackDTxt, attackETxt, attackFTxt,
 				attackGTxt, attackHTxt, attackITxt, attackJTxt);
 
+		//TODO integrate TextData class to have multiple frameworks saved --> actually have multiple frameworks saved in dtos?
+		
 		alphabetical = new ArrayList<?>[3];
 		alphabetical[0] = checkBoxes;
 		alphabetical[1] = statements;
@@ -125,9 +126,14 @@ public class MainInputController {
 		attackLbl.setTooltip(generalAttackTip);
 		
 		choiceTip = new Tooltip("You can choose a preset to load an example framework into the textfields above.");
-		presetChoiceBox.setTooltip(choiceTip);
+		presetComboBox.setTooltip(choiceTip);
 		
-		//TODO tooltips for next and previous missing
+		nextTip = new Tooltip("Show the next available framework's arguments and attack relations.");
+		previousTip = new Tooltip("Show the previous available frameworks's arguments and attack relations.");
+		//noneTip = new Tooltip("There are no other frameworks available, therfore they can not be shown."); //use according to context?
+		
+		nextBtn.setTooltip(nextTip);
+		previousBtn.setTooltip(previousTip);
 		
 		examples = initializeExamples();
 		
@@ -204,16 +210,16 @@ public class MainInputController {
 	}
 	
 	
-	public void showChoices(){ //TODO replace with combobox?
+	public void showChoices(){
 		ArrayList<String> formatList = new ArrayList<String>();
 		
 		for(Example e: examples){
 			formatList.add(e.getName());
 		}
 
-		presetChoiceBox.setItems(FXCollections.observableArrayList(formatList));
-		presetChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChoiceListener<Number>());
-		presetChoiceBox.getSelectionModel().selectFirst();
+		presetComboBox.setItems(FXCollections.observableArrayList(formatList));
+		presetComboBox.getSelectionModel().selectedIndexProperty().addListener(new ChoiceListener<Number>());
+		presetComboBox.getSelectionModel().selectFirst();
 	}
 	
 	@SuppressWarnings("hiding")
@@ -224,7 +230,7 @@ public class MainInputController {
 				return;
 			}
 			
-			Object item = presetChoiceBox.getItems().get((Integer) nval); 
+			Object item = presetComboBox.getItems().get((Integer) nval); 
 
 			if(item instanceof String){
 				resetMask();

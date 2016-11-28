@@ -1,4 +1,4 @@
-package gui;
+package datacontainers;
 
 import exceptions.InvalidInputException;
 import javafx.scene.shape.Arc;

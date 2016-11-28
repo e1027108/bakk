@@ -1,4 +1,4 @@
-package gui;
+package datacontainers;
 
 public class Example {
 	
