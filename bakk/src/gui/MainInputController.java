@@ -60,7 +60,7 @@ public class MainInputController {
 	private Button showGraphBtn, previousBtn, nextBtn, compareBtn, computeBtn;
 	
 	@FXML
-	private ComboBox<String> comparisonComboBox, presetComboBox;
+	private ComboBox<String> presetComboBox;
 
 	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip, choiceTip, nextTip, previousTip; //tooltips describing what to input or what happens
 
@@ -76,6 +76,7 @@ public class MainInputController {
 	private ArrayList<TextField> attacks; //list of textfields containing the attack information
 	private ArrayList<?> alphabetical[]; //array of input containing lists
 	private ArrayList<Example> examples;
+	private int currentPointer;
 	
 	/**
 	 * gets an Interactor and adds tooltips for elements
@@ -140,8 +141,9 @@ public class MainInputController {
 		showChoices();
 	}
 
-	private ArrayList<Example> initializeExamples() { // TODO rework examples to fit new problem?
-		ArrayList<Example> exampleSet = new ArrayList<Example>();
+	private ArrayList<Example> initializeExamples() {
+		ArrayList<Example> exampleSet = new ArrayList<Example>(); //now also use to save new (implement save/delete behaviour) frameworks
+		currentPointer = 0;
 		
 		exampleSet.add(new Example("",null));
 		
@@ -179,14 +181,6 @@ public class MainInputController {
 					new Line('c', "", "bd"),
 					new Line('d', "", "c")
 		}));
-		
-		/*exampleSet.add(new Example("Thesis Figure 4.1",
-				new Line[] {
-					new Line('a', "", "b"),
-					new Line('b', "", "c"),
-					new Line('c', "", "a"),
-					new Line('d', "", "b")
-		}));*/
 		
 		exampleSet.add(new Example("Thesis Figure 4.1",
 				new Line[] {
@@ -313,15 +307,31 @@ public class MainInputController {
 		wrapper.loadDemonstration();
 	}
 	
+	//TODO change on new button click instead of changelistening?
 	@FXML
 	public void onPreviousButton(){
-		/*TODO implement switching
-		 * includes saving inputs in new data structure and clearing last inputs
-		 */
+		//compare to last selected here
+		
+		if(currentPointer - 1 < 0){
+			currentPointer = examples.size()-1;
+		}
+		else{
+			currentPointer--;
+		}
+		
+		//TODO trigger changelistener?
+		
 	}
 	
 	@FXML
 	public void onNextButton(){
+		if(currentPointer + 1 >= examples.size()){
+			currentPointer = 0;
+		}
+		else{
+			currentPointer++;
+		}
+		
 		//TODO implement switching (analogous to above)
 	}
 

@@ -5,6 +5,7 @@ import interactor.Interactor;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import dto.ArgumentDto;
@@ -16,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Tooltip;
@@ -55,9 +57,8 @@ public class DemonstrationWindowController {
 	@FXML
 	private AnchorPane root; //root pane containing all the UI elements
 
-	//TODO replace with comboboxes?
 	@FXML
-	private ChoiceBox<String> setsChoiceBox, extensionChoiceBox; //dropdown for result sets
+	private ComboBox<String> setsComboBox, extensionComboBox; //dropdown for result sets
 	
 	@FXML
 	private Label extensionLbl;
@@ -97,14 +98,14 @@ public class DemonstrationWindowController {
 		resultsBtn.setTooltip(resultsTip);
 
 		choiceTip = new Tooltip("Highlights the chosen set in the graph.");
-		setsChoiceBox.setTooltip(choiceTip);
+		setsComboBox.setTooltip(choiceTip);
 
 		previousTip = new Tooltip("If checked the program will not repeat computations it already has performed,"
 				+ "\nbut instead use the previous computations' results for further computations.");
 		previousCheckBox.setTooltip(previousTip);
 
 		extensionTip = new Tooltip("Choose the type of extension semantics you want to compute!");
-		extensionChoiceBox.setTooltip(extensionTip);
+		extensionComboBox.setTooltip(extensionTip);
 		extensionLbl.setTooltip(extensionTip);
 		
 		/* use on hover over option in dropdown
@@ -324,7 +325,7 @@ public class DemonstrationWindowController {
 	 * of the chosen type
 	 */
 	public void showSetChoices(){
-		setsChoiceBox.setDisable(false);
+		setsComboBox.setDisable(false);
 
 		ArrayList<String> formatList = new ArrayList<String>();
 
@@ -332,17 +333,17 @@ public class DemonstrationWindowController {
 			formatList.add(e.format());
 		}
 
-		setsChoiceBox.setItems(FXCollections.observableArrayList(formatList));
-		setsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChoiceListener<Number>());
-		setsChoiceBox.getSelectionModel().selectFirst();
+		setsComboBox.setItems(FXCollections.observableArrayList(formatList));
+		setsComboBox.getSelectionModel().selectedIndexProperty().addListener(new ChoiceListener<Number>());
+		setsComboBox.getSelectionModel().selectFirst();
 	}
 	
 	/**
 	 * removes all elements from the choicebox and deactivates it
 	 */
 	public void resetSetChoices(){
-		setsChoiceBox.getItems().setAll(FXCollections.observableList(new ArrayList<String>()));
-		setsChoiceBox.setDisable(true);
+		setsComboBox.getItems().setAll(FXCollections.observableList(new ArrayList<String>()));
+		setsComboBox.setDisable(true);
 	}
 	
 	/**
@@ -359,7 +360,7 @@ public class DemonstrationWindowController {
 				return;
 			}
 			
-			Object item = setsChoiceBox.getItems().get((Integer) nval); 
+			Object item = setsComboBox.getItems().get((Integer) nval); 
 
 			if(item instanceof String){
 				GraphInstruction instruction = argumentFramework.getInstructionFromString((String) item);
@@ -373,18 +374,11 @@ public class DemonstrationWindowController {
 			}
 		}
 	}
-
-	//TODO add extensiontypes to choicebox and redirect behaviour
-
+	
 	@FXML
 	public void onComputeClick(){
-		//TODO read from extensionChoiceBox what is chosen, then proceed as if that "button" where clicked
+		int exChoice = extensionComboBox.getSelectionModel().getSelectedIndex();
 		
-		int exChoice = 0;
-		
-		//TODO exChoice=getExtensionChoice();
-		
-		//TODO keep this ordering for choiceBox
 		switch(exChoice){
 			case 0:
 				explanationArea.setText("No extension type was chosen, no computation performed!");
@@ -413,13 +407,10 @@ public class DemonstrationWindowController {
 		}
 	}
 	
-	public void showExtensionChoices(){
-		//TODO implement similar to above
-	}
-	
 	@FXML
 	public void onCompareClick(){
 		//TODO implement equivalency comparison
+		//TODO first fill combobox with choices
 	}
 
 	/**
@@ -437,7 +428,7 @@ public class DemonstrationWindowController {
 	}
 
 	/**
-	 * sets the initial UI and data values that can be changed but not unchangable values
+	 * sets the initial UI and data values
 	 */
 	public void setInitialValues() {		
 		root.getChildren().remove(graphPane);
@@ -467,6 +458,12 @@ public class DemonstrationWindowController {
 		nextBtn.setDisable(true);
 		showAllBtn.setDisable(true);
 		resultsBtn.setDisable(true);
+		
+		//set now the values for extension box
+		String[] extarr = new String[]{"","conflict-free","admissible","complete","preferred","stable","grounded"};
+		ArrayList<String> extensionTypes = new ArrayList<String>();
+		extensionTypes.addAll(Arrays.asList(extarr));
+		extensionComboBox.setItems(FXCollections.observableArrayList(extensionTypes));
 	}
 
 	/**
