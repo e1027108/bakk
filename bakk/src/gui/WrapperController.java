@@ -18,7 +18,8 @@ import javafx.scene.layout.AnchorPane;
 public class WrapperController {
 	@FXML
 	private AnchorPane root, mainPane, demonstrationPane, contentPane; //panes that can be shown and the root pane (their parent)
-
+	//TODO let the WrapperController hold all examples for both window types
+	
 	@FXML
 	private Hyperlink paperLink;
 	
@@ -64,7 +65,6 @@ public class WrapperController {
 			try {
 				demonstrationPane = FXMLLoader.load(getClass().getResource("/DemonstrationWindow.fxml"));
 				DemonstrationWindowController.setWrapper(this);
-				initializeLabels();
 			} catch (IOException e) {
 				descriptionLbl.setStyle("-fx-text-fill: red;");
 				descriptionLbl.setText("Could not load demonstration window!");
