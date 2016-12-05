@@ -18,7 +18,6 @@ import javafx.scene.layout.AnchorPane;
 public class WrapperController {
 	@FXML
 	private AnchorPane root, mainPane, demonstrationPane, contentPane; //panes that can be shown and the root pane (their parent)
-	//TODO let the WrapperController hold all examples for both window types
 	
 	@FXML
 	private Hyperlink paperLink;
@@ -36,6 +35,7 @@ public class WrapperController {
 		description = "Not sure what to refer to here";
 		loadMain();
 	}
+	
 
 	/**
 	 * loads the main input file and shows it on screen

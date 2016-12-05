@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import datacontainers.Example;
 import dto.ArgumentDto;
 import exceptions.InvalidInputException;
 import javafx.beans.value.ChangeListener;
@@ -495,5 +496,9 @@ public class DemonstrationWindowController {
 		for(Extension e: ext){
 			System.out.println(e.format());
 		}
+	}
+	
+	public ArrayList<Example> getExampleList(){
+		return MainInputController.getExamples();
 	}
 }

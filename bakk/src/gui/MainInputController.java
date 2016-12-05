@@ -47,35 +47,30 @@ public class MainInputController {
 	@FXML
 	private TextField argumentATxt, argumentBTxt, argumentCTxt, argumentDTxt, argumentETxt, argumentFTxt, 
 	argumentGTxt, argumentHTxt, argumentITxt, argumentJTxt, attackATxt, attackBTxt, attackCTxt, attackDTxt,
-	attackETxt, attackFTxt, attackGTxt, attackHTxt, attackITxt, attackJTxt; //text fields for input
+	attackETxt, attackFTxt, attackGTxt, attackHTxt, attackITxt, attackJTxt, nameTxt; //text fields for input
 
 	@FXML
 	private CheckBox ABox, BBox, CBox, DBox, EBox, FBox, GBox, HBox, IBox, JBox; //checkboxes selecting which textfields to be read from
 
 	@FXML
-	private Label useLbl, addLbl, attackLbl, headlineLbl, errorLbl, presetLbl; //descriptive labels
+	private Label useLbl, addLbl, attackLbl, headlineLbl, errorLbl, presetLbl, saveLbl; //descriptive labels
 
 	@FXML
-	private Button showGraphBtn, previousBtn, nextBtn, compareBtn, computeBtn;
+	private Button showGraphBtn, saveBtn, newBtn;
 	
 	@FXML
 	private ComboBox<String> presetComboBox;
 
 	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip, choiceTip, nextTip, previousTip; //tooltips describing what to input or what happens
 
-	/*
-	 * TODO implement naming/numbering of frameworks -->
-	 * create new class that contains alphabetical, which then contains checkboxes, arguments, statements, attacks
-	 * maybe rename choose preset to choose between saved frameworks? and add them to list with generic name?
-	 */
+	//TODO implement naming/numbering of frameworks --> autosave 1,2,...
 	private Interactor interactor; //Interactor controlling the results the user sees
 	private ArrayList<ArgumentDto> arguments; //arguments read from the text fields
 	private ArrayList<CheckBox> checkBoxes; //list of checkboxes selecting information to be used
 	private ArrayList<TextField> statements; //list of textfields containing argument describing statements
 	private ArrayList<TextField> attacks; //list of textfields containing the attack information
 	private ArrayList<?> alphabetical[]; //array of input containing lists
-	private ArrayList<Example> examples;
-	private int currentPointer;
+	private static ArrayList<Example> examples;
 	
 	/**
 	 * gets an Interactor and adds tooltips for elements
@@ -83,6 +78,7 @@ public class MainInputController {
 	@FXML
 	void initialize() {
 		interactor = Interactor.getInstance(null);
+		examples = initializeExamples();
 
 		errorLbl.setText("");
 
@@ -128,21 +124,13 @@ public class MainInputController {
 		choiceTip = new Tooltip("You can choose a preset to load an example framework into the textfields above.");
 		presetComboBox.setTooltip(choiceTip);
 		
-		nextTip = new Tooltip("Show the next available framework's arguments and attack relations.");
-		previousTip = new Tooltip("Show the previous available frameworks's arguments and attack relations.");
-		//noneTip = new Tooltip("There are no other frameworks available, therfore they can not be shown."); //use according to context?
-		
-		nextBtn.setTooltip(nextTip);
-		previousBtn.setTooltip(previousTip);
-		
-		examples = initializeExamples();
+		//TODO tips for save, new
 		
 		showChoices();
 	}
-
+	
 	private ArrayList<Example> initializeExamples() {
-		ArrayList<Example> exampleSet = new ArrayList<Example>(); //now also use to save new (implement save/delete behaviour) frameworks
-		currentPointer = 0;
+		ArrayList<Example>exampleSet = new ArrayList<Example>(); //now also use to save new (implement save/delete behaviour) frameworks
 		
 		exampleSet.add(new Example("",null));
 		
@@ -202,7 +190,6 @@ public class MainInputController {
 		return exampleSet;
 	}
 	
-	
 	public void showChoices(){
 		ArrayList<String> formatList = new ArrayList<String>();
 		
@@ -233,6 +220,8 @@ public class MainInputController {
 
 		private void loadExample(String item) {
 			for(Example e: examples){
+				//TODO put loaded name in save field
+				
 				if(e.getName().equals(item) && e.getLines() != null){
 					for(Line l: e.getLines()){
 						Object cb = alphabetical[0].get(l.getNumber());
@@ -270,6 +259,8 @@ public class MainInputController {
 	 */
 	@FXML
 	public void onShowButton(){
+		//TODO autosave what is to be shown, if it's not already saved
+		
 		arguments = new ArrayList<ArgumentDto>();
 
 		try{
@@ -306,32 +297,14 @@ public class MainInputController {
 		wrapper.loadDemonstration();
 	}
 	
-	//TODO change on new button click instead of changelistening?
 	@FXML
-	public void onPreviousButton(){
-		//compare to last selected here
-		
-		if(currentPointer - 1 < 0){
-			currentPointer = examples.size()-1;
-		}
-		else{
-			currentPointer--;
-		}
-		
-		//TODO trigger changelistener?
-		
+	public void onNewClick(){
+		//TODO clear all fields, boxes
 	}
 	
 	@FXML
-	public void onNextButton(){
-		if(currentPointer + 1 >= examples.size()){
-			currentPointer = 0;
-		}
-		else{
-			currentPointer++;
-		}
-		
-		//TODO implement switching (analogous to above)
+	public void onSaveClick(){
+		//TODO save as name (overwrite if name exists)
 	}
 
 	/**
@@ -383,13 +356,6 @@ public class MainInputController {
 
 		return attackValues;
 	}
-	
-	//TODO implement comparing mechanism (choose extension to compare totally new?)
-	//TODO maybe rename to equivalence check or something
-	@FXML
-	public void onCompareClick(){
-		//TODO implement
-	}
 
 	/**
 	 * checks which Arguments' are selected
@@ -413,5 +379,9 @@ public class MainInputController {
 	 */
 	public static void setWrapper(WrapperController wrapperController) {
 		wrapper = wrapperController;
+	}
+	
+	static ArrayList<Example> getExamples() {
+		return examples;
 	}
 }

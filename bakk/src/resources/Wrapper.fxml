@@ -9,7 +9,7 @@
 
 <AnchorPane fx:id="root" prefHeight="625.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.WrapperController">
   <children>
-    <AnchorPane fx:id="contentPane" layoutX="0.0" layoutY="0.0" prefHeight="550.0" prefWidth="900.0" />
+    <AnchorPane fx:id="contentPane" layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="900.0" />
     <Separator layoutX="0.0" prefWidth="900.0" AnchorPane.bottomAnchor="20.0" />
     <Hyperlink fx:id="paperLink" minHeight="17.0" onAction="#onLinkClick" prefHeight="25.0" text="placeholder" AnchorPane.bottomAnchor="-2.0" AnchorPane.rightAnchor="5.0" />
     <Label fx:id="descriptionLbl" prefWidth="635.0" text="placeholder (set in controller class)" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0">

@@ -35,7 +35,7 @@ public class Main extends Application{
 		try{
 			wrapper = FXMLLoader.load(getClass().getResource(fxmlName));
 		} catch (Exception e){
-			System.err.println(e.getStackTrace());
+			e.printStackTrace();
 			System.exit(-1);
 		}
 
