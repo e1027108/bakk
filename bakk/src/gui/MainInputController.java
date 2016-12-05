@@ -61,9 +61,8 @@ public class MainInputController {
 	@FXML
 	private ComboBox<String> presetComboBox;
 
-	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip, choiceTip, nextTip, previousTip; //tooltips describing what to input or what happens
+	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip, choiceTip; //tooltips describing what to input or what happens
 
-	//TODO implement naming/numbering of frameworks --> autosave 1,2,...
 	private Interactor interactor; //Interactor controlling the results the user sees
 	private ArrayList<ArgumentDto> arguments; //arguments read from the text fields
 	private ArrayList<CheckBox> checkBoxes; //list of checkboxes selecting information to be used
@@ -71,6 +70,7 @@ public class MainInputController {
 	private ArrayList<TextField> attacks; //list of textfields containing the attack information
 	private ArrayList<?> alphabetical[]; //array of input containing lists
 	private static ArrayList<Example> examples;
+	private int autosave; //each automatically saved framework is called autosave 1,2,...
 	
 	/**
 	 * gets an Interactor and adds tooltips for elements
@@ -79,6 +79,7 @@ public class MainInputController {
 	void initialize() {
 		interactor = Interactor.getInstance(null);
 		examples = initializeExamples();
+		autosave = 0;
 
 		errorLbl.setText("");
 
@@ -93,8 +94,6 @@ public class MainInputController {
 				argumentFTxt, argumentGTxt, argumentHTxt, argumentITxt, argumentJTxt);
 		Collections.addAll(attacks, attackATxt, attackBTxt, attackCTxt, attackDTxt, attackETxt, attackFTxt,
 				attackGTxt, attackHTxt, attackITxt, attackJTxt);
-
-		//TODO integrate TextData class to have multiple frameworks saved --> actually have multiple frameworks saved in dtos?
 		
 		alphabetical = new ArrayList<?>[3];
 		alphabetical[0] = checkBoxes;
@@ -220,8 +219,6 @@ public class MainInputController {
 
 		private void loadExample(String item) {
 			for(Example e: examples){
-				//TODO put loaded name in save field
-				
 				if(e.getName().equals(item) && e.getLines() != null){
 					for(Line l: e.getLines()){
 						Object cb = alphabetical[0].get(l.getNumber());
@@ -234,6 +231,7 @@ public class MainInputController {
 							((TextField) t2).setText(l.getAttacks());
 						}
 					}
+					nameTxt.setText(e.getName()); //TODO --> clear button
 					break;
 				}
 			}
@@ -258,9 +256,7 @@ public class MainInputController {
 	 * reads text from selected rows and stores it into ArgumentDtos, then initiates screen change to Demonstration Window
 	 */
 	@FXML
-	public void onShowButton(){
-		//TODO autosave what is to be shown, if it's not already saved
-		
+	public void onShowButton(){		
 		arguments = new ArrayList<ArgumentDto>();
 
 		try{
@@ -290,6 +286,12 @@ public class MainInputController {
 			errorLbl.setText("critical error: " + e.getMessage());
 			return;
 		}
+		
+		Example tmp = convertToExample(arguments);
+		if(!exampleExists(tmp)){
+			examples.add(tmp);
+			showChoices();
+		}
 
 		errorLbl.setText("");
 		interactor.setRawArguments(arguments);
@@ -297,6 +299,27 @@ public class MainInputController {
 		wrapper.loadDemonstration();
 	}
 	
+	private boolean exampleExists(Example tmp) {
+		for(Example e:examples){
+			if (e.equals(tmp)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Example convertToExample(ArrayList<ArgumentDto> arguments) {
+		Line[] lines = new Line[arguments.size()];
+		
+		for(int i = 0;i<arguments.size();i++){
+			ArgumentDto tmp = arguments.get(i);
+			lines[i] = new Line(tmp.getName(),tmp.getStatement(),tmp.getAttacks());
+		}
+		
+		autosave++; //we have standard 0, we start with 1 and so on
+		return new Example("autosave " + autosave,lines);
+	}
+
 	@FXML
 	public void onNewClick(){
 		//TODO clear all fields, boxes

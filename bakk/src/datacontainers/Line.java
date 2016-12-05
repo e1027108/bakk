@@ -1,18 +1,12 @@
 package datacontainers;
 
 public class Line{
-	private int number;
+	private int number; //TODO change to char, otherwise equality is useless bc of touppercase
 	private String description;
 	private String attacks;
-
-	public Line(int number, String description, String attacks){
-		this.number = number;
-		this.description = description;
-		this.attacks = attacks;
-	}
-
+	
 	public Line(char name, String description, String attacks){
-		this.number = String.valueOf(name).toUpperCase().charAt(0) - 65; //TODO check if it works
+		this.number = String.valueOf(name).toUpperCase().charAt(0) - 65;
 
 		this.description = description;
 		this.attacks = attacks;
@@ -28,5 +22,25 @@ public class Line{
 
 	public String getAttacks(){
 		return attacks;
+	}
+	
+	/**
+	 * returns whether the line equals a given line b
+	 * note that even tiny differences (e.g. attack order) makes two lines unequal
+	 * @param b another line
+	 * @return true/false
+	 */
+	public boolean equals(Line b){
+		if(this.number != b.getNumber()){
+			return false;
+		}
+		else if(!this.description.equals(b.getDescription())){
+			return false;
+		}
+		else if(!this.attacks.equals(b.getAttacks())){
+			return false;
+		}
+		
+		return true;
 	}
 }
