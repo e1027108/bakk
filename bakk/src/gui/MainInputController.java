@@ -225,8 +225,7 @@ public class MainInputController {
 						Object cb = alphabetical[0].get(number);
 						Object t1 = alphabetical[1].get(number);
 						Object t2 = alphabetical[2].get(number);
-						System.out.println(number);
-
+						
 						if(cb instanceof CheckBox && t1 instanceof TextField && t2 instanceof TextField){
 							((CheckBox) cb).selectedProperty().set(true);
 							((TextField) t1).setText(l.getDescription());
@@ -334,6 +333,7 @@ public class MainInputController {
 		clearAll();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void clearAll(){
 		try{
 			for(CheckBox c: (ArrayList<CheckBox>) alphabetical[0]){
