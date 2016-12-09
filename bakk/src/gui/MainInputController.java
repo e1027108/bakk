@@ -364,7 +364,7 @@ public class MainInputController {
 		}
 		else{
 			//TODO overwrite data in toSave with input
-
+			//TODO first "outsource" collection from alphabetical data
 		}
 
 	}

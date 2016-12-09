@@ -34,6 +34,8 @@ import logic.Framework;
  */
 public class DemonstrationWindowController {
 
+	//TODO later implement dynamic changing of frameworks (context menu?, predefined action?)
+	
 	/**
 	 * wrapper object controlling what is shown on screen
 	 */
@@ -46,7 +48,7 @@ public class DemonstrationWindowController {
 	private URL location; //location of file
 
 	@FXML
-	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, computeBtn; //buttons in demonstration window
+	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, computeBtn, toggleBtn; //buttons in demonstration window
 
 	@FXML
 	private CheckBox previousCheckBox; //checkbox whether to use previously computed sets or extensions
@@ -58,7 +60,7 @@ public class DemonstrationWindowController {
 	private AnchorPane root; //root pane containing all the UI elements
 
 	@FXML
-	private ComboBox<String> setsComboBox, extensionComboBox; //dropdown for result sets
+	private ComboBox<String> setsComboBox, extensionComboBox, comparisonComboBox; //dropdown for result sets
 	
 	@FXML
 	private Label extensionLbl;
@@ -410,7 +412,12 @@ public class DemonstrationWindowController {
 	@FXML
 	public void onCompareClick(){
 		//TODO implement equivalency comparison
-		//TODO first fill combobox with choices
+	}
+	
+	//TODO handle en/disabling of toggleBtn
+	@FXML
+	public void onToggleClick(){
+		//TODO check what comparison is chosen, do something
 	}
 
 	/**
@@ -464,6 +471,22 @@ public class DemonstrationWindowController {
 		ArrayList<String> extensionTypes = new ArrayList<String>();
 		extensionTypes.addAll(Arrays.asList(extarr));
 		extensionComboBox.setItems(FXCollections.observableArrayList(extensionTypes));
+		
+		//set comparable examples
+		showComparableExamples();
+		//TODO exclude current framework from comparison combo box (disable that option?)
+		
+	}
+	
+	public void showComparableExamples(){
+		ArrayList<String> formatList = new ArrayList<String>();
+
+		for(Example e: MainInputController.getExamples()){
+			formatList.add(e.getName());
+		}
+
+		comparisonComboBox.setItems(FXCollections.observableArrayList(formatList));
+		comparisonComboBox.getSelectionModel().selectFirst();
 	}
 
 	/**
