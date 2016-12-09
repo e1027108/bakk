@@ -329,7 +329,26 @@ public class MainInputController {
 	
 	@FXML
 	public void onSaveClick(){
-		//TODO save as name (overwrite if name exists)
+		String name = nameTxt.getText();
+		Example toSave = getExampleByName(name);
+		
+		if(toSave == null){
+			//TODO create new example from input with this name and save it
+		}
+		else{
+			//TODO overwrite data in toSave with input
+		}
+		
+	}
+	
+	private Example getExampleByName(String name){
+		for (Example e:examples){
+			if (name.equals(e.getName())){
+				return e;
+			}
+		}
+		
+		return null;
 	}
 
 	/**
