@@ -56,8 +56,8 @@ public class MainInputController {
 	private Label useLbl, addLbl, attackLbl, headlineLbl, errorLbl, presetLbl, saveLbl; //descriptive labels
 
 	@FXML
-	private Button showGraphBtn, saveBtn, newBtn;
-	
+	private Button showGraphBtn, saveBtn, newBtn, clearBtn;
+
 	@FXML
 	private ComboBox<String> presetComboBox;
 
@@ -71,7 +71,7 @@ public class MainInputController {
 	private ArrayList<?> alphabetical[]; //array of input containing lists
 	private static ArrayList<Example> examples;
 	private int autosave; //each automatically saved framework is called autosave 1,2,...
-	
+
 	/**
 	 * gets an Interactor and adds tooltips for elements
 	 */
@@ -94,7 +94,7 @@ public class MainInputController {
 				argumentFTxt, argumentGTxt, argumentHTxt, argumentITxt, argumentJTxt);
 		Collections.addAll(attacks, attackATxt, attackBTxt, attackCTxt, attackDTxt, attackETxt, attackFTxt,
 				attackGTxt, attackHTxt, attackITxt, attackJTxt);
-		
+
 		alphabetical = new ArrayList<?>[3];
 		alphabetical[0] = checkBoxes;
 		alphabetical[1] = statements;
@@ -116,82 +116,82 @@ public class MainInputController {
 		for(TextField f: attacks){
 			f.setTooltip(attackTip);
 		}
-		
+
 		generalAttackTip = new Tooltip("Set attacks between arguments.");
 		attackLbl.setTooltip(generalAttackTip);
-		
+
 		choiceTip = new Tooltip("You can choose a preset to load an example framework into the textfields above.");
 		presetComboBox.setTooltip(choiceTip);
-		
+
 		//TODO tips for save, new
-		
+
 		showChoices();
 	}
-	
+
 	private ArrayList<Example> initializeExamples() {
 		ArrayList<Example>exampleSet = new ArrayList<Example>(); //now also use to save new (implement save/delete behaviour) frameworks
-		
+
 		exampleSet.add(new Example("",null));
-		
+
 		exampleSet.add(new Example("DUNG Example 1",
 				new Line[] {
-					new Line('a', "I: My government can not negotiate with your government because your government doesn�t even recognize my government.", "b"),
-					new Line('b', "A: Your government doesn't recognize my government either.", "a"),
-					new Line('c', "I: But your government is a terrorist government.", "b")
+						new Line('a', "I: My government can not negotiate with your government because your government doesn�t even recognize my government.", "b"),
+						new Line('b', "A: Your government doesn't recognize my government either.", "a"),
+						new Line('c', "I: But your government is a terrorist government.", "b")
 		}));
-		
+
 		exampleSet.add(new Example("Nixon Diamond",
 				new Line[] {
-					new Line('a', "Nixon is anti-pacifist since he is a republican.", "b"),
-					new Line('b', "Nixon is a pacifist since he is a quaker.", "a"),
+						new Line('a', "Nixon is anti-pacifist since he is a republican.", "b"),
+						new Line('b', "Nixon is a pacifist since he is a quaker.", "a"),
 		}));
-		
+
 		exampleSet.add(new Example("Thesis Example 1-7",
 				new Line[] {
-					new Line('a', "A: Blue is the most beautiful of all colors.", "b"),
-					new Line('b', "B: No, black is much more beautiful!", "a"),
-					new Line('c', "A: That's wrong, black isn't even a color.", "b")
+						new Line('a', "A: Blue is the most beautiful of all colors.", "b"),
+						new Line('b', "B: No, black is much more beautiful!", "a"),
+						new Line('c', "A: That's wrong, black isn't even a color.", "b")
 		}));
-		
+
 		exampleSet.add(new Example("Thesis Example 8",
 				new Line[] {
-					new Line('a', "", "a"),
-					new Line('b', "", "ac"),
-					new Line('c', "", "b")
+						new Line('a', "", "a"),
+						new Line('b', "", "ac"),
+						new Line('c', "", "b")
 		}));
-		
+
 		exampleSet.add(new Example("Thesis Example 9",
 				new Line[] {
-					new Line('a', "", "b"),
-					new Line('b', "", "a"),
-					new Line('c', "", "bd"),
-					new Line('d', "", "c")
+						new Line('a', "", "b"),
+						new Line('b', "", "a"),
+						new Line('c', "", "bd"),
+						new Line('d', "", "c")
 		}));
-		
+
 		exampleSet.add(new Example("Thesis Figure 4.1",
 				new Line[] {
-					new Line('a', "", ""),
-					new Line('b', "", "ac"),
-					new Line('c', "", "bd"),
-					new Line('d', "", "ace"),
-					new Line('e', "", "e")
+						new Line('a', "", ""),
+						new Line('b', "", "ac"),
+						new Line('c', "", "bd"),
+						new Line('d', "", "ace"),
+						new Line('e', "", "e")
 		}));
-		
+
 		exampleSet.add(new Example("Egly Example 1",
 				new Line[] {
-					new Line('a', "", "b"),
-					new Line('b', "", ""),
-					new Line('c', "", "bd"),
-					new Line('d', "", "ce"),
-					new Line('e', "", "e")
+						new Line('a', "", "b"),
+						new Line('b', "", ""),
+						new Line('c', "", "bd"),
+						new Line('d', "", "ce"),
+						new Line('e', "", "e")
 		}));
-		
+
 		return exampleSet;
 	}
-	
+
 	public void showChoices(){
 		ArrayList<String> formatList = new ArrayList<String>();
-		
+
 		for(Example e: examples){
 			formatList.add(e.getName());
 		}
@@ -200,7 +200,7 @@ public class MainInputController {
 		presetComboBox.getSelectionModel().selectedIndexProperty().addListener(new ChoiceListener<Number>());
 		presetComboBox.getSelectionModel().selectFirst();
 	}
-	
+
 	@SuppressWarnings("hiding")
 	private class ChoiceListener<Number> implements ChangeListener<Number>{
 		@Override
@@ -208,7 +208,7 @@ public class MainInputController {
 			if((Integer) nval == -1){
 				return;
 			}
-			
+
 			Object item = presetComboBox.getItems().get((Integer) nval); 
 
 			if(item instanceof String){
@@ -226,26 +226,26 @@ public class MainInputController {
 						Object t1 = alphabetical[1].get(number);
 						Object t2 = alphabetical[2].get(number);
 						System.out.println(number);
-						
+
 						if(cb instanceof CheckBox && t1 instanceof TextField && t2 instanceof TextField){
 							((CheckBox) cb).selectedProperty().set(true);
 							((TextField) t1).setText(l.getDescription());
 							((TextField) t2).setText(l.getAttacks());
 						}
 					}
-					nameTxt.setText(e.getName()); //TODO --> clear button
+					nameTxt.setText(e.getName());
 					break;
 				}
 			}
 		}
 	}
-	
+
 	private void resetMask() {
 		for(int i = 0; i<alphabetical[0].size(); i++){
 			Object a = alphabetical[0].get(i);
 			Object b = alphabetical[1].get(i);
 			Object c = alphabetical[2].get(i);
-			
+
 			if(a instanceof CheckBox && b instanceof TextField && c instanceof TextField){
 				((CheckBox) a).selectedProperty().set(false);
 				((TextField) b).setText("");
@@ -266,7 +266,7 @@ public class MainInputController {
 				CheckBox ctmp;
 				TextField stmp;
 				TextField atmp;
-				
+
 				if((alphabetical[0].get(i) instanceof CheckBox) && (alphabetical[1].get(i) instanceof TextField)
 						&& (alphabetical[2].get(i) instanceof TextField)){
 					ctmp = (CheckBox) alphabetical[0].get(i);
@@ -288,7 +288,7 @@ public class MainInputController {
 			errorLbl.setText("critical error: " + e.getMessage());
 			return;
 		}
-		
+
 		Example tmp = convertToExample(arguments);
 		if(!exampleExists(tmp)){
 			examples.add(tmp);
@@ -300,7 +300,7 @@ public class MainInputController {
 		interactor.setDemonstrationValues();
 		wrapper.loadDemonstration();
 	}
-	
+
 	private boolean exampleExists(Example tmp) {
 		for(Example e:examples){
 			if (e.equals(tmp)) {
@@ -312,42 +312,70 @@ public class MainInputController {
 
 	private Example convertToExample(ArrayList<ArgumentDto> arguments) {
 		Line[] lines = new Line[arguments.size()];
-		
+
 		for(int i = 0;i<arguments.size();i++){
 			ArgumentDto tmp = arguments.get(i);
 			lines[i] = new Line(tmp.getName(),tmp.getStatement(),tmp.getAttacks());
 		}
-		
+
 		autosave++; //we have standard 0, we start with 1 and so on
 		return new Example("autosave " + autosave,lines);
 	}
 
 	@FXML
 	public void onNewClick(){
-		//TODO clear all fields, boxes
+		//TODO save from input with name in nametxt/autosave name an example/overwrite it; if one wants to not save anything --> clear button
+
+		clearAll();
 	}
-	
+
+	@FXML
+	public void onClearClick(){
+		clearAll();
+	}
+
+	private void clearAll(){
+		try{
+			for(CheckBox c: (ArrayList<CheckBox>) alphabetical[0]){
+				c.selectedProperty().set(false);
+			}
+			for(TextField t: (ArrayList<TextField>) alphabetical[1]){
+				t.setText("");
+			}
+			for(TextField t: (ArrayList<TextField>) alphabetical[2]){
+				t.setText("");
+			}
+		}
+		catch (Exception e){
+			e.printStackTrace(); //TODO replace with error
+		}
+		
+		nameTxt.setText("");
+		presetComboBox.getSelectionModel().select(0);
+	}
+
 	@FXML
 	public void onSaveClick(){
 		String name = nameTxt.getText();
 		Example toSave = getExampleByName(name);
-		
+
 		if(toSave == null){
 			//TODO create new example from input with this name and save it
 		}
 		else{
 			//TODO overwrite data in toSave with input
+
 		}
-		
+
 	}
-	
+
 	private Example getExampleByName(String name){
 		for (Example e:examples){
 			if (name.equals(e.getName())){
 				return e;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -424,7 +452,7 @@ public class MainInputController {
 	public static void setWrapper(WrapperController wrapperController) {
 		wrapper = wrapperController;
 	}
-	
+
 	static ArrayList<Example> getExamples() {
 		return examples;
 	}
