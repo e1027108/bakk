@@ -61,7 +61,8 @@ public class MainInputController {
 	@FXML
 	private ComboBox<String> presetComboBox;
 
-	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip, choiceTip; //tooltips describing what to input or what happens
+	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip, choiceTip, saveTip, newTip,
+	clearTip; //tooltips describing what to input or what happens
 
 	private Interactor interactor; //Interactor controlling the results the user sees
 	private ArrayList<ArgumentDto> arguments; //arguments read from the text fields
@@ -123,7 +124,14 @@ public class MainInputController {
 		choiceTip = new Tooltip("You can choose a preset to load an example framework into the textfields above.");
 		presetComboBox.setTooltip(choiceTip);
 
-		//TODO tips for save, new
+		saveTip = new Tooltip("Save the currently selected arguments as a new framework with the name given in the textfield or "
+				+ "overwrite the framework specified there.");
+		newTip = new Tooltip("Clears all textfields and selections to start a new framework, automatically saves the current selection.");
+		clearTip = new Tooltip("Clears all textfields, does not save any selection.");
+		
+		saveBtn.setTooltip(saveTip);
+		newBtn.setTooltip(newTip);
+		clearBtn.setTooltip(clearTip);
 
 		showChoices();
 	}
@@ -390,11 +398,10 @@ public class MainInputController {
 
 		if(toSave == null){
 			examples.add(convertToExample(createTransferObjectList(),name));
-			showChoices(); //TODO maybe make showchoices not select first? then everywhere we want to clear needs to manually clear (not here btw)
+			showChoices(); //TODO make show choices not select first? then everywhere we want to clear needs to manually clear (not here btw)
 		}
 		else{
-			//TODO overwrite data in toSave with input
-			//TODO first "outsource" collection from alphabetical data
+			examples.set(examples.indexOf(toSave), convertToExample(createTransferObjectList(),name));
 		}
 
 	}
