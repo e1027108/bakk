@@ -258,8 +258,28 @@ public class MainInputController {
 	 */
 	@FXML
 	public void onShowButton(){		
-		arguments = new ArrayList<ArgumentDto>();
+		arguments = createTransferObjectList();
+		autosave++; //we have standard 0, we start with 1 and so on
+		String autoName = "autosave " + autosave;
+		
+		Example tmp = convertToExample(arguments,autoName);
+		if(!exampleExists(tmp)){
+			examples.add(tmp);
+			showChoices();
+		}
+		else{
+			autosave--;
+		}
 
+		errorLbl.setText("");
+		interactor.setRawArguments(arguments);
+		interactor.setDemonstrationValues();
+		wrapper.loadDemonstration();
+	}
+	
+	private ArrayList<ArgumentDto> createTransferObjectList(){
+		ArrayList<ArgumentDto> arguments = new ArrayList<ArgumentDto>();
+		
 		try{
 			for(int i = 0; i <= alphabetical[0].size()-1; i++){
 				CheckBox ctmp;
@@ -282,22 +302,13 @@ public class MainInputController {
 			}
 		} catch(InvalidInputException e){
 			errorLbl.setText(e.getMessage());
-			return;
+			return null; //TODO handle
 		} catch(IndexOutOfBoundsException e){
 			errorLbl.setText("critical error: " + e.getMessage());
-			return;
+			return null; //TODO handle
 		}
-
-		Example tmp = convertToExample(arguments);
-		if(!exampleExists(tmp)){
-			examples.add(tmp);
-			showChoices();
-		}
-
-		errorLbl.setText("");
-		interactor.setRawArguments(arguments);
-		interactor.setDemonstrationValues();
-		wrapper.loadDemonstration();
+		
+		return arguments;
 	}
 
 	private boolean exampleExists(Example tmp) {
@@ -308,8 +319,8 @@ public class MainInputController {
 		}
 		return false;
 	}
-
-	private Example convertToExample(ArrayList<ArgumentDto> arguments) {
+	
+	private Example convertToExample(ArrayList<ArgumentDto> arguments, String name) {
 		Line[] lines = new Line[arguments.size()];
 
 		for(int i = 0;i<arguments.size();i++){
@@ -317,14 +328,31 @@ public class MainInputController {
 			lines[i] = new Line(tmp.getName(),tmp.getStatement(),tmp.getAttacks());
 		}
 
-		autosave++; //we have standard 0, we start with 1 and so on
-		return new Example("autosave " + autosave,lines);
+		return new Example(name,lines);
 	}
 
 	@FXML
-	public void onNewClick(){
-		//TODO save from input with name in nametxt/autosave name an example/overwrite it; if one wants to not save anything --> clear button
-
+	public void onNewClick(){ //overwrites old example, if name is same, otherwise writes new autosave
+		Example oldExample;
+		String oldName = nameTxt.getText();
+		
+		if(oldName == null || oldName.equals("")){
+			autosave++;
+			oldName = "autosave " + autosave; 
+		}
+		
+		oldExample = convertToExample(createTransferObjectList(),oldName);
+		Example prevVersion = getExampleByName(oldName);
+		
+		if(prevVersion != null){
+			examples.set(examples.indexOf(prevVersion),oldExample); // previous name version gets overwritten
+			showChoices();
+		}
+		else if(!exampleExists(oldExample)){
+			examples.add(oldExample);
+			showChoices();
+		}
+		
 		clearAll();
 	}
 
@@ -347,7 +375,8 @@ public class MainInputController {
 			}
 		}
 		catch (Exception e){
-			e.printStackTrace(); //TODO replace with error
+			errorLbl.setText("Clearing failed! Sorry!");
+			//e.printStackTrace();
 		}
 		
 		nameTxt.setText("");
@@ -360,7 +389,8 @@ public class MainInputController {
 		Example toSave = getExampleByName(name);
 
 		if(toSave == null){
-			//TODO create new example from input with this name and save it
+			examples.add(convertToExample(createTransferObjectList(),name));
+			showChoices(); //TODO maybe make showchoices not select first? then everywhere we want to clear needs to manually clear (not here btw)
 		}
 		else{
 			//TODO overwrite data in toSave with input
