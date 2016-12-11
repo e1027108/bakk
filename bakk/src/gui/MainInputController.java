@@ -134,6 +134,7 @@ public class MainInputController { //TODO polish button layout
 		clearBtn.setTooltip(clearTip);
 
 		showChoices();
+		clearAll();
 	}
 
 	private ArrayList<Example> initializeExamples() {
@@ -206,7 +207,6 @@ public class MainInputController { //TODO polish button layout
 
 		presetComboBox.setItems(FXCollections.observableArrayList(formatList));
 		presetComboBox.getSelectionModel().selectedIndexProperty().addListener(new ChoiceListener<Number>());
-		presetComboBox.getSelectionModel().selectFirst();
 	}
 
 	@SuppressWarnings("hiding")
@@ -369,28 +369,14 @@ public class MainInputController { //TODO polish button layout
 		clearAll();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void clearAll(){
-		try{
-			for(CheckBox c: (ArrayList<CheckBox>) alphabetical[0]){
-				c.selectedProperty().set(false);
-			}
-			for(TextField t: (ArrayList<TextField>) alphabetical[1]){
-				t.setText("");
-			}
-			for(TextField t: (ArrayList<TextField>) alphabetical[2]){
-				t.setText("");
-			}
-		}
-		catch (Exception e){
-			errorLbl.setText("Clearing failed! Sorry!");
-			//e.printStackTrace();
-		}
-		
+		presetComboBox.getSelectionModel().selectFirst();
 		nameTxt.setText("");
-		presetComboBox.getSelectionModel().select(0);
 	}
 
+	/*TODO after saving a change to something that existed before, but with a new name, the original version is shown
+	--> fix
+	*/
 	@FXML
 	public void onSaveClick(){
 		String name = nameTxt.getText();
@@ -398,10 +384,12 @@ public class MainInputController { //TODO polish button layout
 
 		if(toSave == null){
 			examples.add(convertToExample(createTransferObjectList(),name));
-			showChoices(); //TODO make show choices not select first? then everywhere we want to clear needs to manually clear (not here btw)
+			showChoices();
 		}
 		else{
-			examples.set(examples.indexOf(toSave), convertToExample(createTransferObjectList(),name));
+			int id = examples.indexOf(toSave);
+			examples.set(id, convertToExample(createTransferObjectList(),name)); //overwrite
+			presetComboBox.getSelectionModel().select(id);
 		}
 
 	}
