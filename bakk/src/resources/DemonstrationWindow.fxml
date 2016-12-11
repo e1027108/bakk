@@ -31,7 +31,7 @@
     <Button id="arrowButton" fx:id="arrowBtn" mnemonicParsing="false" onAction="#onArrowClick" text="&lt;" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="8.0" />
     <Separator layoutX="54.0" orientation="VERTICAL" prefHeight="85.0" AnchorPane.bottomAnchor="12.0" AnchorPane.topAnchor="501.5" />
     <Label fx:id="extensionLbl" text="extension type:" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="68.0" />
-    <ComboBox id="comparisonComboBox" fx:id="extensionComboBox" layoutX="168.0" prefWidth="150.0" AnchorPane.bottomAnchor="65.0">
+    <ComboBox id="comparisonComboBox" fx:id="extensionComboBox" layoutX="168.0" maxWidth="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="65.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Item 1" />
@@ -40,9 +40,8 @@
         </FXCollections>
       </items>
     </ComboBox>
-    <Button fx:id="computeBtn" mnemonicParsing="false" onAction="#onComputeClick" text="Compute" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="328.0" AnchorPane.rightAnchor="492.0" />
-    <Label layoutX="68.0" text="compare to:" AnchorPane.bottomAnchor="25.0" />
-    <ComboBox fx:id="comparisonComboBox" layoutX="168.0" prefWidth="150.0" AnchorPane.bottomAnchor="25.0">
+    <Label layoutX="68.0" text="compare to:" AnchorPane.bottomAnchor="30.0" />
+    <ComboBox fx:id="comparisonComboBox" layoutX="168.0" maxWidth="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="25.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Item 1" />
@@ -51,8 +50,10 @@
         </FXCollections>
       </items>
     </ComboBox>
-    <Button fx:id="compareBtn" mnemonicParsing="false" onAction="#onCompareClick" text="Compare" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="328.0" AnchorPane.rightAnchor="492.0" />
-    <Separator layoutX="448.0" orientation="VERTICAL" prefHeight="85.0" AnchorPane.bottomAnchor="12.0" AnchorPane.topAnchor="501.5" />
+    <Separator layoutX="333.0" orientation="VERTICAL" prefHeight="86.5" AnchorPane.bottomAnchor="13.0" AnchorPane.topAnchor="501.5" />
+    <Button fx:id="computeBtn" mnemonicParsing="false" onAction="#onComputeClick" text="Compute" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="348.0" AnchorPane.rightAnchor="450.0" />
+    <Button fx:id="compareBtn" mnemonicParsing="false" onAction="#onCompareClick" text="Compare" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="348.0" AnchorPane.rightAnchor="450.0" />
+    <Separator orientation="VERTICAL" prefHeight="85.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="460.0" AnchorPane.topAnchor="501.5" />
     <CheckBox fx:id="previousCheckBox" layoutX="498.0" mnemonicParsing="false" selected="true" text="use previously computed sets for further computations" AnchorPane.bottomAnchor="69.0" />
     <Separator prefWidth="900.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" />
   </children>

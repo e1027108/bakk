@@ -28,7 +28,7 @@ import javafx.scene.layout.AnchorPane;
  *  for managing input to further use in computations
  * @author Patrick Bellositz
  */
-public class MainInputController {
+public class MainInputController { //TODO polish button layout
 
 	/**
 	 * wrapper object controlling what is shown on screen

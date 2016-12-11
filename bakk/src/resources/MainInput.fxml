@@ -49,8 +49,8 @@
     <TextField fx:id="argumentJTxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="390.0" />
     <TextField fx:id="attackJTxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="390.0" />
     <Separator prefWidth="700.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="425.0" />
-    <Label fx:id="presetLbl" text="choose framework" AnchorPane.bottomAnchor="145.0" AnchorPane.leftAnchor="114.0" />
-    <ComboBox fx:id="presetComboBox" AnchorPane.bottomAnchor="140.0" AnchorPane.leftAnchor="224.0">
+    <Label fx:id="presetLbl" text="choose framework" AnchorPane.bottomAnchor="145.0" AnchorPane.leftAnchor="100.0" />
+    <ComboBox fx:id="presetComboBox" maxWidth="160.0" prefWidth="140.0" AnchorPane.bottomAnchor="140.0" AnchorPane.leftAnchor="220.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Item 1" />
@@ -59,11 +59,12 @@
         </FXCollections>
       </items>
     </ComboBox>
-    <Label fx:id="saveLbl" layoutX="381.0" layoutY="439.0" text="save as" />
-    <TextField id="argumentBTxt" fx:id="nameTxt" layoutX="432.0" layoutY="438.0" prefWidth="109.0" />
-    <Button fx:id="saveBtn" layoutX="550.0" layoutY="439.0" mnemonicParsing="false" onAction="#onSaveClick" text="save" />
-    <Button id="newBtn" fx:id="clearBtn" layoutX="666.0" layoutY="439.0" mnemonicParsing="false" onAction="#onClearClick" text="clear" />
-    <Button fx:id="newBtn" layoutX="735.0" layoutY="439.0" mnemonicParsing="false" onAction="#onNewClick" text="new" />
+    <Separator layoutY="425.0" orientation="VERTICAL" prefHeight="45.0" AnchorPane.leftAnchor="370.0" />
+    <Label fx:id="saveLbl" text="save as" AnchorPane.bottomAnchor="145.0" AnchorPane.leftAnchor="380.0" />
+    <TextField id="argumentBTxt" fx:id="nameTxt" prefWidth="150.0" AnchorPane.bottomAnchor="140.0" AnchorPane.leftAnchor="430.0" />
+    <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#onSaveClick" prefWidth="60.0" text="save" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="250.0" />
+    <Button id="newBtn" fx:id="clearBtn" mnemonicParsing="false" onAction="#onClearClick" prefWidth="60.0" text="clear" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="180.0" />
+    <Button fx:id="newBtn" mnemonicParsing="false" onAction="#onNewClick" prefWidth="60.0" text="new" AnchorPane.bottomAnchor="140.0" AnchorPane.rightAnchor="110.0" />
     <Separator prefWidth="700.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="470.0" />
     <Button fx:id="showGraphBtn" mnemonicParsing="false" onAction="#onShowButton" prefWidth="229.0" text="show graph" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="325.0" AnchorPane.rightAnchor="325.0" />
     <Label fx:id="errorLbl" alignment="CENTER" prefWidth="700.0" text="errorlabel" textAlignment="CENTER" textFill="RED" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
