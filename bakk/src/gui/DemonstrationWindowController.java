@@ -73,7 +73,7 @@ public class DemonstrationWindowController {
 	private ArrayList<Attack> attacks; //attacks of the framework
 	private Interactor interactor; //Interactor controlling the results the user sees
 	private ArrayList<Extension> resultSet; //set containing computation results
-	private NodePane graphPane; //pane where node illustrations are shown
+	private NodePane graphPane, comparisonPane; //pane where node illustrations are shown
 
 	/**
 	 * initializes the controller
@@ -414,10 +414,20 @@ public class DemonstrationWindowController {
 		//TODO implement equivalency comparison
 	}
 	
-	//TODO handle en/disabling of toggleBtn
 	@FXML
 	public void onToggleClick(){
-		//TODO check what comparison is chosen, do something
+		if(graphPane.isVisible()){
+			graphPane.setVisible(false);
+			comparisonPane.setVisible(true);
+		}
+		else{
+			graphPane.setVisible(true);
+			comparisonPane.setVisible(false);
+		}
+	}
+	
+	public void fillComparisonPane(){
+		//TODO on choosing of a comparison framework (change listener) --> enable toggle (at select first disable)
 	}
 
 	/**
@@ -443,7 +453,19 @@ public class DemonstrationWindowController {
 		root.getChildren().add(graphPane);
 		graphPane.setPrefHeight(470);
 		graphPane.setPrefWidth(445);
-		graphPane.setLayoutX(15); //prevents arcs from going out of visual bounds
+		graphPane.setLayoutX(15); //prevents arcs from going out of visual bounds, y stays 0
+		graphPane.setVisible(true);
+		
+		//initialize comparison pane (it's empty at this point)
+		comparisonPane = new NodePane();
+		root.getChildren().add(comparisonPane);
+		comparisonPane.setPrefHeight(470);
+		comparisonPane.setPrefWidth(445);
+		comparisonPane.setLayoutX(15);
+		comparisonPane.setVisible(false);
+		
+		//for testing
+		//toggleBtn.setDisable(false);
 
 		interactor = Interactor.getInstance(this);
 		readArguments(interactor.getRawArguments());
@@ -475,6 +497,7 @@ public class DemonstrationWindowController {
 		//set comparable examples
 		showComparableExamples();
 		//TODO exclude current framework from comparison combo box (disable that option?)
+		//TODO use DTO instead of real examples?
 		
 	}
 	
