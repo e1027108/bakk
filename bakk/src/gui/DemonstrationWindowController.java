@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import datacontainers.Example;
+import datacontainers.Line;
 import dto.ArgumentDto;
 import exceptions.InvalidInputException;
 import javafx.beans.value.ChangeListener;
@@ -68,10 +69,10 @@ public class DemonstrationWindowController {
 	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, 
 	backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip; //tooltips for all buttons etc
 
-	private Framework argumentFramework; //argument framework containing the arguments
-	private ArrayList<Argument> arguments; //arguments of the framework
-	private ArrayList<Attack> attacks; //attacks of the framework
-	private Interactor interactor; //Interactor controlling the results the user sees
+	private Framework argumentFramework, comparisonFramework; //argument framework containing the arguments
+	private ArrayList<Argument> arguments, compArguments; //arguments of the framework
+	private ArrayList<Attack> attacks, compAttacks; //attacks of the framework
+	private Interactor interactor, comparisonInteractor; //Interactor controlling the results the user sees
 	private ArrayList<Extension> resultSet; //set containing computation results
 	private NodePane graphPane, comparisonPane; //pane where node illustrations are shown
 
@@ -336,7 +337,7 @@ public class DemonstrationWindowController {
 		}
 
 		setsComboBox.setItems(FXCollections.observableArrayList(formatList));
-		setsComboBox.getSelectionModel().selectedIndexProperty().addListener(new ChoiceListener<Number>());
+		setsComboBox.getSelectionModel().selectedIndexProperty().addListener(new SetsChoiceListener<Number>());
 		setsComboBox.getSelectionModel().selectFirst();
 	}
 	
@@ -355,7 +356,7 @@ public class DemonstrationWindowController {
 	 * @param <Number> the index of the chosen element
 	 */
 	@SuppressWarnings("hiding")
-	private class ChoiceListener<Number> implements ChangeListener<Number>{
+	private class SetsChoiceListener<Number> implements ChangeListener<Number>{
 		@Override
 		public void changed(ObservableValue<? extends Number> oval, Number sval, Number nval){
 			if((Integer) nval == -1){ //because with a new graph an empty selection (id:-1) is shown
@@ -415,7 +416,7 @@ public class DemonstrationWindowController {
 	}
 	
 	@FXML
-	public void onToggleClick(){
+	public void onToggleClick(){ //TODO show name of shown framework!
 		if(graphPane.isVisible()){
 			graphPane.setVisible(false);
 			comparisonPane.setVisible(true);
@@ -426,8 +427,69 @@ public class DemonstrationWindowController {
 		}
 	}
 	
-	public void fillComparisonPane(){
-		//TODO on choosing of a comparison framework (change listener) --> enable toggle (at select first disable)
+	private void fillComparisonPane(){
+		boolean wasVisible;
+		
+		if(comparisonPane != null && comparisonPane.isVisible()){
+			wasVisible = true;
+		}
+		else{
+			wasVisible = false;
+		}
+		
+		root.getChildren().remove(comparisonPane);
+		
+		//initialize new comparison pane
+		comparisonPane = new NodePane();
+		root.getChildren().add(comparisonPane);
+		comparisonPane.setPrefHeight(470);
+		comparisonPane.setPrefWidth(445);
+		comparisonPane.setLayoutX(15);
+		comparisonPane.setVisible(wasVisible);
+		
+		Example current = MainInputController.getExamples().get(comparisonComboBox.getSelectionModel().getSelectedIndex());
+		
+		//testing
+		System.out.println(current.getName());
+		
+		compArguments = new ArrayList<Argument>();
+		compAttacks = new ArrayList<Attack>();
+		
+		for(Line l: current.getLines()){
+			compArguments.add(new Argument(l.getChar(),l.getDescription()));
+		}
+		
+		for(Line l: current.getLines()){
+			Argument attacker = getArgumentByName(l.getChar(),compArguments);
+			for(int i = 0;i<l.getAttacks().length();i++){
+				Argument defender = getArgumentByName(l.getAttacks().charAt(i),compArguments); //TODO handle if none found
+				compAttacks.add(new Attack(attacker,defender));
+			}
+		}
+		
+		comparisonFramework = new Framework(compArguments, compAttacks, comparisonInteractor);
+
+		comparisonPane.createGraph(comparisonFramework);
+		toggleBtn.setDisable(false);
+		
+		//TODO write comparisonInteractor?
+		
+		try {
+			comparisonPane.drawGraph();
+		} catch (InvalidInputException e) {
+			e.printStackTrace(); //TODO write some error to explanationArea
+		}
+	}
+	
+	private Argument getArgumentByName(char name, ArrayList<Argument> args){
+		for(Argument a: args){
+			if(String.valueOf(name).toUpperCase().equals(String.valueOf(a.getName()))){
+				return a;
+			}
+		}
+		
+		System.out.println("this");
+		return null;
 	}
 
 	/**
@@ -456,17 +518,9 @@ public class DemonstrationWindowController {
 		graphPane.setLayoutX(15); //prevents arcs from going out of visual bounds, y stays 0
 		graphPane.setVisible(true);
 		
-		//initialize comparison pane (it's empty at this point)
-		comparisonPane = new NodePane();
-		root.getChildren().add(comparisonPane);
-		comparisonPane.setPrefHeight(470);
-		comparisonPane.setPrefWidth(445);
-		comparisonPane.setLayoutX(15);
-		comparisonPane.setVisible(false);
-		
 		//for testing
 		//toggleBtn.setDisable(false);
-
+		
 		interactor = Interactor.getInstance(this);
 		readArguments(interactor.getRawArguments());
 		argumentFramework = new Framework(arguments, attacks, interactor);
@@ -497,7 +551,6 @@ public class DemonstrationWindowController {
 		//set comparable examples
 		showComparableExamples();
 		//TODO exclude current framework from comparison combo box (disable that option?)
-		//TODO use DTO instead of real examples?
 		
 	}
 	
@@ -510,6 +563,31 @@ public class DemonstrationWindowController {
 
 		comparisonComboBox.setItems(FXCollections.observableArrayList(formatList));
 		comparisonComboBox.getSelectionModel().selectFirst();
+		comparisonComboBox.getSelectionModel().selectedIndexProperty().addListener(new ComparisonChoiceListener<Number>());
+	}
+	
+	/**
+	 * the ChoiceListener listens for changes on a combobox, and executes fill comparison to fill the second comparison framework
+	 * @author patrick.bellositz
+	 * @param <Number> the index of the chosen element
+	 */
+	@SuppressWarnings("hiding")
+	private class ComparisonChoiceListener<Number> implements ChangeListener<Number>{
+		@Override
+		public void changed(ObservableValue<? extends Number> oval, Number sval, Number nval){
+			if((Integer) nval == -1){ //because with a new graph an empty selection (id:-1) is shown
+				return;
+			}
+			else if((Integer) nval == 0){
+				if(!comparisonPane.isDisabled()){
+					onToggleClick();
+				}
+				toggleBtn.setDisable(true);
+			}
+			else{
+				fillComparisonPane();
+			}
+		}
 	}
 
 	/**
