@@ -265,7 +265,7 @@ public class MainInputController { //TODO polish button layout
 	 * reads text from selected rows and stores it into ArgumentDtos, then initiates screen change to Demonstration Window
 	 */
 	@FXML
-	public void onShowButton(){ //TODO autosave empty framework?
+	public void onShowButton(){
 		arguments = createTransferObjectList();
 		autosave++; //we have standard 0, we start with 1 and so on
 		String autoName = "autosave " + autosave;
@@ -310,10 +310,10 @@ public class MainInputController { //TODO polish button layout
 			}
 		} catch(InvalidInputException e){
 			errorLbl.setText(e.getMessage());
-			return null; //TODO handle
+			return null;
 		} catch(IndexOutOfBoundsException e){
 			errorLbl.setText("critical error: " + e.getMessage());
-			return null; //TODO handle
+			return null;
 		}
 		
 		return arguments;
@@ -349,7 +349,13 @@ public class MainInputController { //TODO polish button layout
 			oldName = "autosave " + autosave; 
 		}
 		
-		oldExample = convertToExample(createTransferObjectList(),oldName);
+		ArrayList<ArgumentDto> toList = createTransferObjectList();	
+		
+		if(toList == null){
+			return; //handled?
+		}
+		
+		oldExample = convertToExample(toList,oldName);
 		Example prevVersion = getExampleByName(oldName);
 		
 		if(prevVersion != null){
@@ -382,13 +388,19 @@ public class MainInputController { //TODO polish button layout
 		String name = nameTxt.getText();
 		Example toSave = getExampleByName(name);
 
+		ArrayList<ArgumentDto> toList = createTransferObjectList();
+		
+		if(toList == null){
+			return; //handled?
+		}
+		
 		if(toSave == null){
-			examples.add(convertToExample(createTransferObjectList(),name));
+			examples.add(convertToExample(toList,name));
 			showChoices();
 		}
 		else{
 			int id = examples.indexOf(toSave);
-			examples.set(id, convertToExample(createTransferObjectList(),name)); //overwrite
+			examples.set(id, convertToExample(toList,name)); //overwrite
 			presetComboBox.getSelectionModel().select(id);
 		}
 

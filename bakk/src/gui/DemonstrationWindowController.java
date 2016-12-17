@@ -64,7 +64,7 @@ public class DemonstrationWindowController {
 	private ComboBox<String> setsComboBox, extensionComboBox, comparisonComboBox; //dropdown for result sets
 	
 	@FXML
-	private Label extensionLbl;
+	private Label extensionLbl, numberLbl;
 
 	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, 
 	backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip; //tooltips for all buttons etc
@@ -416,14 +416,16 @@ public class DemonstrationWindowController {
 	}
 	
 	@FXML
-	public void onToggleClick(){ //TODO show name of shown framework!
+	public void onToggleClick(){
 		if(graphPane.isVisible()){
 			graphPane.setVisible(false);
 			comparisonPane.setVisible(true);
+			numberLbl.setText("B");
 		}
 		else{
 			graphPane.setVisible(true);
 			comparisonPane.setVisible(false);
+			numberLbl.setText("A");
 		}
 	}
 	
@@ -462,7 +464,11 @@ public class DemonstrationWindowController {
 		for(Line l: current.getLines()){
 			Argument attacker = getArgumentByName(l.getChar(),compArguments);
 			for(int i = 0;i<l.getAttacks().length();i++){
-				Argument defender = getArgumentByName(l.getAttacks().charAt(i),compArguments); //TODO handle if none found
+				Argument defender = getArgumentByName(l.getAttacks().charAt(i),compArguments);
+				if(defender == null){
+					explanationArea.setText("Illegal attack detected!");
+					return;
+				}
 				compAttacks.add(new Attack(attacker,defender));
 			}
 		}
@@ -471,13 +477,15 @@ public class DemonstrationWindowController {
 
 		comparisonPane.createGraph(comparisonFramework);
 		toggleBtn.setDisable(false);
+		numberLbl.setText("A");
 		
 		//TODO write comparisonInteractor?
 		
 		try {
 			comparisonPane.drawGraph();
 		} catch (InvalidInputException e) {
-			e.printStackTrace(); //TODO write some error to explanationArea
+			explanationArea.setText("Could not load comparison!");
+			return;
 		}
 	}
 	
@@ -509,7 +517,9 @@ public class DemonstrationWindowController {
 	/**
 	 * sets the initial UI and data values
 	 */
-	public void setInitialValues() {		
+	public void setInitialValues() {
+		numberLbl.setText("");
+		
 		root.getChildren().remove(graphPane);
 		graphPane = new NodePane();
 		root.getChildren().add(graphPane);
@@ -550,7 +560,7 @@ public class DemonstrationWindowController {
 		
 		//set comparable examples
 		showComparableExamples();
-		//TODO exclude current framework from comparison combo box (disable that option?)
+		//do not exclude current framework from combobox (is perfectly good for later manual changes in frameworks)
 		
 	}
 	
@@ -583,6 +593,7 @@ public class DemonstrationWindowController {
 					onToggleClick();
 				}
 				toggleBtn.setDisable(true);
+				numberLbl.setText("");
 			}
 			else{
 				fillComparisonPane();

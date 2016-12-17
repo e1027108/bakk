@@ -56,5 +56,6 @@
     <Separator orientation="VERTICAL" prefHeight="85.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="460.0" AnchorPane.topAnchor="501.5" />
     <CheckBox fx:id="previousCheckBox" layoutX="498.0" mnemonicParsing="false" selected="true" text="use previously computed sets for further computations" AnchorPane.bottomAnchor="69.0" />
     <Separator prefWidth="900.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" />
+    <Label fx:id="numberLbl" text="no" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="20.0" />
   </children>
 </AnchorPane>
