@@ -9,6 +9,7 @@
 <AnchorPane fx:id="root" layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.DemonstrationWindowController">
   <!-- TODO Add Nodes -->
   <children>
+    <Label fx:id="numberLbl" text="no" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="20.0" />
     <Button fx:id="toggleBtn" disable="true" mnemonicParsing="false" onAction="#onToggleClick" text="toggle" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="212.0" />
     <TextArea fx:id="explanationArea" editable="false" prefHeight="450.0" prefWidth="430.0" wrapText="true" AnchorPane.leftAnchor="460.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
     <Button id="backButton" fx:id="backBtn" cancelButton="false" disable="true" mnemonicParsing="false" onAction="#onBackClick" prefWidth="55.0" text="back" AnchorPane.bottomAnchor="110.0" AnchorPane.rightAnchor="382.0" />
@@ -29,9 +30,9 @@
     <Separator orientation="VERTICAL" prefHeight="25.0" AnchorPane.bottomAnchor="108.5" AnchorPane.rightAnchor="137.0" AnchorPane.topAnchor="466.5" />
     <Separator prefWidth="800.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="500.0" />
     <Button id="arrowButton" fx:id="arrowBtn" mnemonicParsing="false" onAction="#onArrowClick" text="&lt;" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="8.0" />
-    <Separator layoutX="54.0" orientation="VERTICAL" prefHeight="85.0" AnchorPane.bottomAnchor="12.0" AnchorPane.topAnchor="501.5" />
-    <Label fx:id="extensionLbl" text="extension type:" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="68.0" />
-    <ComboBox id="comparisonComboBox" fx:id="extensionComboBox" layoutX="168.0" maxWidth="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="65.0">
+    <Separator layoutX="54.0" orientation="VERTICAL" prefHeight="85.0" AnchorPane.bottomAnchor="6.0" AnchorPane.topAnchor="501.5" />
+    <Label fx:id="extensionLbl" text="semantics:" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="68.0" />
+    <ComboBox id="comparisonComboBox" fx:id="extensionComboBox" layoutX="168.0" maxWidth="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="70.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Item 1" />
@@ -40,8 +41,18 @@
         </FXCollections>
       </items>
     </ComboBox>
-    <Label layoutX="68.0" text="compare to:" AnchorPane.bottomAnchor="30.0" />
-    <ComboBox fx:id="comparisonComboBox" layoutX="168.0" maxWidth="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="25.0">
+    <Label text="compare to:" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="68.0" />
+    <ComboBox fx:id="comparisonComboBox" layoutX="168.0" maxWidth="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="43.0">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="Item 1" />
+          <String fx:value="Item 2" />
+          <String fx:value="Item 3" />
+        </FXCollections>
+      </items>
+    </ComboBox>
+    <Label text="expand with:" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="68.0" />
+    <ComboBox id="comparisonComboBox" fx:id="expandingComboBox" layoutX="168.0" maxWidth="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="16.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Item 1" />
@@ -51,11 +62,20 @@
       </items>
     </ComboBox>
     <Separator layoutX="333.0" orientation="VERTICAL" prefHeight="86.5" AnchorPane.bottomAnchor="13.0" AnchorPane.topAnchor="501.5" />
-    <Button fx:id="computeBtn" mnemonicParsing="false" onAction="#onComputeClick" text="Compute" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="348.0" AnchorPane.rightAnchor="450.0" />
-    <Button fx:id="compareBtn" mnemonicParsing="false" onAction="#onCompareClick" text="Compare" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="348.0" AnchorPane.rightAnchor="450.0" />
-    <Separator orientation="VERTICAL" prefHeight="85.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="460.0" AnchorPane.topAnchor="501.5" />
-    <CheckBox fx:id="previousCheckBox" layoutX="498.0" mnemonicParsing="false" selected="true" text="use previously computed sets for further computations" AnchorPane.bottomAnchor="69.0" />
-    <Separator prefWidth="900.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" />
-    <Label fx:id="numberLbl" text="no" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="20.0" />
+    <Button fx:id="computeBtn" mnemonicParsing="false" onAction="#onComputeClick" text="Compute" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="348.0" AnchorPane.rightAnchor="450.0" />
+    <Button fx:id="compareBtn" mnemonicParsing="false" onAction="#onCompareClick" text="Compare" AnchorPane.bottomAnchor="43.0" AnchorPane.leftAnchor="348.0" AnchorPane.rightAnchor="450.0" />
+    <Button id="compareBtn" fx:id="expandBtn" mnemonicParsing="false" onAction="#onExpandClick" prefWidth="102.0" text="Expand" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="348.0" AnchorPane.rightAnchor="450.0" />
+    <Separator orientation="VERTICAL" prefHeight="85.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="460.0" AnchorPane.topAnchor="501.5" />
+    <CheckBox fx:id="previousCheckBox" mnemonicParsing="false" selected="true" text="use previously computed sets for further computations" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="495.0" />
+    <Separator prefWidth="200.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="462.0" AnchorPane.rightAnchor="0.0" />
+    <Label fx:id="expandOptionsLbl" disable="false" text="Choose the type of expansion equivalency to check:" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="495.0" />
+    <RadioButton fx:id="strongRadio" mnemonicParsing="false" selected="true" text="strong" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="515.0">
+      <toggleGroup>
+        <ToggleGroup fx:id="expansionGroup" />
+      </toggleGroup>
+    </RadioButton>
+    <RadioButton fx:id="normalRadio" mnemonicParsing="false" text="normal" toggleGroup="$expansionGroup" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="580.0" />
+    <RadioButton fx:id="weakRadio" mnemonicParsing="false" text="weak" toggleGroup="$expansionGroup" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="645.0" />
+    <Separator prefWidth="900.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" />
   </children>
 </AnchorPane>
