@@ -77,7 +77,7 @@ public class DemonstrationWindowController {
 	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, 
 	backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip; //tooltips for all buttons etc
 
-	//TODO implement expanding of frameworks
+	//TODO implement expanding of frameworks, maybe an extension of the framework class?
 	private Framework argumentFramework, comparisonFramework, expArgFramework, expComFramework; //argument framework containing the arguments
 	private ArrayList<Argument> arguments, compArguments, expArguments; //arguments of the framework
 	private ArrayList<Attack> attacks, compAttacks, expAttacks; //attacks of the framework
@@ -175,7 +175,7 @@ public class DemonstrationWindowController {
 		resultsBtn.setDisable(true);
 
 		//set now the values for extension box
-		String[] extarr = new String[]{"","conflict-free","admissible","complete","preferred","stable","grounded"};
+		String[] extarr = new String[]{"","conflict-free","admissible","complete","preferred","stable","grounded","semi-stable"};
 		ArrayList<String> extensionTypes = new ArrayList<String>();
 		extensionTypes.addAll(Arrays.asList(extarr));
 		extensionComboBox.setItems(FXCollections.observableArrayList(extensionTypes));
@@ -317,6 +317,16 @@ public class DemonstrationWindowController {
 			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
 			explanationArea.setStyle("-fx-text-fill: red;");
 		}
+	}
+	
+	public void semiStableComputation(){
+		interactor.emptyQueue();
+
+		resultSet = argumentFramework.getSemiStableExtensions(previousCheckBox.isSelected());
+		
+		printExtensions(resultSet);
+		
+		setUI();
 	}
 
 	/**
@@ -478,6 +488,9 @@ public class DemonstrationWindowController {
 		case 6:
 			groundedComputation();
 			break;
+		case 7:
+			semiStableComputation();
+			break;
 		default:
 			explanationArea.setText("Invalid extension type was chosen, no computation performed!");
 			break;
@@ -629,6 +642,7 @@ public class DemonstrationWindowController {
 		expandingComboBox.getSelectionModel().selectedIndexProperty().addListener(new ComparisonChoiceListener<Number>());
 	}
 
+	//TODO on loading new framework (after going back) this change-listener causes an invocation exception --> fix
 	/**
 	 * the ChoiceListener listens for changes on a combobox, and executes fill comparison to fill the second comparison framework
 	 * @author patrick.bellositz
@@ -681,6 +695,10 @@ public class DemonstrationWindowController {
 	 * @param ext the extensions to be printed
 	 */
 	public void printExtensions(ArrayList<Extension> ext){
+		if(ext.size() == 0){
+			System.out.println("no extensions availiable");
+		}
+		
 		for(Extension e: ext){
 			System.out.println(e.format());
 		}

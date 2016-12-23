@@ -18,6 +18,7 @@ public class Framework {
 	private ArrayList<Extension> previousConflictFreeSets; //a stored, previously computed set of conflict-free sets
 	private ArrayList<Extension> previousAdmissibleExtensions; //a stored, previously computed set of admissible extensions
 	private ArrayList<Extension> previousCompleteExtensions; //a stored, previously computed set of complete extensions
+	//TODO add more previous lists for equivalency checks
 	private String notification;
 	
 	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor) {
@@ -367,6 +368,62 @@ public class Framework {
 		return groundedExtension;
 	}
 	
+	//TODO add interactor commands
+	public ArrayList<Extension> getSemiStableExtensions(boolean usePrevious){
+		ArrayList<Extension> admExt;
+		
+		if(!usePrevious || (previousAdmissibleExtensions == null)){
+			admExt = getAdmissibleExtensions(usePrevious);
+		}
+		else{
+			admExt = previousAdmissibleExtensions;
+		}
+
+		ArrayList<Extension> semiStable = new ArrayList<Extension>();
+		ArrayList<ArrayList<Argument>> unions = new ArrayList<ArrayList<Argument>>();
+		
+		//generating R+(T)s
+		for(Extension e: admExt){
+			ArrayList<Argument> admArgs = new ArrayList<Argument>();
+			admArgs.addAll(e.getArguments());
+			ArrayList<Argument> unionArgs = new ArrayList<Argument>();
+			for(Argument a: admArgs){
+				for(Argument d: getAttackedBy(a.getName())){
+					if(!admArgs.contains(d) && !unionArgs.contains(d)){
+						unionArgs.add(d);
+					}
+				}
+			}
+			
+			admArgs.addAll(unionArgs); //this should have R+(T) for one T now
+			unions.add(admArgs); //this should have added one R+(T) now
+		}
+		
+		//R+(S) is exactly the R+(T) at the position we are at and corresponds to e
+		for(int i = 0;i<unions.size();i++){
+			semiStable.add(admExt.get(i));
+			//System.out.println("added: " + admExt.get(i).getArguments());
+			for(int j = 0;j<unions.size();j++){
+				if(i==j){
+					continue;
+				}
+				else if(unions.get(j).containsAll(unions.get(i))){
+					if(unions.get(j).equals(unions.get(i))){
+						continue;
+					}
+					else{
+						semiStable.remove(admExt.get(i));
+						//System.out.println("removed: " + admExt.get(i).getArguments());
+						break;
+					}
+				}
+			}
+		}
+		
+		// at this point we have added all extensions, then removed the non-semi-stable ones
+		return semiStable;
+	}
+
 	public GraphInstruction getInstructionFromString(String item) {
 		GraphInstruction instruction = new GraphInstruction(new ArrayList<SingleInstruction>(), null);		
 		item = item.replace("{", "");

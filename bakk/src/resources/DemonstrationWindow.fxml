@@ -74,8 +74,8 @@
         <ToggleGroup fx:id="expansionGroup" />
       </toggleGroup>
     </RadioButton>
-    <RadioButton fx:id="normalRadio" mnemonicParsing="false" text="normal" toggleGroup="$expansionGroup" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="580.0" />
-    <RadioButton fx:id="weakRadio" mnemonicParsing="false" text="weak" toggleGroup="$expansionGroup" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="645.0" />
+    <RadioButton fx:id="normalRadio" mnemonicParsing="false" text="normal" toggleGroup="$expansionGroup" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="590.0" />
+    <RadioButton fx:id="weakRadio" mnemonicParsing="false" text="weak" toggleGroup="$expansionGroup" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="665.0" />
     <Separator prefWidth="900.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" />
   </children>
 </AnchorPane>

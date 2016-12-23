@@ -194,6 +194,14 @@ public class MainInputController { //TODO polish button layout
 						new Line('d', "", "ce"),
 						new Line('e', "", "e")
 		}));
+		
+		exampleSet.add(new Example("Semi-Stable",
+				new Line[] {
+					new Line('a', "", "ac"),
+					new Line('b', "", "c"),
+					new Line('c', "", "d"),
+					new Line('d', "", "")
+				}));
 
 		return exampleSet;
 	}
