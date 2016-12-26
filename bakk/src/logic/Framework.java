@@ -18,7 +18,10 @@ public class Framework {
 	private ArrayList<Extension> previousConflictFreeSets; //a stored, previously computed set of conflict-free sets
 	private ArrayList<Extension> previousAdmissibleExtensions; //a stored, previously computed set of admissible extensions
 	private ArrayList<Extension> previousCompleteExtensions; //a stored, previously computed set of complete extensions
-	//TODO add more previous lists for equivalency checks
+	private ArrayList<Extension> previousPreferredExtensions;
+	private ArrayList<Extension> previousStableExtensions;
+	private ArrayList<Extension> previousSemiStableExtensions;
+	private Extension previousGroundedExtension;
 	private String notification;
 	
 	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor) {
@@ -143,7 +146,7 @@ public class Framework {
 	 * @param effect what is not computable because of a problem
 	 * @return if there is a problem with the set for further computation
 	 */
-	public boolean invalidityCheck(ArrayList<Extension> list, String cause, String effect){
+	private boolean invalidityCheck(ArrayList<Extension> list, String cause, String effect){
 		if(list == null || list.isEmpty()){ //shouldn't be possible
 			String are = ", there are no ";
 
@@ -240,6 +243,9 @@ public class Framework {
 
 		interactor.addToCommands(new Command("The preferred extensions are: " + formatExtensions(preferred), null));
 
+		previousPreferredExtensions = new ArrayList<Extension>();
+		previousPreferredExtensions.addAll(preferred);
+		
 		return preferred;
 	}
 
@@ -278,6 +284,9 @@ public class Framework {
 
 		interactor.addToCommands(new Command("The stable extensions are: " + formatExtensions(stable), null));
 
+		previousStableExtensions = new ArrayList<Extension>();
+		previousStableExtensions.addAll(stable);
+		
 		return stable;
 	}
 
@@ -362,21 +371,33 @@ public class Framework {
 		}
 
 		Extension groundedExtension = new Extension(grounded,this);
+		Extension previousGroundedExtension = new Extension(grounded,this); //I want two objects, because the first one might be replaced/lost
 
 		interactor.addToCommands(new Command("The grounded extension is: " + groundedExtension.format(), groundedExtension.toInstruction(Color.GREEN)));
 
 		return groundedExtension;
 	}
-	
-	//TODO add interactor commands
+
 	public ArrayList<Extension> getSemiStableExtensions(boolean usePrevious){
 		ArrayList<Extension> admExt;
 		
 		if(!usePrevious || (previousAdmissibleExtensions == null)){
+			interactor.addToCommands(new Command("Computing admissible extensions to compute semi-stable extensions!",null));
 			admExt = getAdmissibleExtensions(usePrevious);
 		}
 		else{
 			admExt = previousAdmissibleExtensions;
+			
+			notification = "Using previously computed admissible extensions to compute semi-stable extensions: ";
+			
+			if(admExt.size() == 0){
+				notification += "There are no admissible extensions.";
+			}
+			else{
+				notification += formatExtensions(admExt);
+			}
+			
+			interactor.addToCommands(new Command(notification,null));
 		}
 
 		ArrayList<Extension> semiStable = new ArrayList<Extension>();
@@ -397,12 +418,25 @@ public class Framework {
 			
 			admArgs.addAll(unionArgs); //this should have R+(T) for one T now
 			unions.add(admArgs); //this should have added one R+(T) now
+			
+			Extension toInst = new Extension(admArgs,this);
+			GraphInstruction unionInst = toInst.toInstruction(Color.GREEN); //everything is green, then attacked are blue
+
+			for(Argument a: unionArgs){
+				unionInst.getNodeInstructions().add(new SingleInstruction(a.getName(),Color.BLUE));
+			}
+			
+			interactor.addToCommands(new Command("The admissible extension " + e.format() + " attacks the arguments " + (new Extension(unionArgs,this)).format() + " -> "
+					+ "R+(" + e.format() + ") = " + toInst.format() + ".", unionInst)); 
 		}
 		
 		//R+(S) is exactly the R+(T) at the position we are at and corresponds to e
 		for(int i = 0;i<unions.size();i++){
 			semiStable.add(admExt.get(i));
-			//System.out.println("added: " + admExt.get(i).getArguments());
+			Extension iExt = new Extension(unions.get(i),this);
+			
+			boolean removed = false;
+			
 			for(int j = 0;j<unions.size();j++){
 				if(i==j){
 					continue;
@@ -412,15 +446,37 @@ public class Framework {
 						continue;
 					}
 					else{
+						Extension cmpExt = new Extension(unions.get(j),this);
+						
+						GraphInstruction coloring = cmpExt.toInstruction(Color.BLUE);
+						GraphInstruction overcoloring = iExt.toInstruction(Color.GREEN);
+						coloring.getNodeInstructions().addAll(overcoloring.getNodeInstructions());
+						
+						interactor.addToCommands(new Command(admExt.get(i).format() + " is not a semi-stable extension, since R+(" + admExt.get(i).format() + 
+								") = " + iExt.format() + " is a subset of R+(" + admExt.get(j).format() + ") = " + cmpExt.format() + ".", coloring));
+						
 						semiStable.remove(admExt.get(i));
-						//System.out.println("removed: " + admExt.get(i).getArguments());
+						removed = true;
 						break;
 					}
 				}
 			}
+			
+			if(!removed){
+				//there are duplicate colorings that are just changed because of instruction order
+				GraphInstruction coloring = iExt.toInstruction(Color.GREEN);
+				
+				interactor.addToCommands(new Command("The extension " + admExt.get(i).format() + " is semi-stable, since R+(" + admExt.get(i).format() + 
+						") = " + iExt.format() + " is maximal.",coloring));
+			}
 		}
 		
 		// at this point we have added all extensions, then removed the non-semi-stable ones
+		interactor.addToCommands(new Command("The semi-stable extensions are: " + formatExtensions(semiStable) + ".", null));
+
+		previousSemiStableExtensions = new ArrayList<Extension>();
+		previousSemiStableExtensions.addAll(semiStable);
+		
 		return semiStable;
 	}
 
