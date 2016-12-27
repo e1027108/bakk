@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import javax.swing.SingleSelectionModel;
+
 import datacontainers.Example;
 import datacontainers.Line;
 import dto.ArgumentDto;
@@ -27,6 +29,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import logic.Argument;
 import logic.Attack;
+import logic.Equivalency;
 import logic.Extension;
 import logic.Framework;
 
@@ -499,10 +502,37 @@ public class DemonstrationWindowController {
 
 	@FXML
 	public void onCompareClick(){
-		//TODO implement equivalency comparison
+		javafx.scene.control.SingleSelectionModel<String> selExt, selCom, selExp;
+		selExt = extensionComboBox.getSelectionModel();
+		selCom = comparisonComboBox.getSelectionModel();
+		selExp = expandingComboBox.getSelectionModel();
+		boolean expanded = false; //TODO fill
+		Equivalency eq = new Equivalency();
+		
+		if(selExt.isEmpty() || selExt.getSelectedIndex() <= 0){
+			explanationArea.setText("Can not compare frameworks, since no semantics for comparison was chosen.");
+		}
+		else if(selCom.isEmpty() || selCom.getSelectedIndex() <= 0){
+			explanationArea.setText("Can not compare frameworks, since no comparison framework was chosen.");
+		}
+		else if(!selExp.isEmpty() && selExp.getSelectedIndex() > 1){ //we want to expand TODO replace condition by if we actually have expanded (via button)
+			if(expansionGroup.getSelectedToggle() == null){
+				explanationArea.setText("Please choose an equivalency type to check.");
+				//TODO much to do for expansion
+			}
+		}
+		
+		//if we are here, it is possible to compare something
+		if(!expanded){
+			eq.addFrameworks(argumentFramework,comparisonFramework);
+			//TODO now figure out how to compute stuff, how the interactor is writing it and so on
+		}
+		else{
+			//TODO do something (ie eg choose the expanded frameworks for eq)
+		}
 	}
 
-	//TODO add changelistener so that when expansion framework is chosen, radiobuttons are enabled
+	//TODO actually expand frameworks to be able to view them (comparison still happens on compare button)
 	@FXML
 	public void onExpandClick(){
 		if(!expanded){
@@ -515,6 +545,7 @@ public class DemonstrationWindowController {
 			expandBtn.setText("Expand");
 			restoreOriginalFrameworks();
 		}
+		toggleDisableRadioButtons();
 	}
 
 	private void restoreOriginalFrameworks() {
@@ -564,7 +595,7 @@ public class DemonstrationWindowController {
 		Example current = MainInputController.getExamples().get(comparisonComboBox.getSelectionModel().getSelectedIndex());
 
 		//testing
-		System.out.println(current.getName());
+		//System.out.println(current.getName());
 
 		compArguments = new ArrayList<Argument>();
 		compAttacks = new ArrayList<Attack>();
@@ -590,8 +621,6 @@ public class DemonstrationWindowController {
 		comparisonPane.createGraph(comparisonFramework);
 		toggleBtn.setDisable(false);
 		numberLbl.setText("A");
-
-		//TODO write comparisonInteractor?
 
 		try {
 			comparisonPane.drawGraph();
@@ -642,7 +671,6 @@ public class DemonstrationWindowController {
 		expandingComboBox.getSelectionModel().selectedIndexProperty().addListener(new ComparisonChoiceListener<Number>());
 	}
 
-	//TODO on loading new framework (after going back) this change-listener causes an invocation exception --> fix
 	/**
 	 * the ChoiceListener listens for changes on a combobox, and executes fill comparison to fill the second comparison framework
 	 * @author patrick.bellositz
