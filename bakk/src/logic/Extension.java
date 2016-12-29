@@ -290,6 +290,49 @@ public class Extension {
 		return new GraphInstruction(nodeInstructions, null);
 	}
 
+	//TODO test extensively
+	//TODO add interactor comments?/prepare comments for interactor?
+	public boolean equals(Extension other){
+		ArrayList<Argument> thisArguments = new ArrayList<Argument>();
+		ArrayList<Argument> otherArguments = new ArrayList<Argument>();
+		
+		thisArguments.addAll(arguments);
+		otherArguments.addAll(other.getArguments());
+		
+		boolean found;
+		
+		if(thisArguments.size() == 0 && otherArguments.size() == 0){
+			return true;
+		}
+		else if(thisArguments.size() != otherArguments.size()){
+			return false; //TODO special message?
+		}
+		
+		for(int t = thisArguments.size()-1; t >= 0; t--){
+			found = false;
+			
+			for(int o = otherArguments.size()-1; o >= 0; o--){
+				
+				if(thisArguments.get(t).getName() == otherArguments.get(o).getName()){
+					thisArguments.remove(t);
+					otherArguments.remove(o);
+					found = true;
+					break;
+				}
+			}
+			
+			if(!found){
+				return false;
+			}
+		}
+		
+		if(otherArguments.size() > 0){
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public String format() {
 		String formatted = "{";
 

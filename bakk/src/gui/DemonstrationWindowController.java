@@ -81,13 +81,14 @@ public class DemonstrationWindowController {
 	backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip; //tooltips for all buttons etc
 
 	//TODO implement expanding of frameworks, maybe an extension of the framework class?
-	private Framework argumentFramework, comparisonFramework, expArgFramework, expComFramework; //argument framework containing the arguments
-	private ArrayList<Argument> arguments, compArguments, expArguments; //arguments of the framework
-	private ArrayList<Attack> attacks, compAttacks, expAttacks; //attacks of the framework
-	private Interactor interactor, comparisonInteractor; //Interactor controlling the results the user sees
+	private Framework argumentFramework, comparisonFramework; //argument framework containing the arguments
+	private ArrayList<Argument> arguments, compArguments; //arguments of the framework
+	private ArrayList<Attack> attacks, compAttacks; //attacks of the framework
+	private Interactor interactor; //Interactor controlling the results the user sees //TODO check if one interactor for multiple frameworks suffices
 	private ArrayList<Extension> resultSet; //set containing computation results
 	private NodePane graphPane, comparisonPane; //pane where node illustrations are shown
 	private boolean expanded; //whether we check extended frameworks
+	private Equivalency eq; //this computes equivalencies //TODO make create a list of previously compared frameworks to not have to compute stuff again
 
 	/**
 	 * initializes the controller
@@ -507,7 +508,7 @@ public class DemonstrationWindowController {
 		selCom = comparisonComboBox.getSelectionModel();
 		selExp = expandingComboBox.getSelectionModel();
 		boolean expanded = false; //TODO fill
-		Equivalency eq = new Equivalency();
+		eq = new Equivalency(argumentFramework, comparisonFramework);
 		
 		if(selExt.isEmpty() || selExt.getSelectedIndex() <= 0){
 			explanationArea.setText("Can not compare frameworks, since no semantics for comparison was chosen.");
@@ -524,7 +525,19 @@ public class DemonstrationWindowController {
 		
 		//if we are here, it is possible to compare something
 		if(!expanded){
-			eq.addFrameworks(argumentFramework,comparisonFramework);
+			try {
+				//TODO increase scope of stdEquiv? let stdEquiv be a string (success/failure) or even a set of mismatches?
+				boolean stdEquiv = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
+				//testing TODO remove
+				if(stdEquiv){
+					explanationArea.setText(explanationArea.getText()+"\nsuccess");
+				}
+				else{
+					explanationArea.setText(explanationArea.getText()+"\nfailure");
+				}
+			} catch (InvalidInputException e) {
+				explanationArea.setText(e.getMessage());
+			}
 			//TODO now figure out how to compute stuff, how the interactor is writing it and so on
 		}
 		else{
@@ -572,7 +585,7 @@ public class DemonstrationWindowController {
 		}
 	}
 
-	private void fillComparisonPane(){
+	private void initializeComparisonResources(){	
 		boolean wasVisible;
 
 		if(comparisonPane != null && comparisonPane.isVisible()){
@@ -615,8 +628,8 @@ public class DemonstrationWindowController {
 				compAttacks.add(new Attack(attacker,defender));
 			}
 		}
-
-		comparisonFramework = new Framework(compArguments, compAttacks, comparisonInteractor);
+		
+		comparisonFramework = new Framework(compArguments, compAttacks, interactor);
 
 		comparisonPane.createGraph(comparisonFramework);
 		toggleBtn.setDisable(false);
@@ -691,7 +704,7 @@ public class DemonstrationWindowController {
 				numberLbl.setText("");
 			}
 			else{
-				fillComparisonPane();
+				initializeComparisonResources();
 			}
 		}
 	}
