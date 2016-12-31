@@ -3,13 +3,17 @@ package logic;
 import java.util.ArrayList;
 
 import exceptions.InvalidInputException;
+import interactor.Interactor;
 
 public class Equivalency {
 	private Framework fst, snd; //first and second frameworks (for comparison)
+	private Interactor interactor;
 	
-	public Equivalency(Framework fst, Framework snd){
+	public Equivalency(Framework fst, Framework snd, Interactor interactor){
 		this.fst = fst;
 		this.snd = snd;
+		this.interactor = interactor;
+		//TODO change interactor behaviour (subclass?)
 	}
 	
 	//one might want to replace this to not create another equivalency all the time
@@ -19,7 +23,6 @@ public class Equivalency {
 	
 	//based on baumann 3.1 p8 "standard equivalence"
 	//TODO use interactor & return boolean
-	//TODO same example compared to itself still returns not equal!!! --> fix
 	public boolean areStandardEquivalent(int type, boolean usePrevious) throws InvalidInputException{
 		ArrayList<Extension> fstExt, sndExt;
 		String extName = "";
@@ -67,7 +70,6 @@ public class Equivalency {
 		}
 		
 		if(areExtensionListsEqual(fstExt, sndExt)){
-			//TODO implement extension equivalency
 			//TODO interactor writes they have the same extensions, nicely formatted
 			return true;
 		}
@@ -76,7 +78,6 @@ public class Equivalency {
 		}
 	}
 	
-	//TODO test extensively
 	//TODO let interactor get some
 	private boolean areExtensionListsEqual(ArrayList<Extension> first, ArrayList<Extension> second){
 		ArrayList<Extension> fstExt = new ArrayList<Extension>();
@@ -118,7 +119,6 @@ public class Equivalency {
 		return true;
 	}
 	
-	//for testing
 	private void printAll(ArrayList<Extension> ext){
 		for(Extension e: ext){
 			System.out.println(e.format());

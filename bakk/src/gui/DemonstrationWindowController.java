@@ -30,6 +30,7 @@ import javafx.scene.layout.AnchorPane;
 import logic.Argument;
 import logic.Attack;
 import logic.Equivalency;
+import logic.ExpansionEquivalency;
 import logic.Extension;
 import logic.Framework;
 
@@ -81,7 +82,7 @@ public class DemonstrationWindowController {
 	backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip; //tooltips for all buttons etc
 
 	//TODO implement expanding of frameworks, maybe an extension of the framework class?
-	private Framework argumentFramework, comparisonFramework; //argument framework containing the arguments
+	private Framework argumentFramework, comparisonFramework, expansionFramework; //argument framework containing the arguments
 	private ArrayList<Argument> arguments, compArguments; //arguments of the framework
 	private ArrayList<Attack> attacks, compAttacks; //attacks of the framework
 	private Interactor interactor; //Interactor controlling the results the user sees //TODO check if one interactor for multiple frameworks suffices
@@ -89,6 +90,8 @@ public class DemonstrationWindowController {
 	private NodePane graphPane, comparisonPane; //pane where node illustrations are shown
 	private boolean expanded; //whether we check extended frameworks
 	private Equivalency eq; //this computes equivalencies //TODO make create a list of previously compared frameworks to not have to compute stuff again
+	
+	private static final String EXPANDED = "Unexpand";
 
 	/**
 	 * initializes the controller
@@ -508,18 +511,21 @@ public class DemonstrationWindowController {
 		selCom = comparisonComboBox.getSelectionModel();
 		selExp = expandingComboBox.getSelectionModel();
 		boolean expanded = false; //TODO fill
-		eq = new Equivalency(argumentFramework, comparisonFramework);
+		eq = new Equivalency(argumentFramework, comparisonFramework, interactor); //TODO separate interactor?
 		
 		if(selExt.isEmpty() || selExt.getSelectedIndex() <= 0){
 			explanationArea.setText("Can not compare frameworks, since no semantics for comparison was chosen.");
+			return;
 		}
 		else if(selCom.isEmpty() || selCom.getSelectedIndex() <= 0){
 			explanationArea.setText("Can not compare frameworks, since no comparison framework was chosen.");
+			return;
 		}
-		else if(!selExp.isEmpty() && selExp.getSelectedIndex() > 1){ //we want to expand TODO replace condition by if we actually have expanded (via button)
-			if(expansionGroup.getSelectedToggle() == null){
+		else if(expandBtn.getText().equals(EXPANDED)){
+			expanded = true;
+			if(selExp.isEmpty() || expansionGroup.getSelectedToggle() == null){
 				explanationArea.setText("Please choose an equivalency type to check.");
-				//TODO much to do for expansion
+				return;
 			}
 		}
 		
@@ -528,30 +534,23 @@ public class DemonstrationWindowController {
 			try {
 				//TODO increase scope of stdEquiv? let stdEquiv be a string (success/failure) or even a set of mismatches?
 				boolean stdEquiv = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
-				//testing TODO remove
-				if(stdEquiv){
-					explanationArea.setText(explanationArea.getText()+"\nsuccess");
-				}
-				else{
-					explanationArea.setText(explanationArea.getText()+"\nfailure");
-				}
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
 			}
-			//TODO now figure out how to compute stuff, how the interactor is writing it and so on
 		}
 		else{
-			//TODO do something (ie eg choose the expanded frameworks for eq)
+			//TODO ensure interactor accesses expanded panes
+			eq = new ExpansionEquivalency(argumentFramework, comparisonFramework, expansionFramework, interactor);
+			boolean expEquiv = ((ExpansionEquivalency) eq).areExpansionEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
 		}
 	}
 
-	//TODO actually expand frameworks to be able to view them (comparison still happens on compare button)
 	@FXML
 	public void onExpandClick(){
 		if(!expanded){
 			expanded = true;
-			expandBtn.setText("Unexpand");
-			extendFrameworks();
+			expandBtn.setText(EXPANDED);
+			expandFrameworks();
 		}
 		else{
 			expanded = false;
@@ -562,13 +561,11 @@ public class DemonstrationWindowController {
 	}
 
 	private void restoreOriginalFrameworks() {
-		// TODO Auto-generated method stub
-
+		// TODO load standard version into pane from data
 	}
 
-	private void extendFrameworks() {
-		// TODO Auto-generated method stub
-
+	private void expandFrameworks() {
+		//TODO expand frameworks for panes, but not in data
 	}
 
 	@FXML
