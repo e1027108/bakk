@@ -510,7 +510,7 @@ public class DemonstrationWindowController {
 		selExt = extensionComboBox.getSelectionModel();
 		selCom = comparisonComboBox.getSelectionModel();
 		selExp = expandingComboBox.getSelectionModel();
-		boolean expanded = false; //TODO fill
+		boolean expanded = false;
 		eq = new Equivalency(argumentFramework, comparisonFramework, interactor); //TODO separate interactor?
 		
 		if(selExt.isEmpty() || selExt.getSelectedIndex() <= 0){

@@ -36,4 +36,11 @@ public class Argument {
 	public void setName(char name) {
 		this.name = name;
 	}
+	
+	public boolean equals(Argument b){
+		if(b.getName() == this.name){
+			return true;
+		}
+		return false;
+	}
 }

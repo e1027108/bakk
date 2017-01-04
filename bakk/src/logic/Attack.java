@@ -16,4 +16,11 @@ public class Attack {
 	public Argument getAttacked(){
 		return attacked;
 	}
+	
+	public boolean equals(Attack b){
+		if((attacker.equals(b.getAttacker())) && (attacked.equals(b.getAttacked()))){
+			return true;
+		}
+		return false;
+	}
 }

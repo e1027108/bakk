@@ -556,6 +556,8 @@ public class Framework {
 
 		return output;
 	}
+	
+	//TODO implement contains with overwritten argument/attack equals?
 
 	public String formatArgumentList(ArrayList<Argument> input) {
 		String argNames = "";
@@ -583,6 +585,24 @@ public class Framework {
 		}
 		
 		return formatNameList(argNames);
+	}
+	
+	public boolean contains(Argument b){
+		for(Argument a: this.arguments){
+			if(a.equals(b)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean contains(Attack b){
+		for(Attack a: this.attacks){
+			if(a.equals(b)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**

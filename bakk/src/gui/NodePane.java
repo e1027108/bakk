@@ -34,23 +34,23 @@ import logic.Framework;
 public class NodePane extends AnchorPane{
 
 	/** * default circle radius */
-	private static final int CIRCLE_RADIUS = 15;
+	protected static final int CIRCLE_RADIUS = 15;
 	/** * default length of the two long sides of the arrow */
-	private static final int ARROW_SIDE_LENGTH = 20;
+	protected static final int ARROW_SIDE_LENGTH = 20;
 	/** * default angle between the two long sides of the arrow */
-	private static final int ARROW_POINT_ANGLE = 25;
+	protected static final int ARROW_POINT_ANGLE = 25;
 	/** * type of the edges in the graph drawn */
-	private static final EdgeType DIRECTED = EdgeType.DIRECTED;
+	protected static final EdgeType DIRECTED = EdgeType.DIRECTED;
 	/** * default length of the arc in degrees */
-	private static final int ARC_LENGTH = 270;
+	protected static final int ARC_LENGTH = 270;
 	/** * default angle for the start of the arc in degrees */
-	private static final int ARC_ANGLE = 315;
-	private Layout<String, String> layout; //layout in which the nodes are arranged
-	private Group viz; //parent element for the nodes, lines and labels
-	private Framework framework; //argument framework containing the nodes' data
-	private DirectedSparseGraph<String, String> graph; //data representation of the graph drawn
-	private ArrayList<NamedCircle> nodes; //list of named circles representing the nodes of the graph
-	private ArrayList<DirectedEdge> edges; //list of directed edges representing the edges of the graph
+	protected static final int ARC_ANGLE = 315;
+	protected Layout<String, String> layout; //layout in which the nodes are arranged
+	protected Group viz; //parent element for the nodes, lines and labels
+	protected Framework framework; //argument framework containing the nodes' data
+	protected DirectedSparseGraph<String, String> graph; //data representation of the graph drawn
+	protected ArrayList<NamedCircle> nodes; //list of named circles representing the nodes of the graph
+	protected ArrayList<DirectedEdge> edges; //list of directed edges representing the edges of the graph
 
 	/**
 	 * creates a new nodepane to show a graph
@@ -107,7 +107,7 @@ public class NodePane extends AnchorPane{
 	 * moves nodes, nametags and arrows of the graph to the front
 	 * of the pane, so lines are not in front
 	 */
-	private void arrangePositions() {
+	protected void arrangePositions() {
 		for(NamedCircle c: nodes){
 			c.toFront();
 			c.getNameTag().toFront();
@@ -125,7 +125,7 @@ public class NodePane extends AnchorPane{
 	 * @param viz the parent object for the graphs' elements
 	 * @throws InvalidInputException throws exception if there is a problem with edge creation
 	 */
-	private void renderGraph(Graph<String, String> graph, Layout<String, String> layout, Group viz) throws InvalidInputException {
+	protected void renderGraph(Graph<String, String> graph, Layout<String, String> layout, Group viz) throws InvalidInputException {
 		ArrayList<Point2D> nodePositions = new ArrayList<Point2D>(); 
 		nodes = new ArrayList<NamedCircle>();
 		edges = new ArrayList<DirectedEdge>();
@@ -203,7 +203,7 @@ public class NodePane extends AnchorPane{
 	 * 		at which the arc is to be placed
 	 * @return the computed preferred angle at which the arc is to be placed
 	 */
-	private double getPreferredAngle(Point2D pEnd, ArrayList<Point2D> nodePositions) {
+	protected double getPreferredAngle(Point2D pEnd, ArrayList<Point2D> nodePositions) {
 		ArrayList<Point2D> tmpPositions = new ArrayList<Point2D>();
 		tmpPositions.addAll(nodePositions);
 
@@ -286,7 +286,7 @@ public class NodePane extends AnchorPane{
 	 * @param direction the direction of the edge (should be a string repeating a character twice)
 	 * @throws InvalidInputException throws exception if there is a problem with edge creation
 	 */
-	private void drawDirectedArc(Point2D pStart, double nodeAngle, String direction) throws InvalidInputException {
+	protected void drawDirectedArc(Point2D pStart, double nodeAngle, String direction) throws InvalidInputException {
 		double arcradius = CIRCLE_RADIUS*0.8;
 		Arc arc = new Arc();
 
@@ -343,7 +343,7 @@ public class NodePane extends AnchorPane{
 	 * @param nodeAngle angle at which the arc is to be placed from the corresponding node
 	 * @return the computed y coordinate modifiers
 	 */
-	private double modifyYPosition(double nodeAngle) {
+	protected double modifyYPosition(double nodeAngle) {
 		double value = 1;
 
 		if(nodeAngle%90 == 0){
@@ -365,7 +365,7 @@ public class NodePane extends AnchorPane{
 	 * @param nodeAngle angle at which the arc is to be placed from the corresponding node
 	 * @return the computed x coordinate modifiers
 	 */
-	private double modifyXPosition(double nodeAngle) {
+	protected double modifyXPosition(double nodeAngle) {
 		double value = 1;
 
 		if(nodeAngle%90 == 0){
@@ -389,7 +389,7 @@ public class NodePane extends AnchorPane{
 	 * @param direction direction containing from which to which other node the line is to be drawn
 	 * @throws InvalidInputException throws exception if there is a problem with edge creation
 	 */
-	private void drawDirectedEdge(Point2D pStart, Point2D pEnd, String direction) throws InvalidInputException{
+	protected void drawDirectedEdge(Point2D pStart, Point2D pEnd, String direction) throws InvalidInputException{
 		//draw line
 		Line line = new Line();
 		line.setStartX(pStart.getX());
@@ -496,7 +496,7 @@ public class NodePane extends AnchorPane{
 	 * @param direction the names of the edges
 	 * @return the edge that was found
 	 */
-	private DirectedEdge getEdgeByName(String direction) {
+	protected DirectedEdge getEdgeByName(String direction) {
 		for(DirectedEdge e: edges){
 			String tmp = e.getDirection();
 			if(tmp != null && tmp.equals(direction)){
@@ -511,7 +511,7 @@ public class NodePane extends AnchorPane{
 	 * @param name the name of the searched for node
 	 * @return the node that was found
 	 */
-	private NamedCircle getCircleByName(String name) {
+	protected NamedCircle getCircleByName(String name) {
 		for(NamedCircle n: nodes){
 			String tmp = n.getName();
 			if(tmp != null && tmp.equals(name)){
@@ -525,7 +525,7 @@ public class NodePane extends AnchorPane{
 	 * resets all nodes' and edges' colors to black,
 	 * also sets label colors to white
 	 */
-	private void resetColors() {
+	protected void resetColors() {
 		for(NamedCircle n: nodes){
 			n.setFill(Color.BLACK);
 			n.getNameTag().setTextFill(Color.WHITE);

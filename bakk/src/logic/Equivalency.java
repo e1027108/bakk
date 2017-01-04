@@ -6,8 +6,8 @@ import exceptions.InvalidInputException;
 import interactor.Interactor;
 
 public class Equivalency {
-	private Framework fst, snd; //first and second frameworks (for comparison)
-	private Interactor interactor;
+	protected Framework fst, snd; //first and second frameworks (for comparison)
+	protected Interactor interactor;
 	
 	public Equivalency(Framework fst, Framework snd, Interactor interactor){
 		this.fst = fst;
@@ -79,7 +79,7 @@ public class Equivalency {
 	}
 	
 	//TODO let interactor get some
-	private boolean areExtensionListsEqual(ArrayList<Extension> first, ArrayList<Extension> second){
+	protected boolean areExtensionListsEqual(ArrayList<Extension> first, ArrayList<Extension> second){
 		ArrayList<Extension> fstExt = new ArrayList<Extension>();
 		ArrayList<Extension> sndExt = new ArrayList<Extension>();
 		boolean found;
@@ -119,7 +119,7 @@ public class Equivalency {
 		return true;
 	}
 	
-	private void printAll(ArrayList<Extension> ext){
+	protected void printAll(ArrayList<Extension> ext){
 		for(Extension e: ext){
 			System.out.println(e.format());
 		}
