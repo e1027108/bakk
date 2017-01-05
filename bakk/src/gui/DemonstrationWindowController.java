@@ -83,8 +83,8 @@ public class DemonstrationWindowController {
 
 	//TODO implement expanding of frameworks, maybe an extension of the framework class?
 	private Framework argumentFramework, comparisonFramework, expansionFramework; //argument framework containing the arguments
-	private ArrayList<Argument> arguments, compArguments; //arguments of the framework
-	private ArrayList<Attack> attacks, compAttacks; //attacks of the framework
+	private ArrayList<Argument> arguments, compArguments, expArguments; //arguments of the framework
+	private ArrayList<Attack> attacks, compAttacks, expAttacks; //attacks of the framework
 	private Interactor interactor; //Interactor controlling the results the user sees //TODO check if one interactor for multiple frameworks suffices
 	private ArrayList<Extension> resultSet; //set containing computation results
 	private NodePane graphPane, comparisonPane; //pane where node illustrations are shown
@@ -531,17 +531,52 @@ public class DemonstrationWindowController {
 		
 		//if we are here, it is possible to compare something
 		if(!expanded){
+			boolean stdEquiv = false;
 			try {
-				//TODO increase scope of stdEquiv? let stdEquiv be a string (success/failure) or even a set of mismatches?
-				boolean stdEquiv = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
+				stdEquiv = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
 			}
 		}
 		else{
 			//TODO ensure interactor accesses expanded panes
+			boolean expEquiv = false;
+			
 			eq = new ExpansionEquivalency(argumentFramework, comparisonFramework, expansionFramework, interactor);
-			boolean expEquiv = ((ExpansionEquivalency) eq).areExpansionEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
+			
+			//strong 1, normal 2, weak 3
+			RadioButton b = (RadioButton) expansionGroup.getSelectedToggle();
+			int expansionType;
+			
+			switch(b.getText()){
+			case "strong":
+				expansionType = 1;
+				break;
+			case "normal":
+				expansionType = 2;
+				break;
+			case "weak":
+				expansionType = 3;
+				break;
+			default:
+				explanationArea.setText("No expansion equivalency type was selected! Can't compute equivalency.");
+				return;
+			}
+			
+			try {
+				expEquiv = ((ExpansionEquivalency) eq).areExpansionEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),
+								expansionType,previousCheckBox.isSelected());
+			} catch (InvalidInputException e) {
+				explanationArea.setText(e.getMessage());
+			}
+			
+			//testing
+			if(expEquiv){
+				explanationArea.setText("true");
+			}
+			else{
+				explanationArea.setText("false");
+			}
 		}
 	}
 
@@ -565,7 +600,34 @@ public class DemonstrationWindowController {
 	}
 
 	private void expandFrameworks() {
-		//TODO expand frameworks for panes, but not in data
+		//TODO expand frameworks for panes
+		//something here
+		
+		//TODO load expansion into framework
+		//TODO outsource parts?
+		Example current = MainInputController.getExamples().get(expandingComboBox.getSelectionModel().getSelectedIndex());
+		
+		expArguments = new ArrayList<Argument>();
+		expAttacks = new ArrayList<Attack>();
+
+		for(Line l: current.getLines()){
+			expArguments.add(new Argument(l.getChar(),l.getDescription()));
+		}
+
+		for(Line l: current.getLines()){
+			Argument attacker = getArgumentByName(l.getChar(),expArguments);
+			for(int i = 0;i<l.getAttacks().length();i++){
+				Argument defender = getArgumentByName(l.getAttacks().charAt(i),expArguments);
+				if(defender == null){
+					explanationArea.setText("Illegal attack detected!");
+					return;
+				}
+				compAttacks.add(new Attack(attacker,defender));
+			}
+		}
+		
+		//TODO other interactor
+		expansionFramework = new Framework(expArguments, expAttacks, interactor);
 	}
 
 	@FXML
