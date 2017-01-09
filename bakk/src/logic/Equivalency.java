@@ -124,4 +124,19 @@ public class Equivalency {
 			System.out.println(e.format());
 		}
 	}
+
+	public boolean checkStrongExpansionEquivalency(boolean usePrevious) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean checkNormalExpansionEquivalency(boolean usePrevious) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean checkWeakExpansionEquivalency(boolean usePrevious) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

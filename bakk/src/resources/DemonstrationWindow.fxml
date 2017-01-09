@@ -68,7 +68,7 @@
     <Separator orientation="VERTICAL" prefHeight="85.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="460.0" AnchorPane.topAnchor="501.5" />
     <CheckBox fx:id="previousCheckBox" mnemonicParsing="false" selected="true" text="use previously computed sets for further computations" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="495.0" />
     <Separator prefWidth="200.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="462.0" AnchorPane.rightAnchor="0.0" />
-    <Label fx:id="expandOptionsLbl" disable="false" text="Choose the type of expansion equivalency to check:" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="495.0" />
+    <Label fx:id="expandOptionsLbl" disable="false" prefHeight="18.0" prefWidth="258.0" text="Type of expansion equivalency to check:" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="495.0" />
     <RadioButton fx:id="strongRadio" mnemonicParsing="false" selected="true" text="strong" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="515.0">
       <toggleGroup>
         <ToggleGroup fx:id="expansionGroup" />
@@ -77,5 +77,6 @@
     <RadioButton fx:id="normalRadio" mnemonicParsing="false" text="normal" toggleGroup="$expansionGroup" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="590.0" />
     <RadioButton fx:id="weakRadio" mnemonicParsing="false" text="weak" toggleGroup="$expansionGroup" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="665.0" />
     <Separator prefWidth="900.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" />
+    <Button id="compareBtn" fx:id="checkBtn" mnemonicParsing="false" onAction="#onCheckClick" prefWidth="102.0" text="Check" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="22.0" />
   </children>
 </AnchorPane>

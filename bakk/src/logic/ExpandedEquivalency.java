@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import exceptions.InvalidInputException;
 import interactor.Interactor;
 
-public class ExpansionEquivalency extends Equivalency {
+public class ExpandedEquivalency extends Equivalency {
 
 	private Framework exp, fstExpanded, sndExpanded;
 
-	public ExpansionEquivalency(Framework fst, Framework snd, Framework exp, Interactor interactor) {
+	public ExpandedEquivalency(Framework fst, Framework snd, Framework exp, Interactor interactor) {
 		super(fst,snd,interactor);
 		this.exp = exp;
 		expandFrameworks();
@@ -57,8 +57,8 @@ public class ExpansionEquivalency extends Equivalency {
 		expandFrameworks();
 	}
 
-	//TODO interact, distinguish expansiontypes
-	public boolean areExpansionEquivalent(int extensionType, int expansionType, boolean usePrevious) throws InvalidInputException {
+	//this is for standard expansion equivalency on expanded frameworks, not for general expansion equivalency
+	public boolean areExpansionEquivalent(int extensionType, boolean usePrevious) throws InvalidInputException {
 		ArrayList<Extension> fstExpExt, sndExpExt;
 		String extName = "";
 		//strong 1, normal 2, weak 3 for extensionType
@@ -67,28 +67,6 @@ public class ExpansionEquivalency extends Equivalency {
 			throw new InvalidInputException("No expanded framework was created!");
 		}
 
-		//TODO figure out if/how to deal with general form expansion equivalency (E-Mail?)
-		//refactor start
-
-		/**
-		switch(expansionType){
-		case 1:
-			areStrongExpansionEquivalent(extensionType,usePrevious);
-			break;
-		case 2:
-			areNormalExpansionEquivalent(extensionType,usePrevious);
-			break;
-		case 3:
-			areWeakExpansionEquivalent(extensionType,usePrevious);
-			break;
-		default:
-			throw new InvalidInputException("No expansion type chosen!");
-		}
-		**/
-
-		//refactor end
-
-		//this is for standard expansion equivalency TODO strong/weak expansion equivalencies --> outsource
 		switch(extensionType){
 		case 1:
 			extName = "conflict-free sets";
@@ -136,6 +114,21 @@ public class ExpansionEquivalency extends Equivalency {
 			return true;
 		}
 
+		return false;
+	}
+	
+	public boolean checkStrongExpansionEquivalency(boolean usePrevious) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean checkNormalExpansionEquivalency(boolean usePrevious) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean checkWeakExpansionEquivalency(boolean usePrevious) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 

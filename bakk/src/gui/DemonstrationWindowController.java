@@ -30,7 +30,7 @@ import javafx.scene.layout.AnchorPane;
 import logic.Argument;
 import logic.Attack;
 import logic.Equivalency;
-import logic.ExpansionEquivalency;
+import logic.ExpandedEquivalency;
 import logic.Extension;
 import logic.Framework;
 
@@ -55,7 +55,7 @@ public class DemonstrationWindowController {
 	private URL location; //location of file
 
 	@FXML
-	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, computeBtn, toggleBtn, expandBtn; //buttons in demonstration window
+	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, computeBtn, toggleBtn, expandBtn, checkBtn; //buttons in demonstration window
 
 	@FXML
 	private CheckBox previousCheckBox; //checkbox whether to use previously computed sets or extensions
@@ -90,7 +90,7 @@ public class DemonstrationWindowController {
 	private NodePane graphPane, comparisonPane; //pane where node illustrations are shown
 	private boolean expanded; //whether we check extended frameworks
 	private Equivalency eq; //this computes equivalencies //TODO make create a list of previously compared frameworks to not have to compute stuff again
-	
+
 	private static final String EXPANDED = "Unexpand";
 
 	/**
@@ -190,19 +190,15 @@ public class DemonstrationWindowController {
 		//set comparable examples
 		showExamplesInComboBoxes();
 		expanded = false;
-
-		toggleDisableRadioButtons();
 	}
 
 	//needs lbl and all buttons to be set to the same disable status in fxml file
-	private void toggleDisableRadioButtons() {
-		expandOptionsLbl.setDisable(!expandOptionsLbl.isDisabled());
-		
+	private void setDisableRadioButtons(boolean disabled) {
 		for(int i = 0;i<expansionGroup.getToggles().size();i++){
 			Object tmp = expansionGroup.getToggles().get(i);
 
 			if(tmp instanceof RadioButton){
-				((RadioButton) tmp).setDisable(!((RadioButton) tmp).isDisabled());
+				((RadioButton) tmp).setDisable(disabled);
 			}
 		}
 	}
@@ -325,14 +321,14 @@ public class DemonstrationWindowController {
 			explanationArea.setStyle("-fx-text-fill: red;");
 		}
 	}
-	
+
 	public void semiStableComputation(){
 		interactor.emptyQueue();
 
 		resultSet = argumentFramework.getSemiStableExtensions(previousCheckBox.isSelected());
-		
+
 		printExtensions(resultSet);
-		
+
 		setUI();
 	}
 
@@ -504,6 +500,7 @@ public class DemonstrationWindowController {
 		}
 	}
 
+	// for two discrete frameworks (optionally with a discrete expansion), not for general expansion equivalency
 	@FXML
 	public void onCompareClick(){
 		javafx.scene.control.SingleSelectionModel<String> selExt, selCom, selExp;
@@ -512,7 +509,7 @@ public class DemonstrationWindowController {
 		selExp = expandingComboBox.getSelectionModel();
 		boolean expanded = false;
 		eq = new Equivalency(argumentFramework, comparisonFramework, interactor); //TODO separate interactor?
-		
+
 		if(selExt.isEmpty() || selExt.getSelectedIndex() <= 0){
 			explanationArea.setText("Can not compare frameworks, since no semantics for comparison was chosen.");
 			return;
@@ -523,12 +520,8 @@ public class DemonstrationWindowController {
 		}
 		else if(expandBtn.getText().equals(EXPANDED)){
 			expanded = true;
-			if(selExp.isEmpty() || expansionGroup.getSelectedToggle() == null){
-				explanationArea.setText("Please choose an equivalency type to check.");
-				return;
-			}
 		}
-		
+
 		//if we are here, it is possible to compare something
 		if(!expanded){
 			boolean stdEquiv = false;
@@ -541,35 +534,15 @@ public class DemonstrationWindowController {
 		else{
 			//TODO ensure interactor accesses expanded panes
 			boolean expEquiv = false;
-			
-			eq = new ExpansionEquivalency(argumentFramework, comparisonFramework, expansionFramework, interactor);
-			
-			//strong 1, normal 2, weak 3
-			RadioButton b = (RadioButton) expansionGroup.getSelectedToggle();
-			int expansionType;
-			
-			switch(b.getText()){
-			case "strong":
-				expansionType = 1;
-				break;
-			case "normal":
-				expansionType = 2;
-				break;
-			case "weak":
-				expansionType = 3;
-				break;
-			default:
-				explanationArea.setText("No expansion equivalency type was selected! Can't compute equivalency.");
-				return;
-			}
-			
+
+			eq = new ExpandedEquivalency(argumentFramework, comparisonFramework, expansionFramework, interactor);
+
 			try {
-				expEquiv = ((ExpansionEquivalency) eq).areExpansionEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),
-								expansionType,previousCheckBox.isSelected());
+				expEquiv = ((ExpandedEquivalency) eq).areExpansionEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
 			}
-			
+
 			//testing
 			if(expEquiv){
 				explanationArea.setText("true");
@@ -592,7 +565,6 @@ public class DemonstrationWindowController {
 			expandBtn.setText("Expand");
 			restoreOriginalFrameworks();
 		}
-		toggleDisableRadioButtons();
 	}
 
 	private void restoreOriginalFrameworks() {
@@ -602,11 +574,11 @@ public class DemonstrationWindowController {
 	private void expandFrameworks() {
 		//TODO expand frameworks for panes
 		//something here
-		
+
 		//TODO load expansion into framework
 		//TODO outsource parts?
 		Example current = MainInputController.getExamples().get(expandingComboBox.getSelectionModel().getSelectedIndex());
-		
+
 		expArguments = new ArrayList<Argument>();
 		expAttacks = new ArrayList<Attack>();
 
@@ -625,7 +597,7 @@ public class DemonstrationWindowController {
 				compAttacks.add(new Attack(attacker,defender));
 			}
 		}
-		
+
 		//TODO other interactor
 		expansionFramework = new Framework(expArguments, expAttacks, interactor);
 	}
@@ -642,6 +614,38 @@ public class DemonstrationWindowController {
 			comparisonPane.setVisible(false);
 			numberLbl.setText("A");
 		}
+	}
+
+	@FXML
+	public void onCheckClick(){
+		Equivalency eq;
+		boolean equiv, usePrevious;
+		usePrevious = previousCheckBox.isSelected();
+
+		if(!expandBtn.getText().equals(EXPANDED)){
+			eq = new Equivalency(argumentFramework,comparisonFramework,interactor);
+		}
+		else{
+			eq = new ExpandedEquivalency(argumentFramework,comparisonFramework,expansionFramework,interactor);
+		}
+
+		//we are quite certain that the group only contains radiobuttons
+		switch(((RadioButton) expansionGroup.getSelectedToggle()).getText()){
+		case "strong":
+			equiv = eq.checkStrongExpansionEquivalency(usePrevious);
+			break;
+		case "normal":
+			equiv = eq.checkNormalExpansionEquivalency(usePrevious);
+			break;
+		case "weak":
+			equiv = eq.checkWeakExpansionEquivalency(usePrevious);
+			break;
+		default:
+			explanationArea.setText("No equivalency type chosen!");
+			return;
+		}
+
+		//TODO do something with equiv
 	}
 
 	private void initializeComparisonResources(){	
@@ -687,7 +691,7 @@ public class DemonstrationWindowController {
 				compAttacks.add(new Attack(attacker,defender));
 			}
 		}
-		
+
 		comparisonFramework = new Framework(compArguments, compAttacks, interactor);
 
 		comparisonPane.createGraph(comparisonFramework);
@@ -761,8 +765,10 @@ public class DemonstrationWindowController {
 				}
 				toggleBtn.setDisable(true);
 				numberLbl.setText("");
+				setDisableRadioButtons(true);
 			}
 			else{
+				setDisableRadioButtons(false);
 				initializeComparisonResources();
 			}
 		}
@@ -798,7 +804,7 @@ public class DemonstrationWindowController {
 		if(ext.size() == 0){
 			System.out.println("no extensions availiable");
 		}
-		
+
 		for(Extension e: ext){
 			System.out.println(e.format());
 		}
