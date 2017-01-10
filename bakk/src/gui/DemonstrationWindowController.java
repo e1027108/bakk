@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
-import javax.swing.SingleSelectionModel;
-
 import datacontainers.Example;
 import datacontainers.Line;
 import dto.ArgumentDto;
@@ -180,6 +178,7 @@ public class DemonstrationWindowController {
 		nextBtn.setDisable(true);
 		showAllBtn.setDisable(true);
 		resultsBtn.setDisable(true);
+		setDisableRadioButtons(true);
 
 		//set now the values for extension box
 		String[] extarr = new String[]{"","conflict-free","admissible","complete","preferred","stable","grounded","semi-stable"};
@@ -201,6 +200,9 @@ public class DemonstrationWindowController {
 				((RadioButton) tmp).setDisable(disabled);
 			}
 		}
+		
+		expandOptionsLbl.setDisable(disabled);
+		checkBtn.setDisable(disabled);
 	}
 
 	/**
@@ -527,6 +529,7 @@ public class DemonstrationWindowController {
 			boolean stdEquiv = false;
 			try {
 				stdEquiv = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
+				System.out.println(stdEquiv);
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
 			}
@@ -539,6 +542,7 @@ public class DemonstrationWindowController {
 
 			try {
 				expEquiv = ((ExpandedEquivalency) eq).areExpansionEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
+				System.out.println(expEquiv);
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
 			}
@@ -571,6 +575,8 @@ public class DemonstrationWindowController {
 		// TODO load standard version into pane from data
 	}
 
+	//TODO account for case when only one framework is shown! (no button for this or just expand one ... uselessly)
+	//TODO expand even if this button is clicked before the comparisonframework is chosen
 	private void expandFrameworks() {
 		//TODO expand frameworks for panes
 		//something here
@@ -744,7 +750,6 @@ public class DemonstrationWindowController {
 
 		expandingComboBox.setItems(FXCollections.observableArrayList(formatList));
 		expandingComboBox.getSelectionModel().selectFirst();
-		expandingComboBox.getSelectionModel().selectedIndexProperty().addListener(new ComparisonChoiceListener<Number>());
 	}
 
 	/**
@@ -766,6 +771,7 @@ public class DemonstrationWindowController {
 				toggleBtn.setDisable(true);
 				numberLbl.setText("");
 				setDisableRadioButtons(true);
+				//TODO empty comparisonPane!!!
 			}
 			else{
 				setDisableRadioButtons(false);
