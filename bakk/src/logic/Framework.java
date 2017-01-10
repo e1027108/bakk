@@ -24,6 +24,9 @@ public class Framework {
 	private Extension previousGroundedExtension;
 	private String notification;
 	
+	protected enum Type {cf,ad,co,pr,st,ss,gr}; //TODO use for kernels, may be used for other things too (outsourcing)?
+	private ArrayList<Kernel> kernel; //TODO selecting kernel by type to get/set
+	
 	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor) {
 		this.arguments = arguments;
 		this.attacks = attacks;
