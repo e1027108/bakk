@@ -6,6 +6,7 @@ import interactor.Interactor;
 import interactor.SingleInstruction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import exceptions.InvalidInputException;
 import javafx.scene.paint.Color;
@@ -25,12 +26,13 @@ public class Framework {
 	private String notification;
 	
 	protected enum Type {cf,ad,co,pr,st,ss,gr}; //TODO use for kernels, may be used for other things too (outsourcing)?
-	private ArrayList<Kernel> kernel; //TODO selecting kernel by type to get/set
+	private HashMap<Type,Kernel> kernel;
 	
 	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor) {
 		this.arguments = arguments;
 		this.attacks = attacks;
 		this.interactor = interactor;
+		this.kernel = new HashMap<Type,Kernel>();
 	}
 
 	public ArrayList<Extension> getConflictFreeSets() {
@@ -481,6 +483,22 @@ public class Framework {
 		previousSemiStableExtensions.addAll(semiStable);
 		
 		return semiStable;
+	}
+	
+	public Kernel getKernel(Type type) throws InvalidInputException{
+		Kernel ret = kernel.get(type);
+		
+		if(ret != null){
+			return ret;
+		}
+		else{
+			computeKernel(type);
+			return getKernel(type);
+		}
+	}
+
+	private void computeKernel(Type type) throws InvalidInputException {
+		kernel.put(type, new Kernel(this,interactor,type)); //Kernel computes itself in constructor
 	}
 
 	public GraphInstruction getInstructionFromString(String item) {
