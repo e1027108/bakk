@@ -13,9 +13,9 @@ import javafx.scene.paint.Color;
 
 public class Framework {
 
-	private ArrayList<Argument> arguments;
-	private ArrayList<Attack> attacks;
-	private Interactor interactor;
+	protected ArrayList<Argument> arguments;
+	protected ArrayList<Attack> attacks;
+	protected Interactor interactor;
 	private ArrayList<Extension> previousConflictFreeSets; //a stored, previously computed set of conflict-free sets
 	private ArrayList<Extension> previousAdmissibleExtensions; //a stored, previously computed set of admissible extensions
 	private ArrayList<Extension> previousCompleteExtensions; //a stored, previously computed set of complete extensions
