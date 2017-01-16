@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 import exceptions.InvalidInputException;
 import interactor.Interactor;
+import logic.Framework.Type;
 
 public class ExpandedEquivalency extends Equivalency {
 
 	private Framework exp, fstExpanded, sndExpanded;
 
+	//TODO re-integrate class into Equivalency?
+	
 	public ExpandedEquivalency(Framework fst, Framework snd, Framework exp, Interactor interactor) {
 		super(fst,snd,interactor);
 		this.exp = exp;
@@ -58,7 +61,7 @@ public class ExpandedEquivalency extends Equivalency {
 	}
 
 	//this is for standard expansion equivalency on expanded frameworks, not for general expansion equivalency
-	public boolean areExpansionEquivalent(int extensionType, boolean usePrevious) throws InvalidInputException {
+	public boolean areExpandedEquivalent(int extensionType, boolean usePrevious) throws InvalidInputException {
 		ArrayList<Extension> fstExpExt, sndExpExt;
 		String extName = "";
 		//strong 1, normal 2, weak 3 for extensionType
@@ -117,17 +120,17 @@ public class ExpandedEquivalency extends Equivalency {
 		return false;
 	}
 	
-	public boolean checkStrongExpansionEquivalency(boolean usePrevious) {
+	public boolean checkStrongExpansionEquivalency(Type type, boolean usePrevious) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public boolean checkNormalExpansionEquivalency(boolean usePrevious) {
+	public boolean checkNormalExpansionEquivalency(Type type, boolean usePrevious) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public boolean checkWeakExpansionEquivalency(boolean usePrevious) {
+	public boolean checkWeakExpansionEquivalency(Type type, boolean usePrevious) {
 		// TODO Auto-generated method stub
 		return false;
 	}

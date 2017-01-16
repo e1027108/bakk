@@ -31,6 +31,7 @@ import logic.Equivalency;
 import logic.ExpandedEquivalency;
 import logic.Extension;
 import logic.Framework;
+import logic.Framework.Type;
 
 /**
  * Controller controlling the DemonstrationWindow.fxml file behaviour
@@ -541,7 +542,7 @@ public class DemonstrationWindowController {
 			eq = new ExpandedEquivalency(argumentFramework, comparisonFramework, expansionFramework, interactor);
 
 			try {
-				expEquiv = ((ExpandedEquivalency) eq).areExpansionEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
+				expEquiv = ((ExpandedEquivalency) eq).areExpandedEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
 				System.out.println(expEquiv);
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
@@ -636,15 +637,20 @@ public class DemonstrationWindowController {
 		}
 
 		//we are quite certain that the group only contains radiobuttons
+		//TODO complete
 		switch(((RadioButton) expansionGroup.getSelectedToggle()).getText()){
 		case "strong":
-			equiv = eq.checkStrongExpansionEquivalency(usePrevious);
+			try {
+				equiv = eq.checkStrongExpansionEquivalency(idToType(comparisonComboBox.getSelectionModel().getSelectedIndex()), usePrevious);
+			} catch (InvalidInputException e) {
+				explanationArea.setText(e.getMessage());
+			}
 			break;
 		case "normal":
-			equiv = eq.checkNormalExpansionEquivalency(usePrevious);
+			equiv = eq.checkNormalExpansionEquivalency(idToType(comparisonComboBox.getSelectionModel().getSelectedIndex()), usePrevious);
 			break;
 		case "weak":
-			equiv = eq.checkWeakExpansionEquivalency(usePrevious);
+			equiv = eq.checkWeakExpansionEquivalency(idToType(comparisonComboBox.getSelectionModel().getSelectedIndex()), usePrevious);
 			break;
 		default:
 			explanationArea.setText("No equivalency type chosen!");
@@ -652,6 +658,27 @@ public class DemonstrationWindowController {
 		}
 
 		//TODO do something with equiv
+	}
+
+	private Type idToType(int id) {
+		switch(id){
+		case 1:
+			return Type.cf;
+		case 2:
+			return Type.ad;
+		case 3:
+			return Type.co;
+		case 4:
+			return Type.pr;
+		case 5:
+			return Type.st;
+		case 6:
+			return Type.gr;
+		case 7:
+			return Type.ss;
+		default:
+			return null;
+		}
 	}
 
 	private void initializeComparisonResources(){	

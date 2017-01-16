@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import exceptions.InvalidInputException;
 import interactor.Interactor;
+import logic.Framework.Type;
 
 public class Equivalency {
 	protected Framework fst, snd; //first and second frameworks (for comparison)
@@ -125,17 +126,24 @@ public class Equivalency {
 		}
 	}
 
-	public boolean checkStrongExpansionEquivalency(boolean usePrevious) {
+	public boolean checkStrongExpansionEquivalency(Type type, boolean usePrevious) throws InvalidInputException {
+		if(type == Type.ss){ //semi-stable needs equivalent admissible kernels (2)
+			return new Equivalency(fst.getKernel(type),snd.getKernel(type),interactor).areStandardEquivalent(2, usePrevious);
+		}
+		else if(type == Type.st){ //stable needs equivalent stable kernels (5)
+			return new Equivalency(fst.getKernel(type),snd.getKernel(type),interactor).areStandardEquivalent(5, usePrevious);
+		}
+		//TODO other types
+				
+		return false;
+	}
+
+	public boolean checkNormalExpansionEquivalency(Type type, boolean usePrevious) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public boolean checkNormalExpansionEquivalency(boolean usePrevious) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean checkWeakExpansionEquivalency(boolean usePrevious) {
+	public boolean checkWeakExpansionEquivalency(Type type, boolean usePrevious) {
 		// TODO Auto-generated method stub
 		return false;
 	}

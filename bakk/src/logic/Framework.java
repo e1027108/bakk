@@ -25,7 +25,7 @@ public class Framework {
 	private Extension previousGroundedExtension;
 	private String notification;
 	
-	protected enum Type {cf,ad,co,pr,st,ss,gr}; //TODO use for kernels, may be used for other things too (outsourcing)?
+	public enum Type {cf,ad,co,pr,st,ss,gr,adstar}; //TODO use for kernels, may be used for other things too (outsourcing)?
 	private HashMap<Type,Kernel> kernel;
 	
 	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor) {
