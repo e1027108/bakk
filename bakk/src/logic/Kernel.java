@@ -26,7 +26,7 @@ public class Kernel extends Framework {
 			computeStableKernel();
 			break;
 		case ad:
-			computeAdmissibleKernel();
+			computeAdmissibleKernel(false);
 			break;
 		case gr:
 			computeGroundedKernel();
@@ -35,7 +35,7 @@ public class Kernel extends Framework {
 			computeCompleteKernel();
 			break;
 		case adstar:
-			computeAdmissibleStarKernel();
+			computeAdmissibleKernel(true);
 			break;
 		default: //TODO don't enable checkbutton for other semantics?
 			throw new InvalidInputException("No kernel possible for the chosen semantic!"); //TODO check whether this is actually true for the others
@@ -63,7 +63,7 @@ public class Kernel extends Framework {
 	}
 
 	//TODO test
-	private void computeAdmissibleKernel() {
+	private void computeAdmissibleKernel(boolean star) {
 		// all attacks except the attacks from self-attacking arguments (the self-attack stays),
 		// if the attacked attackes back or also attacks itself
 
@@ -108,8 +108,40 @@ public class Kernel extends Framework {
 			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
 		}
 
+		//adstar:
+		//retain all attacks except:
+		//((a,b) where a != b and a self-attacks + (b self-attacks or b attacks a back) or) --> see above
+		//	b self-attacks + for every c attacked by b:
+		//		c is attacked by a or
+		//		c attacks a or
+		//		c is self-attacking or
+		//		c attacks b back
+		
+		if(star){
+			//check the second part
+			ArrayList<Attack> toAlsoNotRemove = new ArrayList<Attack>();
+			
+			for(Attack att: toRemove){
+				Argument a = att.getAttacker();
+				Argument b = att.getAttacked();
+				if(selfAttacking.contains(b)){
+					//check whether for all c the conditions hold
+					ArrayList<Argument> thirdArguments = getAttackedBy(b.getName());
+					for(Argument c: thirdArguments){
+						ArrayList<Argument> attackedByThird = getAttackedBy(c.getName());
+						if(getAttackedBy(a.getName()).contains(c) || attackedByThird.contains(a) || attackedByThird.contains(b) || selfAttacking.contains(c)){
+							toAlsoNotRemove.add(att);
+							break;
+						}
+					}
+				}
+			}
+			
+			toRemove.removeAll(toAlsoNotRemove);
+			
+		}
+		
 		attacks.removeAll(toRemove);
-
 	}
 
 	//TODO test very much! (reversed admissible code)
@@ -209,17 +241,6 @@ public class Kernel extends Framework {
 
 		attacks.removeAll(toRemove);
 
-	}
-	
-	private void computeAdmissibleStarKernel() {
-		//TODO retain all attacks except:
-		//(a,b) where a != b and
-		//	a self-attacks + (b self-attacks or b attacks a back) or
-		//	b self-attacks + for every c attacked by b:
-		//		c is attacked by a or
-		//		c attacks a or
-		//		c is self-attacking or
-		//		c attacks b back
 	}
 
 	private ArrayList<Argument> getSelfAttacking(){
