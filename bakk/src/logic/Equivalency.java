@@ -126,12 +126,23 @@ public class Equivalency {
 		}
 	}
 
+	//TODO check all type relation
 	public boolean checkStrongExpansionEquivalency(Type type, boolean usePrevious) throws InvalidInputException {
-		if(type == Type.ss){ //semi-stable needs equivalent admissible kernels (2)
-			return new Equivalency(fst.getKernel(type),snd.getKernel(type),interactor).areStandardEquivalent(2, usePrevious);
+		if(type == Type.ss){ //semi-stable needs equivalent admissible kernels
+			return new Equivalency(fst.getKernel(Type.ad),snd.getKernel(Type.ad),interactor).areStandardEquivalent(7, usePrevious);
 		}
 		else if(type == Type.st){ //stable needs equivalent stable kernels (5)
 			return new Equivalency(fst.getKernel(type),snd.getKernel(type),interactor).areStandardEquivalent(5, usePrevious);
+		}
+		else if(type == Type.ad || type == Type.pr){ //admissible and preferred need adstar (?2?)
+			int num;
+			if(type == Type.ad){
+				num = 2;
+			}
+			else{
+				num = 5;
+			}
+			return new Equivalency(fst.getKernel(Type.adstar),snd.getKernel(Type.adstar),interactor).areStandardEquivalent(num, usePrevious);
 		}
 		//TODO other types
 				

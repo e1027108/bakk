@@ -34,7 +34,7 @@ public class Kernel extends Framework {
 		case co:
 			computeCompleteKernel();
 			break;
-		case adstar:
+		case adstar: //TODO for all 
 			computeAdmissibleKernel(true);
 			break;
 		default: //TODO don't enable checkbutton for other semantics?
