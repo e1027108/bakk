@@ -29,10 +29,10 @@ public class Kernel extends Framework {
 			computeAdmissibleKernel(false);
 			break;
 		case gr:
-			computeGroundedKernel();
+			computeGroundedKernel(false);
 			break;
 		case co:
-			computeCompleteKernel();
+			computeCompleteKernel(false);
 			break;
 		case adstar: //TODO for all 
 			computeAdmissibleKernel(true);
@@ -62,7 +62,7 @@ public class Kernel extends Framework {
 
 	}
 
-	//TODO test
+	//TODO test, check whether what's in or out is understood correctly
 	private void computeAdmissibleKernel(boolean star) {
 		// all attacks except the attacks from self-attacking arguments (the self-attack stays),
 		// if the attacked attackes back or also attacks itself
@@ -145,7 +145,7 @@ public class Kernel extends Framework {
 	}
 
 	//TODO test very much! (reversed admissible code)
-	private void computeGroundedKernel() {
+	private void computeGroundedKernel(boolean star) {
 		// all attacks except the attacks on self-attacking arguments (a self-attack stays),
 		// but only if the attacker doesn't attack itself or gets attacked back
 
@@ -198,13 +198,25 @@ public class Kernel extends Framework {
 		for(Attack a: toRemove){
 			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
 		}
+		
+		//TODO now grstar
+		// also do remove if:
+		// for a self-attacking b has for all c:
+		//		b attacks c and either:
+		//			a attacks c
+		//			c attacks a
+		//			c is self-attacking
+		
+		if(star){
+			
+		}
 
 		attacks.removeAll(toRemove);
 
 	}
 
 	//TODO test
-	private void computeCompleteKernel() {
+	private void computeCompleteKernel(boolean star) {
 		// all attacks except the attacks of self-attacking arguments (a) (the self-attack stays)
 		// but only if the attacked (b) also attacks itself
 
@@ -237,6 +249,19 @@ public class Kernel extends Framework {
 		//testing
 		for(Attack a: toRemove){
 			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
+		}
+		
+		//TODO now costar
+		// also do remove if:
+		// for a self-attacking b:
+		//		b doesn't attack a and for all c:
+		//		that b attacks:
+		//			a attacks c or
+		//			c attacks a or
+		//			c is self-attacking
+		
+		if(star){
+			
 		}
 
 		attacks.removeAll(toRemove);
