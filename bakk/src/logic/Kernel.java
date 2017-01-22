@@ -69,44 +69,22 @@ public class Kernel extends Framework {
 
 		ArrayList<Argument> selfAttacking = new ArrayList<Argument>();
 		ArrayList<Attack> toRemove = new ArrayList<Attack>();
-		ArrayList<Attack> toNotRemove = new ArrayList<Attack>();
+		ArrayList<Attack> maybeNotRemove = new ArrayList<Attack>();
 
 		selfAttacking = getSelfAttacking();
 
 		//build first two conditions
 		toRemove = getSelfAttackingRemovalList(selfAttacking);
 
-		//don't remove:
-		boolean unRemove;
-
 		for(Attack a: toRemove){
+			Argument attacker = a.getAttacker();
 			Argument attacked = a.getAttacked();
-			unRemove = false;
-			for(Attack b: attacks){
-				if(a!=b){
-					// if attacked self-attacks
-					if(b.getAttacker() == attacked && b.getAttacked() == attacked){
-						unRemove = true;
-						break;
-					}
-					// if attacked attacks back
-					else if(b.getAttacker() == attacked && b.getAttacked() == a.getAttacker()){
-						unRemove = true;
-						break;
-					}
-				}
-			}
-			if(unRemove){
-				toNotRemove.add(a);
+			if(!(getAttackedBy(attacked.getName()).contains(attacker) || selfAttacking.contains(attacked))){
+				maybeNotRemove.add(a);
 			}
 		}
 
-		toRemove.removeAll(toNotRemove);
 
-		//testing
-		for(Attack a: toRemove){
-			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
-		}
 
 		//adstar:
 		//retain all attacks except:
@@ -116,11 +94,11 @@ public class Kernel extends Framework {
 		//		c attacks a or
 		//		c is self-attacking or
 		//		c attacks b back
-		
+
 		if(star){
 			//check the second part
-			ArrayList<Attack> toAlsoNotRemove = new ArrayList<Attack>();
-			
+			ArrayList<Attack> maybeAlsoNotRemove = new ArrayList<Attack>();
+
 			for(Attack att: toRemove){
 				Argument a = att.getAttacker();
 				Argument b = att.getAttacked();
@@ -129,18 +107,31 @@ public class Kernel extends Framework {
 					ArrayList<Argument> thirdArguments = getAttackedBy(b.getName());
 					for(Argument c: thirdArguments){
 						ArrayList<Argument> attackedByThird = getAttackedBy(c.getName());
-						if(getAttackedBy(a.getName()).contains(c) || attackedByThird.contains(a) || attackedByThird.contains(b) || selfAttacking.contains(c)){
-							toAlsoNotRemove.add(att);
+						if(!(getAttackedBy(a.getName()).contains(c) || attackedByThird.contains(a) ||
+								attackedByThird.contains(b) || selfAttacking.contains(c))){
+							maybeAlsoNotRemove.add(att);
 							break;
 						}
 					}
 				}
+				else{
+					maybeAlsoNotRemove.add(att);
+				}
 			}
+
+			//if we don't get here maybenotremove is not removed
+			//otherwise we check here what is really not removed
 			
-			toRemove.removeAll(toAlsoNotRemove);
-			
+			maybeNotRemove.retainAll(maybeAlsoNotRemove);
 		}
 		
+		toRemove.remove(maybeNotRemove);
+		
+		//testing
+		for(Attack a: toRemove){
+			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
+		}
+
 		attacks.removeAll(toRemove);
 	}
 
@@ -151,13 +142,9 @@ public class Kernel extends Framework {
 
 		ArrayList<Argument> selfAttacking = new ArrayList<Argument>();
 		ArrayList<Attack> toRemove = new ArrayList<Attack>();
-		ArrayList<Attack> toNotRemove = new ArrayList<Attack>();
+		ArrayList<Attack> maybeNotRemove = new ArrayList<Attack>();
 
-		for(Attack a: attacks){
-			if(a.getAttacked() == a.getAttacker()){
-				selfAttacking.add(a.getAttacked()); //not the attacker but the attacked
-			}
-		}
+		selfAttacking = getSelfAttacking();
 
 		for(Attack a: attacks){
 			if(selfAttacking.contains(a.getAttacked())){
@@ -167,38 +154,14 @@ public class Kernel extends Framework {
 			}
 		}
 
-		//don't remove:
-		boolean unRemove;
-
 		for(Attack a: toRemove){
 			Argument attacker = a.getAttacker();
-			unRemove = false;
-			for(Attack b: attacks){
-				if(a!=b){
-					// if attacked self-attacks
-					if(b.getAttacker() == attacker && b.getAttacked() == attacker){
-						unRemove = true;
-						break;
-					}
-					// if attacked attacks back
-					else if(b.getAttacked() == attacker && b.getAttacker() == a.getAttacked()){
-						unRemove = true;
-						break;
-					}
-				}
-			}
-			if(unRemove){
-				toNotRemove.add(a);
+			Argument attacked = a.getAttacked();
+			if(!(selfAttacking.contains(attacker) || getAttackedBy(attacked.getName()).contains(attacker))){
+				maybeNotRemove.add(a);
 			}
 		}
 
-		toRemove.removeAll(toNotRemove);
-
-		//testing
-		for(Attack a: toRemove){
-			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
-		}
-		
 		//TODO now grstar
 		// also do remove if:
 		// for a self-attacking b has for all c:
@@ -206,11 +169,37 @@ public class Kernel extends Framework {
 		//			a attacks c
 		//			c attacks a
 		//			c is self-attacking
-		
-		if(star){
-			
-		}
 
+		if(star){
+			ArrayList<Attack> maybeAlsoNotRemove = new ArrayList<Attack>();
+
+			for(Attack att:toRemove){
+				Argument a = att.getAttacker();
+				Argument b = att.getAttacked();
+				if(selfAttacking.contains(b)){
+					ArrayList<Argument> cs = getAttackedBy(b.getName());
+					for(Argument c: cs){
+						if(!(selfAttacking.contains(c) || getAttackedBy(c.getName()).contains(a) || getAttackedBy(a.getName()).contains(c)) ){
+							maybeAlsoNotRemove.add(att);
+							break;
+						}
+					}
+				}
+				else{
+					maybeAlsoNotRemove.add(att);
+				}
+			}
+
+			maybeNotRemove.retainAll(maybeAlsoNotRemove);
+		}
+		
+		toRemove.remove(maybeNotRemove);
+
+		//testing
+		for(Attack a: toRemove){
+			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
+		}
+		
 		attacks.removeAll(toRemove);
 
 	}
@@ -222,35 +211,20 @@ public class Kernel extends Framework {
 
 		ArrayList<Argument> selfAttacking = new ArrayList<Argument>();
 		ArrayList<Attack> toRemove = new ArrayList<Attack>();
-		ArrayList<Attack> toNotRemove = new ArrayList<Attack>();
+		ArrayList<Attack> maybeNotRemove = new ArrayList<Attack>();
 
 		selfAttacking = getSelfAttacking();
 
 		toRemove = getSelfAttackingRemovalList(selfAttacking); //now we have checked that a attacks itself
 
-		boolean unRemove;
-
 		//now weed out if b also attacks itself
-		for(Attack a: toRemove){
-			unRemove = true;
-			for(Attack b: attacks){
-				if(a.getAttacked() == b.getAttacked() && b.getAttacked() == b.getAttacker()){ // if b attacks itself, we really want to remove it
-					unRemove = false;
-					break;
-				}
-			}
-			if(unRemove){
-				toNotRemove.add(a);
+		for(Attack att: toRemove){
+			Argument b = att.getAttacked();
+			if(!selfAttacking.contains(b)){
+				maybeNotRemove.add(att);
 			}
 		}
 
-		toRemove.removeAll(toNotRemove);
-
-		//testing
-		for(Attack a: toRemove){
-			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
-		}
-		
 		//TODO now costar
 		// also do remove if:
 		// for a self-attacking b:
@@ -259,11 +233,37 @@ public class Kernel extends Framework {
 		//			a attacks c or
 		//			c attacks a or
 		//			c is self-attacking
-		
-		if(star){
-			
-		}
 
+		if(star){
+			ArrayList<Attack> maybeAlsoNotRemove = new ArrayList<Attack>();
+			
+			for(Attack att: toRemove){
+				Argument a = att.getAttacker();
+				Argument b = att.getAttacked();
+				if(selfAttacking.contains(b) && !getAttackedBy(b.getName()).contains(a)){
+					ArrayList<Argument> cs = getAttackedBy(b.getName());
+					for(Argument c: cs){
+						if(!(getAttackedBy(a.getName()).contains(c) || selfAttacking.contains(c) || getAttackedBy(c.getName()).contains(a))){
+							maybeAlsoNotRemove.add(att);
+							break;
+						}
+					}
+				}
+				else{
+					maybeAlsoNotRemove.add(att);
+				}
+			}
+			
+			maybeNotRemove.retainAll(maybeAlsoNotRemove);
+		}
+		
+		toRemove.removeAll(maybeNotRemove);
+
+		//testing
+		for(Attack a: toRemove){
+			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
+		}
+		
 		attacks.removeAll(toRemove);
 
 	}

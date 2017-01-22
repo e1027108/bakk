@@ -126,7 +126,7 @@ public class Equivalency {
 		}
 	}
 
-	//TODO check all type relation
+	//TODO test
 	public boolean checkStrongExpansionEquivalency(Type type, boolean usePrevious) throws InvalidInputException {
 		if(type == Type.ss){ //semi-stable needs equivalent admissible kernels
 			return new Equivalency(fst.getKernel(Type.ad),snd.getKernel(Type.ad),interactor).areStandardEquivalent(7, usePrevious);
@@ -140,17 +140,23 @@ public class Equivalency {
 				num = 2;
 			}
 			else{
-				num = 5;
+				num = 4;
 			}
 			return new Equivalency(fst.getKernel(Type.adstar),snd.getKernel(Type.adstar),interactor).areStandardEquivalent(num, usePrevious);
 		}
-		//TODO other types
-				
-		return false;
+		else if(type == type.gr){
+			return new Equivalency(fst.getKernel(Type.grstar),snd.getKernel(Type.grstar),interactor).areStandardEquivalent(6, usePrevious);
+		}
+		else if(type == type.co){
+			return new Equivalency(fst.getKernel(Type.costar),snd.getKernel(Type.costar),interactor).areStandardEquivalent(3, usePrevious);
+		}
+		else{
+			throw new InvalidInputException("There is no strong expansion equivalency defined for this semantics");
+		}
 	}
 
 	public boolean checkNormalExpansionEquivalency(Type type, boolean usePrevious) {
-		// TODO Auto-generated method stub
+		// TODO == strong equivalence (not strong expansion equivalence) --> check normal, weak, strong standard equivalences
 		return false;
 	}
 
