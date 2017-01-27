@@ -28,7 +28,6 @@ import javafx.scene.layout.AnchorPane;
 import logic.Argument;
 import logic.Attack;
 import logic.Equivalency;
-import logic.ExpandedEquivalency;
 import logic.Extension;
 import logic.Framework;
 import logic.Framework.Type;
@@ -39,8 +38,6 @@ import logic.Framework.Type;
  * @author Patrick Bellositz
  */
 public class DemonstrationWindowController {
-
-	//TODO later implement dynamic changing of frameworks (context menu?, predefined action?)
 
 	/**
 	 * wrapper object controlling what is shown on screen
@@ -54,7 +51,7 @@ public class DemonstrationWindowController {
 	private URL location; //location of file
 
 	@FXML
-	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, computeBtn, toggleBtn, expandBtn, checkBtn; //buttons in demonstration window
+	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, computeBtn, toggleBtn, expandBtn; //buttons in demonstration window
 
 	@FXML
 	private CheckBox previousCheckBox; //checkbox whether to use previously computed sets or extensions
@@ -75,7 +72,7 @@ public class DemonstrationWindowController {
 	private ToggleGroup expansionGroup;
 
 	@FXML
-	private RadioButton strongRadio, normalRadio, weakRadio; //TODO use for expansion comparison
+	private RadioButton standardRadio, expansionRadio; //TODO use for expansion comparison
 
 	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, 
 	backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip; //tooltips for all buttons etc
@@ -88,7 +85,7 @@ public class DemonstrationWindowController {
 	private ArrayList<Extension> resultSet; //set containing computation results
 	private NodePane graphPane, comparisonPane; //pane where node illustrations are shown
 	private boolean expanded; //whether we check extended frameworks
-	private Equivalency eq; //this computes equivalencies //TODO make create a list of previously compared frameworks to not have to compute stuff again
+	private Equivalency eq; //this computes equivalencies //TODO maybe create a list of previously compared frameworks to not have to compute stuff again
 
 	private static final String EXPANDED = "Unexpand";
 
@@ -203,7 +200,6 @@ public class DemonstrationWindowController {
 		}
 		
 		expandOptionsLbl.setDisable(disabled);
-		checkBtn.setDisable(disabled);
 	}
 
 	/**
@@ -503,21 +499,19 @@ public class DemonstrationWindowController {
 		}
 	}
 
-	// for two discrete frameworks (optionally with a discrete expansion), not for general expansion equivalency
 	@FXML
 	public void onCompareClick(){
-		javafx.scene.control.SingleSelectionModel<String> selExt, selCom, selExp;
-		selExt = extensionComboBox.getSelectionModel();
-		selCom = comparisonComboBox.getSelectionModel();
-		selExp = expandingComboBox.getSelectionModel();
+		javafx.scene.control.SingleSelectionModel<String> selectExtension, selectComparison;
+		selectExtension = extensionComboBox.getSelectionModel();
+		selectComparison = comparisonComboBox.getSelectionModel();
 		boolean expanded = false;
 		eq = new Equivalency(argumentFramework, comparisonFramework, interactor); //TODO separate interactor?
 
-		if(selExt.isEmpty() || selExt.getSelectedIndex() <= 0){
+		if(selectExtension.isEmpty() || selectExtension.getSelectedIndex() <= 0){
 			explanationArea.setText("Can not compare frameworks, since no semantics for comparison was chosen.");
 			return;
 		}
-		else if(selCom.isEmpty() || selCom.getSelectedIndex() <= 0){
+		else if(selectComparison.isEmpty() || selectComparison.getSelectedIndex() <= 0){
 			explanationArea.setText("Can not compare frameworks, since no comparison framework was chosen.");
 			return;
 		}
@@ -526,36 +520,36 @@ public class DemonstrationWindowController {
 		}
 
 		//if we are here, it is possible to compare something
-		if(!expanded){
-			boolean stdEquiv = false;
-			try {
-				stdEquiv = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
-				System.out.println(stdEquiv);
-			} catch (InvalidInputException e) {
-				explanationArea.setText(e.getMessage());
-			}
+		boolean equiv = false;
+		if(expanded){
+			eq.expandFrameworks(expansionFramework); //this should have to exist
 		}
-		else{
-			//TODO ensure interactor accesses expanded panes
-			boolean expEquiv = false;
-
-			eq = new ExpandedEquivalency(argumentFramework, comparisonFramework, expansionFramework, interactor);
-
+		
+		//which type do we check?
+		RadioButton selectedToggle = (RadioButton) expansionGroup.getSelectedToggle();
+		
+		if(selectedToggle.getText().equals("standard")){
 			try {
-				expEquiv = ((ExpandedEquivalency) eq).areExpandedEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
-				System.out.println(expEquiv);
+				equiv = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
+				return;
 			}
-
 			//testing
-			if(expEquiv){
-				explanationArea.setText("true");
-			}
-			else{
-				explanationArea.setText("false");
-			}
+			explanationArea.setText(String.valueOf(equiv));
 		}
+		else if(selectedToggle.getText().equals("expansion")){
+			try {
+				equiv = eq.areExpansionEquivalent(idToType(extensionComboBox.getSelectionModel().getSelectedIndex()),previousCheckBox.isSelected());
+			} catch (InvalidInputException e) {
+				explanationArea.setText(e.getMessage());
+				return;
+			}
+			//testing
+			explanationArea.setText(String.valueOf(equiv));
+		}
+
+		//TODO do something with equiv
 	}
 
 	@FXML
@@ -581,9 +575,6 @@ public class DemonstrationWindowController {
 	private void expandFrameworks() {
 		//TODO expand frameworks for panes
 		//something here
-
-		//TODO load expansion into framework
-		//TODO outsource parts?
 		Example current = MainInputController.getExamples().get(expandingComboBox.getSelectionModel().getSelectedIndex());
 
 		expArguments = new ArrayList<Argument>();
@@ -621,43 +612,6 @@ public class DemonstrationWindowController {
 			comparisonPane.setVisible(false);
 			numberLbl.setText("A");
 		}
-	}
-
-	@FXML
-	public void onCheckClick(){
-		Equivalency eq;
-		boolean equiv, usePrevious;
-		usePrevious = previousCheckBox.isSelected();
-
-		if(!expandBtn.getText().equals(EXPANDED)){
-			eq = new Equivalency(argumentFramework,comparisonFramework,interactor);
-		}
-		else{
-			eq = new ExpandedEquivalency(argumentFramework,comparisonFramework,expansionFramework,interactor);
-		}
-
-		//we are quite certain that the group only contains radiobuttons
-		//TODO complete
-		switch(((RadioButton) expansionGroup.getSelectedToggle()).getText()){
-		case "strong":
-			try {
-				equiv = eq.checkStrongExpansionEquivalency(idToType(comparisonComboBox.getSelectionModel().getSelectedIndex()), usePrevious);
-			} catch (InvalidInputException e) {
-				explanationArea.setText(e.getMessage());
-			}
-			break;
-		case "normal":
-			equiv = eq.checkNormalExpansionEquivalency(idToType(comparisonComboBox.getSelectionModel().getSelectedIndex()), usePrevious);
-			break;
-		case "weak":
-			equiv = eq.checkWeakExpansionEquivalency(idToType(comparisonComboBox.getSelectionModel().getSelectedIndex()), usePrevious);
-			break;
-		default:
-			explanationArea.setText("No equivalency type chosen!");
-			return;
-		}
-
-		//TODO do something with equiv
 	}
 
 	private Type idToType(int id) {

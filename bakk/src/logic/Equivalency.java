@@ -7,7 +7,7 @@ import interactor.Interactor;
 import logic.Framework.Type;
 
 public class Equivalency {
-	protected Framework fst, snd; //first and second frameworks (for comparison)
+	protected Framework fst, snd, exp, fstExpanded, sndExpanded;; //first and second frameworks (for comparison) and expansion options
 	protected Interactor interactor;
 	
 	public Equivalency(Framework fst, Framework snd, Interactor interactor){
@@ -20,51 +20,65 @@ public class Equivalency {
 	//one might want to replace this to not create another equivalency all the time
 	public void setSecondFramework(Framework snd){
 		this.snd = snd;
+		if(fstExpanded != null || sndExpanded != null){ //re-expand new
+			expandFrameworks(this.exp);
+		}
 	}
 	
 	//based on baumann 3.1 p8 "standard equivalence"
 	//TODO use interactor & return boolean
 	public boolean areStandardEquivalent(int type, boolean usePrevious) throws InvalidInputException{
 		ArrayList<Extension> fstExt, sndExt;
+		Framework fstUsed, sndUsed;
+		
+		if(fstExpanded != null && sndExpanded != null){
+			fstUsed = fstExpanded;
+			sndUsed = sndExpanded;
+		}
+		else{
+			fstUsed = fst;
+			sndUsed = snd;
+		}
+		
 		String extName = "";
 		
 		switch(type){
 		case 1:
 			extName = "conflict-free sets";
-			fstExt = fst.getConflictFreeSets();
-			sndExt = snd.getConflictFreeSets();
+			fstExt = fstUsed.getConflictFreeSets();
+			sndExt = sndUsed.getConflictFreeSets();
 			break;
 		case 2:
 			extName = "admissible extensions";
-			fstExt = fst.getAdmissibleExtensions(usePrevious);
-			sndExt = snd.getAdmissibleExtensions(usePrevious);
+			fstExt = fstUsed.getAdmissibleExtensions(usePrevious);
+			sndExt = sndUsed.getAdmissibleExtensions(usePrevious);
 			break;
 		case 3:
 			extName = "complete extensions";
-			fstExt = fst.getCompleteExtensions(usePrevious);
-			sndExt = snd.getCompleteExtensions(usePrevious);
+			fstExt = fstUsed.getCompleteExtensions(usePrevious);
+			sndExt = sndUsed.getCompleteExtensions(usePrevious);
 			break;
 		case 4:
 			extName = "preferred extensions";
-			fstExt = fst.getPreferredExtensions(usePrevious);
-			sndExt = snd.getPreferredExtensions(usePrevious);
+			fstExt = fstUsed.getPreferredExtensions(usePrevious);
+			sndExt = sndUsed.getPreferredExtensions(usePrevious);
 			break;
 		case 5:
 			extName = "stable extensions";
-			fstExt = fst.getStableExtensions(usePrevious);
-			sndExt = snd.getStableExtensions(usePrevious);
+			fstExt = fstUsed.getStableExtensions(usePrevious);
+			sndExt = sndUsed.getStableExtensions(usePrevious);
 			break;
 		case 6:
 			extName = "grounded extensions";
 			fstExt = new ArrayList<Extension>();
-			fstExt.add(fst.getGroundedExtension(usePrevious));
+			fstExt.add(fstUsed.getGroundedExtension(usePrevious));
 			sndExt = new ArrayList<Extension>();
-			sndExt.add(snd.getGroundedExtension(usePrevious));
+			sndExt.add(sndUsed.getGroundedExtension(usePrevious));
 			break;
 		case 7:
 			extName = "semi-stable extensions";
-			fstExt = fst.getSemiStableExtensions(usePrevious);
-			sndExt = snd.getSemiStableExtensions(usePrevious);
+			fstExt = fstUsed.getSemiStableExtensions(usePrevious);
+			sndExt = sndUsed.getSemiStableExtensions(usePrevious);
 			break;
 		default:
 			throw new InvalidInputException("No sematics for comparison chosen!");
@@ -126,13 +140,25 @@ public class Equivalency {
 		}
 	}
 
-	//TODO test
-	public boolean checkStrongExpansionEquivalency(Type type, boolean usePrevious) throws InvalidInputException {
+	//TODO test, TODO add weak and normal? (irrelevant?), add local?
+	public boolean areExpansionEquivalent(Type type, boolean usePrevious) throws InvalidInputException {
+		Framework fstUsed, sndUsed;
+		
+		//ensures expansion is used if exists
+		if(fstExpanded != null && sndExpanded != null){
+			fstUsed = fstExpanded;
+			sndUsed = sndExpanded;
+		}
+		else{
+			fstUsed = fst;
+			sndUsed = snd;
+		}
+		
 		if(type == Type.ss){ //semi-stable needs equivalent admissible kernels
-			return new Equivalency(fst.getKernel(Type.ad),snd.getKernel(Type.ad),interactor).areStandardEquivalent(7, usePrevious);
+			return new Equivalency(fstUsed.getKernel(Type.ad),sndUsed.getKernel(Type.ad),interactor).areStandardEquivalent(7, usePrevious);
 		}
 		else if(type == Type.st){ //stable needs equivalent stable kernels (5)
-			return new Equivalency(fst.getKernel(type),snd.getKernel(type),interactor).areStandardEquivalent(5, usePrevious);
+			return new Equivalency(fstUsed.getKernel(type),sndUsed.getKernel(type),interactor).areStandardEquivalent(5, usePrevious);
 		}
 		else if(type == Type.ad || type == Type.pr){ //admissible and preferred need adstar (?2?)
 			int num;
@@ -142,26 +168,53 @@ public class Equivalency {
 			else{
 				num = 4;
 			}
-			return new Equivalency(fst.getKernel(Type.adstar),snd.getKernel(Type.adstar),interactor).areStandardEquivalent(num, usePrevious);
+			return new Equivalency(fstUsed.getKernel(Type.adstar),sndUsed.getKernel(Type.adstar),interactor).areStandardEquivalent(num, usePrevious);
 		}
 		else if(type == type.gr){
-			return new Equivalency(fst.getKernel(Type.grstar),snd.getKernel(Type.grstar),interactor).areStandardEquivalent(6, usePrevious);
+			return new Equivalency(fstUsed.getKernel(Type.grstar),sndUsed.getKernel(Type.grstar),interactor).areStandardEquivalent(6, usePrevious);
 		}
 		else if(type == type.co){
-			return new Equivalency(fst.getKernel(Type.costar),snd.getKernel(Type.costar),interactor).areStandardEquivalent(3, usePrevious);
+			return new Equivalency(fstUsed.getKernel(Type.costar),sndUsed.getKernel(Type.costar),interactor).areStandardEquivalent(3, usePrevious);
 		}
 		else{
-			throw new InvalidInputException("There is no strong expansion equivalency defined for this semantics");
+			throw new InvalidInputException("There is no strong equivalency relation defined for this semantics.");
 		}
 	}
+	
+	public void expandFrameworks(Framework exp) {
+		this.exp = exp;
+		ArrayList<Argument> fstArgExp, sndArgExp;
+		ArrayList<Attack> fstAttExp, sndAttExp;
 
-	public boolean checkNormalExpansionEquivalency(Type type, boolean usePrevious) {
-		// TODO == strong equivalence (not strong expansion equivalence) --> check normal, weak, strong standard equivalences
-		return false;
-	}
+		fstArgExp = new ArrayList<Argument>();
+		sndArgExp = new ArrayList<Argument>();
+		fstAttExp = new ArrayList<Attack>();
+		sndAttExp = new ArrayList<Attack>();
 
-	public boolean checkWeakExpansionEquivalency(Type type, boolean usePrevious) {
-		// TODO Auto-generated method stub
-		return false;
+		fstArgExp.addAll(fst.getArguments());
+		sndArgExp.addAll(snd.getArguments());
+		fstAttExp.addAll(fst.getAttacks());
+		sndAttExp.addAll(snd.getAttacks());
+
+		for(Argument a: exp.getArguments()){
+			if(!fst.contains(a)){
+				fstArgExp.add(a);
+			}
+			if(!snd.contains(a)){
+				sndArgExp.add(a);
+			}
+		}
+
+		for(Attack a: exp.getAttacks()){
+			if(!fst.contains(a)){
+				fstAttExp.add(a);
+			}
+			if(!snd.contains(a)){
+				sndAttExp.add(a);
+			}
+		}
+
+		fstExpanded = new Framework(fstArgExp,fstAttExp,interactor);
+		sndExpanded = new Framework(sndArgExp,sndAttExp,interactor);
 	}
 }

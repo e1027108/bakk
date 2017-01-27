@@ -279,7 +279,7 @@ public class MainInputController { //TODO polish button layout
 		String autoName = "autosave " + autosave;
 		
 		Example tmp = convertToExample(arguments,autoName);
-		if(!exampleExists(tmp)){
+		if(!exampleExists(tmp)){ //TODO still creates autosave for already existing examples --> fix
 			examples.add(tmp);
 			showChoices();
 		}
