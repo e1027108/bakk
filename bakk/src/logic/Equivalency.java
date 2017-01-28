@@ -3,6 +3,7 @@ package logic;
 import java.util.ArrayList;
 
 import exceptions.InvalidInputException;
+import interactor.Command;
 import interactor.Interactor;
 import logic.Framework.Type;
 
@@ -14,7 +15,6 @@ public class Equivalency {
 		this.fst = fst;
 		this.snd = snd;
 		this.interactor = interactor;
-		//TODO change interactor behaviour (subclass?)
 	}
 	
 	//one might want to replace this to not create another equivalency all the time
@@ -26,8 +26,7 @@ public class Equivalency {
 	}
 	
 	//based on baumann 3.1 p8 "standard equivalence"
-	//TODO use interactor & return boolean
-	public boolean areStandardEquivalent(int type, boolean usePrevious) throws InvalidInputException{
+	public ArrayList<Extension> areStandardEquivalent(int type, boolean usePrevious) throws InvalidInputException{
 		ArrayList<Extension> fstExt, sndExt;
 		Framework fstUsed, sndUsed;
 		
@@ -42,58 +41,72 @@ public class Equivalency {
 		
 		String extName = "";
 		
+		//TODO framework names?
 		switch(type){
 		case 1:
 			extName = "conflict-free sets";
 			fstExt = fstUsed.getConflictFreeSets();
+			interactor.addToCommands(new Command("Framework A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null));
 			sndExt = sndUsed.getConflictFreeSets();
+			interactor.addToCommands(new Command("Framework B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null));
 			break;
 		case 2:
 			extName = "admissible extensions";
 			fstExt = fstUsed.getAdmissibleExtensions(usePrevious);
+			interactor.addToCommands(new Command("Framework A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null));
 			sndExt = sndUsed.getAdmissibleExtensions(usePrevious);
+			interactor.addToCommands(new Command("Framework B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null));
 			break;
 		case 3:
 			extName = "complete extensions";
 			fstExt = fstUsed.getCompleteExtensions(usePrevious);
+			interactor.addToCommands(new Command("Framework A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null));
 			sndExt = sndUsed.getCompleteExtensions(usePrevious);
+			interactor.addToCommands(new Command("Framework B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null));
 			break;
 		case 4:
 			extName = "preferred extensions";
 			fstExt = fstUsed.getPreferredExtensions(usePrevious);
+			interactor.addToCommands(new Command("Framework A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null));
 			sndExt = sndUsed.getPreferredExtensions(usePrevious);
+			interactor.addToCommands(new Command("Framework B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null));
 			break;
 		case 5:
 			extName = "stable extensions";
 			fstExt = fstUsed.getStableExtensions(usePrevious);
+			interactor.addToCommands(new Command("Framework A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null));
 			sndExt = sndUsed.getStableExtensions(usePrevious);
+			interactor.addToCommands(new Command("Framework B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null));
 			break;
 		case 6:
 			extName = "grounded extensions";
 			fstExt = new ArrayList<Extension>();
 			fstExt.add(fstUsed.getGroundedExtension(usePrevious));
+			interactor.addToCommands(new Command("Framework A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null));
 			sndExt = new ArrayList<Extension>();
 			sndExt.add(sndUsed.getGroundedExtension(usePrevious));
+			interactor.addToCommands(new Command("Framework B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null));
 			break;
 		case 7:
 			extName = "semi-stable extensions";
 			fstExt = fstUsed.getSemiStableExtensions(usePrevious);
+			interactor.addToCommands(new Command("Framework A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null));
 			sndExt = sndUsed.getSemiStableExtensions(usePrevious);
+			interactor.addToCommands(new Command("Framework B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null));
 			break;
 		default:
 			throw new InvalidInputException("No sematics for comparison chosen!");
 		}
 		
 		if(areExtensionListsEqual(fstExt, sndExt)){
-			//TODO interactor writes they have the same extensions, nicely formatted
-			return true;
+			return fstExt; //is the same as sndExt anyway
 		}
 		else{
-			return false;
+			return null;
 		}
 	}
 	
-	//TODO let interactor get some
+	//TODO return equivalent extensions (not boolean!)
 	protected boolean areExtensionListsEqual(ArrayList<Extension> first, ArrayList<Extension> second){
 		ArrayList<Extension> fstExt = new ArrayList<Extension>();
 		ArrayList<Extension> sndExt = new ArrayList<Extension>();
@@ -103,10 +116,13 @@ public class Equivalency {
 		sndExt.addAll(second);
 		
 		if(fstExt.size() == 0 && sndExt.size() == 0){
+			interactor.addToCommands(new Command("Both frameworks do not have extensions for this semantics.",null));
 			return true;
 		}
 		else if(fstExt.size() != sndExt.size()){
-			return false; //TODO special message
+			interactor.addToCommands(new Command("The frameworks do not have the same amounts of extensions (" + fstExt.size() + " and " + sndExt.size() + "extensions). "
+					+ "They can not be equivalent.", null));
+			return false;
 		}
 		
 		for(int f = fstExt.size() - 1; f >= 0; f--){
@@ -122,12 +138,14 @@ public class Equivalency {
 			}
 			
 			if(!found){
+				interactor.addToCommands(new Command("Since framework A contains the extension " + fstExt.get(f).format() + " and framework B does not, the frameworks are not equivalent!",null));
 				return false;
 			}
 			
 		}
 		
 		if(sndExt.size() > 0){
+			interactor.addToCommands(new Command("Since framework B contains the extensions " + Framework.formatExtensions(sndExt) + " which framework A does not contain, the frameworks are not equivalent!",null));
 			return false;
 		}
 		
@@ -155,10 +173,10 @@ public class Equivalency {
 		}
 		
 		if(type == Type.ss){ //semi-stable needs equivalent admissible kernels
-			return new Equivalency(fstUsed.getKernel(Type.ad),sndUsed.getKernel(Type.ad),interactor).areStandardEquivalent(7, usePrevious);
+			return new Equivalency(fstUsed.getKernel(Type.ad, usePrevious),sndUsed.getKernel(Type.ad, usePrevious),interactor).areStandardEquivalent(7, usePrevious);
 		}
 		else if(type == Type.st){ //stable needs equivalent stable kernels (5)
-			return new Equivalency(fstUsed.getKernel(type),sndUsed.getKernel(type),interactor).areStandardEquivalent(5, usePrevious);
+			return new Equivalency(fstUsed.getKernel(type, usePrevious),sndUsed.getKernel(type, usePrevious),interactor).areStandardEquivalent(5, usePrevious);
 		}
 		else if(type == Type.ad || type == Type.pr){ //admissible and preferred need adstar (?2?)
 			int num;
@@ -168,13 +186,13 @@ public class Equivalency {
 			else{
 				num = 4;
 			}
-			return new Equivalency(fstUsed.getKernel(Type.adstar),sndUsed.getKernel(Type.adstar),interactor).areStandardEquivalent(num, usePrevious);
+			return new Equivalency(fstUsed.getKernel(Type.adstar, usePrevious),sndUsed.getKernel(Type.adstar, usePrevious),interactor).areStandardEquivalent(num, usePrevious);
 		}
 		else if(type == type.gr){
-			return new Equivalency(fstUsed.getKernel(Type.grstar),sndUsed.getKernel(Type.grstar),interactor).areStandardEquivalent(6, usePrevious);
+			return new Equivalency(fstUsed.getKernel(Type.grstar, usePrevious),sndUsed.getKernel(Type.grstar, usePrevious),interactor).areStandardEquivalent(6, usePrevious);
 		}
 		else if(type == type.co){
-			return new Equivalency(fstUsed.getKernel(Type.costar),sndUsed.getKernel(Type.costar),interactor).areStandardEquivalent(3, usePrevious);
+			return new Equivalency(fstUsed.getKernel(Type.costar, usePrevious),sndUsed.getKernel(Type.costar, usePrevious),interactor).areStandardEquivalent(3, usePrevious);
 		}
 		else{
 			throw new InvalidInputException("There is no strong equivalency relation defined for this semantics.");

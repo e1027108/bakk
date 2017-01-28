@@ -25,6 +25,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import logic.Argument;
 import logic.Attack;
 import logic.Equivalency;
@@ -452,7 +453,7 @@ public class DemonstrationWindowController {
 			Object item = setsComboBox.getItems().get((Integer) nval); 
 
 			if(item instanceof String){
-				GraphInstruction instruction = argumentFramework.getInstructionFromString((String) item);
+				GraphInstruction instruction = argumentFramework.getNodeInstructionsFromArgumentList((String) item, Color.GREEN);
 				try {
 					graphPane.executeInstruction(instruction);
 				} catch (InvalidInputException e) {
@@ -520,7 +521,7 @@ public class DemonstrationWindowController {
 		}
 
 		//if we are here, it is possible to compare something
-		boolean equiv = false;
+		ArrayList<Extension> equivalentExtensions;
 		if(expanded){
 			eq.expandFrameworks(expansionFramework); //this should have to exist
 		}
@@ -530,26 +531,32 @@ public class DemonstrationWindowController {
 		
 		if(selectedToggle.getText().equals("standard")){
 			try {
-				equiv = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
+				//TODO handle null lists
+				equivalentExtensions = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
 				return;
 			}
 			//testing
-			explanationArea.setText(String.valueOf(equiv));
+			//explanationArea.setText(String.valueOf(equiv));
 		}
 		else if(selectedToggle.getText().equals("expansion")){
 			try {
-				equiv = eq.areExpansionEquivalent(idToType(extensionComboBox.getSelectionModel().getSelectedIndex()),previousCheckBox.isSelected());
+				//TODO handle null lists
+				equivalentExtensions = eq.areExpansionEquivalent(idToType(extensionComboBox.getSelectionModel().getSelectedIndex()),previousCheckBox.isSelected());
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
 				return;
 			}
 			//testing
-			explanationArea.setText(String.valueOf(equiv));
+			//explanationArea.setText(String.valueOf(equiv));
 		}
+		
+		interactor.emptyQueue();
+		
+		printExtensions(equivalentExtensions);
 
-		//TODO do something with equiv
+		setUI();
 	}
 
 	@FXML
@@ -558,6 +565,7 @@ public class DemonstrationWindowController {
 			expanded = true;
 			expandBtn.setText(EXPANDED);
 			expandFrameworks();
+			//checkExpansionType(); //TODO check which type of expansion this is
 		}
 		else{
 			expanded = false;

@@ -25,7 +25,7 @@ public class Framework {
 	private Extension previousGroundedExtension;
 	private String notification;
 	
-	public enum Type {cf,ad,co,pr,st,ss,gr,adstar,costar,grstar}; //TODO use for kernels, may be used for other things too (outsourcing)?
+	public enum Type {cf,ad,co,pr,st,ss,gr,adstar,costar,grstar};
 	private HashMap<Type,Kernel> kernel;
 	
 	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor) {
@@ -81,7 +81,7 @@ public class Framework {
 		return powerSet;
 	}
 	
-	private String formatExtensions(ArrayList<Extension> extensions) {
+	protected static String formatExtensions(ArrayList<Extension> extensions) {
 		String formatted = "";
 
 		for(Extension e: extensions){
@@ -485,15 +485,14 @@ public class Framework {
 		return semiStable;
 	}
 	
-	public Kernel getKernel(Type type) throws InvalidInputException{
-		Kernel ret = kernel.get(type);
-		
-		if(ret != null){
+	public Kernel getKernel(Type type, boolean usePrevious) throws InvalidInputException{
+		Kernel ret = kernel.get(type);		
+		if(ret != null && usePrevious){
 			return ret;
 		}
 		else{
 			computeKernel(type);
-			return getKernel(type);
+			return getKernel(type, true);
 		}
 	}
 
@@ -501,16 +500,25 @@ public class Framework {
 		kernel.put(type, new Kernel(this,interactor,type)); //Kernel computes itself in constructor
 	}
 
-	public GraphInstruction getInstructionFromString(String item) {
+	/**
+	 * filters a formatted string of arguments and turns them into instructions to format them green
+	 * @param item (formatted) string representation of argument list
+	 * @return list of green node instructions
+	 */
+	public GraphInstruction getNodeInstructionsFromArgumentList(String item, Color color) {
 		GraphInstruction instruction = new GraphInstruction(new ArrayList<SingleInstruction>(), null);		
 		item = item.replace("{", "");
 		item = item.replace("}", "");
 
 		for(int i = 0; i < item.length(); i++){
-			instruction.getNodeInstructions().add(new SingleInstruction(String.valueOf(item.charAt(i)), Color.GREEN));
+			instruction.getNodeInstructions().add(new SingleInstruction(String.valueOf(item.charAt(i)), color));
 		}
 
 		return instruction;
+	}
+	
+	public SingleInstruction getEdgeInstructionFromAttack(String item,Color color){
+		return new SingleInstruction(item,color);
 	}
 
 	public Argument getArgument(char name) {
@@ -590,6 +598,12 @@ public class Framework {
 		return formatNameList(argNames);
 	}
 	
+	/**
+	 * formats a specified list of attacks as a list in string format	
+	 * @param input attacks to list
+	 * @param pos whether to take attackers or defenders first //?
+	 * @return string represenation of attack list
+	 */
 	public String formatAttackList(ArrayList<Attack> input,int pos) {
 		String argNames = "";
 
