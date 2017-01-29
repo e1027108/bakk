@@ -23,6 +23,7 @@ public class Interactor {
 
 	private TextArea textArea; //the textArea controlled by the Interactor
 	private NodePane graph; //the anchorpane in which the graph is drawn
+	private NodePane comparisonGraph; //a comparison to the first graph
 	private DemonstrationWindowController controller; //the controller class of the graph and textArea window
 	private LinkedList<Command> storedCommands; //queue storing the commands to be executed (graph/textarea changes)
 	private LinkedList<Command> history; //queue storing previously executed commands
@@ -37,8 +38,9 @@ public class Interactor {
 		this.controller = controller;
 
 		if(controller != null){
-			this.textArea = this.controller.getTextArea();
-			this.graph = this.controller.getGraphPane();
+			this.textArea = controller.getTextArea();
+			this.graph = controller.getGraphPane();
+			this.comparisonGraph = controller.getComparisonPane();
 		}
 
 		storedCommands = new LinkedList<Command>();
@@ -71,11 +73,14 @@ public class Interactor {
 	private void overwrite(){
 		if(!storedCommands.isEmpty()){
 			Command cmd = storedCommands.pollLast();
-			
+
 			textArea.setText(cmd.getText());
-			manipulateGraph(cmd.getInstruction());
+
+			GraphInstruction cmdInst = cmd.getInstruction();
+
+			manipulateGraph(cmdInst);
 			scrollDown();
-			
+
 			history.push(cmd);
 		}
 	}
@@ -88,12 +93,14 @@ public class Interactor {
 		if(!storedCommands.isEmpty()){
 			if(!textArea.getText().isEmpty()){
 				Command cmd = storedCommands.pollLast();
-				
+
 				textArea.setText(textArea.getText() + "\n" + cmd.getText());
 				scrollDown();
-				
-				manipulateGraph(cmd.getInstruction());
-				
+
+				GraphInstruction cmdInst = cmd.getInstruction();
+
+				manipulateGraph(cmdInst);
+
 				history.push(cmd);
 			}
 			else{
@@ -112,16 +119,19 @@ public class Interactor {
 		}
 		scrollDown();
 	}
-	
+
 	/**
 	 * executes the last instruction and prints the last line contained in the queue
 	 */
 	public void skipToLastCommand() { //no push to history!
 		if(!storedCommands.isEmpty()){
 			Command cmd = storedCommands.getFirst();
-			
+
 			textArea.setText(cmd.getText());
-			manipulateGraph(cmd.getInstruction());
+
+			GraphInstruction cmdInst = cmd.getInstruction();
+
+			manipulateGraph(cmdInst);
 			emptyQueue();
 		}
 		scrollDown();
@@ -144,12 +154,13 @@ public class Interactor {
 		if(history.isEmpty()){
 			return;
 		}
-		
+
 		if(!tmp.isEmpty()){
 			if(tmp.contains("\n")){
 				textArea.setText(tmp.substring(0,tmp.lastIndexOf('\n')));
 				storedCommands.addLast(history.pollFirst());
-				manipulateGraph(history.peekFirst().getInstruction());
+				GraphInstruction peek = history.peekFirst().getInstruction();
+				manipulateGraph(peek);
 				scrollDown();
 			}
 			else{
@@ -160,12 +171,28 @@ public class Interactor {
 	}
 
 	/**
-	 * sends the instruction to the NodePane, where it is executed
+	 * sends the instruction to the NodePane or comparisonPane, where it is executed
 	 * @param instruction the instruction to be executed
+	 * @param pane 1 for graph, 2 for comparison graph
 	 */
 	public void manipulateGraph(GraphInstruction instruction){
 		try {
-			graph.executeInstruction(instruction);
+			if(instruction != null){
+				if(instruction.getPane() == 1){
+					controller.conditionalToggle(1);
+					graph.executeInstruction(instruction);
+				}
+				else if(instruction.getPane() == 2){
+					controller.conditionalToggle(2);
+					comparisonGraph.executeInstruction(instruction);
+				}
+				else if(instruction.getPane() == 0){
+					//do nothing
+				}
+				else {
+					throw new InvalidInputException("Not an existing pane!");
+				}
+			}
 		} catch (InvalidInputException e) {
 			emptyQueue();
 			textArea.setText(e.getMessage() + " The graph could not be displayed!");
@@ -220,4 +247,13 @@ public class Interactor {
 			controller.setInitialValues();
 		}
 	}
+	
+	public void updateComparisonGraph() {
+		comparisonGraph = controller.getComparisonPane();
+	}
+	
+	public void updateGraph(){
+		graph = controller.getGraphPane();
+	}
+	
 }

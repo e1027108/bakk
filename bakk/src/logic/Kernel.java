@@ -13,11 +13,13 @@ public class Kernel extends Framework {
 
 	private Type type;
 	private Framework parent;
+	private int pane;
 
-	public Kernel(Framework parent, Interactor interactor, Type type) throws InvalidInputException {
-		super(parent.getArguments(), parent.getAttacks(), interactor);
+	public Kernel(Framework parent, Interactor interactor, Type type, int pane) throws InvalidInputException {
+		super(parent.getArguments(), parent.getAttacks(), interactor, pane);
 		this.parent = parent;
 		this.type = type;
+		this.pane = pane;
 		computeKernel(this.type);
 	}
 
@@ -26,44 +28,44 @@ public class Kernel extends Framework {
 		switch(type){
 		case st:
 			interactor.addToCommands(new Command("Computing stable kernel of framework with arguments " + 
-					parent.formatArgumentList(parent.getArguments()) + " and attacks " + parent.formatAttackList(parent.getAttacks(), 1),
-					null));
+					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+					null,pane));
 			computeStableKernel();
 			break;
 		case ad:
 			interactor.addToCommands(new Command("Computing admissible kernel of framework with arguments " + 
-					parent.formatArgumentList(parent.getArguments()) + " and attacks " + parent.formatAttackList(parent.getAttacks(), 1),
-					null));
+					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+					null,pane));
 			computeAdmissibleKernel(false);
 			break;
 		case gr:
 			interactor.addToCommands(new Command("Computing grounded kernel of framework with arguments " + 
-					parent.formatArgumentList(parent.getArguments()) + " and attacks " + parent.formatAttackList(parent.getAttacks(), 1),
-					null));
+					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+					null,pane));
 			computeGroundedKernel(false);
 			break;
 		case co:
 			interactor.addToCommands(new Command("Computing complete kernel of framework with arguments " + 
-					parent.formatArgumentList(parent.getArguments()) + " and attacks " + parent.formatAttackList(parent.getAttacks(), 1),
-					null));
+					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+					null,pane));
 			computeCompleteKernel(false);
 			break;
 		case adstar:
 			interactor.addToCommands(new Command("Computing admissible-*-kernel of framework with arguments " + 
-					parent.formatArgumentList(parent.getArguments()) + " and attacks " + parent.formatAttackList(parent.getAttacks(), 1),
-					null));
+					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+					null,pane));
 			computeAdmissibleKernel(true);
 			break;
 		case costar:
 			interactor.addToCommands(new Command("Computing complete-*-kernel of framework with arguments " + 
-					parent.formatArgumentList(parent.getArguments()) + " and attacks " + parent.formatAttackList(parent.getAttacks(), 1),
-					null));
+					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+					null,pane));
 			computeCompleteKernel(true);
 			break;
 		case grstar:
 			interactor.addToCommands(new Command("Computing grounded-*-kernel of framework with arguments " + 
-					parent.formatArgumentList(parent.getArguments()) + " and attacks " + parent.formatAttackList(parent.getAttacks(), 1),
-					null));
+					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+					null,pane));
 			computeGroundedKernel(true);
 			break;
 		default:
@@ -79,6 +81,12 @@ public class Kernel extends Framework {
 		ArrayList<Attack> toRemove = new ArrayList<Attack>();
 
 		selfAttacking = getSelfAttacking();
+
+		if(selfAttacking.isEmpty()){
+			interactor.addToCommands(new Command("No arguments attack themselves, the kernel is equivalent to the framework!",null,pane));
+			return;
+		}
+
 		String formattedSelfAttacking = formatArgumentList(selfAttacking);
 		GraphInstruction selfAttackInstruction = getSelfAttackInstruction(selfAttacking,Color.BLUE);
 
@@ -89,13 +97,11 @@ public class Kernel extends Framework {
 		}
 
 		interactor.addToCommands(new Command("Since " + formattedSelfAttacking + " are attacking themselves, we do not include their attacks on other arguments in the stable kernel",
-				selfAttackInstruction));
+				selfAttackInstruction,pane));
 
 		attacks.removeAll(toRemove);
 
-		//TODO use framework names? just show the right one at any given time?
-		interactor.addToCommands(new Command("The resulting stable kernel contains all arguments and the attacks " + formatAttackList(attacks,1) + ".", getKernelInstruction(Color.GREEN)));
-
+		interactor.addToCommands(new Command("The resulting stable kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".", getKernelInstruction(Color.GREEN),pane));
 	}
 
 	/**
@@ -114,7 +120,14 @@ public class Kernel extends Framework {
 		String formattedSelfAttacking = formatArgumentList(selfAttacking);
 		GraphInstruction selfAttackInstruction = getSelfAttackInstruction(selfAttacking,Color.BLUE);
 
-		interactor.addToCommands(new Command("We want to compute the " + getDescription("admissible",star) + " kernel. Therefore we look at self-attacking arguments " + formattedSelfAttacking + ".", selfAttackInstruction));
+		if(!selfAttacking.isEmpty()){
+			interactor.addToCommands(new Command("We want to compute the " + getDescription("admissible",star) + " kernel. Therefore we look at self-attacking arguments " + formattedSelfAttacking + ".", 
+					selfAttackInstruction,pane));
+		}
+		else{
+			interactor.addToCommands(new Command("No arguments attack themselves, the kernel is equivalent to the framework!",null,pane));
+			return;
+		}
 
 		//build first two conditions
 		toRemove = getSelfAttackingRemovalList(selfAttacking);
@@ -125,7 +138,7 @@ public class Kernel extends Framework {
 		}
 
 		interactor.addToCommands(new Command("We look at all their attacks on other arguments to determine whether they belong in the kernel.",
-				selfAttackInstruction));
+				selfAttackInstruction,pane));
 
 		ArrayList<Attack> BsAttackingBack = new ArrayList<Attack>();
 		ArrayList<Attack> SelfAttackingBs = new ArrayList<Attack>();
@@ -147,38 +160,47 @@ public class Kernel extends Framework {
 				}
 			}
 		}
-		
+
 		ArrayList<SingleInstruction> removeInstruction = new ArrayList<SingleInstruction>();
-		
+
 		for(Attack a: BsAttackingBack){
-			removeInstruction.add(new SingleInstruction(""+a.getAttacker()+a.getAttacked(),Color.RED));
+			removeInstruction.add(new SingleInstruction(""+a.getAttacker().getName()+a.getAttacked().getName(),Color.RED));
 		}
-		
-		interactor.addToCommands(new Command("We want to remove the attacks " + formatAttackList(BsAttackingBack,1) + " from the kernel, since they are defences against self-attacking arguments.",
-				new GraphInstruction(null,removeInstruction)));
-		
+
+		if(!removeInstruction.isEmpty()){
+			interactor.addToCommands(new Command("We want to remove the attacks " + formatAttackList(BsAttackingBack) + " from the kernel, since they are defences against self-attacking arguments.",
+					new GraphInstruction(null,removeInstruction,pane),pane));
+		}
+		else{
+			interactor.addToCommands(new Command("There are no attacks that are defences against self-attacking arguments.",null,pane));
+		}
+
 		removeInstruction = new ArrayList<SingleInstruction>();
-		
+
 		for(Attack a: SelfAttackingBs){
-			removeInstruction.add(new SingleInstruction(""+a.getAttacker()+a.getAttacked(),Color.RED));
+			removeInstruction.add(new SingleInstruction(""+a.getAttacker().getName()+a.getAttacked().getName(),Color.RED));
 		}
-		
-		interactor.addToCommands(new Command("Additionally we want to remove the attacks " + formatAttackList(SelfAttackingBs,1) + " from the kernel, since they are attacks on self-attacking arguments.",
-				new GraphInstruction(null,removeInstruction)));
+
+		if(!removeInstruction.isEmpty()){
+			interactor.addToCommands(new Command("Additionally we want to remove the attacks " + formatAttackList(SelfAttackingBs) + " from the kernel, since they are attacks on self-attacking arguments.",
+					new GraphInstruction(null,removeInstruction,pane),pane));
+		}
+		else{
+			interactor.addToCommands(new Command("There are no attacks from other arguments on self-attacking arguments.",null,pane));
+		}
 
 		if(star){
 			//check the second part
 			ArrayList<Attack> maybeAlsoNotRemove = new ArrayList<Attack>();
-			ArrayList<Attack> AsAttackingAllCs = new ArrayList<Attack>();
-			ArrayList<Attack> AsAttackedByAllCs = new ArrayList<Attack>();
-			ArrayList<Attack> selfAttackingCs = new ArrayList<Attack>();
-			ArrayList<Attack> BsAttackedByAllCs = new ArrayList<Attack>();
 
 			for(Attack att: toRemove){
 				Argument a = att.getAttacker();
-				Argument b = att.getAttacked();
+				Argument b = att.getAttacked();				
 				if(selfAttacking.contains(b)){
 					//check whether for all c the conditions hold
+
+					boolean kernelCondition = true;
+
 					ArrayList<Argument> thirdArguments = getAttackedBy(b.getName());
 					for(Argument c: thirdArguments){
 						ArrayList<Argument> attackedByThird = getAttackedBy(c.getName());
@@ -188,22 +210,17 @@ public class Kernel extends Framework {
 						boolean selfAttackingc = selfAttacking.contains(c);
 						if(!(aAttacksc || aAttackedByc || bAttackedByc || selfAttackingc)){
 							maybeAlsoNotRemove.add(att);
+							kernelCondition = false;
 							break;
 						}
+					}
 
-						//notes for interactor
-						if(aAttacksc){
-							AsAttackingAllCs.add(att);
-						}
-						if(aAttackedByc){
-							AsAttackedByAllCs.add(att);
-						}
-						if(bAttackedByc){
-							BsAttackedByAllCs.add(att);
-						}
-						if(selfAttackingc){
-							selfAttackingCs.add(att);
-						}
+					if(kernelCondition){
+						ArrayList<SingleInstruction> attackInstruction = new ArrayList<SingleInstruction>();
+						attackInstruction.add(new SingleInstruction(""+a.getName()+b.getName(),Color.RED));
+						interactor.addToCommands(new Command("The attack (" + a.getName() + "," + b.getName() + ") is removed from the kernel, since " + b.getName() + " attacks itself and, all arguments "
+								+ b.getName() + " attacks, either: (1) are attacked by " + a.getName() + ", (2) attack " + a.getName() + ", (3) attack back or (4) attack themselves.", 
+								new GraphInstruction(null,attackInstruction,pane),pane));
 					}
 				}
 				else{
@@ -211,11 +228,8 @@ public class Kernel extends Framework {
 				}
 			}
 
-			//TODO star interactions (4 different)
-			
 			//if we don't get here maybenotremove is not removed
 			//otherwise we check here what is really not removed
-
 			maybeNotRemove.retainAll(maybeAlsoNotRemove);
 		}
 
@@ -228,7 +242,7 @@ public class Kernel extends Framework {
 
 		attacks.removeAll(toRemove);
 
-		interactor.addToCommands(new Command("The resulting " + getDescription("admissible",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks,1) + ".", getKernelInstruction(Color.GREEN)));
+		interactor.addToCommands(new Command("The resulting " + getDescription("admissible",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".", getKernelInstruction(Color.GREEN),pane));
 	}
 
 	/**
@@ -237,8 +251,6 @@ public class Kernel extends Framework {
 	 * @param star whether it is a standard or star kernel
 	 */
 	private void computeGroundedKernel(boolean star) {
-
-
 		ArrayList<Argument> selfAttacking = new ArrayList<Argument>();
 		ArrayList<Attack> toRemove = new ArrayList<Attack>();
 		ArrayList<Attack> maybeNotRemove = new ArrayList<Attack>();
@@ -247,10 +259,16 @@ public class Kernel extends Framework {
 		String formattedSelfAttacking = formatArgumentList(selfAttacking);
 		GraphInstruction selfAttackInstruction = getSelfAttackInstruction(selfAttacking,Color.BLUE);
 
-		interactor.addToCommands(new Command("We want to compute the " + getDescription("grounded",star) + " kernel. Therefore we look at self-attacking arguments " + formattedSelfAttacking + ".", selfAttackInstruction));
+		if(!selfAttacking.isEmpty()){
+			interactor.addToCommands(new Command("We want to compute the " + getDescription("grounded",star) + " kernel. Therefore we look at self-attacking arguments " + formattedSelfAttacking + ".", selfAttackInstruction,pane));
+		}
+		else{
+			interactor.addToCommands(new Command("No arguments attack themselves, the kernel is equivalent to the framework!",null,pane));
+			return;
+		}
 
 		selfAttackInstruction.setEdgeInstructions(new ArrayList<SingleInstruction>()); //here we don't continue highlighting the self attacks, the arguments we continue highlighting
-	
+
 		for(Attack a: attacks){
 			if(selfAttacking.contains(a.getAttacked())){
 				if(a.getAttacked() != a.getAttacker()){
@@ -261,11 +279,11 @@ public class Kernel extends Framework {
 		}
 
 		interactor.addToCommands(new Command("We look at all the attacks on them by other arguments to determine whether they belong in the kernel.",
-				selfAttackInstruction));
+				selfAttackInstruction,pane));
 
 		ArrayList<Attack> selfAttackingAs = new ArrayList<Attack>();
 		ArrayList<Attack> AsAttackedByBs = new ArrayList<Attack>();
-		
+
 		for(Attack att: toRemove){
 			Argument attacker = att.getAttacker();
 			Argument attacked = att.getAttacked();
@@ -283,39 +301,61 @@ public class Kernel extends Framework {
 				}
 			}
 		}
-		
-		ArrayList<SingleInstruction> removeInstruction = new ArrayList<SingleInstruction>();
-		
-		for(Attack a: AsAttackedByBs){
-			removeInstruction.add(new SingleInstruction(""+a.getAttacker()+a.getAttacked(),Color.RED));
-		}
-		
-		interactor.addToCommands(new Command("We want to remove the attacks " + formatAttackList(AsAttackedByBs,1) + " from the kernel, since they are defences against self-attacking arguments.",
-				new GraphInstruction(null,removeInstruction)));
-		
-		removeInstruction = new ArrayList<SingleInstruction>();
-		
-		for(Attack a: selfAttackingAs){
-			removeInstruction.add(new SingleInstruction(""+a.getAttacker()+a.getAttacked(),Color.RED));
-		}
-		
-		interactor.addToCommands(new Command("Additionally we want to remove the attacks " + formatAttackList(selfAttackingAs,1) + " from the kernel, since they are attacks by self-attacking arguments.",
-				new GraphInstruction(null,removeInstruction)));
 
-		//TODO interactor downwards for star
+		ArrayList<SingleInstruction> removeInstruction = new ArrayList<SingleInstruction>();
+
+		for(Attack a: AsAttackedByBs){
+			removeInstruction.add(new SingleInstruction(""+a.getAttacker().getName()+a.getAttacked().getName(),Color.RED));
+		}
+
+		if(!removeInstruction.isEmpty()){
+			interactor.addToCommands(new Command("We want to remove the attacks " + formatAttackList(AsAttackedByBs) + " from the kernel, since they are defences against self-attacking arguments.",
+					new GraphInstruction(null,removeInstruction,pane),pane));
+		}
+		else{
+			interactor.addToCommands(new Command("There are no attacks that are defences against self-attacking arguments.",null,pane));
+		}
+
+		removeInstruction = new ArrayList<SingleInstruction>();
+
+		for(Attack a: selfAttackingAs){
+			removeInstruction.add(new SingleInstruction(""+a.getAttacker().getName()+a.getAttacked().getName(),Color.RED));
+		}
+
+		if(!removeInstruction.isEmpty()){
+			interactor.addToCommands(new Command("Additionally we want to remove the attacks " + formatAttackList(selfAttackingAs) + " from the kernel, since they are attacks by self-attacking arguments.",
+					new GraphInstruction(null,removeInstruction,pane),pane));
+		}
+		else{
+			interactor.addToCommands(new Command("There are no attacks that are attacks against self-attacking arguments.",null,pane));
+		}
+
 		if(star){
 			ArrayList<Attack> maybeAlsoNotRemove = new ArrayList<Attack>();
 
 			for(Attack att:toRemove){
 				Argument a = att.getAttacker();
 				Argument b = att.getAttacked();
+
 				if(selfAttacking.contains(b)){
+
+					boolean kernelCondition = true;
+
 					ArrayList<Argument> cs = getAttackedBy(b.getName());
 					for(Argument c: cs){
 						if(!(selfAttacking.contains(c) || getAttackedBy(c.getName()).contains(a) || getAttackedBy(a.getName()).contains(c)) ){
 							maybeAlsoNotRemove.add(att);
+							kernelCondition = false;
 							break;
 						}
+					}
+
+					if(kernelCondition){
+						ArrayList<SingleInstruction> attackInstruction = new ArrayList<SingleInstruction>();
+						attackInstruction.add(new SingleInstruction(""+a.getName()+b.getName(),Color.RED));
+						interactor.addToCommands(new Command("The attack (" + a.getName() + "," + b.getName() + ") is removed from the kernel, since " + b.getName() + " attacks itself and, all arguments "
+								+ b.getName() + " attacks, either: (1) are attacked by " + a.getName() + ", (2) attack " + a.getName() + " or (3) attack themselves.",
+								new GraphInstruction(null,attackInstruction,pane),pane));
 					}
 				}
 				else{
@@ -335,7 +375,7 @@ public class Kernel extends Framework {
 
 		attacks.removeAll(toRemove);
 
-		interactor.addToCommands(new Command("The resulting " + getDescription("grounded",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks,1) + ".", getKernelInstruction(Color.GREEN)));
+		interactor.addToCommands(new Command("The resulting " + getDescription("grounded",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".", getKernelInstruction(Color.GREEN),pane));
 	}
 
 	/**
@@ -350,11 +390,16 @@ public class Kernel extends Framework {
 
 		selfAttacking = getSelfAttacking();
 
+		if(selfAttacking.isEmpty()){
+			interactor.addToCommands(new Command("There are no self-attacking arguments, therefore the kernel is equal to the framework.",null,pane));
+			return;
+		}
+
 		toRemove = getSelfAttackingRemovalList(selfAttacking); //now we have checked that a attacks itself
 
 		ArrayList<Attack> definetlyRemove = new ArrayList<Attack>();
 		ArrayList<SingleInstruction> removeInstruction = new ArrayList<SingleInstruction>();
-		
+
 		//now weed out if b also attacks itself
 		for(Attack att: toRemove){
 			Argument b = att.getAttacked();
@@ -363,15 +408,19 @@ public class Kernel extends Framework {
 			}
 			else{
 				definetlyRemove.add(att);
-				removeInstruction.add(new SingleInstruction(""+att.getAttacker()+att.getAttacked(),Color.RED));
+				removeInstruction.add(new SingleInstruction(""+att.getAttacker().getName()+att.getAttacked().getName(),Color.RED));
 			}
 		}
-		
-		interactor.addToCommands(new Command("Since " + formatAttackList(definetlyRemove,1) + " are attacks between two self-attacking arguments, we do not want them in the "
-				+ getDescription("complete",star) + " kernel.",
-				new GraphInstruction(null,removeInstruction)));
 
-		//TODO interactor downwards for star
+		if(!definetlyRemove.isEmpty()){
+			interactor.addToCommands(new Command("Since " + formatAttackList(definetlyRemove) + " are attacks between two self-attacking arguments, we do not want them in the "
+					+ getDescription("complete",star) + " kernel.",
+					new GraphInstruction(null,removeInstruction,pane),pane));
+		}
+		else{
+			interactor.addToCommands(new Command("There are no attacks between two self-attacking arguments, hence no such attacks are removed from the kernel",null,pane));
+		}
+
 		if(star){
 			ArrayList<Attack> maybeAlsoNotRemove = new ArrayList<Attack>();
 
@@ -379,13 +428,26 @@ public class Kernel extends Framework {
 				Argument a = att.getAttacker();
 				Argument b = att.getAttacked();
 				if(selfAttacking.contains(b) && !getAttackedBy(b.getName()).contains(a)){
+					
+					boolean kernelCondition = true;
+					
 					ArrayList<Argument> cs = getAttackedBy(b.getName());
 					for(Argument c: cs){
 						if(!(getAttackedBy(a.getName()).contains(c) || selfAttacking.contains(c) || getAttackedBy(c.getName()).contains(a))){
 							maybeAlsoNotRemove.add(att);
+							kernelCondition = false;
 							break;
 						}
 					}
+					
+					if(kernelCondition){
+						ArrayList<SingleInstruction> attackInstruction = new ArrayList<SingleInstruction>();
+						attackInstruction.add(new SingleInstruction(""+a.getName()+b.getName(),Color.RED));
+						interactor.addToCommands(new Command("The attack (" + a.getName() + "," + b.getName() + ") is removed from the kernel, since " + b.getName() + " attacks itself, does not attack " +
+							a.getName() + " and all arguments " + b.getName() + " attacks, either: (1) are attacked by " + a.getName() + ", (2) attack " + a.getName() + "or (3) attack themselves.",
+							new GraphInstruction(null,attackInstruction,pane),pane));
+					}
+
 				}
 				else{
 					maybeAlsoNotRemove.add(att);
@@ -404,7 +466,7 @@ public class Kernel extends Framework {
 
 		attacks.removeAll(toRemove);
 
-		interactor.addToCommands(new Command("The resulting " + getDescription("complete",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks,1) + ".", getKernelInstruction(Color.GREEN)));
+		interactor.addToCommands(new Command("The resulting " + getDescription("complete",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".", getKernelInstruction(Color.GREEN),pane));
 	}
 
 	private ArrayList<Argument> getSelfAttacking(){
@@ -432,7 +494,7 @@ public class Kernel extends Framework {
 		return selfAttackInstruction;
 	}
 
-	private GraphInstruction getKernelInstruction(Color color){
+	public GraphInstruction getKernelInstruction(Color color){
 		ArrayList<SingleInstruction> nodeInstructions = new ArrayList<SingleInstruction>();
 		ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
 
@@ -440,10 +502,10 @@ public class Kernel extends Framework {
 			nodeInstructions.add(new SingleInstruction(a.getName(),color));
 		}
 		for(Attack a: attacks){
-			edgeInstructions.add(new SingleInstruction(""+a.getAttacker()+a.getAttacked(),color));
+			edgeInstructions.add(new SingleInstruction(""+a.getAttacker().getName()+a.getAttacked().getName(),color));
 		}
 
-		return new GraphInstruction(nodeInstructions,edgeInstructions);
+		return new GraphInstruction(nodeInstructions,edgeInstructions,pane);
 	}
 
 	/**
@@ -464,7 +526,7 @@ public class Kernel extends Framework {
 
 		return toRemove;
 	}
-	
+
 	private String getDescription(String type, boolean star){
 		if(star){
 			return type;

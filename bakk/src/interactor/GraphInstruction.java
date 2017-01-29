@@ -10,15 +10,17 @@ import java.util.ArrayList;
 public class GraphInstruction {
 
 	private ArrayList<SingleInstruction> nodeInstructions, edgeInstructions; //sets of names of edges and nodes with corresponding colors
+	private int pane;
 	
 	/**
 	 * Creates a GraphInstruction, given two sets of SingleInstructions (containing names and colors)
 	 * @param nodeInstructions a set of node names, each with a color
 	 * @param edgeInstructions a set of edge names, each with a color
 	 */
-	public GraphInstruction(ArrayList<SingleInstruction> nodeInstructions, ArrayList<SingleInstruction> edgeInstructions){
+	public GraphInstruction(ArrayList<SingleInstruction> nodeInstructions, ArrayList<SingleInstruction> edgeInstructions, int pane){
 		this.nodeInstructions = nodeInstructions;
 		this.edgeInstructions = edgeInstructions;
+		this.pane = pane;
 	}
 	
 	/**
@@ -49,5 +51,13 @@ public class GraphInstruction {
 	 */
 	public void setEdgeInstructions(ArrayList<SingleInstruction> instructions){
 		this.edgeInstructions = instructions;
+	}
+
+	public void setPane(int pane){
+		this.pane = pane;
+	}
+	
+	public int getPane() {
+		return pane;
 	}
 }

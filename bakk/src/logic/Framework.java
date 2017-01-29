@@ -24,15 +24,17 @@ public class Framework {
 	private ArrayList<Extension> previousSemiStableExtensions;
 	private Extension previousGroundedExtension;
 	private String notification;
+	private int pane;
 	
 	public enum Type {cf,ad,co,pr,st,ss,gr,adstar,costar,grstar};
 	private HashMap<Type,Kernel> kernel;
 	
-	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor) {
+	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor, int pane) {
 		this.arguments = arguments;
 		this.attacks = attacks;
 		this.interactor = interactor;
 		this.kernel = new HashMap<Type,Kernel>();
+		this.pane = pane;
 	}
 
 	public ArrayList<Extension> getConflictFreeSets() {
@@ -41,11 +43,11 @@ public class Framework {
 
 		if(arguments == null){
 			//should not be possible
-			interactor.addToCommands(new Command("No arguments found, error!", null));
+			interactor.addToCommands(new Command("No arguments found, error!", null, pane));
 			return null;
 		}
 
-		interactor.addToCommands(new Command("Computing conflict-free sets!", null));
+		interactor.addToCommands(new Command("Computing conflict-free sets!", null, pane));
 
 		powerset = getAllSubsets(arguments);
 
@@ -56,7 +58,7 @@ public class Framework {
 			}
 		}
 
-		interactor.addToCommands(new Command("The conflict-free sets are: " + formatExtensions(conflictFreeSets), null));
+		interactor.addToCommands(new Command("The conflict-free sets are: " + formatExtensions(conflictFreeSets), null, pane));
 
 		previousConflictFreeSets = new ArrayList<Extension>();
 		previousConflictFreeSets.addAll(conflictFreeSets);
@@ -100,7 +102,7 @@ public class Framework {
 		ArrayList<Extension> admissible = new ArrayList<Extension>();
 
 		if(!usePrevious || (previousConflictFreeSets == null)){
-			interactor.addToCommands(new Command("Computing conflict-free sets to compute admissible extensions!", null));
+			interactor.addToCommands(new Command("Computing conflict-free sets to compute admissible extensions!", null, pane));
 			cf = getConflictFreeSets();
 		}
 		else{
@@ -114,7 +116,7 @@ public class Framework {
 				notification += formatExtensions(cf);
 			}
 
-			interactor.addToCommands(new Command(notification, null));
+			interactor.addToCommands(new Command(notification, null, pane));
 		}
 
 		if(invalidityCheck(cf, "conflict-free sets", "admissible extensions")){
@@ -134,7 +136,7 @@ public class Framework {
 		else{
 			notification = "There are no admissible extensions!";
 		}
-		interactor.addToCommands(new Command(notification, null));
+		interactor.addToCommands(new Command(notification, null, pane));
 
 		previousAdmissibleExtensions = new ArrayList<Extension>();
 		previousAdmissibleExtensions.addAll(admissible);
@@ -159,7 +161,7 @@ public class Framework {
 				are = are.replace("are", "is");
 			}
 
-			interactor.addToCommands(new Command("Since there are no " + cause + are + effect + "!", null));
+			interactor.addToCommands(new Command("Since there are no " + cause + are + effect + "!", null, pane));
 			return true;
 		}
 		return false;
@@ -170,7 +172,7 @@ public class Framework {
 		ArrayList<Extension> complete = new ArrayList<Extension>();
 
 		if(!usePrevious || (previousAdmissibleExtensions == null)){
-			interactor.addToCommands(new Command("Computing admissible extensions to compute complete extensions!", null));
+			interactor.addToCommands(new Command("Computing admissible extensions to compute complete extensions!", null, pane));
 			adm = getAdmissibleExtensions(usePrevious);
 		}
 		else{
@@ -184,7 +186,7 @@ public class Framework {
 				notification += formatExtensions(adm);
 			}
 
-			interactor.addToCommands(new Command(notification, null));
+			interactor.addToCommands(new Command(notification, null, pane));
 		}
 
 		if(invalidityCheck(adm, "admissible extensions", "complete extensions")){
@@ -205,7 +207,7 @@ public class Framework {
 			notification = "There are no complete extensions!";
 		}
 		
-		interactor.addToCommands(new Command(notification, null));
+		interactor.addToCommands(new Command(notification, null, pane));
 
 		previousCompleteExtensions = new ArrayList<Extension>();
 		previousCompleteExtensions.addAll(complete);
@@ -218,7 +220,7 @@ public class Framework {
 		ArrayList<Extension> preferred = new ArrayList<Extension>();
 
 		if(!usePrevious || (previousAdmissibleExtensions == null)){
-			interactor.addToCommands(new Command("Computing admissible extensions to compute preferred extensions!", null));
+			interactor.addToCommands(new Command("Computing admissible extensions to compute preferred extensions!", null, pane));
 			adm = getAdmissibleExtensions(usePrevious);
 		}
 		else{
@@ -233,7 +235,7 @@ public class Framework {
 				notification += formatExtensions(adm);
 			}
 
-			interactor.addToCommands(new Command(notification, null));
+			interactor.addToCommands(new Command(notification, null, pane));
 		}
 
 		if(invalidityCheck(adm, "admissible extensions", "preferred extensions")){
@@ -246,7 +248,7 @@ public class Framework {
 			}
 		}
 
-		interactor.addToCommands(new Command("The preferred extensions are: " + formatExtensions(preferred), null));
+		interactor.addToCommands(new Command("The preferred extensions are: " + formatExtensions(preferred), null, pane));
 
 		previousPreferredExtensions = new ArrayList<Extension>();
 		previousPreferredExtensions.addAll(preferred);
@@ -259,7 +261,7 @@ public class Framework {
 		ArrayList<Extension> stable = new ArrayList<Extension>();
 
 		if(!usePrevious || (previousConflictFreeSets == null)){
-			interactor.addToCommands(new Command("Computing conflict-free sets to compute stable extensions!", null));
+			interactor.addToCommands(new Command("Computing conflict-free sets to compute stable extensions!", null, pane));
 			cf = getConflictFreeSets();
 		}
 		else{
@@ -274,7 +276,7 @@ public class Framework {
 				notification += formatExtensions(cf);
 			}
 
-			interactor.addToCommands(new Command(notification, null));
+			interactor.addToCommands(new Command(notification, null, pane));
 		}
 
 		if(invalidityCheck(cf, "conflict-free sets", "stable extensions")){
@@ -287,7 +289,7 @@ public class Framework {
 			}
 		}
 
-		interactor.addToCommands(new Command("The stable extensions are: " + formatExtensions(stable), null));
+		interactor.addToCommands(new Command("The stable extensions are: " + formatExtensions(stable), null, pane));
 
 		previousStableExtensions = new ArrayList<Extension>();
 		previousStableExtensions.addAll(stable);
@@ -300,7 +302,7 @@ public class Framework {
 		ArrayList<Argument> grounded = new ArrayList<Argument>();
 
 		if(!usePrevious || (previousCompleteExtensions == null)){
-			interactor.addToCommands(new Command("Computing complete extensions to compute the grounded extension!", null));
+			interactor.addToCommands(new Command("Computing complete extensions to compute the grounded extension!", null, pane));
 			co = getCompleteExtensions(usePrevious);
 		}
 		else{
@@ -315,7 +317,7 @@ public class Framework {
 				notification += formatExtensions(co);
 			}
 
-			interactor.addToCommands(new Command(notification, null));
+			interactor.addToCommands(new Command(notification, null, pane));
 		}
 
 		if(invalidityCheck(co, "complete extensions", "grounded extension")){
@@ -323,13 +325,13 @@ public class Framework {
 		}
 		
 		if(co.size() == 1){
-			interactor.addToCommands(new Command("The only complete extension " + co.get(0).format() + " is the grounded extension.", co.get(0).toInstruction(Color.GREEN)));
+			interactor.addToCommands(new Command("The only complete extension " + co.get(0).format() + " is the grounded extension.", co.get(0).toInstruction(Color.GREEN), pane));
 			return co.get(0);
 		}
 
 		for(Extension e: co){
 			if(e.getArguments().size() == 0){
-				interactor.addToCommands(new Command("Since there is a complete extension {}, the grounded extension is {}", null));
+				interactor.addToCommands(new Command("Since there is a complete extension {}, the grounded extension is {}", null, pane));
 				return new Extension(grounded, this);
 			}
 		}
@@ -339,13 +341,13 @@ public class Framework {
 
 			if(grounded.isEmpty()){ //if no elements in grounded, e is first extension
 				grounded.addAll(e.getArguments());
-				interactor.addToCommands(new Command("The extension " + eFormat + " is the first candidate for grounded extension.", e.toInstruction(Color.GREEN)));
+				interactor.addToCommands(new Command("The extension " + eFormat + " is the first candidate for grounded extension.", e.toInstruction(Color.GREEN), pane));
 			}
 			else{ //else check for common elements in extension
 				ArrayList<Argument> missing = new ArrayList<Argument>();
 				String missingString = "";
 
-				GraphInstruction highlight = new GraphInstruction(new ArrayList<SingleInstruction>(), new ArrayList<SingleInstruction>());
+				GraphInstruction highlight = new GraphInstruction(new ArrayList<SingleInstruction>(), new ArrayList<SingleInstruction>(), pane);
 
 				for(Argument a: grounded){
 					String aName = String.valueOf(a.getName());
@@ -363,10 +365,10 @@ public class Framework {
 
 				if(missing.size() > 0){
 					interactor.addToCommands(new Command(eFormat + " doesn't contain the argument(s) " + formatNameList(missingString) + 
-							". Therefore our new candidate is " + tmp.format(), highlight));
+							". Therefore our new candidate is " + tmp.format(), highlight, pane));
 				}
 				else{
-					interactor.addToCommands(new Command("Since " + eFormat + " contains all the arguments of " + tmp.format() + ", our candidate doesn't change.", highlight));
+					interactor.addToCommands(new Command("Since " + eFormat + " contains all the arguments of " + tmp.format() + ", our candidate doesn't change.", highlight, pane));
 				}
 
 				if(grounded.isEmpty()){
@@ -376,9 +378,10 @@ public class Framework {
 		}
 
 		Extension groundedExtension = new Extension(grounded,this);
+		@SuppressWarnings("unused")
 		Extension previousGroundedExtension = new Extension(grounded,this); //I want two objects, because the first one might be replaced/lost
 
-		interactor.addToCommands(new Command("The grounded extension is: " + groundedExtension.format(), groundedExtension.toInstruction(Color.GREEN)));
+		interactor.addToCommands(new Command("The grounded extension is: " + groundedExtension.format(), groundedExtension.toInstruction(Color.GREEN), pane));
 
 		return groundedExtension;
 	}
@@ -387,7 +390,7 @@ public class Framework {
 		ArrayList<Extension> admExt;
 		
 		if(!usePrevious || (previousAdmissibleExtensions == null)){
-			interactor.addToCommands(new Command("Computing admissible extensions to compute semi-stable extensions!",null));
+			interactor.addToCommands(new Command("Computing admissible extensions to compute semi-stable extensions!",null, pane));
 			admExt = getAdmissibleExtensions(usePrevious);
 		}
 		else{
@@ -402,7 +405,7 @@ public class Framework {
 				notification += formatExtensions(admExt);
 			}
 			
-			interactor.addToCommands(new Command(notification,null));
+			interactor.addToCommands(new Command(notification,null, pane));
 		}
 
 		ArrayList<Extension> semiStable = new ArrayList<Extension>();
@@ -432,7 +435,7 @@ public class Framework {
 			}
 			
 			interactor.addToCommands(new Command("The admissible extension " + e.format() + " attacks the arguments " + (new Extension(unionArgs,this)).format() + " -> "
-					+ "R+(" + e.format() + ") = " + toInst.format() + ".", unionInst)); 
+					+ "R+(" + e.format() + ") = " + toInst.format() + ".", unionInst, pane)); 
 		}
 		
 		//R+(S) is exactly the R+(T) at the position we are at and corresponds to e
@@ -458,7 +461,7 @@ public class Framework {
 						coloring.getNodeInstructions().addAll(overcoloring.getNodeInstructions());
 						
 						interactor.addToCommands(new Command(admExt.get(i).format() + " is not a semi-stable extension, since R+(" + admExt.get(i).format() + 
-								") = " + iExt.format() + " is a subset of R+(" + admExt.get(j).format() + ") = " + cmpExt.format() + ".", coloring));
+								") = " + iExt.format() + " is a subset of R+(" + admExt.get(j).format() + ") = " + cmpExt.format() + ".", coloring, pane));
 						
 						semiStable.remove(admExt.get(i));
 						removed = true;
@@ -472,12 +475,12 @@ public class Framework {
 				GraphInstruction coloring = iExt.toInstruction(Color.GREEN);
 				
 				interactor.addToCommands(new Command("The extension " + admExt.get(i).format() + " is semi-stable, since R+(" + admExt.get(i).format() + 
-						") = " + iExt.format() + " is maximal.",coloring));
+						") = " + iExt.format() + " is maximal.",coloring, pane));
 			}
 		}
 		
 		// at this point we have added all extensions, then removed the non-semi-stable ones
-		interactor.addToCommands(new Command("The semi-stable extensions are: " + formatExtensions(semiStable) + ".", null));
+		interactor.addToCommands(new Command("The semi-stable extensions are: " + formatExtensions(semiStable) + ".", null, pane));
 
 		previousSemiStableExtensions = new ArrayList<Extension>();
 		previousSemiStableExtensions.addAll(semiStable);
@@ -497,7 +500,7 @@ public class Framework {
 	}
 
 	private void computeKernel(Type type) throws InvalidInputException {
-		kernel.put(type, new Kernel(this,interactor,type)); //Kernel computes itself in constructor
+		kernel.put(type, new Kernel(this,interactor,type, pane)); //Kernel computes itself in constructor
 	}
 
 	/**
@@ -506,7 +509,7 @@ public class Framework {
 	 * @return list of green node instructions
 	 */
 	public GraphInstruction getNodeInstructionsFromArgumentList(String item, Color color) {
-		GraphInstruction instruction = new GraphInstruction(new ArrayList<SingleInstruction>(), null);		
+		GraphInstruction instruction = new GraphInstruction(new ArrayList<SingleInstruction>(), null, pane);		
 		item = item.replace("{", "");
 		item = item.replace("}", "");
 
@@ -568,7 +571,7 @@ public class Framework {
 	 * @param input the string to be formatted
 	 * @return the formatted string (now a list, separated by ',' and an 'and' between the last two elements)
 	 */
-	public String formatNameList(String input) {
+	protected static String formatNameList(String input) {
 		String output = "";
 
 		if(input.length() < 2){
@@ -585,10 +588,8 @@ public class Framework {
 
 		return output;
 	}
-	
-	//TODO implement contains with overwritten argument/attack equals?
 
-	public String formatArgumentList(ArrayList<Argument> input) {
+	public static String formatArgumentList(ArrayList<Argument> input) {
 		String argNames = "";
 		
 		for(Argument a: input){
@@ -599,12 +600,12 @@ public class Framework {
 	}
 	
 	/**
-	 * formats a specified list of attacks as a list in string format	
+	 * formats a specified list of attackers or defenders as a list in string format	
 	 * @param input attacks to list
 	 * @param pos whether to take attackers or defenders first //?
-	 * @return string represenation of attack list
+	 * @return string represenation of attacker/defender list
 	 */
-	public String formatAttackList(ArrayList<Attack> input,int pos) {
+	public static String formatAttackerList(ArrayList<Attack> input,int pos) {
 		String argNames = "";
 
 		for(Attack a: input){
@@ -620,6 +621,19 @@ public class Framework {
 		}
 		
 		return formatNameList(argNames);
+	}
+	
+	protected static String formatAttackList(ArrayList<Attack> attacklist) {
+		String formatted = "{";
+		
+		for(Attack a: attacklist){
+			formatted += "(" + a.getAttacker().getName()+a.getAttacked().getName() + "),";
+		}
+		
+		formatted += "}";
+		formatted = formatted.replace(",}", "}");
+		
+		return formatted;
 	}
 	
 	public boolean contains(Argument b){
@@ -646,6 +660,10 @@ public class Framework {
 	 */
 	public void addToInteractor(Command command){
 		interactor.addToCommands(command);
+	}
+
+	public int getPane() {
+		return pane;
 	}
 
 

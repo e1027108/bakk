@@ -153,13 +153,24 @@ public class DemonstrationWindowController {
 		graphPane.setPrefWidth(445);
 		graphPane.setLayoutX(15); //prevents arcs from going out of visual bounds, y stays 0
 		graphPane.setVisible(true);
-
+		
+		//we need to have an initial comparison pane
+		root.getChildren().remove(comparisonPane);
+		comparisonPane = new NodePane();
+		root.getChildren().add(comparisonPane);
+		comparisonPane.setPrefHeight(470);
+		comparisonPane.setPrefWidth(445);
+		comparisonPane.setLayoutX(15);
+		comparisonPane.setVisible(false);
+		
 		//for testing
 		//toggleBtn.setDisable(false);
 
 		interactor = Interactor.getInstance(this);
+		interactor.updateComparisonGraph(); //in case the interactor already exists
+		interactor.updateGraph();
 		readArguments(interactor.getRawArguments());
-		argumentFramework = new Framework(arguments, attacks, interactor);
+		argumentFramework = new Framework(arguments, attacks, interactor, 1);
 
 		graphPane.createGraph(argumentFramework);
 
@@ -199,7 +210,7 @@ public class DemonstrationWindowController {
 				((RadioButton) tmp).setDisable(disabled);
 			}
 		}
-		
+
 		expandOptionsLbl.setDisable(disabled);
 	}
 
@@ -243,7 +254,7 @@ public class DemonstrationWindowController {
 
 		//printExtensions(resultSet);
 
-		setUI();
+		setUI(true);
 	}
 
 	/**
@@ -256,7 +267,7 @@ public class DemonstrationWindowController {
 
 		//printExtensions(resultSet);
 
-		setUI();
+		setUI(true);
 	}
 
 	/**
@@ -268,7 +279,7 @@ public class DemonstrationWindowController {
 		try {
 			resultSet = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
 			//printExtensions(resultSet);
-			setUI();
+			setUI(true);
 		} catch (InvalidInputException e) {
 			interactor.emptyQueue();
 			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
@@ -286,7 +297,7 @@ public class DemonstrationWindowController {
 
 		//printExtensions(resultSet);
 
-		setUI();
+		setUI(true);
 	}
 
 	/**
@@ -299,7 +310,7 @@ public class DemonstrationWindowController {
 
 		//printExtensions(resultSet);
 
-		setUI();
+		setUI(true);
 	}
 
 	/**
@@ -314,7 +325,7 @@ public class DemonstrationWindowController {
 			resultSet = new ArrayList<Extension>();
 			resultSet.add(grounded);
 			//printExtensions(resultSet);
-			setUI();
+			setUI(true);
 		} catch (InvalidInputException e) {
 			interactor.emptyQueue();
 			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
@@ -327,9 +338,9 @@ public class DemonstrationWindowController {
 
 		resultSet = argumentFramework.getSemiStableExtensions(previousCheckBox.isSelected());
 
-		printExtensions(resultSet);
+		//printExtensions(resultSet);
 
-		setUI();
+		setUI(true);
 	}
 
 	/**
@@ -419,8 +430,10 @@ public class DemonstrationWindowController {
 
 		ArrayList<String> formatList = new ArrayList<String>();
 
-		for(Extension e: resultSet){
-			formatList.add(e.format());
+		if(resultSet != null && !resultSet.isEmpty()){
+			for(Extension e: resultSet){
+				formatList.add(e.format());
+			}
 		}
 
 		setsComboBox.setItems(FXCollections.observableArrayList(formatList));
@@ -502,11 +515,13 @@ public class DemonstrationWindowController {
 
 	@FXML
 	public void onCompareClick(){
+		interactor.emptyQueue();
+
 		javafx.scene.control.SingleSelectionModel<String> selectExtension, selectComparison;
 		selectExtension = extensionComboBox.getSelectionModel();
 		selectComparison = comparisonComboBox.getSelectionModel();
 		boolean expanded = false;
-		eq = new Equivalency(argumentFramework, comparisonFramework, interactor); //TODO separate interactor?
+		eq = new Equivalency(argumentFramework, comparisonFramework, interactor);
 
 		if(selectExtension.isEmpty() || selectExtension.getSelectedIndex() <= 0){
 			explanationArea.setText("Can not compare frameworks, since no semantics for comparison was chosen.");
@@ -521,18 +536,17 @@ public class DemonstrationWindowController {
 		}
 
 		//if we are here, it is possible to compare something
-		ArrayList<Extension> equivalentExtensions;
 		if(expanded){
 			eq.expandFrameworks(expansionFramework); //this should have to exist
 		}
-		
+
 		//which type do we check?
 		RadioButton selectedToggle = (RadioButton) expansionGroup.getSelectedToggle();
-		
-		if(selectedToggle.getText().equals("standard")){
+		boolean standard = selectedToggle.getText().equals("standard");
+
+		if(standard){
 			try {
-				//TODO handle null lists
-				equivalentExtensions = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
+				resultSet = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
 				return;
@@ -542,21 +556,26 @@ public class DemonstrationWindowController {
 		}
 		else if(selectedToggle.getText().equals("expansion")){
 			try {
-				//TODO handle null lists
-				equivalentExtensions = eq.areExpansionEquivalent(idToType(extensionComboBox.getSelectionModel().getSelectedIndex()),previousCheckBox.isSelected());
+				eq.areExpansionEquivalent(idToType(extensionComboBox.getSelectionModel().getSelectedIndex()),previousCheckBox.isSelected());
+				resultSet = null; //so it knows not to show anything
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
+				e.printStackTrace();
 				return;
 			}
 			//testing
 			//explanationArea.setText(String.valueOf(equiv));
 		}
-		
-		interactor.emptyQueue();
-		
-		printExtensions(equivalentExtensions);
+		else{
+			explanationArea.setText("No equivalence type was chosen, could not perform action!");
+			return;
+		}
 
-		setUI();
+		/*if(standard){
+			printExtensions(resultSet); //is initialized if standard!
+		}*/
+
+		setUI(standard);
 	}
 
 	@FXML
@@ -604,8 +623,7 @@ public class DemonstrationWindowController {
 			}
 		}
 
-		//TODO other interactor
-		expansionFramework = new Framework(expArguments, expAttacks, interactor);
+		expansionFramework = new Framework(expArguments, expAttacks, interactor, 0); //pane should never be used --> 0
 	}
 
 	@FXML
@@ -619,6 +637,15 @@ public class DemonstrationWindowController {
 			graphPane.setVisible(true);
 			comparisonPane.setVisible(false);
 			numberLbl.setText("A");
+		}
+	}
+	
+	public void conditionalToggle(int pane){
+		if(graphPane.isVisible() && pane == 2){
+			onToggleClick();
+		}
+		else if(comparisonPane.isVisible() && pane == 1){
+			onToggleClick();
 		}
 	}
 
@@ -662,6 +689,8 @@ public class DemonstrationWindowController {
 		comparisonPane.setPrefWidth(445);
 		comparisonPane.setLayoutX(15);
 		comparisonPane.setVisible(wasVisible);
+		
+		interactor.updateComparisonGraph();
 
 		Example current = MainInputController.getExamples().get(comparisonComboBox.getSelectionModel().getSelectedIndex());
 
@@ -687,7 +716,7 @@ public class DemonstrationWindowController {
 			}
 		}
 
-		comparisonFramework = new Framework(compArguments, compAttacks, interactor);
+		comparisonFramework = new Framework(compArguments, compAttacks, interactor, 2);
 
 		comparisonPane.createGraph(comparisonFramework);
 		toggleBtn.setDisable(false);
@@ -715,14 +744,21 @@ public class DemonstrationWindowController {
 	/**
 	 * brings the UI into a state where viewing of the computation process is possible
 	 */
-	public void setUI(){
-		resetSetChoices();
+	public void setUI(boolean showExtensions){
+		if(showExtensions){
+			resetSetChoices();
+		}
+		else{
+			setsComboBox.setVisible(false);
+		}
+		
 		explanationArea.setText("");
 		explanationArea.setStyle("-fx-text-fill: black;");
 		backBtn.setDisable(true);
 		nextBtn.setDisable(false);
 		showAllBtn.setDisable(false);
 		resultsBtn.setDisable(false);
+
 		interactor.executeNextCommand();
 	}
 
@@ -760,9 +796,11 @@ public class DemonstrationWindowController {
 				toggleBtn.setDisable(true);
 				numberLbl.setText("");
 				setDisableRadioButtons(true);
+				computeBtn.setDisable(false);
 				//TODO empty comparisonPane!!!
 			}
 			else{
+				computeBtn.setDisable(true);
 				setDisableRadioButtons(false);
 				initializeComparisonResources();
 			}
@@ -789,6 +827,13 @@ public class DemonstrationWindowController {
 	 */
 	public NodePane getGraphPane(){
 		return graphPane;
+	}
+	
+	/**
+	 * @return the comparison NodePane containing the graphical representation of the framework
+	 */
+	public NodePane getComparisonPane(){
+		return comparisonPane;
 	}
 
 	/**
