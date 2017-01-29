@@ -22,9 +22,11 @@ public class Framework {
 	private ArrayList<Extension> previousPreferredExtensions;
 	private ArrayList<Extension> previousStableExtensions;
 	private ArrayList<Extension> previousSemiStableExtensions;
+	@SuppressWarnings("unused")
 	private Extension previousGroundedExtension;
 	private String notification;
 	private int pane;
+	private Framework expansion;
 	
 	public enum Type {cf,ad,co,pr,st,ss,gr,adstar,costar,grstar};
 	private HashMap<Type,Kernel> kernel;
@@ -36,7 +38,7 @@ public class Framework {
 		this.kernel = new HashMap<Type,Kernel>();
 		this.pane = pane;
 	}
-
+	
 	public ArrayList<Extension> getConflictFreeSets() {
 		ArrayList<Extension> conflictFreeSets = new ArrayList<Extension>();
 		ArrayList<ArrayList<Argument>> powerset;

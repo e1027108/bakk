@@ -7,6 +7,8 @@ import interactor.SingleInstruction.Type;
 import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 import datacontainers.DirectedEdge;
 import datacontainers.NamedCircle;
@@ -47,7 +49,7 @@ public class NodePane extends AnchorPane{
 	protected static final int ARC_ANGLE = 315;
 	protected Layout<String, String> layout; //layout in which the nodes are arranged
 	protected Group viz; //parent element for the nodes, lines and labels
-	protected Framework framework; //argument framework containing the nodes' data
+	protected Framework framework, expansion; //argument framework containing the nodes' data
 	protected DirectedSparseGraph<String, String> graph; //data representation of the graph drawn
 	protected ArrayList<NamedCircle> nodes; //list of named circles representing the nodes of the graph
 	protected ArrayList<DirectedEdge> edges; //list of directed edges representing the edges of the graph
@@ -64,20 +66,49 @@ public class NodePane extends AnchorPane{
 	 * saves the Framework given and computes the graph
 	 * @param argumentFramework the framework containing arguments and attacks that are the basis for the graph to be computed
 	 */
-	public void createGraph(Framework argumentFramework) {
+	public void createGraph(Framework argumentFramework, Framework expansion) { //TODO implement expansion here (grayish standard color)
 		this.framework = argumentFramework;
+		this.expansion = expansion;
+
 		graph = new DirectedSparseGraph<String, String>();
 
 		for(Argument a: framework.getArguments()){
 			graph.addVertex(String.valueOf(a.getName()));
 		}
-		
+
 		for(Attack att: framework.getAttacks()){
 			String attacked = String.valueOf(att.getAttacked().getName()).toUpperCase();
 			String attacker = String.valueOf(att.getAttacker().getName()).toUpperCase();
 
 			graph.addEdge(attacker + attacked, new Pair<String>(attacker, attacked), DIRECTED);
 		}
+
+		if(expansion != null){
+			for(Argument a: expansion.getArguments()){
+				System.out.println("x " + a.getName() + " x");
+				if(!hasEntry(graph.getVertices(),String.valueOf(a.getName()))){
+					System.out.println("test: " + String.valueOf(a.getName()));
+					graph.addVertex(String.valueOf(a.getName()));
+				}
+			}
+			for(Attack att: expansion.getAttacks()){
+				if(!hasEntry(graph.getEdges(),""+att.getAttacker().getName()+att.getAttacked().getName())){
+					graph.addEdge(""+att.getAttacker().getName()+att.getAttacked().getName(), new Pair<String>(""+att.getAttacker().getName(),""+att.getAttacked().getName()));
+				}
+			}
+		}
+	}
+
+	private boolean hasEntry(Collection<String> c, String name) {
+		Iterator<String> i = c.iterator();
+
+		while(i.hasNext()){
+			if(i.next().toString().equals(name)){
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -95,12 +126,14 @@ public class NodePane extends AnchorPane{
 
 		layout = new CircleLayout<String, String>(graph);
 		new DefaultVisualizationModel<String, String>(layout, new Dimension(width, height));
-		
+
 		renderGraph(graph, layout, viz);
 
 		arrangePositions();
 
-		this.getChildren().add(viz);
+		if(!this.getChildren().contains(viz)){
+			this.getChildren().add(viz);
+		}
 	}
 
 	/**
@@ -137,6 +170,7 @@ public class NodePane extends AnchorPane{
 		}
 
 		for (String v : graph.getVertices()) {
+			System.out.println(v);
 			// Get the position of the vertex
 			Point2D p;
 
@@ -161,7 +195,15 @@ public class NodePane extends AnchorPane{
 			Label tmp = circle.getNameTag();
 			tmp.setTextFill(Color.WHITE);
 			tmp.setTextAlignment(TextAlignment.CENTER);
-			tmp.setTooltip(new Tooltip(framework.getArgument(v.charAt(0)).getStatement()));
+
+			System.out.println(v.length());
+			try{
+				tmp.setTooltip(new Tooltip(framework.getArgument(v.charAt(0)).getStatement()));
+			}
+			catch(NullPointerException e){
+				tmp.setTooltip(new Tooltip(expansion.getArgument(v.charAt(0)).getStatement()));
+			}
+
 			tmp.setLayoutX(p.getX()-CIRCLE_RADIUS*0.3);
 			tmp.setLayoutY(p.getY()-CIRCLE_RADIUS*0.65);
 			this.getChildren().add(tmp);
@@ -455,7 +497,7 @@ public class NodePane extends AnchorPane{
 				if(i.getType() != Type.NODE){
 					throw new InvalidInputException("Instruction (name: " + i.getName() + ") is not a node instruction.");
 				}
-				
+
 				NamedCircle tmp = getCircleByName(i.getName());
 
 				if(tmp != null){
@@ -469,7 +511,7 @@ public class NodePane extends AnchorPane{
 				if(i.getType() != Type.EDGE){
 					throw new InvalidInputException("Instruction (name: " + i.getName() + ") is not an edge instruction.");
 				}
-				
+
 				DirectedEdge tmp = getEdgeByName(i.getName()); //name of edge = direction
 
 				if(tmp != null){

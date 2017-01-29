@@ -236,9 +236,9 @@ public class Kernel extends Framework {
 		toRemove.remove(maybeNotRemove);
 
 		//testing
-		for(Attack a: toRemove){
+		/*for(Attack a: toRemove){
 			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
-		}
+		}*/
 
 		attacks.removeAll(toRemove);
 
@@ -369,9 +369,9 @@ public class Kernel extends Framework {
 		toRemove.remove(maybeNotRemove);
 
 		//testing
-		for(Attack a: toRemove){
+		/*for(Attack a: toRemove){
 			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
-		}
+		}*/
 
 		attacks.removeAll(toRemove);
 
@@ -460,9 +460,9 @@ public class Kernel extends Framework {
 		toRemove.removeAll(maybeNotRemove);
 
 		//testing
-		for(Attack a: toRemove){
+		/*for(Attack a: toRemove){
 			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
-		}
+		}*/
 
 		attacks.removeAll(toRemove);
 

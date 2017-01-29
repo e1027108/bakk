@@ -73,20 +73,19 @@ public class DemonstrationWindowController {
 	private ToggleGroup expansionGroup;
 
 	@FXML
-	private RadioButton standardRadio, expansionRadio; //TODO use for expansion comparison
+	private RadioButton standardRadio, expansionRadio;
 
 	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, 
 	backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip; //tooltips for all buttons etc
 
-	//TODO implement expanding of frameworks, maybe an extension of the framework class?
-	private Framework argumentFramework, comparisonFramework, expansionFramework; //argument framework containing the arguments
+	private Framework argumentFramework, comparisonFramework, expansionFramework, expandedFramework; //argument framework containing the arguments
 	private ArrayList<Argument> arguments, compArguments, expArguments; //arguments of the framework
 	private ArrayList<Attack> attacks, compAttacks, expAttacks; //attacks of the framework
-	private Interactor interactor; //Interactor controlling the results the user sees //TODO check if one interactor for multiple frameworks suffices
+	private Interactor interactor; //Interactor controlling the results the user sees
 	private ArrayList<Extension> resultSet; //set containing computation results
 	private NodePane graphPane, comparisonPane; //pane where node illustrations are shown
 	private boolean expanded; //whether we check extended frameworks
-	private Equivalency eq; //this computes equivalencies //TODO maybe create a list of previously compared frameworks to not have to compute stuff again
+	private Equivalency eq; //this computes equivalencies
 
 	private static final String EXPANDED = "Unexpand";
 
@@ -162,9 +161,6 @@ public class DemonstrationWindowController {
 		comparisonPane.setPrefWidth(445);
 		comparisonPane.setLayoutX(15);
 		comparisonPane.setVisible(false);
-		
-		//for testing
-		//toggleBtn.setDisable(false);
 
 		interactor = Interactor.getInstance(this);
 		interactor.updateComparisonGraph(); //in case the interactor already exists
@@ -172,18 +168,10 @@ public class DemonstrationWindowController {
 		readArguments(interactor.getRawArguments());
 		argumentFramework = new Framework(arguments, attacks, interactor, 1);
 
-		graphPane.createGraph(argumentFramework);
-
-		try {
-			graphPane.drawGraph();
-			explanationArea.setText("");
-			explanationArea.setStyle("-fx-text-fill: black;");
-		} catch (InvalidInputException e) {
-			interactor.emptyQueue();
-			explanationArea.setText(e.getMessage() + "\n The graph may not be correctly displayed!");
-			explanationArea.setStyle("-fx-text-fill: red;");
-		}
-
+		initializeGraph(graphPane, argumentFramework, null);
+		explanationArea.setText("");
+		explanationArea.setStyle("-fx-text-fill: black;");
+		
 		backBtn.setDisable(true);
 		nextBtn.setDisable(true);
 		showAllBtn.setDisable(true);
@@ -199,6 +187,19 @@ public class DemonstrationWindowController {
 		//set comparable examples
 		showExamplesInComboBoxes();
 		expanded = false;
+	}
+	
+	private void initializeGraph(NodePane pane, Framework framework, Framework expansion){
+		graphPane.createGraph(framework,expansion);
+
+		try {
+			pane.getChildren().clear();
+			pane.drawGraph();
+		} catch (InvalidInputException e) {
+			interactor.emptyQueue();
+			explanationArea.setText(e.getMessage() + "\n The graph may not be correctly displayed!");
+			explanationArea.setStyle("-fx-text-fill: red;");
+		}
 	}
 
 	//needs lbl and all buttons to be set to the same disable status in fxml file
@@ -249,7 +250,7 @@ public class DemonstrationWindowController {
 	 */
 	public void conflictFreeComputation() {
 		interactor.emptyQueue();
-
+		
 		resultSet = argumentFramework.getConflictFreeSets();
 
 		//printExtensions(resultSet);
@@ -417,6 +418,9 @@ public class DemonstrationWindowController {
 	public void onArrowClick(){
 		explanationArea.setText("");
 		resetSetChoices();
+		expanded = false;
+		expandBtn.setText("Expand");
+		restoreOriginalFrameworks();
 
 		wrapper.loadMain();
 	}
@@ -481,7 +485,15 @@ public class DemonstrationWindowController {
 	@FXML
 	public void onComputeClick(){
 		int exChoice = extensionComboBox.getSelectionModel().getSelectedIndex();
+		
+		//TODO use expandedFramework
+		if(expansionFramework != null){
+			
+		}
+		else{
 
+		}
+		
 		switch(exChoice){
 		case 0:
 			explanationArea.setText("No extension type was chosen, no computation performed!");
@@ -595,13 +607,16 @@ public class DemonstrationWindowController {
 
 	private void restoreOriginalFrameworks() {
 		// TODO load standard version into pane from data
+		expansionFramework = null;
+		initializeGraph(graphPane,argumentFramework,null);
+		if(comparisonFramework != null){
+			initializeGraph(comparisonPane,comparisonFramework,null);
+		}
 	}
 
 	//TODO account for case when only one framework is shown! (no button for this or just expand one ... uselessly)
 	//TODO expand even if this button is clicked before the comparisonframework is chosen
 	private void expandFrameworks() {
-		//TODO expand frameworks for panes
-		//something here
 		Example current = MainInputController.getExamples().get(expandingComboBox.getSelectionModel().getSelectedIndex());
 
 		expArguments = new ArrayList<Argument>();
@@ -619,11 +634,17 @@ public class DemonstrationWindowController {
 					explanationArea.setText("Illegal attack detected!");
 					return;
 				}
-				compAttacks.add(new Attack(attacker,defender));
+				expAttacks.add(new Attack(attacker,defender));
 			}
 		}
 
 		expansionFramework = new Framework(expArguments, expAttacks, interactor, 0); //pane should never be used --> 0
+		
+		//this should draw the expanded version
+		initializeGraph(graphPane,argumentFramework,expansionFramework);
+		if(comparisonFramework != null){
+			initializeGraph(comparisonPane,comparisonFramework,expansionFramework);
+		}
 	}
 
 	@FXML
@@ -718,7 +739,7 @@ public class DemonstrationWindowController {
 
 		comparisonFramework = new Framework(compArguments, compAttacks, interactor, 2);
 
-		comparisonPane.createGraph(comparisonFramework);
+		comparisonPane.createGraph(comparisonFramework,null);
 		toggleBtn.setDisable(false);
 		numberLbl.setText("A");
 
@@ -797,7 +818,6 @@ public class DemonstrationWindowController {
 				numberLbl.setText("");
 				setDisableRadioButtons(true);
 				computeBtn.setDisable(false);
-				//TODO empty comparisonPane!!!
 			}
 			else{
 				computeBtn.setDisable(true);

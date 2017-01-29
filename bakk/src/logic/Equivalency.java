@@ -259,7 +259,7 @@ public class Equivalency {
 					k2.getKernelInstruction(Color.GREEN),2));
 
 			kernelEquality = checkKernelEquality(k1,k2);
-		} //TODO check what co, gr kernels actually do
+		}
 		else{
 			throw new InvalidInputException("There is no strong equivalency relation defined for this semantics.");
 		}
@@ -311,7 +311,6 @@ public class Equivalency {
 		sndExpanded = new Framework(sndArgExp,sndAttExp,interactor,2);
 	}
 
-	//TODO check if contains/containsall uses overwritten attack/argument equals
 	private boolean checkKernelEquality(Kernel k1, Kernel k2){
 		if(k1.getArguments().size() != k2.getArguments().size()){
 			interactor.addToCommands(new Command("Since the kernels do not contain the same amount of arguments, they are not equal",k1.getKernelInstruction(Color.BLACK),1));
