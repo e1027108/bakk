@@ -706,4 +706,8 @@ public class Framework {
 		
 		return new Framework(tmpArguments, tmpAttacks, inter, pane);
 	}
+	
+	public Interactor getInteractor(){
+		return interactor;
+	}
 }

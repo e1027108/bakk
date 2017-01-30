@@ -29,6 +29,7 @@ import javafx.scene.paint.Color;
 import logic.Argument;
 import logic.Attack;
 import logic.Equivalency;
+import logic.Expansion;
 import logic.Extension;
 import logic.Framework;
 import logic.Framework.Type;
@@ -73,7 +74,7 @@ public class DemonstrationWindowController {
 	private ToggleGroup expansionGroup;
 
 	@FXML
-	private RadioButton standardRadio, expansionRadio;
+	private RadioButton standardRadio, strongRadio;
 
 	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, 
 	backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip; //tooltips for all buttons etc
@@ -591,7 +592,7 @@ public class DemonstrationWindowController {
 			expandBtn.setText(EXPANDED);
 			expandFrameworks();
 			numberLbl.setText(numberLbl.getText() + " + C");
-			//checkExpansionType(); //TODO check which type of expansion this is
+			checkExpansionType(); //TODO check which type of expansion this is
 		}
 		else{
 			expanded = false;
@@ -599,6 +600,20 @@ public class DemonstrationWindowController {
 			restoreOriginalFrameworks();
 			numberLbl.setText(numberLbl.getText().replace(" + C",""));
 		}
+	}
+
+	private void checkExpansionType() {
+		Expansion frameworkExpansion, comparisonExpansion;
+		Type argExpType, compExpType; //not sure if I want to do anything with this return value
+		
+		frameworkExpansion = new Expansion(argumentFramework,expansionFramework);
+		argExpType = frameworkExpansion.determineExpansionType();
+		
+		if(comparisonFramework != null){
+			comparisonExpansion = new Expansion(comparisonFramework,expansionFramework);
+			compExpType = comparisonExpansion.determineExpansionType();
+		}
+		
 	}
 
 	private void restoreOriginalFrameworks() {
@@ -824,6 +839,7 @@ public class DemonstrationWindowController {
 				numberLbl.setText("");
 				setDisableRadioButtons(true);
 				computeBtn.setDisable(false);
+				comparisonFramework = null;
 			}
 			else{ // on choosing a framework, old expansion on just one example are unexpanded
 				if(expansionFramework != null){
