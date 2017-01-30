@@ -26,7 +26,6 @@ public class Framework {
 	private Extension previousGroundedExtension;
 	private String notification;
 	private int pane;
-	private Framework expansion;
 	
 	public enum Type {cf,ad,co,pr,st,ss,gr,adstar,costar,grstar};
 	private HashMap<Type,Kernel> kernel;
@@ -668,5 +667,43 @@ public class Framework {
 		return pane;
 	}
 
+	public static Framework expandFramework(Framework framework, Framework expansion, Interactor inter, int pane) {
+		ArrayList<Argument> tmpArguments = new ArrayList<Argument>();
+		ArrayList<Attack> tmpAttacks = new ArrayList<Attack>();
 
+		tmpArguments.addAll(framework.getArguments());
+		tmpAttacks.addAll(framework.getAttacks());
+
+		boolean add;
+
+		if(expansion != null && expansion.getArguments() != null && expansion.getAttacks() != null){
+			for(Argument nar : expansion.getArguments()){
+				add = true;
+				for(Argument old : tmpArguments){
+					if(nar.equals(old)){
+						add = false;
+						break;
+					}
+				}
+				if(add){
+					tmpArguments.add(nar);
+				}
+			}
+
+			for(Attack nat : expansion.getAttacks()){
+				add = true;
+				for(Attack old : tmpAttacks){
+					if(nat.equals(old)){
+						add = false;
+						break;
+					}
+				}
+				if(add){
+					tmpAttacks.add(nat);
+				}
+			}
+		}
+		
+		return new Framework(tmpArguments, tmpAttacks, inter, pane);
+	}
 }

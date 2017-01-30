@@ -275,40 +275,8 @@ public class Equivalency {
 	}
 
 	public void expandFrameworks(Framework exp) {
-		this.exp = exp;
-		ArrayList<Argument> fstArgExp, sndArgExp;
-		ArrayList<Attack> fstAttExp, sndAttExp;
-
-		fstArgExp = new ArrayList<Argument>();
-		sndArgExp = new ArrayList<Argument>();
-		fstAttExp = new ArrayList<Attack>();
-		sndAttExp = new ArrayList<Attack>();
-
-		fstArgExp.addAll(fst.getArguments());
-		sndArgExp.addAll(snd.getArguments());
-		fstAttExp.addAll(fst.getAttacks());
-		sndAttExp.addAll(snd.getAttacks());
-
-		for(Argument a: exp.getArguments()){
-			if(!fst.contains(a)){
-				fstArgExp.add(a);
-			}
-			if(!snd.contains(a)){
-				sndArgExp.add(a);
-			}
-		}
-
-		for(Attack a: exp.getAttacks()){
-			if(!fst.contains(a)){
-				fstAttExp.add(a);
-			}
-			if(!snd.contains(a)){
-				sndAttExp.add(a);
-			}
-		}
-
-		fstExpanded = new Framework(fstArgExp,fstAttExp,interactor,1);
-		sndExpanded = new Framework(sndArgExp,sndAttExp,interactor,2);
+		fstExpanded = Framework.expandFramework(fst,exp,interactor,1);
+		sndExpanded = Framework.expandFramework(snd,exp,interactor,2);
 	}
 
 	private boolean checkKernelEquality(Kernel k1, Kernel k2){
@@ -316,7 +284,7 @@ public class Equivalency {
 			interactor.addToCommands(new Command("Since the kernels do not contain the same amount of arguments, they are not equal",k1.getKernelInstruction(Color.BLACK),1));
 			return false;
 		}
-		else if(k1.getAttacks().size() != k2.getArguments().size()){
+		else if(k1.getAttacks().size() != k2.getAttacks().size()){
 			interactor.addToCommands(new Command("Since the kernels do not contain the same amount of attacks, they are not equal",k1.getKernelInstruction(Color.BLACK),1));
 			return false;
 		}

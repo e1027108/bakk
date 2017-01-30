@@ -85,9 +85,7 @@ public class NodePane extends AnchorPane{
 
 		if(expansion != null){
 			for(Argument a: expansion.getArguments()){
-				System.out.println("x " + a.getName() + " x");
 				if(!hasEntry(graph.getVertices(),String.valueOf(a.getName()))){
-					System.out.println("test: " + String.valueOf(a.getName()));
 					graph.addVertex(String.valueOf(a.getName()));
 				}
 			}
@@ -170,7 +168,6 @@ public class NodePane extends AnchorPane{
 		}
 
 		for (String v : graph.getVertices()) {
-			System.out.println(v);
 			// Get the position of the vertex
 			Point2D p;
 
@@ -196,7 +193,6 @@ public class NodePane extends AnchorPane{
 			tmp.setTextFill(Color.WHITE);
 			tmp.setTextAlignment(TextAlignment.CENTER);
 
-			System.out.println(v.length());
 			try{
 				tmp.setTooltip(new Tooltip(framework.getArgument(v.charAt(0)).getStatement()));
 			}

@@ -152,7 +152,7 @@ public class DemonstrationWindowController {
 		graphPane.setPrefWidth(445);
 		graphPane.setLayoutX(15); //prevents arcs from going out of visual bounds, y stays 0
 		graphPane.setVisible(true);
-		
+
 		//we need to have an initial comparison pane
 		root.getChildren().remove(comparisonPane);
 		comparisonPane = new NodePane();
@@ -171,7 +171,7 @@ public class DemonstrationWindowController {
 		initializeGraph(graphPane, argumentFramework, null);
 		explanationArea.setText("");
 		explanationArea.setStyle("-fx-text-fill: black;");
-		
+
 		backBtn.setDisable(true);
 		nextBtn.setDisable(true);
 		showAllBtn.setDisable(true);
@@ -188,9 +188,9 @@ public class DemonstrationWindowController {
 		showExamplesInComboBoxes();
 		expanded = false;
 	}
-	
+
 	private void initializeGraph(NodePane pane, Framework framework, Framework expansion){
-		graphPane.createGraph(framework,expansion);
+		pane.createGraph(framework,expansion);
 
 		try {
 			pane.getChildren().clear();
@@ -248,10 +248,10 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the conflict free sets of the framework
 	 */
-	public void conflictFreeComputation() {
+	public void conflictFreeComputation(Framework framework) {
 		interactor.emptyQueue();
-		
-		resultSet = argumentFramework.getConflictFreeSets();
+
+		resultSet = framework.getConflictFreeSets();
 
 		//printExtensions(resultSet);
 
@@ -261,10 +261,10 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the admissible sets of the framework
 	 */
-	public void admissibleComputation(){
+	public void admissibleComputation(Framework framework){
 		interactor.emptyQueue();
 
-		resultSet = argumentFramework.getAdmissibleExtensions(previousCheckBox.isSelected());
+		resultSet = framework.getAdmissibleExtensions(previousCheckBox.isSelected());
 
 		//printExtensions(resultSet);
 
@@ -274,11 +274,11 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the complete extensions of the framework
 	 */
-	public void completeComputation(){
+	public void completeComputation(Framework framework){
 		interactor.emptyQueue();
 
 		try {
-			resultSet = argumentFramework.getCompleteExtensions(previousCheckBox.isSelected());
+			resultSet = framework.getCompleteExtensions(previousCheckBox.isSelected());
 			//printExtensions(resultSet);
 			setUI(true);
 		} catch (InvalidInputException e) {
@@ -291,10 +291,10 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the preferred extensions of the framework
 	 */
-	public void preferredComputation(){
+	public void preferredComputation(Framework framework){
 		interactor.emptyQueue();
 
-		resultSet = argumentFramework.getPreferredExtensions(previousCheckBox.isSelected());
+		resultSet = framework.getPreferredExtensions(previousCheckBox.isSelected());
 
 		//printExtensions(resultSet);
 
@@ -304,10 +304,10 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the stable extensions of the framework
 	 */
-	public void stableComputation(){
+	public void stableComputation(Framework framework){
 		interactor.emptyQueue();
 
-		resultSet = argumentFramework.getStableExtensions(previousCheckBox.isSelected());
+		resultSet = framework.getStableExtensions(previousCheckBox.isSelected());
 
 		//printExtensions(resultSet);
 
@@ -317,12 +317,12 @@ public class DemonstrationWindowController {
 	/**
 	 * initiates the computation of the grounded extension of the framework
 	 */
-	public void groundedComputation(){
+	public void groundedComputation(Framework framework){
 		interactor.emptyQueue();
 
 		Extension grounded;
 		try {
-			grounded = argumentFramework.getGroundedExtension(previousCheckBox.isSelected());
+			grounded = framework.getGroundedExtension(previousCheckBox.isSelected());
 			resultSet = new ArrayList<Extension>();
 			resultSet.add(grounded);
 			//printExtensions(resultSet);
@@ -334,10 +334,10 @@ public class DemonstrationWindowController {
 		}
 	}
 
-	public void semiStableComputation(){
+	public void semiStableComputation(Framework framework){
 		interactor.emptyQueue();
 
-		resultSet = argumentFramework.getSemiStableExtensions(previousCheckBox.isSelected());
+		resultSet = framework.getSemiStableExtensions(previousCheckBox.isSelected());
 
 		//printExtensions(resultSet);
 
@@ -485,39 +485,33 @@ public class DemonstrationWindowController {
 	@FXML
 	public void onComputeClick(){
 		int exChoice = extensionComboBox.getSelectionModel().getSelectedIndex();
-		
-		//TODO use expandedFramework
-		if(expansionFramework != null){
-			
-		}
-		else{
 
-		}
-		
+		Framework framework = Framework.expandFramework(argumentFramework,expansionFramework,interactor,1);
+
 		switch(exChoice){
 		case 0:
 			explanationArea.setText("No extension type was chosen, no computation performed!");
 			break;
 		case 1:
-			conflictFreeComputation();
+			conflictFreeComputation(framework);
 			break;
 		case 2:
-			admissibleComputation();
+			admissibleComputation(framework);
 			break;
 		case 3:
-			completeComputation();
+			completeComputation(framework);
 			break;
 		case 4:
-			preferredComputation();
+			preferredComputation(framework);
 			break;
 		case 5:
-			stableComputation();
+			stableComputation(framework);
 			break;
 		case 6:
-			groundedComputation();
+			groundedComputation(framework);
 			break;
 		case 7:
-			semiStableComputation();
+			semiStableComputation(framework);
 			break;
 		default:
 			explanationArea.setText("Invalid extension type was chosen, no computation performed!");
@@ -608,14 +602,15 @@ public class DemonstrationWindowController {
 	private void restoreOriginalFrameworks() {
 		// TODO load standard version into pane from data
 		expansionFramework = null;
+		expArguments = null;
+		expAttacks = null;
 		initializeGraph(graphPane,argumentFramework,null);
 		if(comparisonFramework != null){
 			initializeGraph(comparisonPane,comparisonFramework,null);
 		}
 	}
 
-	//TODO account for case when only one framework is shown! (no button for this or just expand one ... uselessly)
-	//TODO expand even if this button is clicked before the comparisonframework is chosen
+	//TODO expand a second framework that is chosen after expansion
 	private void expandFrameworks() {
 		Example current = MainInputController.getExamples().get(expandingComboBox.getSelectionModel().getSelectedIndex());
 
@@ -639,7 +634,7 @@ public class DemonstrationWindowController {
 		}
 
 		expansionFramework = new Framework(expArguments, expAttacks, interactor, 0); //pane should never be used --> 0
-		
+
 		//this should draw the expanded version
 		initializeGraph(graphPane,argumentFramework,expansionFramework);
 		if(comparisonFramework != null){
@@ -660,7 +655,7 @@ public class DemonstrationWindowController {
 			numberLbl.setText("A");
 		}
 	}
-	
+
 	public void conditionalToggle(int pane){
 		if(graphPane.isVisible() && pane == 2){
 			onToggleClick();
@@ -710,7 +705,7 @@ public class DemonstrationWindowController {
 		comparisonPane.setPrefWidth(445);
 		comparisonPane.setLayoutX(15);
 		comparisonPane.setVisible(wasVisible);
-		
+
 		interactor.updateComparisonGraph();
 
 		Example current = MainInputController.getExamples().get(comparisonComboBox.getSelectionModel().getSelectedIndex());
@@ -758,7 +753,6 @@ public class DemonstrationWindowController {
 			}
 		}
 
-		System.out.println("this");
 		return null;
 	}
 
@@ -772,7 +766,7 @@ public class DemonstrationWindowController {
 		else{
 			setsComboBox.setVisible(false);
 		}
-		
+
 		explanationArea.setText("");
 		explanationArea.setStyle("-fx-text-fill: black;");
 		backBtn.setDisable(true);
@@ -848,7 +842,7 @@ public class DemonstrationWindowController {
 	public NodePane getGraphPane(){
 		return graphPane;
 	}
-	
+
 	/**
 	 * @return the comparison NodePane containing the graphical representation of the framework
 	 */

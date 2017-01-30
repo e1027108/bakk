@@ -22,8 +22,6 @@ public class SingleInstruction {
 		this.name = name;
 		this.color = color;
 		
-		System.out.println(name);
-		
 		switch(this.name.length()){
 			case 1:
 				type = Type.NODE;
@@ -32,7 +30,6 @@ public class SingleInstruction {
 				type = Type.EDGE;
 				break;
 			default:
-				System.out.println("test");
 				type = Type.INVALID;
 				break;
 		}
