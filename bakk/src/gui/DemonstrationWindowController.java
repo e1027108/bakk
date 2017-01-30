@@ -590,17 +590,18 @@ public class DemonstrationWindowController {
 			expanded = true;
 			expandBtn.setText(EXPANDED);
 			expandFrameworks();
+			numberLbl.setText(numberLbl.getText() + " + C");
 			//checkExpansionType(); //TODO check which type of expansion this is
 		}
 		else{
 			expanded = false;
 			expandBtn.setText("Expand");
 			restoreOriginalFrameworks();
+			numberLbl.setText(numberLbl.getText().replace(" + C",""));
 		}
 	}
 
 	private void restoreOriginalFrameworks() {
-		// TODO load standard version into pane from data
 		expansionFramework = null;
 		expArguments = null;
 		expAttacks = null;
@@ -610,9 +611,13 @@ public class DemonstrationWindowController {
 		}
 	}
 
-	//TODO expand a second framework that is chosen after expansion
 	private void expandFrameworks() {
 		Example current = MainInputController.getExamples().get(expandingComboBox.getSelectionModel().getSelectedIndex());
+		
+		if(expandingComboBox.getSelectionModel().getSelectedIndex() < 1){
+			explanationArea.setText("No expansion framework was chosen, could not expand framework!");
+			return;
+		}
 
 		expArguments = new ArrayList<Argument>();
 		expAttacks = new ArrayList<Attack>();
@@ -637,6 +642,7 @@ public class DemonstrationWindowController {
 
 		//this should draw the expanded version
 		initializeGraph(graphPane,argumentFramework,expansionFramework);
+		
 		if(comparisonFramework != null){
 			initializeGraph(comparisonPane,comparisonFramework,expansionFramework);
 		}
@@ -644,15 +650,21 @@ public class DemonstrationWindowController {
 
 	@FXML
 	public void onToggleClick(){
+		String text = "";
+		
+		if(expansionFramework != null){
+			text = " + C";
+		}
+		
 		if(graphPane.isVisible()){
 			graphPane.setVisible(false);
-			comparisonPane.setVisible(true);
-			numberLbl.setText("B");
+			comparisonPane.setVisible(true);			
+			numberLbl.setText("B" + text);
 		}
 		else{
 			graphPane.setVisible(true);
 			comparisonPane.setVisible(false);
-			numberLbl.setText("A");
+			numberLbl.setText("A" + text);
 		}
 	}
 
@@ -813,7 +825,11 @@ public class DemonstrationWindowController {
 				setDisableRadioButtons(true);
 				computeBtn.setDisable(false);
 			}
-			else{
+			else{ // on choosing a framework, old expansion on just one example are unexpanded
+				if(expansionFramework != null){
+					onExpandClick();
+				}
+				
 				computeBtn.setDisable(true);
 				setDisableRadioButtons(false);
 				initializeComparisonResources();
