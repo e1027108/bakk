@@ -561,7 +561,7 @@ public class DemonstrationWindowController {
 			//testing
 			//explanationArea.setText(String.valueOf(equiv));
 		}
-		else if(selectedToggle.getText().equals("expansion")){
+		else if(selectedToggle.getText().equals("strong")){
 			try {
 				eq.areExpansionEquivalent(idToType(extensionComboBox.getSelectionModel().getSelectedIndex()),previousCheckBox.isSelected());
 				resultSet = null; //so it knows not to show anything
