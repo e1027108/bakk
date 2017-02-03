@@ -189,9 +189,9 @@ public class Equivalency {
 			k2 = sndUsed.getKernel(Type.ad, usePrevious);
 
 			interactor.addToCommands(new Command("Kernel A contains arguments " + Framework.formatArgumentList(k1.getArguments()) + " and attacks " + Framework.formatAttackList(k1.getAttacks()), 
-					k1.getKernelInstruction(Color.GREEN),1));
+					k1.toInstruction(Color.GREEN),1));
 			interactor.addToCommands(new Command("Kernel B contains arguments " + Framework.formatArgumentList(k2.getArguments()) + " and attacks " + Framework.formatAttackList(k2.getAttacks()), 
-					k2.getKernelInstruction(Color.GREEN),2));
+					k2.toInstruction(Color.GREEN),2));
 
 			kernelEquality = checkKernelEquality(k1,k2);
 		}
@@ -203,9 +203,9 @@ public class Equivalency {
 			k2 = sndUsed.getKernel(Type.st, usePrevious);
 
 			interactor.addToCommands(new Command("Kernel A contains arguments " + Framework.formatArgumentList(k1.getArguments()) + " and attacks " + Framework.formatAttackList(k1.getAttacks()), 
-					k1.getKernelInstruction(Color.GREEN),1));
+					k1.toInstruction(Color.GREEN),1));
 			interactor.addToCommands(new Command("Kernel B contains arguments " + Framework.formatArgumentList(k2.getArguments()) + " and attacks " + Framework.formatAttackList(k2.getAttacks()), 
-					k2.getKernelInstruction(Color.GREEN),2));
+					k2.toInstruction(Color.GREEN),2));
 
 			kernelEquality = checkKernelEquality(k1,k2);
 		}
@@ -226,9 +226,9 @@ public class Equivalency {
 			k2 = sndUsed.getKernel(Type.adstar, usePrevious);
 
 			interactor.addToCommands(new Command("Kernel A contains arguments " + Framework.formatArgumentList(k1.getArguments()) + " and attacks " + Framework.formatAttackList(k1.getAttacks()), 
-					k1.getKernelInstruction(Color.GREEN),1));
+					k1.toInstruction(Color.GREEN),1));
 			interactor.addToCommands(new Command("Kernel B contains arguments " + Framework.formatArgumentList(k2.getArguments()) + " and attacks " + Framework.formatAttackList(k2.getAttacks()), 
-					k2.getKernelInstruction(Color.GREEN),2));
+					k2.toInstruction(Color.GREEN),2));
 
 			kernelEquality = checkKernelEquality(k1,k2);
 		}
@@ -240,9 +240,9 @@ public class Equivalency {
 			k2 = sndUsed.getKernel(Type.grstar, usePrevious);
 
 			interactor.addToCommands(new Command("Kernel A contains arguments " + Framework.formatArgumentList(k1.getArguments()) + " and attacks " + Framework.formatAttackList(k1.getAttacks()), 
-					k1.getKernelInstruction(Color.GREEN),1));
+					k1.toInstruction(Color.GREEN),1));
 			interactor.addToCommands(new Command("Kernel B contains arguments " + Framework.formatArgumentList(k2.getArguments()) + " and attacks " + Framework.formatAttackList(k2.getAttacks()), 
-					k2.getKernelInstruction(Color.GREEN),2));
+					k2.toInstruction(Color.GREEN),2));
 
 			kernelEquality = checkKernelEquality(k1,k2);
 		}
@@ -254,9 +254,9 @@ public class Equivalency {
 			k2 = sndUsed.getKernel(Type.costar, usePrevious);
 
 			interactor.addToCommands(new Command("Kernel A contains arguments " + Framework.formatArgumentList(k1.getArguments()) + " and attacks " + Framework.formatAttackList(k1.getAttacks()), 
-					k1.getKernelInstruction(Color.GREEN),1));
+					k1.toInstruction(Color.GREEN),1));
 			interactor.addToCommands(new Command("Kernel B contains arguments " + Framework.formatArgumentList(k2.getArguments()) + " and attacks " + Framework.formatAttackList(k2.getAttacks()), 
-					k2.getKernelInstruction(Color.GREEN),2));
+					k2.toInstruction(Color.GREEN),2));
 
 			kernelEquality = checkKernelEquality(k1,k2);
 		}
@@ -275,17 +275,17 @@ public class Equivalency {
 	}
 
 	public void expandFrameworks(Framework exp) {
-		fstExpanded = Framework.expandFramework(fst,exp,interactor,1);
-		sndExpanded = Framework.expandFramework(snd,exp,interactor,2);
+		fstExpanded = Framework.expandFramework(fst,exp);
+		sndExpanded = Framework.expandFramework(snd,exp);
 	}
 
 	private boolean checkKernelEquality(Kernel k1, Kernel k2){
 		if(k1.getArguments().size() != k2.getArguments().size()){
-			interactor.addToCommands(new Command("Since the kernels do not contain the same amount of arguments, they are not equal",k1.getKernelInstruction(Color.BLACK),1));
+			interactor.addToCommands(new Command("Since the kernels do not contain the same amount of arguments, they are not equal",k1.toInstruction(Color.BLACK),1));
 			return false;
 		}
 		else if(k1.getAttacks().size() != k2.getAttacks().size()){
-			interactor.addToCommands(new Command("Since the kernels do not contain the same amount of attacks, they are not equal",k1.getKernelInstruction(Color.BLACK),1));
+			interactor.addToCommands(new Command("Since the kernels do not contain the same amount of attacks, they are not equal",k1.toInstruction(Color.BLACK),1));
 			return false;
 		}
 		else{
@@ -293,11 +293,11 @@ public class Equivalency {
 			ArrayList<Attack> attdiff = allAttacksContained(k1.getAttacks(),k2.getAttacks());
 			
 			if(!argdiff.isEmpty()){
-				interactor.addToCommands(new Command("Since the kernel B does not contain the arguments " + Framework.formatArgumentList(argdiff) + ", the kernels are not equal.",k1.getKernelInstruction(Color.BLACK),1));
+				interactor.addToCommands(new Command("Since the kernel B does not contain the arguments " + Framework.formatArgumentList(argdiff) + ", the kernels are not equal.",k1.toInstruction(Color.BLACK),1));
 				return false;
 			}
 			else if(!attdiff.isEmpty()){
-				interactor.addToCommands(new Command("Since the kernel B does not contain the attacks " + Framework.formatAttackList(attdiff) + ", the kernels are not equal.",k1.getKernelInstruction(Color.BLACK),1));
+				interactor.addToCommands(new Command("Since the kernel B does not contain the attacks " + Framework.formatAttackList(attdiff) + ", the kernels are not equal.",k1.toInstruction(Color.BLACK),1));
 				return false;
 			}
 			else{

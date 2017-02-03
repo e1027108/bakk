@@ -487,7 +487,7 @@ public class DemonstrationWindowController {
 	public void onComputeClick(){
 		int exChoice = extensionComboBox.getSelectionModel().getSelectedIndex();
 
-		Framework framework = Framework.expandFramework(argumentFramework,expansionFramework,interactor,1);
+		Framework framework = Framework.expandFramework(argumentFramework,expansionFramework);
 
 		switch(exChoice){
 		case 0:
@@ -604,7 +604,7 @@ public class DemonstrationWindowController {
 
 	private void checkExpansionType() {
 		Expansion frameworkExpansion, comparisonExpansion;
-		Type argExpType, compExpType; //not sure if I want to do anything with this return value
+		String argExpType, compExpType; //not sure if I want to do anything with this return value
 		
 		frameworkExpansion = new Expansion(argumentFramework,expansionFramework);
 		argExpType = frameworkExpansion.determineExpansionType();

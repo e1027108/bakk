@@ -11,19 +11,7 @@ public class Line{
 		this.description = description;
 		this.attacks = attacks;
 	}
-
-	public char getChar(){
-		return name;
-	}
-
-	public String getDescription(){
-		return description;
-	}
-
-	public String getAttacks(){
-		return attacks;
-	}
-
+	
 	/**
 	 * returns whether the line equals a given line b
 	 * @param b another line
@@ -48,4 +36,17 @@ public class Line{
 
 		return true;
 	}
+	
+	public char getChar(){
+		return name;
+	}
+
+	public String getDescription(){
+		return description;
+	}
+
+	public String getAttacks(){
+		return attacks;
+	}
+
 }

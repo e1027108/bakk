@@ -101,7 +101,7 @@ public class Kernel extends Framework {
 
 		attacks.removeAll(toRemove);
 
-		interactor.addToCommands(new Command("The resulting stable kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".", getKernelInstruction(Color.GREEN),pane));
+		interactor.addToCommands(new Command("The resulting stable kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".", toInstruction(Color.GREEN),pane));
 	}
 
 	/**
@@ -242,7 +242,8 @@ public class Kernel extends Framework {
 
 		attacks.removeAll(toRemove);
 
-		interactor.addToCommands(new Command("The resulting " + getDescription("admissible",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".", getKernelInstruction(Color.GREEN),pane));
+		interactor.addToCommands(new Command("The resulting " + getDescription("admissible",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".",
+				toInstruction(Color.GREEN),pane));
 	}
 
 	/**
@@ -260,7 +261,8 @@ public class Kernel extends Framework {
 		GraphInstruction selfAttackInstruction = getSelfAttackInstruction(selfAttacking,Color.BLUE);
 
 		if(!selfAttacking.isEmpty()){
-			interactor.addToCommands(new Command("We want to compute the " + getDescription("grounded",star) + " kernel. Therefore we look at self-attacking arguments " + formattedSelfAttacking + ".", selfAttackInstruction,pane));
+			interactor.addToCommands(new Command("We want to compute the " + getDescription("grounded",star) + " kernel. Therefore we look at self-attacking arguments " + formattedSelfAttacking + ".",
+					selfAttackInstruction,pane));
 		}
 		else{
 			interactor.addToCommands(new Command("No arguments attack themselves, the kernel is equivalent to the framework!",null,pane));
@@ -375,7 +377,8 @@ public class Kernel extends Framework {
 
 		attacks.removeAll(toRemove);
 
-		interactor.addToCommands(new Command("The resulting " + getDescription("grounded",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".", getKernelInstruction(Color.GREEN),pane));
+		interactor.addToCommands(new Command("The resulting " + getDescription("grounded",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".",
+				toInstruction(Color.GREEN),pane));
 	}
 
 	/**
@@ -466,7 +469,8 @@ public class Kernel extends Framework {
 
 		attacks.removeAll(toRemove);
 
-		interactor.addToCommands(new Command("The resulting " + getDescription("complete",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".", getKernelInstruction(Color.GREEN),pane));
+		interactor.addToCommands(new Command("The resulting " + getDescription("complete",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".",
+				toInstruction(Color.GREEN),pane));
 	}
 
 	private ArrayList<Argument> getSelfAttacking(){
@@ -494,20 +498,6 @@ public class Kernel extends Framework {
 		return selfAttackInstruction;
 	}
 
-	public GraphInstruction getKernelInstruction(Color color){
-		ArrayList<SingleInstruction> nodeInstructions = new ArrayList<SingleInstruction>();
-		ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
-
-		for(Argument a: arguments){
-			nodeInstructions.add(new SingleInstruction(a.getName(),color));
-		}
-		for(Attack a: attacks){
-			edgeInstructions.add(new SingleInstruction(""+a.getAttacker().getName()+a.getAttacked().getName(),color));
-		}
-
-		return new GraphInstruction(nodeInstructions,edgeInstructions,pane);
-	}
-
 	/**
 	 * returns a list of attacks of self-attacking arguments, but not the self-attacks themselves
 	 * @param selfAttacking a list of self-attacking arguments
@@ -527,6 +517,12 @@ public class Kernel extends Framework {
 		return toRemove;
 	}
 
+	/**
+	 * returns the name of the kernel type
+	 * @param type the base type
+	 * @param star whether we look for the star or the standard type
+	 * @return the String description of the kernel type
+	 */
 	private String getDescription(String type, boolean star){
 		if(star){
 			return type;

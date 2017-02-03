@@ -38,6 +38,7 @@ public class Framework {
 		this.pane = pane;
 	}
 	
+	//TODO document
 	public ArrayList<Extension> getConflictFreeSets() {
 		ArrayList<Extension> conflictFreeSets = new ArrayList<Extension>();
 		ArrayList<ArrayList<Argument>> powerset;
@@ -67,6 +68,7 @@ public class Framework {
 		return conflictFreeSets;
 	}
 	
+	//TODO document
 	private ArrayList<ArrayList<Argument>> getAllSubsets(ArrayList<Argument> set){
 		ArrayList<ArrayList<Argument>> powerSet = new ArrayList<ArrayList<Argument>>();
 		int elements = set.size();
@@ -83,21 +85,8 @@ public class Framework {
 
 		return powerSet;
 	}
-	
-	protected static String formatExtensions(ArrayList<Extension> extensions) {
-		String formatted = "";
 
-		for(Extension e: extensions){
-			formatted += e.format() + ", ";
-		}
-
-		if(formatted.length() > 1){
-			formatted = formatted.substring(0,formatted.length()-2);
-		}
-
-		return formatted;
-	}
-
+	//TODO documentation
 	public ArrayList<Extension> getAdmissibleExtensions(boolean usePrevious) {
 		ArrayList<Extension> cf;
 		ArrayList<Extension> admissible = new ArrayList<Extension>();
@@ -168,6 +157,7 @@ public class Framework {
 		return false;
 	}
 	
+	//TODO documentation
 	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious) throws InvalidInputException {
 		ArrayList<Extension> adm;
 		ArrayList<Extension> complete = new ArrayList<Extension>();
@@ -216,6 +206,7 @@ public class Framework {
 		return complete;
 	}
 	
+	//TODO documentation
 	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious) {
 		ArrayList<Extension> adm;
 		ArrayList<Extension> preferred = new ArrayList<Extension>();
@@ -257,6 +248,7 @@ public class Framework {
 		return preferred;
 	}
 
+	//TODO documentation
 	public ArrayList<Extension> getStableExtensions(boolean usePrevious) {
 		ArrayList<Extension> cf;
 		ArrayList<Extension> stable = new ArrayList<Extension>();
@@ -298,6 +290,13 @@ public class Framework {
 		return stable;
 	}
 
+	/**
+	 * computes the unique grounded extension of the framework
+	 * 	the maximal complete extension is searched, since it is the grounded extension
+	 * @param usePrevious whether or not to use previous results
+	 * @return the grounded Extension
+	 * @throws InvalidInputException if complete extensions could not be computed
+	 */
 	public Extension getGroundedExtension(boolean usePrevious) throws InvalidInputException{
 		ArrayList<Extension> co;
 		ArrayList<Argument> grounded = new ArrayList<Argument>();
@@ -387,6 +386,16 @@ public class Framework {
 		return groundedExtension;
 	}
 
+	/**
+	 * gets all semi-stable extensions of the framework
+	 * 	for that purpose we check for every admissible extension the following:
+	 * 		we compute for the extension e, e+
+	 * 			e+ contains all arguments in R that are attacked by an argument in e, and the whole of e
+	 * 		we compute f+ for all other extensions f
+	 * 		an extension e is semi-stable if for all f+, e+ is not a proper subset of f+
+	 * @param usePrevious whether previous results are used (true) or re-computed (false)
+	 * @return a list of all semi-stable extensions of the framework
+	 */
 	public ArrayList<Extension> getSemiStableExtensions(boolean usePrevious){
 		ArrayList<Extension> admExt;
 		
@@ -489,6 +498,13 @@ public class Framework {
 		return semiStable;
 	}
 	
+	/**
+	 * returns the kernel wrt the type (semantic)
+	 * @param type type of kernel (admissible, stable, etc.)
+	 * @param usePrevious whether to show computations, that are already done, again
+	 * @return the computed kernel
+	 * @throws InvalidInputException if an invalid semantics was specified
+	 */
 	public Kernel getKernel(Type type, boolean usePrevious) throws InvalidInputException{
 		Kernel ret = kernel.get(type);		
 		if(ret != null && usePrevious){
@@ -500,6 +516,11 @@ public class Framework {
 		}
 	}
 
+	/**
+	 * computes a kernel wrt the given type	
+	 * @param type type of kernel (admissible, stable, etc.)
+	 * @throws InvalidInputException if no valid type was given (not all types have kernels)
+	 */
 	private void computeKernel(Type type) throws InvalidInputException {
 		kernel.put(type, new Kernel(this,interactor,type, pane)); //Kernel computes itself in constructor
 	}
@@ -520,11 +541,12 @@ public class Framework {
 
 		return instruction;
 	}
-	
-	public SingleInstruction getEdgeInstructionFromAttack(String item,Color color){
-		return new SingleInstruction(item,color);
-	}
 
+	/**
+	 * returns an argument by name
+	 * @param name
+	 * @return an argument
+	 */
 	public Argument getArgument(char name) {
 		if(arguments != null){
 			for(Argument a: arguments){
@@ -535,16 +557,13 @@ public class Framework {
 		}
 		
 		return null;
-	}
-
-	public ArrayList<Argument> getArguments() {
-		return arguments;
-	}
-
-	public ArrayList<Attack> getAttacks(){
-		return attacks;
-	}
+	}	
 	
+	/**
+	 * for an argument returns a list of its attacks
+	 * @param attacker name of the attacker
+	 * @return list of attacks
+	 */
 	public ArrayList<Attack> getAttacks(char attacker) {
 		ArrayList<Attack> argumentAttacks = new ArrayList<Attack>();
 		
@@ -557,6 +576,11 @@ public class Framework {
 		return argumentAttacks;
 	}
 	
+	/**
+	 * for an argument returns a list of arguments that it attacks
+	 * @param attacker name of the attacker
+	 * @return a list of attacked arguments
+	 */
 	public ArrayList<Argument> getAttackedBy(char attacker) {
 		ArrayList<Argument> attacked = new ArrayList<Argument>();
 		
@@ -567,107 +591,13 @@ public class Framework {
 		return attacked;
 	}
 
-	/**
-	 * formats a string of argument names to be a readable list in a sentence
-	 * @param input the string to be formatted
-	 * @return the formatted string (now a list, separated by ',' and an 'and' between the last two elements)
+	/** TODO consolidate with something?
+	 * combines two given frameworks and returns their union 
+	 * @param framework the first framework to combine, acts as the base framework (its interactor and pane are used)
+	 * @param expansion the second framework to combine, acts as an expansion to the base
+	 * @return the union of the frameworks (using the bases interactor and pane information)
 	 */
-	protected static String formatNameList(String input) {
-		String output = "";
-
-		if(input.length() < 2){
-			return input;
-		}
-
-		for(int i = 0; i < input.length(); i++){
-			output += input.charAt(i) + ", ";
-		}
-
-		output = output.substring(0,output.length()-2);
-		String last = "" + output.charAt(output.length()-1);
-		output = output.replace(", " + last, " and " + last);
-
-		return output;
-	}
-
-	public static String formatArgumentList(ArrayList<Argument> input) {
-		String argNames = "";
-		
-		for(Argument a: input){
-			argNames += a.getName();
-		}
-		
-		return formatNameList(argNames);
-	}
-	
-	/**
-	 * formats a specified list of attackers or defenders as a list in string format	
-	 * @param input attacks to list
-	 * @param pos whether to take attackers or defenders first //?
-	 * @return string represenation of attacker/defender list
-	 */
-	public static String formatAttackerList(ArrayList<Attack> input,int pos) {
-		String argNames = "";
-
-		for(Attack a: input){
-			if(pos == 1){
-				argNames += a.getAttacker().getName();
-			}
-			else if(pos == 2){
-				argNames += a.getAttacked().getName();
-			}
-			else{
-				continue;
-			}
-		}
-		
-		return formatNameList(argNames);
-	}
-	
-	protected static String formatAttackList(ArrayList<Attack> attacklist) {
-		String formatted = "{";
-		
-		for(Attack a: attacklist){
-			formatted += "(" + a.getAttacker().getName()+a.getAttacked().getName() + "),";
-		}
-		
-		formatted += "}";
-		formatted = formatted.replace(",}", "}");
-		
-		return formatted;
-	}
-	
-	public boolean contains(Argument b){
-		for(Argument a: this.arguments){
-			if(a.equals(b)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean contains(Attack b){
-		for(Attack a: this.attacks){
-			if(a.equals(b)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/**
-	 * stores a message at the end of the queue of the Interactor
-	 * @param message message to be stored by Interactor
-	 */
-	public void addToInteractor(Command command){
-		interactor.addToCommands(command);
-	}
-
-	public int getPane() {
-		return pane;
-	}
-
-	public static Framework expandFramework(Framework framework, Framework expansion, Interactor inter, int pane) {
+	public static Framework expandFramework(Framework framework, Framework expansion) {
 		ArrayList<Argument> tmpArguments = new ArrayList<Argument>();
 		ArrayList<Attack> tmpAttacks = new ArrayList<Attack>();
 
@@ -676,6 +606,7 @@ public class Framework {
 
 		boolean add;
 
+		//TODO rewrite using contains(argument) and contains(attack) methods
 		if(expansion != null && expansion.getArguments() != null && expansion.getAttacks() != null){
 			for(Argument nar : expansion.getArguments()){
 				add = true;
@@ -704,7 +635,190 @@ public class Framework {
 			}
 		}
 		
-		return new Framework(tmpArguments, tmpAttacks, inter, pane);
+		return new Framework(tmpArguments, tmpAttacks, framework.getInteractor(), framework.getPane());
+	}
+	
+	/**
+	 * returns a graphinstruction for this framework, turning each argument and attack the specified color
+	 * @param color a color to color the framework in
+	 * @return a set of coloring instructions (called GraphInstruction)
+	 */
+	protected GraphInstruction toInstruction(Color color){
+		ArrayList<SingleInstruction> nodeInstructions = new ArrayList<SingleInstruction>();
+		ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();
+
+		for(Argument a: arguments){
+			nodeInstructions.add(new SingleInstruction(a.getName(),color));
+		}
+		for(Attack a: attacks){
+			edgeInstructions.add(new SingleInstruction(""+a.getAttacker().getName()+a.getAttacked().getName(),color));
+		}
+
+		return new GraphInstruction(nodeInstructions,edgeInstructions,pane);
+	}
+	
+	/**
+	 * checks whether a given argument is also present in this framework
+	 * @param b the given argument
+	 * @return argument present
+	 */
+	public boolean contains(Argument b){
+		for(Argument a: this.arguments){
+			if(a.equals(b)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * checks whether a given attack is also present in this framework
+	 * @param b the given attack
+	 * @return attack present
+	 */
+	public boolean contains(Attack b){
+		for(Attack a: this.attacks){
+			if(a.equals(b)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * formats a string of argument names to be a readable list in a sentence
+	 * @param input the string to be formatted
+	 * @return the formatted string (now a list, separated by ',' and an 'and' between the last two elements)
+	 */
+	protected static String formatNameList(String input) {
+		String output = "";
+
+		if(input.length() < 2){
+			return input;
+		}
+
+		for(int i = 0; i < input.length(); i++){
+			output += input.charAt(i) + ", ";
+		}
+
+		output = output.substring(0,output.length()-2);
+		String last = "" + output.charAt(output.length()-1);
+		output = output.replace(", " + last, " and " + last);
+
+		return output;
+	}
+
+	/**
+	 * formats a given list of arguments to be more easily readable
+	 * @param input
+	 * @return
+	 */
+	public static String formatArgumentList(ArrayList<Argument> input) {
+		String argNames = "";
+		
+		for(Argument a: input){
+			argNames += a.getName();
+		}
+		
+		return formatNameList(argNames);
+	}
+	
+	/**
+	 * formats a specified list of attackers or defenders as a list in string format	
+	 * @param input attacks to list
+	 * @param pos whether to format the list of attackers or defenders (1 attackers, 2 defenders)
+	 * @return string represenation of attacker/defender list
+	 */
+	public static String formatAttackerList(ArrayList<Attack> input,int pos) {
+		String argNames = "";
+
+		for(Attack a: input){
+			if(pos == 1){
+				argNames += a.getAttacker().getName();
+			}
+			else if(pos == 2){
+				argNames += a.getAttacked().getName();
+			}
+			else{
+				continue;
+			}
+		}
+		
+		return formatNameList(argNames);
+	}
+	
+	/**
+	 * formats a given list of attacks to be easily readable
+	 * @param attacklist the list of attacks to be formatted
+	 * @return a formatted string of the given attacks
+	 */
+	protected static String formatAttackList(ArrayList<Attack> attacklist) {
+		String formatted = "{";
+		
+		for(Attack a: attacklist){
+			formatted += "(" + a.getAttacker().getName()+a.getAttacked().getName() + "),";
+		}
+		
+		formatted += "}";
+		formatted = formatted.replace(",}", "}");
+		
+		return formatted;
+	}
+	
+	//TODO documentation
+	protected static String formatExtensions(ArrayList<Extension> extensions) {
+		String formatted = "";
+
+		for(Extension e: extensions){
+			formatted += e.format() + ", ";
+		}
+
+		if(formatted.length() > 1){
+			formatted = formatted.substring(0,formatted.length()-2);
+		}
+
+		return formatted;
+	}
+	
+	/**
+	 * checks whether ther are no arguments and no attacks within this framework
+	 * @return true if no argument and no attacks, else false
+	 */
+	public boolean isEmpty(){
+		if(attacks.size() == 0 && arguments.size() == 0){
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * stores a message at the end of the queue of the Interactor
+	 * @param message message to be stored by Interactor
+	 */
+	public void addToInteractor(Command command){
+		interactor.addToCommands(command);
+	}
+	
+	/** TODO consolidate
+	 * for an attack creates a coloring instruction
+	 * @param item the attack as a string AB
+	 * @param color the color the attack should be shown
+	 * @return the instruction coloring the attack
+	 */
+	public SingleInstruction getEdgeInstructionFromAttack(String item,Color color){
+		return new SingleInstruction(item,color);
+	}
+	
+	public ArrayList<Argument> getArguments() {
+		return arguments;
+	}
+
+	public ArrayList<Attack> getAttacks(){
+		return attacks;
+	}
+	
+	public int getPane() {
+		return pane;
 	}
 	
 	public Interactor getInteractor(){
