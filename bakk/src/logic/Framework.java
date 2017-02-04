@@ -86,7 +86,12 @@ public class Framework {
 		return powerSet;
 	}
 
-	//TODO documentation
+	/**
+	 * computes all admissible extensions (sets) of the framework
+	 * these are all conflict-free sets, that defend themselves against all outside attacks
+	 * @param usePrevious whether to use previous computation results or compute the needed sets anew
+	 * @return a list of all admissible extensions of the framework
+	 */
 	public ArrayList<Extension> getAdmissibleExtensions(boolean usePrevious) {
 		ArrayList<Extension> cf;
 		ArrayList<Extension> admissible = new ArrayList<Extension>();
@@ -157,8 +162,13 @@ public class Framework {
 		return false;
 	}
 	
-	//TODO documentation
-	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious) throws InvalidInputException {
+	/**
+	 * computes all complete extensions of the framework
+	 * these are all admissible extensions that contain all arguments they defend
+	 * @param usePrevious whether or not to take previous computation results for this computation or re-compute those
+	 * @return a list of all complete extensions of the framework
+	 */
+	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious){
 		ArrayList<Extension> adm;
 		ArrayList<Extension> complete = new ArrayList<Extension>();
 
@@ -206,7 +216,12 @@ public class Framework {
 		return complete;
 	}
 	
-	//TODO documentation
+	/**
+	 * computes all preferred extensions of the framework
+	 * these are all admissible extensions which defend themselves against outside attacks
+	 * @param usePrevious whether or not to take previous computation results for this computation or re-compute those
+	 * @return a list of all preferred extensions of the framework
+	 */
 	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious) {
 		ArrayList<Extension> adm;
 		ArrayList<Extension> preferred = new ArrayList<Extension>();
@@ -248,7 +263,12 @@ public class Framework {
 		return preferred;
 	}
 
-	//TODO documentation
+	/**
+	 * Computes the stable extensions of the framework, therefore we
+	 * 	look at all conflict-free sets that attack all arguments they do not contain themselves
+	 * @param usePrevious whether to use previously computed sets for this computation or to compute them anew
+	 * @return the set of all stable extensions of the framework
+	 */
 	public ArrayList<Extension> getStableExtensions(boolean usePrevious) {
 		ArrayList<Extension> cf;
 		ArrayList<Extension> stable = new ArrayList<Extension>();
@@ -295,9 +315,8 @@ public class Framework {
 	 * 	the maximal complete extension is searched, since it is the grounded extension
 	 * @param usePrevious whether or not to use previous results
 	 * @return the grounded Extension
-	 * @throws InvalidInputException if complete extensions could not be computed
 	 */
-	public Extension getGroundedExtension(boolean usePrevious) throws InvalidInputException{
+	public Extension getGroundedExtension(boolean usePrevious){
 		ArrayList<Extension> co;
 		ArrayList<Argument> grounded = new ArrayList<Argument>();
 
@@ -547,9 +566,9 @@ public class Framework {
 	 * @param name
 	 * @return an argument
 	 */
-	public Argument getArgument(char name) {
-		if(arguments != null){
-			for(Argument a: arguments){
+	public static Argument getArgument(ArrayList<Argument> list, char name) {
+		if(list != null){
+			for(Argument a: list){
 				if(a.getName() == name){
 					return a;
 				}
@@ -765,7 +784,11 @@ public class Framework {
 		return formatted;
 	}
 	
-	//TODO documentation
+	/**
+	 * returns a comma separated string for a list of extensions (which are formatted themselves)
+	 * @param extensions a list of extensions
+	 * @return a string list representation of extensions
+	 */
 	protected static String formatExtensions(ArrayList<Extension> extensions) {
 		String formatted = "";
 

@@ -194,10 +194,10 @@ public class NodePane extends AnchorPane{
 			tmp.setTextAlignment(TextAlignment.CENTER);
 
 			try{
-				tmp.setTooltip(new Tooltip(framework.getArgument(v.charAt(0)).getStatement()));
+				tmp.setTooltip(new Tooltip(Framework.getArgument(framework.getArguments(),v.charAt(0)).getStatement()));
 			}
 			catch(NullPointerException e){
-				tmp.setTooltip(new Tooltip(expansion.getArgument(v.charAt(0)).getStatement()));
+				tmp.setTooltip(new Tooltip(Framework.getArgument(expansion.getArguments(),v.charAt(0)).getStatement()));
 			}
 
 			tmp.setLayoutX(p.getX()-CIRCLE_RADIUS*0.3);

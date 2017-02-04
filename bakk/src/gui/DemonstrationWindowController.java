@@ -190,6 +190,7 @@ public class DemonstrationWindowController {
 		expanded = false;
 	}
 
+	//TODO reorder, document
 	private void initializeGraph(NodePane pane, Framework framework, Framework expansion){
 		pane.createGraph(framework,expansion);
 
@@ -203,6 +204,7 @@ public class DemonstrationWindowController {
 		}
 	}
 
+	//TODO reorder, document
 	//needs lbl and all buttons to be set to the same disable status in fxml file
 	private void setDisableRadioButtons(boolean disabled) {
 		for(int i = 0;i<expansionGroup.getToggles().size();i++){
@@ -216,7 +218,7 @@ public class DemonstrationWindowController {
 		expandOptionsLbl.setDisable(disabled);
 	}
 
-	/**
+	/** TODO reorder
 	 * converts Arguments from ArgumentDtos and saves them
 	 * @param rawArguments a list of ArgumentDtos
 	 */
@@ -278,15 +280,11 @@ public class DemonstrationWindowController {
 	public void completeComputation(Framework framework){
 		interactor.emptyQueue();
 
-		try {
-			resultSet = framework.getCompleteExtensions(previousCheckBox.isSelected());
-			//printExtensions(resultSet);
-			setUI(true);
-		} catch (InvalidInputException e) {
-			interactor.emptyQueue();
-			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
-			explanationArea.setStyle("-fx-text-fill: red;");
-		}
+		resultSet = framework.getCompleteExtensions(previousCheckBox.isSelected());
+
+		//printExtensions(resultSet);
+
+		setUI(true);
 	}
 
 	/**
@@ -321,20 +319,19 @@ public class DemonstrationWindowController {
 	public void groundedComputation(Framework framework){
 		interactor.emptyQueue();
 
-		Extension grounded;
-		try {
-			grounded = framework.getGroundedExtension(previousCheckBox.isSelected());
-			resultSet = new ArrayList<Extension>();
-			resultSet.add(grounded);
-			//printExtensions(resultSet);
-			setUI(true);
-		} catch (InvalidInputException e) {
-			interactor.emptyQueue();
-			explanationArea.setText(e.getMessage() + " Extension could not be computed!");
-			explanationArea.setStyle("-fx-text-fill: red;");
-		}
+		Extension grounded = framework.getGroundedExtension(previousCheckBox.isSelected());
+		resultSet = new ArrayList<Extension>();
+		resultSet.add(grounded);
+
+		//printExtensions(resultSet);
+
+		setUI(true);
 	}
 
+	/**
+	 * initiates the computation of all semi-stable extensions of the framework
+	 * @param framework
+	 */
 	public void semiStableComputation(Framework framework){
 		interactor.emptyQueue();
 
@@ -403,7 +400,7 @@ public class DemonstrationWindowController {
 		showSetChoices();
 	}
 
-	/**
+	/** TODO reorder?
 	 * disables the next and show all buttons
 	 */
 	public void disableForwardButtons(){
@@ -426,7 +423,7 @@ public class DemonstrationWindowController {
 		wrapper.loadMain();
 	}
 
-	/**
+	/** TODO reorder
 	 * activates the choicebox (dropdown menu) that shows the extensions
 	 * of the chosen type
 	 */
@@ -446,7 +443,7 @@ public class DemonstrationWindowController {
 		setsComboBox.getSelectionModel().selectFirst();
 	}
 
-	/**
+	/** TODO reorder
 	 * removes all elements from the choicebox and deactivates it
 	 */
 	public void resetSetChoices(){
@@ -454,35 +451,7 @@ public class DemonstrationWindowController {
 		setsComboBox.setDisable(true);
 	}
 
-	/**
-	 * the ChoiceListener listens for changes on a choicebox, and computes
-	 * an instruction for the graph to show the newly chosen extension
-	 * @author patrick.bellositz
-	 * @param <Number> the index of the chosen element
-	 */
-	@SuppressWarnings("hiding")
-	private class SetsChoiceListener<Number> implements ChangeListener<Number>{
-		@Override
-		public void changed(ObservableValue<? extends Number> oval, Number sval, Number nval){
-			if((Integer) nval == -1){ //because with a new graph an empty selection (id:-1) is shown
-				return;
-			}
-
-			Object item = setsComboBox.getItems().get((Integer) nval); 
-
-			if(item instanceof String){
-				GraphInstruction instruction = argumentFramework.getNodeInstructionsFromArgumentList((String) item, Color.GREEN);
-				try {
-					graphPane.executeInstruction(instruction);
-				} catch (InvalidInputException e) {
-					interactor.emptyQueue();
-					explanationArea.setText(e.getMessage() + "\n The graph may not be correctly displayed!");
-					explanationArea.setStyle("-fx-text-fill: red;");
-				}
-			}
-		}
-	}
-
+	//TODO document
 	@FXML
 	public void onComputeClick(){
 		int exChoice = extensionComboBox.getSelectionModel().getSelectedIndex();
@@ -520,6 +489,7 @@ public class DemonstrationWindowController {
 		}
 	}
 
+	//TODO outsource? document!
 	@FXML
 	public void onCompareClick(){
 		interactor.emptyQueue();
@@ -585,6 +555,13 @@ public class DemonstrationWindowController {
 		setUI(standard);
 	}
 
+	/**
+	 * initiates the expansion of the framework (and comparison framework, if available)
+	 * also re-sets the text of the button and the name labels of the pane(s)
+	 * then initiates the check for the expansion type
+	 * 
+	 * if a framework is already expanded, this expansion is rolled back
+	 */
 	@FXML
 	public void onExpandClick(){
 		if(!expanded){
@@ -602,33 +579,67 @@ public class DemonstrationWindowController {
 		}
 	}
 
+	/**
+	 * toggles between showing the original framework and the comparison framework
+	 * also re-sets name label (including expansions)
+	 */
+	@FXML
+	public void onToggleClick(){
+		String text = "";
+
+		if(expansionFramework != null){
+			text = " + C";
+		}
+
+		if(graphPane.isVisible()){
+			graphPane.setVisible(false);
+			comparisonPane.setVisible(true);			
+			numberLbl.setText("B" + text);
+		}
+		else{
+			graphPane.setVisible(true);
+			comparisonPane.setVisible(false);
+			numberLbl.setText("A" + text);
+		}
+	}
+
+	/**
+	 * triggers the onToggleClick method depending on which pane is visible and should be visible
+	 * @param pane the id of the pane which is to be shown (1=framework, 2=comparison)
+	 */
+	public void conditionalToggle(int pane){
+		if(graphPane.isVisible() && pane == 2){
+			onToggleClick();
+		}
+		else if(comparisonPane.isVisible() && pane == 1){
+			onToggleClick();
+		}
+	}
+
+	//TODO is currently being worked on
 	private void checkExpansionType() {
 		Expansion frameworkExpansion, comparisonExpansion;
 		String argExpType, compExpType; //not sure if I want to do anything with this return value
-		
+
 		frameworkExpansion = new Expansion(argumentFramework,expansionFramework);
-		argExpType = frameworkExpansion.determineExpansionType();
-		
+		argExpType = frameworkExpansion.determineExpansionType(""); //TODO fill in right name
+
 		if(comparisonFramework != null){
 			comparisonExpansion = new Expansion(comparisonFramework,expansionFramework);
-			compExpType = comparisonExpansion.determineExpansionType();
+			compExpType = comparisonExpansion.determineExpansionType(expandingComboBox.getAccessibleText());
+			System.out.println(expandingComboBox.getAccessibleText());
 		}
-		
-	}
 
-	private void restoreOriginalFrameworks() {
-		expansionFramework = null;
-		expArguments = null;
-		expAttacks = null;
-		initializeGraph(graphPane,argumentFramework,null);
-		if(comparisonFramework != null){
-			initializeGraph(comparisonPane,comparisonFramework,null);
-		}
 	}
-
+	
+	/**
+	 * fills the variables expansionFramework, expAttacks and expArguments
+	 * with the values of the expansion that was chosen
+	 * following that, the panes showing the frameworks also show the expansions (so showing an expanded framework)
+	 */
 	private void expandFrameworks() {
 		Example current = MainInputController.getExamples().get(expandingComboBox.getSelectionModel().getSelectedIndex());
-		
+
 		if(expandingComboBox.getSelectionModel().getSelectedIndex() < 1){
 			explanationArea.setText("No expansion framework was chosen, could not expand framework!");
 			return;
@@ -642,9 +653,9 @@ public class DemonstrationWindowController {
 		}
 
 		for(Line l: current.getLines()){
-			Argument attacker = getArgumentByName(l.getChar(),expArguments);
+			Argument attacker = Framework.getArgument(expArguments,l.getChar());
 			for(int i = 0;i<l.getAttacks().length();i++){
-				Argument defender = getArgumentByName(l.getAttacks().charAt(i),expArguments);
+				Argument defender = Framework.getArgument(expArguments,l.getAttacks().charAt(i));
 				if(defender == null){
 					explanationArea.setText("Illegal attack detected!");
 					return;
@@ -657,62 +668,26 @@ public class DemonstrationWindowController {
 
 		//this should draw the expanded version
 		initializeGraph(graphPane,argumentFramework,expansionFramework);
-		
+
 		if(comparisonFramework != null){
 			initializeGraph(comparisonPane,comparisonFramework,expansionFramework);
 		}
 	}
 
-	@FXML
-	public void onToggleClick(){
-		String text = "";
-		
-		if(expansionFramework != null){
-			text = " + C";
-		}
-		
-		if(graphPane.isVisible()){
-			graphPane.setVisible(false);
-			comparisonPane.setVisible(true);			
-			numberLbl.setText("B" + text);
-		}
-		else{
-			graphPane.setVisible(true);
-			comparisonPane.setVisible(false);
-			numberLbl.setText("A" + text);
+	//TODO document
+	private void restoreOriginalFrameworks() {
+		expansionFramework = null;
+		expArguments = null;
+		expAttacks = null;
+		initializeGraph(graphPane,argumentFramework,null);
+		if(comparisonFramework != null){
+			initializeGraph(comparisonPane,comparisonFramework,null);
 		}
 	}
 
-	public void conditionalToggle(int pane){
-		if(graphPane.isVisible() && pane == 2){
-			onToggleClick();
-		}
-		else if(comparisonPane.isVisible() && pane == 1){
-			onToggleClick();
-		}
-	}
-
-	private Type idToType(int id) {
-		switch(id){
-		case 1:
-			return Type.cf;
-		case 2:
-			return Type.ad;
-		case 3:
-			return Type.co;
-		case 4:
-			return Type.pr;
-		case 5:
-			return Type.st;
-		case 6:
-			return Type.gr;
-		case 7:
-			return Type.ss;
-		default:
-			return null;
-		}
-	}
-
+	/**
+	 * sets up the UI for showing comparison results
+	 */
 	private void initializeComparisonResources(){	
 		boolean wasVisible;
 
@@ -737,9 +712,6 @@ public class DemonstrationWindowController {
 
 		Example current = MainInputController.getExamples().get(comparisonComboBox.getSelectionModel().getSelectedIndex());
 
-		//testing
-		//System.out.println(current.getName());
-
 		compArguments = new ArrayList<Argument>();
 		compAttacks = new ArrayList<Attack>();
 
@@ -748,9 +720,9 @@ public class DemonstrationWindowController {
 		}
 
 		for(Line l: current.getLines()){
-			Argument attacker = getArgumentByName(l.getChar(),compArguments);
+			Argument attacker = Framework.getArgument(compArguments,l.getChar());
 			for(int i = 0;i<l.getAttacks().length();i++){
-				Argument defender = getArgumentByName(l.getAttacks().charAt(i),compArguments);
+				Argument defender = Framework.getArgument(compArguments,l.getAttacks().charAt(i));
 				if(defender == null){
 					explanationArea.setText("Illegal attack detected!");
 					return;
@@ -771,16 +743,6 @@ public class DemonstrationWindowController {
 			explanationArea.setText("Could not load comparison!");
 			return;
 		}
-	}
-
-	private Argument getArgumentByName(char name, ArrayList<Argument> args){
-		for(Argument a: args){
-			if(String.valueOf(name).toUpperCase().equals(String.valueOf(a.getName()))){
-				return a;
-			}
-		}
-
-		return null;
 	}
 
 	/**
@@ -804,6 +766,9 @@ public class DemonstrationWindowController {
 		interactor.executeNextCommand();
 	}
 
+	/**
+	 * loads all examples from the maininput into a combobox
+	 */
 	public void showExamplesInComboBoxes(){
 		ArrayList<String> formatList = new ArrayList<String>();
 
@@ -817,6 +782,62 @@ public class DemonstrationWindowController {
 
 		expandingComboBox.setItems(FXCollections.observableArrayList(formatList));
 		expandingComboBox.getSelectionModel().selectFirst();
+	}
+
+	/**
+	 * helper method to convert a semantics id (used here)
+	 * to its Framework.Type (used in other classes)
+	 * @param id id of type
+	 * @return type of id
+	 */
+	private Type idToType(int id) {
+		switch(id){
+		case 1:
+			return Type.cf;
+		case 2:
+			return Type.ad;
+		case 3:
+			return Type.co;
+		case 4:
+			return Type.pr;
+		case 5:
+			return Type.st;
+		case 6:
+			return Type.gr;
+		case 7:
+			return Type.ss;
+		default:
+			return null;
+		}
+	}
+
+	/**
+	 * the ChoiceListener listens for changes on a choicebox, and computes
+	 * an instruction for the graph to show the newly chosen extension
+	 * @author patrick.bellositz
+	 * @param <Number> the index of the chosen element
+	 */
+	@SuppressWarnings("hiding")
+	private class SetsChoiceListener<Number> implements ChangeListener<Number>{
+		@Override
+		public void changed(ObservableValue<? extends Number> oval, Number sval, Number nval){
+			if((Integer) nval == -1){ //because with a new graph an empty selection (id:-1) is shown
+				return;
+			}
+
+			Object item = setsComboBox.getItems().get((Integer) nval); 
+
+			if(item instanceof String){
+				GraphInstruction instruction = argumentFramework.getNodeInstructionsFromArgumentList((String) item, Color.GREEN);
+				try {
+					graphPane.executeInstruction(instruction);
+				} catch (InvalidInputException e) {
+					interactor.emptyQueue();
+					explanationArea.setText(e.getMessage() + "\n The graph may not be correctly displayed!");
+					explanationArea.setStyle("-fx-text-fill: red;");
+				}
+			}
+		}
 	}
 
 	/**
@@ -845,11 +866,25 @@ public class DemonstrationWindowController {
 				if(expansionFramework != null){
 					onExpandClick();
 				}
-				
+
 				computeBtn.setDisable(true);
 				setDisableRadioButtons(false);
 				initializeComparisonResources();
 			}
+		}
+	}
+
+	/**
+	 * prints the arguments of all computed extensions (only for testing)
+	 * @param ext the extensions to be printed
+	 */
+	public void printExtensions(ArrayList<Extension> ext){
+		if(ext.size() == 0){
+			System.out.println("no extensions availiable");
+		}
+
+		for(Extension e: ext){
+			System.out.println(e.format());
 		}
 	}
 
@@ -880,20 +915,6 @@ public class DemonstrationWindowController {
 	 */
 	public NodePane getComparisonPane(){
 		return comparisonPane;
-	}
-
-	/**
-	 * prints the arguments of all computed extensions (only for testing)
-	 * @param ext the extensions to be printed
-	 */
-	public void printExtensions(ArrayList<Extension> ext){
-		if(ext.size() == 0){
-			System.out.println("no extensions availiable");
-		}
-
-		for(Extension e: ext){
-			System.out.println(e.format());
-		}
 	}
 
 	public ArrayList<Example> getExampleList(){

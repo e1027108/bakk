@@ -137,6 +137,7 @@ public class MainInputController { //TODO polish button layout
 		clearAll();
 	}
 
+	//TODO document, re-evaluate examples (kick some, add some)
 	private ArrayList<Example> initializeExamples() {
 		ArrayList<Example>exampleSet = new ArrayList<Example>(); //now also use to save new (implement save/delete behaviour) frameworks
 
@@ -272,7 +273,7 @@ public class MainInputController { //TODO polish button layout
 	/**
 	 * reads text from selected rows and stores it into ArgumentDtos, then initiates screen change to Demonstration Window
 	 */
-	@FXML
+	@FXML //TODO not only selected arguments' attacks
 	public void onShowButton(){
 		arguments = createTransferObjectList();
 		autosave++; //we have standard 0, we start with 1 and so on
@@ -391,7 +392,7 @@ public class MainInputController { //TODO polish button layout
 	/*TODO after saving a change to something that existed before, but with a new name, the original version is shown
 	--> fix
 	*/
-	@FXML
+	@FXML //TODO save attacks of unselected arguments too
 	public void onSaveClick(){
 		String name = nameTxt.getText();
 		Example toSave = getExampleByName(name);
@@ -441,7 +442,7 @@ public class MainInputController { //TODO polish button layout
 	 * @param attack the TextField containing the attack String
 	 * @return a String of valid attacks
 	 * @throws InvalidInputException if there is invalid input, throws error message to calling method
-	 */
+	 */ //TODO also for non-selected attacks
 	private String parseAttacks(TextField attack) throws InvalidInputException {
 		String input = attack.getText();
 		String argumentNames = getSelected();
@@ -477,7 +478,7 @@ public class MainInputController { //TODO polish button layout
 	/**
 	 * checks which Arguments' are selected
 	 * @return a String of selected Arguments
-	 */
+	 */ //TODO remove?
 	private String getSelected() {
 		String selected = "";
 
