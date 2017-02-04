@@ -76,10 +76,10 @@ public class DemonstrationWindowController {
 	@FXML
 	private RadioButton standardRadio, strongRadio;
 
-	private Tooltip conflictFreeTip, admissibleTip, completeTip, stableTip, preferredTip, groundedTip, previousTip, arrowTip, 
-	backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip; //tooltips for all buttons etc
+	private Tooltip previousTip, arrowTip, backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip, expansionTip, expandTip, comparisonTip, compareTip, typeTip; //tooltips for all buttons etc
+	//TODO write tips into initialize()
 
-	private Framework argumentFramework, comparisonFramework, expansionFramework, expandedFramework; //argument framework containing the arguments
+	private Framework argumentFramework, comparisonFramework, expansionFramework; //argument framework containing the arguments
 	private ArrayList<Argument> arguments, compArguments, expArguments; //arguments of the framework
 	private ArrayList<Attack> attacks, compAttacks, expAttacks; //attacks of the framework
 	private Interactor interactor; //Interactor controlling the results the user sees
@@ -124,20 +124,6 @@ public class DemonstrationWindowController {
 		extensionTip = new Tooltip("Choose the type of extension semantics you want to compute!");
 		extensionComboBox.setTooltip(extensionTip);
 		extensionLbl.setTooltip(extensionTip);
-
-		/* use on hover over option in dropdown
-		conflictFreeTip = new Tooltip("A set of arguments is conflict-free,\nif none of it's arguments attack another.\n\nClick to compute all conflict-free sets.");
-
-		admissibleTip = new Tooltip("A conflict-free set is an admissible extension,\nif it defends each of it's arguments.\n\nClick to compute all admissible extensions.");
-
-		completeTip = new Tooltip("An admissible extension is a complete extension,\nif it contains every argument it defends.\n\nClick to compute all complete extensions.");
-
-		stableTip = new Tooltip("A conflict-free set is a stable extension,\nif it attacks every argument it doesn't contain.\n\nClick to compute all stable extensions.");
-
-		preferredTip = new Tooltip("An admissible extension is a preferred extension,\nif it is not a subset of another admissible extension.\n\nClick to compute all preferred extensions.");
-
-		groundedTip = new Tooltip("The extension containing all arguments that all\ncomplete extensions have in common is the grounded extension.\n\nClick to compute the grounded extension.");
-		 */
 	}
 
 	/**
@@ -188,64 +174,6 @@ public class DemonstrationWindowController {
 		//set comparable examples
 		showExamplesInComboBoxes();
 		expanded = false;
-	}
-
-	//TODO reorder, document
-	private void initializeGraph(NodePane pane, Framework framework, Framework expansion){
-		pane.createGraph(framework,expansion);
-
-		try {
-			pane.getChildren().clear();
-			pane.drawGraph();
-		} catch (InvalidInputException e) {
-			interactor.emptyQueue();
-			explanationArea.setText(e.getMessage() + "\n The graph may not be correctly displayed!");
-			explanationArea.setStyle("-fx-text-fill: red;");
-		}
-	}
-
-	//TODO reorder, document
-	//needs lbl and all buttons to be set to the same disable status in fxml file
-	private void setDisableRadioButtons(boolean disabled) {
-		for(int i = 0;i<expansionGroup.getToggles().size();i++){
-			Object tmp = expansionGroup.getToggles().get(i);
-
-			if(tmp instanceof RadioButton){
-				((RadioButton) tmp).setDisable(disabled);
-			}
-		}
-
-		expandOptionsLbl.setDisable(disabled);
-	}
-
-	/** TODO reorder
-	 * converts Arguments from ArgumentDtos and saves them
-	 * @param rawArguments a list of ArgumentDtos
-	 */
-	private void readArguments(ArrayList<ArgumentDto> rawArguments) {
-		arguments = new ArrayList<Argument>();
-		attacks = new ArrayList<Attack>();
-
-		for(ArgumentDto a: rawArguments){
-			arguments.add(new Argument(a.getName(),a.getStatement()));
-		}
-
-		for(ArgumentDto a: rawArguments){
-			char attackString[] = a.getAttacks().toCharArray();
-			for(char att: attackString){
-				attacks.add(new Attack(getArgument(arguments,a.getName()),getArgument(arguments,att)));
-			}
-		}
-	}
-
-	private Argument getArgument(ArrayList<Argument> args, char att) {
-		for(Argument a: args){
-			if(a.getName() == att){
-				return a; 
-			}
-		}
-
-		return null;
 	}
 
 	/**
@@ -343,6 +271,24 @@ public class DemonstrationWindowController {
 	}
 
 	/**
+	 * computes the type of expansion the expansion framework would be to the framework
+	 * and to the comparison framework (if available)
+	 */
+	private void checkExpansionType() {
+		interactor.emptyQueue();
+		
+		Expansion frameworkExpansion, comparisonExpansion;
+		frameworkExpansion = new Expansion(argumentFramework,expansionFramework);
+		frameworkExpansion.determineExpansionType(""); //TODO fill in right name?
+
+		if(comparisonFramework != null){
+			comparisonExpansion = new Expansion(comparisonFramework,expansionFramework);
+			comparisonExpansion.determineExpansionType(expandingComboBox.getAccessibleText());
+			System.out.println(expandingComboBox.getAccessibleText());
+		}
+	}
+	
+	/**
 	 * moves the output of the computation one step forward
 	 */
 	@FXML
@@ -400,15 +346,6 @@ public class DemonstrationWindowController {
 		showSetChoices();
 	}
 
-	/** TODO reorder?
-	 * disables the next and show all buttons
-	 */
-	public void disableForwardButtons(){
-		nextBtn.setDisable(true);
-		showAllBtn.setDisable(true);
-		resultsBtn.setDisable(true);
-	}
-
 	/**
 	 * returns to main input window
 	 */
@@ -423,35 +360,9 @@ public class DemonstrationWindowController {
 		wrapper.loadMain();
 	}
 
-	/** TODO reorder
-	 * activates the choicebox (dropdown menu) that shows the extensions
-	 * of the chosen type
+	/**
+	 * initiates the computation of a semantics extensions, according to the dropdown menu option chosen
 	 */
-	public void showSetChoices(){
-		setsComboBox.setDisable(false);
-
-		ArrayList<String> formatList = new ArrayList<String>();
-
-		if(resultSet != null && !resultSet.isEmpty()){
-			for(Extension e: resultSet){
-				formatList.add(e.format());
-			}
-		}
-
-		setsComboBox.setItems(FXCollections.observableArrayList(formatList));
-		setsComboBox.getSelectionModel().selectedIndexProperty().addListener(new SetsChoiceListener<Number>());
-		setsComboBox.getSelectionModel().selectFirst();
-	}
-
-	/** TODO reorder
-	 * removes all elements from the choicebox and deactivates it
-	 */
-	public void resetSetChoices(){
-		setsComboBox.getItems().setAll(FXCollections.observableList(new ArrayList<String>()));
-		setsComboBox.setDisable(true);
-	}
-
-	//TODO document
 	@FXML
 	public void onComputeClick(){
 		int exChoice = extensionComboBox.getSelectionModel().getSelectedIndex();
@@ -489,7 +400,10 @@ public class DemonstrationWindowController {
 		}
 	}
 
-	//TODO outsource? document!
+	//TODO outsource?
+	/**
+	 * reads the frameworks available (expanded or not), then compares them according to the chosen type
+	 */
 	@FXML
 	public void onCompareClick(){
 		interactor.emptyQueue();
@@ -516,8 +430,7 @@ public class DemonstrationWindowController {
 		if(expanded){
 			eq.expandFrameworks(expansionFramework); //this should have to exist
 		}
-
-		//which type do we check?
+		
 		RadioButton selectedToggle = (RadioButton) expansionGroup.getSelectedToggle();
 		boolean standard = selectedToggle.getText().equals("standard");
 
@@ -528,8 +441,6 @@ public class DemonstrationWindowController {
 				explanationArea.setText(e.getMessage());
 				return;
 			}
-			//testing
-			//explanationArea.setText(String.valueOf(equiv));
 		}
 		else if(selectedToggle.getText().equals("strong")){
 			try {
@@ -540,17 +451,11 @@ public class DemonstrationWindowController {
 				e.printStackTrace();
 				return;
 			}
-			//testing
-			//explanationArea.setText(String.valueOf(equiv));
 		}
 		else{
 			explanationArea.setText("No equivalence type was chosen, could not perform action!");
 			return;
 		}
-
-		/*if(standard){
-			printExtensions(resultSet); //is initialized if standard!
-		}*/
 
 		setUI(standard);
 	}
@@ -569,7 +474,7 @@ public class DemonstrationWindowController {
 			expandBtn.setText(EXPANDED);
 			expandFrameworks();
 			numberLbl.setText(numberLbl.getText() + " + C");
-			checkExpansionType(); //TODO check which type of expansion this is
+			checkExpansionType();
 		}
 		else{
 			expanded = false;
@@ -615,21 +520,25 @@ public class DemonstrationWindowController {
 			onToggleClick();
 		}
 	}
+	
+	/**
+	 * converts Arguments from ArgumentDtos and saves them
+	 * @param rawArguments a list of ArgumentDtos
+	 */
+	private void readArguments(ArrayList<ArgumentDto> rawArguments) {
+		arguments = new ArrayList<Argument>();
+		attacks = new ArrayList<Attack>();
 
-	//TODO is currently being worked on
-	private void checkExpansionType() {
-		Expansion frameworkExpansion, comparisonExpansion;
-		String argExpType, compExpType; //not sure if I want to do anything with this return value
-
-		frameworkExpansion = new Expansion(argumentFramework,expansionFramework);
-		argExpType = frameworkExpansion.determineExpansionType(""); //TODO fill in right name
-
-		if(comparisonFramework != null){
-			comparisonExpansion = new Expansion(comparisonFramework,expansionFramework);
-			compExpType = comparisonExpansion.determineExpansionType(expandingComboBox.getAccessibleText());
-			System.out.println(expandingComboBox.getAccessibleText());
+		for(ArgumentDto a: rawArguments){
+			arguments.add(new Argument(a.getName(),a.getStatement()));
 		}
 
+		for(ArgumentDto a: rawArguments){
+			char attackString[] = a.getAttacks().toCharArray();
+			for(char att: attackString){
+				attacks.add(new Attack(Framework.getArgument(arguments,a.getName()),Framework.getArgument(arguments,att)));
+			}
+		}
 	}
 	
 	/**
@@ -674,7 +583,9 @@ public class DemonstrationWindowController {
 		}
 	}
 
-	//TODO document
+	/**
+	 * removes references to the chosen expansion from data and from the gui
+	 */
 	private void restoreOriginalFrameworks() {
 		expansionFramework = null;
 		expArguments = null;
@@ -685,6 +596,25 @@ public class DemonstrationWindowController {
 		}
 	}
 
+	/**
+	 * loads the framework given into the pane given, removes old frameworks, and draws a graph
+	 * @param pane the pane we want to show the graph in
+	 * @param framework the framework we want to show as a graph
+	 * @param expansion an (optional) expansion to the framework we might want to also show
+	 */
+	private void initializeGraph(NodePane pane, Framework framework, Framework expansion){
+		pane.createGraph(framework,expansion);
+
+		try {
+			pane.getChildren().clear();
+			pane.drawGraph();
+		} catch (InvalidInputException e) {
+			interactor.emptyQueue();
+			explanationArea.setText(e.getMessage() + "\n The graph may not be correctly displayed!");
+			explanationArea.setStyle("-fx-text-fill: red;");
+		}
+	}
+	
 	/**
 	 * sets up the UI for showing comparison results
 	 */
@@ -765,6 +695,34 @@ public class DemonstrationWindowController {
 
 		interactor.executeNextCommand();
 	}
+	
+	/**
+	 * activates the choicebox (dropdown menu) that shows the extensions
+	 * of the chosen type
+	 */
+	public void showSetChoices(){
+		setsComboBox.setDisable(false);
+
+		ArrayList<String> formatList = new ArrayList<String>();
+
+		if(resultSet != null && !resultSet.isEmpty()){
+			for(Extension e: resultSet){
+				formatList.add(e.format());
+			}
+		}
+
+		setsComboBox.setItems(FXCollections.observableArrayList(formatList));
+		setsComboBox.getSelectionModel().selectedIndexProperty().addListener(new SetsChoiceListener<Number>());
+		setsComboBox.getSelectionModel().selectFirst();
+	}
+	
+	/**
+	 * removes all elements from the choicebox and deactivates it
+	 */
+	public void resetSetChoices(){
+		setsComboBox.getItems().setAll(FXCollections.observableList(new ArrayList<String>()));
+		setsComboBox.setDisable(true);
+	}
 
 	/**
 	 * loads all examples from the maininput into a combobox
@@ -782,6 +740,32 @@ public class DemonstrationWindowController {
 
 		expandingComboBox.setItems(FXCollections.observableArrayList(formatList));
 		expandingComboBox.getSelectionModel().selectFirst();
+	}
+	
+	/**
+	 * disables the next and show all buttons
+	 */
+	public void disableForwardButtons(){
+		nextBtn.setDisable(true);
+		showAllBtn.setDisable(true);
+		resultsBtn.setDisable(true);
+	}
+	
+	/**
+	 * dis/en-ables the radio buttons for chosing the type of equivalency, depending on if the 
+	 * possibilty of comparison exists
+	 * @param disabled whether the buttons are already disabled
+	 */
+	private void setDisableRadioButtons(boolean disabled) {
+		for(int i = 0;i<expansionGroup.getToggles().size();i++){
+			Object tmp = expansionGroup.getToggles().get(i);
+
+			if(tmp instanceof RadioButton){
+				((RadioButton) tmp).setDisable(disabled);
+			}
+		}
+
+		expandOptionsLbl.setDisable(disabled);
 	}
 
 	/**

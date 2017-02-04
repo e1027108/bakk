@@ -23,7 +23,11 @@ public class Kernel extends Framework {
 		computeKernel(this.type);
 	}
 
-	//all arguments stay in the kernel
+	/**
+	 * initiates the computation of the kernel depending on which semantics was given
+	 * @param type the semantics of the kernel
+	 * @throws InvalidInputException if an invalid semantics was requested
+	 */
 	private void computeKernel(Type type) throws InvalidInputException {
 		switch(type){
 		case st:
@@ -235,11 +239,6 @@ public class Kernel extends Framework {
 
 		toRemove.remove(maybeNotRemove);
 
-		//testing
-		/*for(Attack a: toRemove){
-			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
-		}*/
-
 		attacks.removeAll(toRemove);
 
 		interactor.addToCommands(new Command("The resulting " + getDescription("admissible",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".",
@@ -370,11 +369,6 @@ public class Kernel extends Framework {
 
 		toRemove.remove(maybeNotRemove);
 
-		//testing
-		/*for(Attack a: toRemove){
-			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
-		}*/
-
 		attacks.removeAll(toRemove);
 
 		interactor.addToCommands(new Command("The resulting " + getDescription("grounded",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".",
@@ -462,17 +456,16 @@ public class Kernel extends Framework {
 
 		toRemove.removeAll(maybeNotRemove);
 
-		//testing
-		/*for(Attack a: toRemove){
-			System.out.println(a.getAttacker().getName() + " attacking " + a.getAttacked().getName() + " was removed.");
-		}*/
-
 		attacks.removeAll(toRemove);
 
 		interactor.addToCommands(new Command("The resulting " + getDescription("complete",star) + " kernel contains all arguments and the attacks " + formatAttackList(attacks) + ".",
 				toInstruction(Color.GREEN),pane));
 	}
 
+	/**
+	 * compiles a list of arguments that attack themselves
+	 * @return self-attacking argument list
+	 */
 	private ArrayList<Argument> getSelfAttacking(){
 		ArrayList<Argument> selfAttacking = new ArrayList<Argument>();
 
@@ -485,6 +478,12 @@ public class Kernel extends Framework {
 		return selfAttacking;
 	}
 
+	/**
+	 * creates an instruction for the interactor that contains colored nodes and edges for self-attacking arguments
+	 * @param selfAttackers a list of arguments that attack themselves
+	 * @param color the color the gui elements are supposed to be shown
+	 * @return an instruction to color elements in a graph
+	 */
 	private GraphInstruction getSelfAttackInstruction(ArrayList<Argument> selfAttackers, Color color){
 		GraphInstruction selfAttackInstruction = getNodeInstructionsFromArgumentList(formatArgumentList(selfAttackers),color);
 		ArrayList<SingleInstruction> edgeInstructions = new ArrayList<SingleInstruction>();

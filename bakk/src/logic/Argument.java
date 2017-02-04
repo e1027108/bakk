@@ -37,6 +37,12 @@ public class Argument {
 		this.name = name;
 	}
 	
+	/**
+	 * checks whether another given argument has the same name
+	 * so we say it is equal
+	 * @param b the argument we want to compare to this argument
+	 * @return whether the arguments are "equal"
+	 */
 	public boolean equals(Argument b){
 		if(b.getName() == this.name){
 			return true;

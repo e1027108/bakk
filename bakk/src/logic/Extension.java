@@ -290,8 +290,6 @@ public class Extension {
 		return new GraphInstruction(nodeInstructions, null, framework.getPane());
 	}
 
-	//TODO test extensively
-	//TODO add interactor comments?/prepare comments for interactor?
 	public boolean equals(Extension other){
 		ArrayList<Argument> thisArguments = new ArrayList<Argument>();
 		ArrayList<Argument> otherArguments = new ArrayList<Argument>();

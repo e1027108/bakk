@@ -30,6 +30,13 @@ public class Framework {
 	public enum Type {cf,ad,co,pr,st,ss,gr,adstar,costar,grstar};
 	private HashMap<Type,Kernel> kernel;
 	
+	/**
+	 * An argumentation framework consists of arguments (denoted by letters) and attacks (denoted by pairs of arguments, denoted by letters)
+	 * @param arguments a list of all arguments of the framework
+	 * @param attacks a list of all attacks of the framework
+	 * @param interactor the object that links the gui and logic computations
+	 * @param pane which gui graph the interactor should interact with
+	 */
 	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor, int pane) {
 		this.arguments = arguments;
 		this.attacks = attacks;
@@ -38,13 +45,16 @@ public class Framework {
 		this.pane = pane;
 	}
 	
-	//TODO document
+	/**
+	 * computes all conflict-free sets of the framework
+	 * these are sets of arguments where no argument attacks another inside the set
+	 * @return set of all conflict-free sets of the framework
+	 */
 	public ArrayList<Extension> getConflictFreeSets() {
 		ArrayList<Extension> conflictFreeSets = new ArrayList<Extension>();
 		ArrayList<ArrayList<Argument>> powerset;
 
 		if(arguments == null){
-			//should not be possible
 			interactor.addToCommands(new Command("No arguments found, error!", null, pane));
 			return null;
 		}
@@ -68,7 +78,12 @@ public class Framework {
 		return conflictFreeSets;
 	}
 	
-	//TODO document
+	/**
+	 * computes the powerset of a given argument set
+	 * uses a binary method over the amount of elements in the original set
+	 * @param set the set we want the powerset from
+	 * @return the powerset of the given set
+	 */
 	private ArrayList<ArrayList<Argument>> getAllSubsets(ArrayList<Argument> set){
 		ArrayList<ArrayList<Argument>> powerSet = new ArrayList<ArrayList<Argument>>();
 		int elements = set.size();

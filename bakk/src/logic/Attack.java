@@ -17,6 +17,11 @@ public class Attack {
 		return attacked;
 	}
 	
+	/**
+	 * this method compares the attackers and defenders of the attack to the given attack
+	 * @param b the attack we compare this attack to
+	 * @return whether the attacks are equal
+	 */
 	public boolean equals(Attack b){
 		if((attacker.equals(b.getAttacker())) && (attacked.equals(b.getAttacked()))){
 			return true;

@@ -18,15 +18,16 @@ public class Equivalency {
 		this.interactor = interactor;
 	}
 
-	//one might want to replace this to not create another equivalency all the time
-	public void setSecondFramework(Framework snd){
-		this.snd = snd;
-		if(fstExpanded != null || sndExpanded != null){ //re-expand new
-			expandFrameworks(this.exp);
-		}
-	}
-
-	//based on baumann 3.1 p8 "standard equivalence"
+	/**
+	 * checks whether the frameworks are standard equivalent
+	 * this means the extensions of both frameworks are compared
+	 * wrt the semantics given
+	 * this may compare frameworks or their expanded versions
+	 * @param type the semantics to check for
+	 * @param usePrevious whether to compute sets that were already computed, again
+	 * @return whether the checked frameworks' extensions are equivalent wrt the given semantics
+	 * @throws InvalidInputException if an impermissible semantics was chosen
+	 */
 	public ArrayList<Extension> areStandardEquivalent(int type, boolean usePrevious) throws InvalidInputException{
 		ArrayList<Extension> fstExt, sndExt;
 		Framework fstUsed, sndUsed;
@@ -109,6 +110,12 @@ public class Equivalency {
 		}
 	}
 
+	/**
+	 * compares two lists of extensions to each other
+	 * @param first a list of extensions
+	 * @param second another list of extensions
+	 * @return whether the two lists contain the exact same elements (as defined argument, attack, extension)
+	 */
 	protected boolean areExtensionListsEqual(ArrayList<Extension> first, ArrayList<Extension> second){
 		ArrayList<Extension> fstExt = new ArrayList<Extension>();
 		ArrayList<Extension> sndExt = new ArrayList<Extension>();
@@ -158,13 +165,15 @@ public class Equivalency {
 		return true;
 	}
 
-	protected void printAll(ArrayList<Extension> ext){
-		for(Extension e: ext){
-			System.out.println(e.format());
-		}
-	}
-
-	//TODO add weak and normal? (irrelevant?), add local?
+	/**
+	 * checks whether two frameworks are (strong) expansion equivalent
+	 * this may be done with expanded or with unexpanded frameworks
+	 * according to the type given, we check the necessary type of kernels for equality
+	 * @param type the semantics of the expansion equivalency
+	 * @param usePrevious whether to use previous computations' results
+	 * @return whether the used frameworks are expansion equivalent wrt the given type
+	 * @throws InvalidInputException if a kernel could not be computed
+	 */
 	public boolean areExpansionEquivalent(Type type, boolean usePrevious) throws InvalidInputException {
 		Framework fstUsed, sndUsed;
 		Kernel k1, k2;
@@ -274,11 +283,25 @@ public class Equivalency {
 		return kernelEquality;
 	}
 
+	/**
+	 * loads expanded frameworks into the dedicated variables
+	 * therefore calls to expand both the base as well as the comparison framework
+	 * @param exp the expanding framework to enhance both frameworks
+	 */
 	public void expandFrameworks(Framework exp) {
 		fstExpanded = Framework.expandFramework(fst,exp);
 		sndExpanded = Framework.expandFramework(snd,exp);
 	}
 
+	/**
+	 * checks whether two kernels are equal to each other
+	 * this means we check if all attacks and all arguments of kernel 1 are
+	 * contained in kernel 2 and vice versa
+	 * for speeds sake, we first check set sizes
+	 * @param k1 first kernel to compare
+	 * @param k2 second kernel to compare
+	 * @return whether the two kernels are equal
+	 */
 	private boolean checkKernelEquality(Kernel k1, Kernel k2){
 		if(k1.getArguments().size() != k2.getArguments().size()){
 			interactor.addToCommands(new Command("Since the kernels do not contain the same amount of arguments, they are not equal",k1.toInstruction(Color.BLACK),1));
@@ -307,6 +330,12 @@ public class Equivalency {
 		}
 	}
 
+	/**
+	 * we check if the first list contains any arguments of the second list
+	 * @param list1 the first list of arguments
+	 * @param list2 the second list of arguments
+	 * @return a list of arguments of the second list, that are also contained within the first list
+	 */
 	private ArrayList<Argument> allArgumentsContained(ArrayList<Argument> list1, ArrayList<Argument> list2){
 		ArrayList<Argument> missing = new ArrayList<Argument>();
 		
@@ -325,6 +354,12 @@ public class Equivalency {
 		return missing;
 	}
 
+	/**
+	 * we check if the first list contains any attacks of the second list
+	 * @param list1 the first list of attacks
+	 * @param list2 the second list of attacks
+	 * @return a list of attacks of the second list, that are also contained within the first list
+	 */
 	private ArrayList<Attack> allAttacksContained(ArrayList<Attack> list1, ArrayList<Attack> list2){
 		ArrayList<Attack> missing = new ArrayList<Attack>();
 		
