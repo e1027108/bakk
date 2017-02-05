@@ -53,7 +53,7 @@ public class DemonstrationWindowController {
 	private URL location; //location of file
 
 	@FXML
-	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, computeBtn, toggleBtn, expandBtn; //buttons in demonstration window
+	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, computeBtn, toggleBtn, expandBtn, compareBtn; //buttons in demonstration window
 
 	@FXML
 	private CheckBox previousCheckBox; //checkbox whether to use previously computed sets or extensions
@@ -68,7 +68,7 @@ public class DemonstrationWindowController {
 	private ComboBox<String> setsComboBox, extensionComboBox, comparisonComboBox, expandingComboBox; //dropdown for result sets
 
 	@FXML
-	private Label extensionLbl, numberLbl, expandOptionsLbl;
+	private Label extensionLbl, numberLbl, expandOptionsLbl, expansionLbl, compareLbl;
 
 	@FXML
 	private ToggleGroup expansionGroup;
@@ -76,8 +76,8 @@ public class DemonstrationWindowController {
 	@FXML
 	private RadioButton standardRadio, strongRadio;
 
-	private Tooltip previousTip, arrowTip, backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip, expansionTip, expandTip, comparisonTip, compareTip, typeTip; //tooltips for all buttons etc
-	//TODO write tips into initialize()
+	private Tooltip previousTip, arrowTip, backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip, expansionTip, expandTip, comparisonTip, compareTip, typeTip, standardTip, 
+	strongTip, toggleTip; //tooltips for all buttons etc
 
 	private Framework argumentFramework, comparisonFramework, expansionFramework; //argument framework containing the arguments
 	private ArrayList<Argument> arguments, compArguments, expArguments; //arguments of the framework
@@ -124,6 +124,36 @@ public class DemonstrationWindowController {
 		extensionTip = new Tooltip("Choose the type of extension semantics you want to compute!");
 		extensionComboBox.setTooltip(extensionTip);
 		extensionLbl.setTooltip(extensionTip);
+		
+		expansionTip = new Tooltip("Choose an expansion to your framework and comparison framework.");
+		expandingComboBox.setTooltip(expansionTip);
+		expansionLbl.setTooltip(expansionTip);
+		
+		expandTip = new Tooltip("Expand both frameworks (if available) with your chosen expansion.");
+		expandBtn.setTooltip(expandTip);
+		
+		comparisonTip = new Tooltip("Choose a framework to compare your framework to."
+				+ "\nYour chosen option can be shown by clicking the toggle button.");
+		comparisonComboBox.setTooltip(comparisonTip);
+		compareLbl.setTooltip(comparisonTip);
+		
+		compareTip = new Tooltip("Compare your framework to your chosen comparison framework,"
+				+ "\ncomputing your chosen equivalency type.");
+		compareBtn.setTooltip(compareTip);
+		
+		typeTip = new Tooltip("Chose the type of equivalency to check for your frameworks.");
+		expandOptionsLbl.setTooltip(typeTip);
+		
+		standardTip = new Tooltip("Set comparison to check for standard equivalency. This checks whether the"
+				+ "\nframeworks have the same extensions for the chosen semantics.");
+		standardRadio.setTooltip(standardTip);
+		
+		strongTip = new Tooltip("Set comparison to check for strong expansion equivalency. This checks whether the"
+				+ "\nframeworks have equal kernels for the chosen semantics.");
+		strongRadio.setTooltip(strongTip);
+		
+		toggleTip = new Tooltip("Switch between the graphs.");
+		toggleBtn.setTooltip(toggleTip);
 	}
 
 	/**
@@ -284,7 +314,7 @@ public class DemonstrationWindowController {
 		if(comparisonFramework != null){
 			comparisonExpansion = new Expansion(comparisonFramework,expansionFramework);
 			comparisonExpansion.determineExpansionType(expandingComboBox.getAccessibleText());
-			System.out.println(expandingComboBox.getAccessibleText());
+			System.out.println(expandingComboBox.getAccessibleText()); //TODO remove after testing
 		}
 	}
 	
@@ -400,7 +430,6 @@ public class DemonstrationWindowController {
 		}
 	}
 
-	//TODO outsource?
 	/**
 	 * reads the frameworks available (expanded or not), then compares them according to the chosen type
 	 */

@@ -625,7 +625,7 @@ public class Framework {
 		return attacked;
 	}
 
-	/** TODO consolidate with something?
+	/**
 	 * combines two given frameworks and returns their union 
 	 * @param framework the first framework to combine, acts as the base framework (its interactor and pane are used)
 	 * @param expansion the second framework to combine, acts as an expansion to the base
@@ -640,7 +640,6 @@ public class Framework {
 
 		boolean add;
 
-		//TODO rewrite using contains(argument) and contains(attack) methods
 		if(expansion != null && expansion.getArguments() != null && expansion.getAttacks() != null){
 			for(Argument nar : expansion.getArguments()){
 				add = true;
@@ -837,7 +836,7 @@ public class Framework {
 		interactor.addToCommands(command);
 	}
 	
-	/** TODO consolidate
+	/**
 	 * for an attack creates a coloring instruction
 	 * @param item the attack as a string AB
 	 * @param color the color the attack should be shown

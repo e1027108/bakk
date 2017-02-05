@@ -303,7 +303,7 @@ public class Extension {
 			return true;
 		}
 		else if(thisArguments.size() != otherArguments.size()){
-			return false; //TODO special message?
+			return false;
 		}
 		
 		for(int t = thisArguments.size()-1; t >= 0; t--){

@@ -41,7 +41,7 @@
         </FXCollections>
       </items>
     </ComboBox>
-    <Label text="compare to:" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="68.0" />
+    <Label fx:id="compareLbl" text="compare to:" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="68.0" />
     <ComboBox fx:id="comparisonComboBox" layoutX="168.0" maxWidth="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="43.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
@@ -51,7 +51,7 @@
         </FXCollections>
       </items>
     </ComboBox>
-    <Label text="expand with:" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="68.0" />
+    <Label fx:id="expansionLbl" text="expand with:" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="68.0" />
     <ComboBox id="comparisonComboBox" fx:id="expandingComboBox" layoutX="168.0" maxWidth="200.0" prefWidth="150.0" AnchorPane.bottomAnchor="16.0">
       <items>
         <FXCollections fx:factory="observableArrayList">
