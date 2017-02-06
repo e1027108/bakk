@@ -45,7 +45,7 @@ public class Extension {
 		}
 	}
 
-	public boolean isConflictFree(boolean write) {
+	public boolean isConflictFree(boolean write, boolean show) {
 		ArrayList<Attack> violatingAttacks = new ArrayList<Attack>();
 		
 		for(Attack a: framework.getAttacks()){
@@ -71,19 +71,19 @@ public class Extension {
 				tmp = Framework.formatNameList(tmp);
 				instruction.setEdgeInstructions(edgeInstructions);
 
-				framework.addToInteractor(new Command(this.format() + " attacks the arguments " + tmp + "; thus it is not a conflict-free set!", instruction, framework.getPane()));
+				framework.addToInteractor(new Command(this.format() + " attacks the arguments " + tmp + "; thus it is not a conflict-free set!", instruction, framework.getPane()),show);
 			}
 			return false;
 		}
 
 		if(write){
-			framework.addToInteractor(new Command(this.format() + " is a conflict-free set, because it does not attack its own arguments", toInstruction(Color.GREEN), framework.getPane()));
+			framework.addToInteractor(new Command(this.format() + " is a conflict-free set, because it does not attack its own arguments", toInstruction(Color.GREEN), framework.getPane()),show);
 		}
 		cf = true;
 		return true;
 	}
 
-	public boolean isAdmissible(boolean write) {
+	public boolean isAdmissible(boolean write,boolean show) {
 		ArrayList<Attack> defeated = new ArrayList<Attack>();
 		ArrayList<Attack> undefeated = new ArrayList<Attack>();
 		GraphInstruction highlight = toInstruction(Color.GREEN);
@@ -92,19 +92,13 @@ public class Extension {
 		ArrayList<SingleInstruction> undefeatedInstructions = new ArrayList<SingleInstruction>();
 
 		if(!cf){
-			framework.addToInteractor(new Command(format() + "is not conflict-free, so it can't be admissible.",null, framework.getPane()));
+			framework.addToInteractor(new Command(format() + "is not conflict-free, so it can't be admissible.",null, framework.getPane()),show);
 			return false;
 		}
 
 		for(Attack inc: incomingAttacks){			
 			if(extensionAttacks.contains(inc.getAttacker())){
 				defeated.add(inc);
-				/*for(Attack out: outgoingAttacks){
-					if(inc.equals(out.getAttacked())){
-						defenceInstructions.add(new SingleInstruction(""+out.getAttacker().getName()+
-								out.getAttacked().getName(),Color.GREEN));
-					}
-				}*/
 			}
 			else{
 				undefeated.add(inc);
@@ -119,22 +113,22 @@ public class Extension {
 
 		if(undefeated.isEmpty()){
 			if(write){
-				framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", highlight, framework.getPane()));
+				framework.addToInteractor(new Command(format() + " defends all its arguments, so it is an admissible extension.", highlight, framework.getPane()),show);
 			}
 			adm = true;
 			return true;
 		}
 		else{
 			if(write){
-				framework.addToInteractor(new Command(format() + " does not defend against " + Framework.formatAttackerList(undefeated,1) + ", so it is not an admissible extension.", highlight, framework.getPane()));
+				framework.addToInteractor(new Command(format() + " does not defend against " + Framework.formatAttackerList(undefeated,1) + ", so it is not an admissible extension.", highlight, framework.getPane()),show);
 			}
 			return false;
 		}
 	}
 
-	public boolean isPreferred(ArrayList<Extension> admissible) {
+	public boolean isPreferred(ArrayList<Extension> admissible, boolean show) {
 		if(!adm){
-			framework.addToInteractor(new Command(format() + "is not admissible, so it can't be preferred.",null, framework.getPane()));
+			framework.addToInteractor(new Command(format() + "is not admissible, so it can't be preferred.",null, framework.getPane()),show);
 			return false;
 		}
 
@@ -152,12 +146,12 @@ public class Extension {
 					}
 				}
 
-				framework.addToInteractor(new Command("Since " + format + " is a subset of " + e.format() + ", " + format + " is not preferred.", instruction, framework.getPane()));
+				framework.addToInteractor(new Command("Since " + format + " is a subset of " + e.format() + ", " + format + " is not preferred.", instruction, framework.getPane()),show);
 				return false;
 			}
 		}
 
-		framework.addToInteractor(new Command(format() + " is not the subset of another admissible extension, so it is a preferred extension.", toInstruction(Color.GREEN), framework.getPane()));
+		framework.addToInteractor(new Command(format() + " is not the subset of another admissible extension, so it is a preferred extension.", toInstruction(Color.GREEN), framework.getPane()),show);
 		return true;
 	}
 
@@ -173,13 +167,13 @@ public class Extension {
 		return true;
 	}
 
-	public boolean isStable(){
+	public boolean isStable(boolean show){
 		ArrayList<Argument> outside = new ArrayList<Argument>();
 		ArrayList<Argument> unattacked = new ArrayList<Argument>();
 		GraphInstruction highlight = toInstruction(Color.GREEN);
 
 		if(!cf){
-			framework.addToInteractor(new Command(format() + "is not conflict-free, so it can't be stable.",null, framework.getPane()));
+			framework.addToInteractor(new Command(format() + "is not conflict-free, so it can't be stable.",null, framework.getPane()),show);
 			return false;
 		}
 
@@ -194,16 +188,16 @@ public class Extension {
 		}
 
 		if(unattacked.isEmpty()){
-			framework.addToInteractor(new Command(format() + " attacks every argument outside itself, so it is a stable extension.", highlight, framework.getPane()));
+			framework.addToInteractor(new Command(format() + " attacks every argument outside itself, so it is a stable extension.", highlight, framework.getPane()),show);
 			return true;
 		}
 		else{
-			framework.addToInteractor(new Command(format() + " is not a stable extension because it doesn't attack " + Framework.formatArgumentList(unattacked) + ".", highlight, framework.getPane()));
+			framework.addToInteractor(new Command(format() + " is not a stable extension because it doesn't attack " + Framework.formatArgumentList(unattacked) + ".", highlight, framework.getPane()),show);
 			return false;
 		}
 	}
 
-	public boolean isComplete(boolean write){
+	public boolean isComplete(boolean write,boolean show){
 		ArrayList<Argument> outside = new ArrayList<Argument>();
 		ArrayList<Argument> uselessDefences = new ArrayList<Argument>();
 		GraphInstruction highlight = toInstruction(Color.GREEN);
@@ -211,7 +205,7 @@ public class Extension {
 		ArrayList<SingleInstruction> edgeIns = new ArrayList<SingleInstruction>();
 
 		if(!adm){
-			framework.addToInteractor(new Command(format() + "is not admissible, so it can't be complete.",null, framework.getPane()));
+			framework.addToInteractor(new Command(format() + "is not admissible, so it can't be complete.",null, framework.getPane()),show);
 			return false;
 		}
 
@@ -256,7 +250,7 @@ public class Extension {
 
 		if(uselessDefences.isEmpty()){
 			if(write){
-				framework.addToInteractor(new Command(format() + " contains all the arguments it defends and therefore is a complete extension.", highlight, framework.getPane()));
+				framework.addToInteractor(new Command(format() + " contains all the arguments it defends and therefore is a complete extension.", highlight, framework.getPane()),show);
 			}
 
 			return true;
@@ -272,7 +266,8 @@ public class Extension {
 					highlight.setEdgeInstructions(edgeIns);
 				}
 
-				framework.addToInteractor(new Command(format() + " defends the argument(s) " + Framework.formatArgumentList(uselessDefences) + ", which it does not contain. " + format() + " is not a complete extension.", highlight, framework.getPane()));
+				framework.addToInteractor(new Command(format() + " defends the argument(s) " + Framework.formatArgumentList(uselessDefences) + ", which it does not contain. " + format() + " is not a complete extension.",
+						highlight, framework.getPane()),show);
 			}
 
 			return false;

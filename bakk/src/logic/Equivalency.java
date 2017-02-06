@@ -25,10 +25,11 @@ public class Equivalency {
 	 * this may compare frameworks or their expanded versions
 	 * @param type the semantics to check for
 	 * @param usePrevious whether to compute sets that were already computed, again
+	 * @param show whether to show extension computations
 	 * @return whether the checked frameworks' extensions are equivalent wrt the given semantics
 	 * @throws InvalidInputException if an impermissible semantics was chosen
 	 */
-	public ArrayList<Extension> areStandardEquivalent(int type, boolean usePrevious) throws InvalidInputException{
+	public ArrayList<Extension> areStandardEquivalent(int type, boolean usePrevious, boolean show) throws InvalidInputException{
 		ArrayList<Extension> fstExt, sndExt;
 		Framework fstUsed, sndUsed;
 
@@ -48,53 +49,53 @@ public class Equivalency {
 		switch(type){
 		case 1:
 			extName = "conflict-free sets";
-			fstExt = fstUsed.getConflictFreeSets();
+			fstExt = fstUsed.getConflictFreeSets(show);
 			interactor.addToCommands(new Command(framedesc + " A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null,1));
-			sndExt = sndUsed.getConflictFreeSets();
+			sndExt = sndUsed.getConflictFreeSets(show);
 			interactor.addToCommands(new Command(framedesc + " B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null,2));
 			break;
 		case 2:
 			extName = "admissible extensions";
-			fstExt = fstUsed.getAdmissibleExtensions(usePrevious);
+			fstExt = fstUsed.getAdmissibleExtensions(usePrevious,show);
 			interactor.addToCommands(new Command(framedesc + " A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null,1));
-			sndExt = sndUsed.getAdmissibleExtensions(usePrevious);
+			sndExt = sndUsed.getAdmissibleExtensions(usePrevious,show);
 			interactor.addToCommands(new Command(framedesc + " B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null,2));
 			break;
 		case 3:
 			extName = "complete extensions";
-			fstExt = fstUsed.getCompleteExtensions(usePrevious);
+			fstExt = fstUsed.getCompleteExtensions(usePrevious,show);
 			interactor.addToCommands(new Command(framedesc + " A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null,1));
-			sndExt = sndUsed.getCompleteExtensions(usePrevious);
+			sndExt = sndUsed.getCompleteExtensions(usePrevious,show);
 			interactor.addToCommands(new Command(framedesc + " B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null,2));
 			break;
 		case 4:
 			extName = "preferred extensions";
-			fstExt = fstUsed.getPreferredExtensions(usePrevious);
+			fstExt = fstUsed.getPreferredExtensions(usePrevious,show);
 			interactor.addToCommands(new Command(framedesc + " A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null,1));
-			sndExt = sndUsed.getPreferredExtensions(usePrevious);
+			sndExt = sndUsed.getPreferredExtensions(usePrevious,show);
 			interactor.addToCommands(new Command(framedesc + " B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null,2));
 			break;
 		case 5:
 			extName = "stable extensions";
-			fstExt = fstUsed.getStableExtensions(usePrevious);
+			fstExt = fstUsed.getStableExtensions(usePrevious,show);
 			interactor.addToCommands(new Command(framedesc + " A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null,1));
-			sndExt = sndUsed.getStableExtensions(usePrevious);
+			sndExt = sndUsed.getStableExtensions(usePrevious,show);
 			interactor.addToCommands(new Command(framedesc + " B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null,2));
 			break;
 		case 6:
 			extName = "grounded extensions";
 			fstExt = new ArrayList<Extension>();
-			fstExt.add(fstUsed.getGroundedExtension(usePrevious));
+			fstExt.add(fstUsed.getGroundedExtension(usePrevious,show));
 			interactor.addToCommands(new Command(framedesc + " A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null,1));
 			sndExt = new ArrayList<Extension>();
-			sndExt.add(sndUsed.getGroundedExtension(usePrevious));
+			sndExt.add(sndUsed.getGroundedExtension(usePrevious,show));
 			interactor.addToCommands(new Command(framedesc + " B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null,2));
 			break;
 		case 7:
 			extName = "semi-stable extensions";
-			fstExt = fstUsed.getSemiStableExtensions(usePrevious);
+			fstExt = fstUsed.getSemiStableExtensions(usePrevious,show);
 			interactor.addToCommands(new Command(framedesc + " A has the following " + extName + ": " + Framework.formatExtensions(fstExt) + ".",null,1));
-			sndExt = sndUsed.getSemiStableExtensions(usePrevious);
+			sndExt = sndUsed.getSemiStableExtensions(usePrevious,show);
 			interactor.addToCommands(new Command(framedesc + " B has the following " + extName + ": " + Framework.formatExtensions(sndExt) + ".",null,2));
 			break;
 		default:

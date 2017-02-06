@@ -68,13 +68,14 @@
     <Separator orientation="VERTICAL" prefHeight="85.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="460.0" AnchorPane.topAnchor="501.5" />
     <CheckBox fx:id="previousCheckBox" mnemonicParsing="false" selected="true" text="use previously computed sets for further computations" AnchorPane.bottomAnchor="75.0" AnchorPane.leftAnchor="495.0" />
     <Separator prefWidth="200.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="462.0" AnchorPane.rightAnchor="0.0" />
-    <Label fx:id="expandOptionsLbl" disable="false" prefHeight="18.0" prefWidth="258.0" text="Type of equivalency check:" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="495.0" />
-    <RadioButton id="strongRadio" fx:id="standardRadio" mnemonicParsing="false" selected="true" text="standard" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="515.0">
+    <Label fx:id="expandOptionsLbl" disable="false" prefHeight="18.0" prefWidth="183.0" text="Type of equivalency check:" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="495.0" />
+    <RadioButton id="strongRadio" fx:id="standardRadio" mnemonicParsing="false" selected="true" text="standard" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="700.0">
       <toggleGroup>
         <ToggleGroup fx:id="expansionGroup" />
       </toggleGroup>
     </RadioButton>
-    <RadioButton id="normalRadio" fx:id="strongRadio" mnemonicParsing="false" text="strong" toggleGroup="$expansionGroup" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="610.0" />
+    <RadioButton id="normalRadio" fx:id="strongRadio" mnemonicParsing="false" text="strong" toggleGroup="$expansionGroup" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="800.0" />
     <Separator prefWidth="900.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" />
+    <CheckBox id="previousCheckBox" fx:id="showExtensionsCheckBox" mnemonicParsing="false" selected="false" text="show extension computation" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="495.0" />
   </children>
 </AnchorPane>

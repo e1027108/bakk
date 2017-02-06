@@ -48,29 +48,30 @@ public class Framework {
 	/**
 	 * computes all conflict-free sets of the framework
 	 * these are sets of arguments where no argument attacks another inside the set
+	 * @param show whether or not to show interactor commands
 	 * @return set of all conflict-free sets of the framework
 	 */
-	public ArrayList<Extension> getConflictFreeSets() {
+	public ArrayList<Extension> getConflictFreeSets(boolean show) {
 		ArrayList<Extension> conflictFreeSets = new ArrayList<Extension>();
 		ArrayList<ArrayList<Argument>> powerset;
 
 		if(arguments == null){
-			interactor.addToCommands(new Command("No arguments found, error!", null, pane));
+			addToInteractor(new Command("No arguments found, error!", null, pane),show);
 			return null;
 		}
 
-		interactor.addToCommands(new Command("Computing conflict-free sets!", null, pane));
+		addToInteractor(new Command("Computing conflict-free sets!", null, pane),show);
 
 		powerset = getAllSubsets(arguments);
 
 		for(ArrayList<Argument> set: powerset){
 			Extension tmp = new Extension(set, this);
-			if(tmp.isConflictFree(true)){
+			if(tmp.isConflictFree(true,show)){
 				conflictFreeSets.add(tmp);
 			}
 		}
 
-		interactor.addToCommands(new Command("The conflict-free sets are: " + formatExtensions(conflictFreeSets), null, pane));
+		addToInteractor(new Command("The conflict-free sets are: " + formatExtensions(conflictFreeSets), null, pane),show);
 
 		previousConflictFreeSets = new ArrayList<Extension>();
 		previousConflictFreeSets.addAll(conflictFreeSets);
@@ -105,15 +106,16 @@ public class Framework {
 	 * computes all admissible extensions (sets) of the framework
 	 * these are all conflict-free sets, that defend themselves against all outside attacks
 	 * @param usePrevious whether to use previous computation results or compute the needed sets anew
+	 * @param show whether or not to show interactor commands
 	 * @return a list of all admissible extensions of the framework
 	 */
-	public ArrayList<Extension> getAdmissibleExtensions(boolean usePrevious) {
+	public ArrayList<Extension> getAdmissibleExtensions(boolean usePrevious, boolean show) {
 		ArrayList<Extension> cf;
 		ArrayList<Extension> admissible = new ArrayList<Extension>();
 
 		if(!usePrevious || (previousConflictFreeSets == null)){
-			interactor.addToCommands(new Command("Computing conflict-free sets to compute admissible extensions!", null, pane));
-			cf = getConflictFreeSets();
+			addToInteractor(new Command("Computing conflict-free sets to compute admissible extensions!", null, pane),show);
+			cf = getConflictFreeSets(show);
 		}
 		else{
 			cf = previousConflictFreeSets;
@@ -126,15 +128,15 @@ public class Framework {
 				notification += formatExtensions(cf);
 			}
 
-			interactor.addToCommands(new Command(notification, null, pane));
+			addToInteractor(new Command(notification, null, pane),show);
 		}
 
-		if(invalidityCheck(cf, "conflict-free sets", "admissible extensions")){
+		if(invalidityCheck(cf, "conflict-free sets", "admissible extensions",show)){
 			return null;
 		}
 
 		for(Extension e: cf){
-			if(e.isAdmissible(true)){
+			if(e.isAdmissible(true,show)){
 				admissible.add(e);
 			}
 		}
@@ -146,7 +148,7 @@ public class Framework {
 		else{
 			notification = "There are no admissible extensions!";
 		}
-		interactor.addToCommands(new Command(notification, null, pane));
+		addToInteractor(new Command(notification, null, pane),show);
 
 		previousAdmissibleExtensions = new ArrayList<Extension>();
 		previousAdmissibleExtensions.addAll(admissible);
@@ -161,9 +163,10 @@ public class Framework {
 	 * @param list the list to be checked
 	 * @param cause cause of the possible problem
 	 * @param effect what is not computable because of a problem
+	 * @param show whether or not to show interactor commands
 	 * @return if there is a problem with the set for further computation
 	 */
-	private boolean invalidityCheck(ArrayList<Extension> list, String cause, String effect){
+	private boolean invalidityCheck(ArrayList<Extension> list, String cause, String effect, boolean show){
 		if(list == null || list.isEmpty()){ //shouldn't be possible
 			String are = ", there are no ";
 
@@ -171,7 +174,7 @@ public class Framework {
 				are = are.replace("are", "is");
 			}
 
-			interactor.addToCommands(new Command("Since there are no " + cause + are + effect + "!", null, pane));
+			addToInteractor(new Command("Since there are no " + cause + are + effect + "!", null, pane),show);
 			return true;
 		}
 		return false;
@@ -181,15 +184,16 @@ public class Framework {
 	 * computes all complete extensions of the framework
 	 * these are all admissible extensions that contain all arguments they defend
 	 * @param usePrevious whether or not to take previous computation results for this computation or re-compute those
+	 * @param show whether or not to show interactor commands
 	 * @return a list of all complete extensions of the framework
 	 */
-	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious){
+	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious, boolean show){
 		ArrayList<Extension> adm;
 		ArrayList<Extension> complete = new ArrayList<Extension>();
 
 		if(!usePrevious || (previousAdmissibleExtensions == null)){
-			interactor.addToCommands(new Command("Computing admissible extensions to compute complete extensions!", null, pane));
-			adm = getAdmissibleExtensions(usePrevious);
+			addToInteractor(new Command("Computing admissible extensions to compute complete extensions!", null, pane),show);
+			adm = getAdmissibleExtensions(usePrevious,show);
 		}
 		else{
 			adm = previousAdmissibleExtensions;
@@ -202,15 +206,15 @@ public class Framework {
 				notification += formatExtensions(adm);
 			}
 
-			interactor.addToCommands(new Command(notification, null, pane));
+			addToInteractor(new Command(notification, null, pane),show);
 		}
 
-		if(invalidityCheck(adm, "admissible extensions", "complete extensions")){
+		if(invalidityCheck(adm, "admissible extensions", "complete extensions",show)){
 			return null;
 		}
 
 		for(Extension e: adm){
-			if(e.isComplete(true)){
+			if(e.isComplete(true,show)){
 				complete.add(e);
 			}
 		}
@@ -223,7 +227,7 @@ public class Framework {
 			notification = "There are no complete extensions!";
 		}
 		
-		interactor.addToCommands(new Command(notification, null, pane));
+		addToInteractor(new Command(notification, null, pane),show);
 
 		previousCompleteExtensions = new ArrayList<Extension>();
 		previousCompleteExtensions.addAll(complete);
@@ -235,15 +239,16 @@ public class Framework {
 	 * computes all preferred extensions of the framework
 	 * these are all admissible extensions which defend themselves against outside attacks
 	 * @param usePrevious whether or not to take previous computation results for this computation or re-compute those
+	 * @param show whether or not to show interactor commands
 	 * @return a list of all preferred extensions of the framework
 	 */
-	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious) {
+	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious, boolean show) {
 		ArrayList<Extension> adm;
 		ArrayList<Extension> preferred = new ArrayList<Extension>();
 
 		if(!usePrevious || (previousAdmissibleExtensions == null)){
-			interactor.addToCommands(new Command("Computing admissible extensions to compute preferred extensions!", null, pane));
-			adm = getAdmissibleExtensions(usePrevious);
+			addToInteractor(new Command("Computing admissible extensions to compute preferred extensions!", null, pane),show);
+			adm = getAdmissibleExtensions(usePrevious,show);
 		}
 		else{
 			adm = previousAdmissibleExtensions;
@@ -257,20 +262,20 @@ public class Framework {
 				notification += formatExtensions(adm);
 			}
 
-			interactor.addToCommands(new Command(notification, null, pane));
+			addToInteractor(new Command(notification, null, pane),show);
 		}
 
-		if(invalidityCheck(adm, "admissible extensions", "preferred extensions")){
+		if(invalidityCheck(adm, "admissible extensions", "preferred extensions",show)){
 			return null;
 		}
 
 		for(Extension e: adm){
-			if(e.isPreferred(adm)){
+			if(e.isPreferred(adm,show)){
 				preferred.add(e);
 			}
 		}
 
-		interactor.addToCommands(new Command("The preferred extensions are: " + formatExtensions(preferred), null, pane));
+		addToInteractor(new Command("The preferred extensions are: " + formatExtensions(preferred), null, pane),show);
 
 		previousPreferredExtensions = new ArrayList<Extension>();
 		previousPreferredExtensions.addAll(preferred);
@@ -282,15 +287,16 @@ public class Framework {
 	 * Computes the stable extensions of the framework, therefore we
 	 * 	look at all conflict-free sets that attack all arguments they do not contain themselves
 	 * @param usePrevious whether to use previously computed sets for this computation or to compute them anew
+	 * @param show whether or not to show interactor commands
 	 * @return the set of all stable extensions of the framework
 	 */
-	public ArrayList<Extension> getStableExtensions(boolean usePrevious) {
+	public ArrayList<Extension> getStableExtensions(boolean usePrevious, boolean show) {
 		ArrayList<Extension> cf;
 		ArrayList<Extension> stable = new ArrayList<Extension>();
 
 		if(!usePrevious || (previousConflictFreeSets == null)){
-			interactor.addToCommands(new Command("Computing conflict-free sets to compute stable extensions!", null, pane));
-			cf = getConflictFreeSets();
+			addToInteractor(new Command("Computing conflict-free sets to compute stable extensions!", null, pane),show);
+			cf = getConflictFreeSets(show);
 		}
 		else{
 			cf = previousConflictFreeSets;
@@ -304,20 +310,20 @@ public class Framework {
 				notification += formatExtensions(cf);
 			}
 
-			interactor.addToCommands(new Command(notification, null, pane));
+			addToInteractor(new Command(notification, null, pane),show);
 		}
 
-		if(invalidityCheck(cf, "conflict-free sets", "stable extensions")){
+		if(invalidityCheck(cf, "conflict-free sets", "stable extensions",show)){
 			return null;
 		}
 
 		for(Extension e: cf){
-			if(e.isStable()){
+			if(e.isStable(show)){
 				stable.add(e);
 			}
 		}
 
-		interactor.addToCommands(new Command("The stable extensions are: " + formatExtensions(stable), null, pane));
+		addToInteractor(new Command("The stable extensions are: " + formatExtensions(stable), null, pane),show);
 
 		previousStableExtensions = new ArrayList<Extension>();
 		previousStableExtensions.addAll(stable);
@@ -329,15 +335,16 @@ public class Framework {
 	 * computes the unique grounded extension of the framework
 	 * 	the maximal complete extension is searched, since it is the grounded extension
 	 * @param usePrevious whether or not to use previous results
+	 * @param show whether or not to show interactor commands
 	 * @return the grounded Extension
 	 */
-	public Extension getGroundedExtension(boolean usePrevious){
+	public Extension getGroundedExtension(boolean usePrevious, boolean show){
 		ArrayList<Extension> co;
 		ArrayList<Argument> grounded = new ArrayList<Argument>();
 
 		if(!usePrevious || (previousCompleteExtensions == null)){
-			interactor.addToCommands(new Command("Computing complete extensions to compute the grounded extension!", null, pane));
-			co = getCompleteExtensions(usePrevious);
+			addToInteractor(new Command("Computing complete extensions to compute the grounded extension!", null, pane),show);
+			co = getCompleteExtensions(usePrevious,show);
 		}
 		else{
 			co = previousCompleteExtensions;
@@ -351,21 +358,21 @@ public class Framework {
 				notification += formatExtensions(co);
 			}
 
-			interactor.addToCommands(new Command(notification, null, pane));
+			addToInteractor(new Command(notification, null, pane),show);
 		}
 
-		if(invalidityCheck(co, "complete extensions", "grounded extension")){
+		if(invalidityCheck(co, "complete extensions", "grounded extension",show)){
 			return null;
 		}
 		
 		if(co.size() == 1){
-			interactor.addToCommands(new Command("The only complete extension " + co.get(0).format() + " is the grounded extension.", co.get(0).toInstruction(Color.GREEN), pane));
+			addToInteractor(new Command("The only complete extension " + co.get(0).format() + " is the grounded extension.", co.get(0).toInstruction(Color.GREEN), pane),show);
 			return co.get(0);
 		}
 
 		for(Extension e: co){
 			if(e.getArguments().size() == 0){
-				interactor.addToCommands(new Command("Since there is a complete extension {}, the grounded extension is {}", null, pane));
+				addToInteractor(new Command("Since there is a complete extension {}, the grounded extension is {}", null, pane),show);
 				return new Extension(grounded, this);
 			}
 		}
@@ -375,7 +382,7 @@ public class Framework {
 
 			if(grounded.isEmpty()){ //if no elements in grounded, e is first extension
 				grounded.addAll(e.getArguments());
-				interactor.addToCommands(new Command("The extension " + eFormat + " is the first candidate for grounded extension.", e.toInstruction(Color.GREEN), pane));
+				addToInteractor(new Command("The extension " + eFormat + " is the first candidate for grounded extension.", e.toInstruction(Color.GREEN), pane),show);
 			}
 			else{ //else check for common elements in extension
 				ArrayList<Argument> missing = new ArrayList<Argument>();
@@ -398,11 +405,11 @@ public class Framework {
 				highlight.getNodeInstructions().addAll(tmp.toInstruction(Color.GREEN).getNodeInstructions());
 
 				if(missing.size() > 0){
-					interactor.addToCommands(new Command(eFormat + " doesn't contain the argument(s) " + formatNameList(missingString) + 
-							". Therefore our new candidate is " + tmp.format(), highlight, pane));
+					addToInteractor(new Command(eFormat + " doesn't contain the argument(s) " + formatNameList(missingString) + 
+							". Therefore our new candidate is " + tmp.format(), highlight, pane),show);
 				}
 				else{
-					interactor.addToCommands(new Command("Since " + eFormat + " contains all the arguments of " + tmp.format() + ", our candidate doesn't change.", highlight, pane));
+					addToInteractor(new Command("Since " + eFormat + " contains all the arguments of " + tmp.format() + ", our candidate doesn't change.", highlight, pane),show);
 				}
 
 				if(grounded.isEmpty()){
@@ -415,7 +422,7 @@ public class Framework {
 		@SuppressWarnings("unused")
 		Extension previousGroundedExtension = new Extension(grounded,this); //I want two objects, because the first one might be replaced/lost
 
-		interactor.addToCommands(new Command("The grounded extension is: " + groundedExtension.format(), groundedExtension.toInstruction(Color.GREEN), pane));
+		addToInteractor(new Command("The grounded extension is: " + groundedExtension.format(), groundedExtension.toInstruction(Color.GREEN), pane),show);
 
 		return groundedExtension;
 	}
@@ -428,14 +435,15 @@ public class Framework {
 	 * 		we compute f+ for all other extensions f
 	 * 		an extension e is semi-stable if for all f+, e+ is not a proper subset of f+
 	 * @param usePrevious whether previous results are used (true) or re-computed (false)
+	 * @param show whether or not to show interactor commands
 	 * @return a list of all semi-stable extensions of the framework
 	 */
-	public ArrayList<Extension> getSemiStableExtensions(boolean usePrevious){
+	public ArrayList<Extension> getSemiStableExtensions(boolean usePrevious, boolean show){
 		ArrayList<Extension> admExt;
 		
 		if(!usePrevious || (previousAdmissibleExtensions == null)){
-			interactor.addToCommands(new Command("Computing admissible extensions to compute semi-stable extensions!",null, pane));
-			admExt = getAdmissibleExtensions(usePrevious);
+			addToInteractor(new Command("Computing admissible extensions to compute semi-stable extensions!",null, pane),show);
+			admExt = getAdmissibleExtensions(usePrevious,show);
 		}
 		else{
 			admExt = previousAdmissibleExtensions;
@@ -449,7 +457,7 @@ public class Framework {
 				notification += formatExtensions(admExt);
 			}
 			
-			interactor.addToCommands(new Command(notification,null, pane));
+			addToInteractor(new Command(notification,null, pane),show);
 		}
 
 		ArrayList<Extension> semiStable = new ArrayList<Extension>();
@@ -478,8 +486,8 @@ public class Framework {
 				unionInst.getNodeInstructions().add(new SingleInstruction(a.getName(),Color.BLUE));
 			}
 			
-			interactor.addToCommands(new Command("The admissible extension " + e.format() + " attacks the arguments " + (new Extension(unionArgs,this)).format() + " -> "
-					+ "R+(" + e.format() + ") = " + toInst.format() + ".", unionInst, pane)); 
+			addToInteractor(new Command("The admissible extension " + e.format() + " attacks the arguments " + (new Extension(unionArgs,this)).format() + " -> "
+					+ "R+(" + e.format() + ") = " + toInst.format() + ".", unionInst, pane),show); 
 		}
 		
 		//R+(S) is exactly the R+(T) at the position we are at and corresponds to e
@@ -504,8 +512,8 @@ public class Framework {
 						GraphInstruction overcoloring = iExt.toInstruction(Color.GREEN);
 						coloring.getNodeInstructions().addAll(overcoloring.getNodeInstructions());
 						
-						interactor.addToCommands(new Command(admExt.get(i).format() + " is not a semi-stable extension, since R+(" + admExt.get(i).format() + 
-								") = " + iExt.format() + " is a subset of R+(" + admExt.get(j).format() + ") = " + cmpExt.format() + ".", coloring, pane));
+						addToInteractor(new Command(admExt.get(i).format() + " is not a semi-stable extension, since R+(" + admExt.get(i).format() + 
+								") = " + iExt.format() + " is a subset of R+(" + admExt.get(j).format() + ") = " + cmpExt.format() + ".", coloring, pane),show);
 						
 						semiStable.remove(admExt.get(i));
 						removed = true;
@@ -518,13 +526,13 @@ public class Framework {
 				//there are duplicate colorings that are just changed because of instruction order
 				GraphInstruction coloring = iExt.toInstruction(Color.GREEN);
 				
-				interactor.addToCommands(new Command("The extension " + admExt.get(i).format() + " is semi-stable, since R+(" + admExt.get(i).format() + 
-						") = " + iExt.format() + " is maximal.",coloring, pane));
+				addToInteractor(new Command("The extension " + admExt.get(i).format() + " is semi-stable, since R+(" + admExt.get(i).format() + 
+						") = " + iExt.format() + " is maximal.",coloring, pane),show);
 			}
 		}
 		
 		// at this point we have added all extensions, then removed the non-semi-stable ones
-		interactor.addToCommands(new Command("The semi-stable extensions are: " + formatExtensions(semiStable) + ".", null, pane));
+		addToInteractor(new Command("The semi-stable extensions are: " + formatExtensions(semiStable) + ".", null, pane),show);
 
 		previousSemiStableExtensions = new ArrayList<Extension>();
 		previousSemiStableExtensions.addAll(semiStable);
@@ -831,9 +839,12 @@ public class Framework {
 	/**
 	 * stores a message at the end of the queue of the Interactor
 	 * @param message message to be stored by Interactor
+	 * @param whether to really add the command to the interactor
 	 */
-	public void addToInteractor(Command command){
-		interactor.addToCommands(command);
+	public void addToInteractor(Command command,boolean show){
+		if(show){
+			interactor.addToCommands(command);
+		}
 	}
 	
 	/**
@@ -845,6 +856,7 @@ public class Framework {
 	public SingleInstruction getEdgeInstructionFromAttack(String item,Color color){
 		return new SingleInstruction(item,color);
 	}
+
 	
 	public ArrayList<Argument> getArguments() {
 		return arguments;

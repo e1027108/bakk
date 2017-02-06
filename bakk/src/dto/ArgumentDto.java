@@ -8,6 +8,7 @@ public class ArgumentDto {
 	private char name; //name of the argument
 	private String statement; //statement describing the argument
 	private String attacks; //arguments the argument attacks
+	private boolean selected;
 	
 	/**
 	 * creates a Data Transfer Object for arguments
@@ -15,10 +16,11 @@ public class ArgumentDto {
 	 * @param statement text or formula describing the argument
 	 * @param attacks string of argument names the argument attacks
 	 */
-	public ArgumentDto(char name, String statement, String attacks){
+	public ArgumentDto(char name, String statement, String attacks, boolean selected){
 		this.setName(name);
 		this.setStatement(statement);
 		this.setAttacks(attacks);
+		this.selected = selected;
 	}
 
 	/**
@@ -75,5 +77,9 @@ public class ArgumentDto {
 	 */
 	public void removeAttack(char attack){
 		this.attacks.replace("" + attack, "");
+	}
+
+	public boolean isSelected() {
+		return selected;
 	}
 }

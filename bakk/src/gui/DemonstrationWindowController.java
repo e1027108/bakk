@@ -56,7 +56,7 @@ public class DemonstrationWindowController {
 	private Button backBtn, nextBtn, showAllBtn, resultsBtn, arrowBtn, computeBtn, toggleBtn, expandBtn, compareBtn; //buttons in demonstration window
 
 	@FXML
-	private CheckBox previousCheckBox; //checkbox whether to use previously computed sets or extensions
+	private CheckBox previousCheckBox, showExtensionsCheckBox; //checkbox whether to use previously computed sets or extensions
 
 	@FXML
 	private TextArea explanationArea; //textArea describing every computation
@@ -212,7 +212,7 @@ public class DemonstrationWindowController {
 	public void conflictFreeComputation(Framework framework) {
 		interactor.emptyQueue();
 
-		resultSet = framework.getConflictFreeSets();
+		resultSet = framework.getConflictFreeSets(true);
 
 		//printExtensions(resultSet);
 
@@ -225,7 +225,7 @@ public class DemonstrationWindowController {
 	public void admissibleComputation(Framework framework){
 		interactor.emptyQueue();
 
-		resultSet = framework.getAdmissibleExtensions(previousCheckBox.isSelected());
+		resultSet = framework.getAdmissibleExtensions(previousCheckBox.isSelected(),true);
 
 		//printExtensions(resultSet);
 
@@ -238,7 +238,7 @@ public class DemonstrationWindowController {
 	public void completeComputation(Framework framework){
 		interactor.emptyQueue();
 
-		resultSet = framework.getCompleteExtensions(previousCheckBox.isSelected());
+		resultSet = framework.getCompleteExtensions(previousCheckBox.isSelected(),true);
 
 		//printExtensions(resultSet);
 
@@ -251,7 +251,7 @@ public class DemonstrationWindowController {
 	public void preferredComputation(Framework framework){
 		interactor.emptyQueue();
 
-		resultSet = framework.getPreferredExtensions(previousCheckBox.isSelected());
+		resultSet = framework.getPreferredExtensions(previousCheckBox.isSelected(),true);
 
 		//printExtensions(resultSet);
 
@@ -264,7 +264,7 @@ public class DemonstrationWindowController {
 	public void stableComputation(Framework framework){
 		interactor.emptyQueue();
 
-		resultSet = framework.getStableExtensions(previousCheckBox.isSelected());
+		resultSet = framework.getStableExtensions(previousCheckBox.isSelected(),true);
 
 		//printExtensions(resultSet);
 
@@ -277,7 +277,7 @@ public class DemonstrationWindowController {
 	public void groundedComputation(Framework framework){
 		interactor.emptyQueue();
 
-		Extension grounded = framework.getGroundedExtension(previousCheckBox.isSelected());
+		Extension grounded = framework.getGroundedExtension(previousCheckBox.isSelected(),true);
 		resultSet = new ArrayList<Extension>();
 		resultSet.add(grounded);
 
@@ -293,7 +293,7 @@ public class DemonstrationWindowController {
 	public void semiStableComputation(Framework framework){
 		interactor.emptyQueue();
 
-		resultSet = framework.getSemiStableExtensions(previousCheckBox.isSelected());
+		resultSet = framework.getSemiStableExtensions(previousCheckBox.isSelected(),true);
 
 		//printExtensions(resultSet);
 
@@ -313,8 +313,8 @@ public class DemonstrationWindowController {
 
 		if(comparisonFramework != null){
 			comparisonExpansion = new Expansion(comparisonFramework,expansionFramework);
-			comparisonExpansion.determineExpansionType(expandingComboBox.getAccessibleText());
-			System.out.println(expandingComboBox.getAccessibleText()); //TODO remove after testing
+			comparisonExpansion.determineExpansionType(expandingComboBox.getSelectionModel().getSelectedItem());
+			System.out.println(expandingComboBox.getSelectionModel().getSelectedItem()); //TODO remove after testing
 		}
 	}
 
@@ -465,7 +465,7 @@ public class DemonstrationWindowController {
 
 		if(standard){
 			try {
-				resultSet = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected());
+				resultSet = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected(),showExtensionsCheckBox.isSelected());
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
 				return;
