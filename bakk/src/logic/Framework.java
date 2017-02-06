@@ -51,7 +51,6 @@ public class Framework {
 	 * @return set of all conflict-free sets of the framework
 	 */
 	public ArrayList<Extension> getConflictFreeSets() {
-		System.out.println(this.formatArgumentList(arguments) + " + " + this.formatAttackList(attacks));
 		ArrayList<Extension> conflictFreeSets = new ArrayList<Extension>();
 		ArrayList<ArrayList<Argument>> powerset;
 
@@ -70,7 +69,6 @@ public class Framework {
 				conflictFreeSets.add(tmp);
 			}
 		}
-		System.out.println("");
 
 		interactor.addToCommands(new Command("The conflict-free sets are: " + formatExtensions(conflictFreeSets), null, pane));
 

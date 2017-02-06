@@ -41,9 +41,6 @@ public class Equivalency {
 			sndUsed = snd;
 		}
 		
-		//System.out.println(Framework.formatArgumentList(fstUsed.getArguments()) + "/" + Framework.formatArgumentList(sndUsed.getArguments()));
-		//System.out.println(Framework.formatAttackList(fstUsed.getAttacks()) + "/" + Framework.formatAttackList(sndUsed.getAttacks()));
-
 		String extName = "";
 
 		String framedesc = "Framework";

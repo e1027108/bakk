@@ -46,7 +46,6 @@ public class Argument {
 	@Override
 	public boolean equals(Object b){
 		if(b instanceof Argument){
-			System.out.println("" + ((Argument) b).getName() + this.name);
 			if(String.valueOf(((Argument) b).getName()).toUpperCase().equals(String.valueOf(this.name).toUpperCase())){
 				return true;
 			}
