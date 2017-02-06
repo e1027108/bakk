@@ -124,34 +124,34 @@ public class DemonstrationWindowController {
 		extensionTip = new Tooltip("Choose the type of extension semantics you want to compute!");
 		extensionComboBox.setTooltip(extensionTip);
 		extensionLbl.setTooltip(extensionTip);
-		
+
 		expansionTip = new Tooltip("Choose an expansion to your framework and comparison framework.");
 		expandingComboBox.setTooltip(expansionTip);
 		expansionLbl.setTooltip(expansionTip);
-		
+
 		expandTip = new Tooltip("Expand both frameworks (if available) with your chosen expansion.");
 		expandBtn.setTooltip(expandTip);
-		
+
 		comparisonTip = new Tooltip("Choose a framework to compare your framework to."
 				+ "\nYour chosen option can be shown by clicking the toggle button.");
 		comparisonComboBox.setTooltip(comparisonTip);
 		compareLbl.setTooltip(comparisonTip);
-		
+
 		compareTip = new Tooltip("Compare your framework to your chosen comparison framework,"
 				+ "\ncomputing your chosen equivalency type.");
 		compareBtn.setTooltip(compareTip);
-		
+
 		typeTip = new Tooltip("Chose the type of equivalency to check for your frameworks.");
 		expandOptionsLbl.setTooltip(typeTip);
-		
+
 		standardTip = new Tooltip("Set comparison to check for standard equivalency. This checks whether the"
 				+ "\nframeworks have the same extensions for the chosen semantics.");
 		standardRadio.setTooltip(standardTip);
-		
+
 		strongTip = new Tooltip("Set comparison to check for strong expansion equivalency. This checks whether the"
 				+ "\nframeworks have equal kernels for the chosen semantics.");
 		strongRadio.setTooltip(strongTip);
-		
+
 		toggleTip = new Tooltip("Switch between the graphs.");
 		toggleBtn.setTooltip(toggleTip);
 	}
@@ -306,7 +306,7 @@ public class DemonstrationWindowController {
 	 */
 	private void checkExpansionType() {
 		interactor.emptyQueue();
-		
+
 		Expansion frameworkExpansion, comparisonExpansion;
 		frameworkExpansion = new Expansion(argumentFramework,expansionFramework);
 		frameworkExpansion.determineExpansionType(""); //TODO fill in right name?
@@ -317,7 +317,7 @@ public class DemonstrationWindowController {
 			System.out.println(expandingComboBox.getAccessibleText()); //TODO remove after testing
 		}
 	}
-	
+
 	/**
 	 * moves the output of the computation one step forward
 	 */
@@ -459,7 +459,7 @@ public class DemonstrationWindowController {
 		if(expanded){
 			eq.expandFrameworks(expansionFramework); //this should have to exist
 		}
-		
+	
 		RadioButton selectedToggle = (RadioButton) expansionGroup.getSelectedToggle();
 		boolean standard = selectedToggle.getText().equals("standard");
 
@@ -499,10 +499,16 @@ public class DemonstrationWindowController {
 	@FXML
 	public void onExpandClick(){
 		if(!expanded){
+			try {
+				expandFrameworks();
+			} catch (InvalidInputException e) {
+				explanationArea.setText(e.getMessage());
+				restoreOriginalFrameworks();
+				return;
+			}
 			expanded = true;
 			expandBtn.setText(EXPANDED);
-			expandFrameworks();
-			numberLbl.setText(numberLbl.getText() + " + C");
+			numberLbl.setText(numberLbl.getText() + " + C"); //TODO "+ C" appears on one framework only (alone) fix
 			checkExpansionType();
 		}
 		else{
@@ -549,7 +555,7 @@ public class DemonstrationWindowController {
 			onToggleClick();
 		}
 	}
-	
+
 	/**
 	 * converts Arguments from ArgumentDtos and saves them
 	 * @param rawArguments a list of ArgumentDtos
@@ -559,23 +565,26 @@ public class DemonstrationWindowController {
 		attacks = new ArrayList<Attack>();
 
 		for(ArgumentDto a: rawArguments){
-			arguments.add(new Argument(a.getName(),a.getStatement()));
+			if(a.isSelected()){
+				arguments.add(new Argument(a.getName(),a.getStatement()));
+			}
 		}
 
-		for(ArgumentDto a: rawArguments){
+		for(ArgumentDto a: rawArguments){ //two loops, instead there are arguments attacked, that don't exist
 			char attackString[] = a.getAttacks().toCharArray();
 			for(char att: attackString){
 				attacks.add(new Attack(Framework.getArgument(arguments,a.getName()),Framework.getArgument(arguments,att)));
 			}
 		}
 	}
-	
+
 	/**
 	 * fills the variables expansionFramework, expAttacks and expArguments
 	 * with the values of the expansion that was chosen
 	 * following that, the panes showing the frameworks also show the expansions (so showing an expanded framework)
+	 * @throws InvalidInputException if there is an invalid attack
 	 */
-	private void expandFrameworks() {
+	private void expandFrameworks() throws InvalidInputException {
 		Example current = MainInputController.getExamples().get(expandingComboBox.getSelectionModel().getSelectedIndex());
 
 		if(expandingComboBox.getSelectionModel().getSelectedIndex() < 1){
@@ -587,18 +596,40 @@ public class DemonstrationWindowController {
 		expAttacks = new ArrayList<Attack>();
 
 		for(Line l: current.getLines()){
-			expArguments.add(new Argument(l.getChar(),l.getDescription()));
+			if(l.isExists()){
+				expArguments.add(new Argument(l.getChar(),l.getDescription()));
+			}
 		}
 
 		for(Line l: current.getLines()){
 			Argument attacker = Framework.getArgument(expArguments,l.getChar());
+			Argument compAtt = null;
+			Argument compDef = null;
+
+			if(attacker == null){
+				attacker = Framework.getArgument(argumentFramework.getArguments(), l.getChar());
+				if(comparisonFramework != null){
+					compAtt = Framework.getArgument(comparisonFramework.getArguments(), l.getChar());
+				}
+			}
+
 			for(int i = 0;i<l.getAttacks().length();i++){
 				Argument defender = Framework.getArgument(expArguments,l.getAttacks().charAt(i));
 				if(defender == null){
-					explanationArea.setText("Illegal attack detected!");
-					return;
+					defender = Framework.getArgument(argumentFramework.getArguments(), l.getAttacks().charAt(i));
+					if(comparisonFramework != null){
+						compDef = Framework.getArgument(comparisonFramework.getArguments(), l.getAttacks().charAt(i));
+					}
 				}
-				expAttacks.add(new Attack(attacker,defender));
+
+				if(attacker != null && defender != null && 
+						(comparisonFramework == null || (comparisonFramework != null && compAtt != null && compDef != null))){
+					expAttacks.add(new Attack(attacker,defender));
+				}
+				else{
+					throw new InvalidInputException("Invalid attack detected! (" + l.getChar() + 
+							"," + l.getAttacks().charAt(i) + ")");
+				}
 			}
 		}
 
@@ -643,7 +674,7 @@ public class DemonstrationWindowController {
 			explanationArea.setStyle("-fx-text-fill: red;");
 		}
 	}
-	
+
 	/**
 	 * sets up the UI for showing comparison results
 	 */
@@ -675,18 +706,22 @@ public class DemonstrationWindowController {
 		compAttacks = new ArrayList<Attack>();
 
 		for(Line l: current.getLines()){
-			compArguments.add(new Argument(l.getChar(),l.getDescription()));
+			if(l.isExists()){
+				compArguments.add(new Argument(l.getChar(),l.getDescription()));
+			}
 		}
 
 		for(Line l: current.getLines()){
-			Argument attacker = Framework.getArgument(compArguments,l.getChar());
-			for(int i = 0;i<l.getAttacks().length();i++){
-				Argument defender = Framework.getArgument(compArguments,l.getAttacks().charAt(i));
-				if(defender == null){
-					explanationArea.setText("Illegal attack detected!");
-					return;
+			if(l.isExists()){
+				Argument attacker = Framework.getArgument(compArguments,l.getChar());
+				for(int i = 0;i<l.getAttacks().length();i++){
+					Argument defender = Framework.getArgument(compArguments,l.getAttacks().charAt(i));
+					if(defender == null){
+						explanationArea.setText("Illegal attack detected!");
+						return;
+					}
+					compAttacks.add(new Attack(attacker,defender));
 				}
-				compAttacks.add(new Attack(attacker,defender));
 			}
 		}
 
@@ -724,7 +759,7 @@ public class DemonstrationWindowController {
 
 		interactor.executeNextCommand();
 	}
-	
+
 	/**
 	 * activates the choicebox (dropdown menu) that shows the extensions
 	 * of the chosen type
@@ -744,7 +779,7 @@ public class DemonstrationWindowController {
 		setsComboBox.getSelectionModel().selectedIndexProperty().addListener(new SetsChoiceListener<Number>());
 		setsComboBox.getSelectionModel().selectFirst();
 	}
-	
+
 	/**
 	 * removes all elements from the choicebox and deactivates it
 	 */
@@ -770,7 +805,7 @@ public class DemonstrationWindowController {
 		expandingComboBox.setItems(FXCollections.observableArrayList(formatList));
 		expandingComboBox.getSelectionModel().selectFirst();
 	}
-	
+
 	/**
 	 * disables the next and show all buttons
 	 */
@@ -779,7 +814,7 @@ public class DemonstrationWindowController {
 		showAllBtn.setDisable(true);
 		resultsBtn.setDisable(true);
 	}
-	
+
 	/**
 	 * dis/en-ables the radio buttons for chosing the type of equivalency, depending on if the 
 	 * possibilty of comparison exists

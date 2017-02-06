@@ -28,7 +28,7 @@ import javafx.scene.layout.AnchorPane;
  *  for managing input to further use in computations
  * @author Patrick Bellositz
  */
-public class MainInputController { //TODO polish button layout
+public class MainInputController {
 
 	/**
 	 * wrapper object controlling what is shown on screen
@@ -145,63 +145,68 @@ public class MainInputController { //TODO polish button layout
 
 		exampleSet.add(new Example("DUNG Example 1",
 				new Line[] {
-						new Line('a', "I: My government can not negotiate with your government because your government doesn�t even recognize my government.", "b"),
-						new Line('b', "A: Your government doesn't recognize my government either.", "a"),
-						new Line('c', "I: But your government is a terrorist government.", "b")
+						new Line('a', "I: My government can not negotiate with your government because your government doesn�t even recognize my government.", "b", true),
+						new Line('b', "A: Your government doesn't recognize my government either.", "a", true),
+						new Line('c', "I: But your government is a terrorist government.", "b", true)
 		}));
 
 		exampleSet.add(new Example("Nixon Diamond",
 				new Line[] {
-						new Line('a', "Nixon is anti-pacifist since he is a republican.", "b"),
-						new Line('b', "Nixon is a pacifist since he is a quaker.", "a"),
+						new Line('a', "Nixon is anti-pacifist since he is a republican.", "b", true),
+						new Line('b', "Nixon is a pacifist since he is a quaker.", "a", true),
 		}));
 
 		exampleSet.add(new Example("Thesis Example 1-7",
 				new Line[] {
-						new Line('a', "A: Blue is the most beautiful of all colors.", "b"),
-						new Line('b', "B: No, black is much more beautiful!", "a"),
-						new Line('c', "A: That's wrong, black isn't even a color.", "b")
+						new Line('a', "A: Blue is the most beautiful of all colors.", "b", true),
+						new Line('b', "B: No, black is much more beautiful!", "a", true),
+						new Line('c', "A: That's wrong, black isn't even a color.", "b", true)
 		}));
 
 		exampleSet.add(new Example("Thesis Example 8",
 				new Line[] {
-						new Line('a', "", "a"),
-						new Line('b', "", "ac"),
-						new Line('c', "", "b")
+						new Line('a', "", "a", true),
+						new Line('b', "", "ac", true),
+						new Line('c', "", "b", true)
 		}));
 
 		exampleSet.add(new Example("Thesis Example 9",
 				new Line[] {
-						new Line('a', "", "b"),
-						new Line('b', "", "a"),
-						new Line('c', "", "bd"),
-						new Line('d', "", "c")
+						new Line('a', "", "b", true),
+						new Line('b', "", "a", true),
+						new Line('c', "", "bd", true),
+						new Line('d', "", "c", true)
 		}));
 
 		exampleSet.add(new Example("Thesis Figure 4.1",
 				new Line[] {
-						new Line('a', "", ""),
-						new Line('b', "", "ac"),
-						new Line('c', "", "bd"),
-						new Line('d', "", "ace"),
-						new Line('e', "", "e")
+						new Line('a', "", "", true),
+						new Line('b', "", "ac", true),
+						new Line('c', "", "bd", true),
+						new Line('d', "", "ace", true),
+						new Line('e', "", "e", true)
 		}));
 
 		exampleSet.add(new Example("Egly Example 1",
 				new Line[] {
-						new Line('a', "", "b"),
-						new Line('b', "", ""),
-						new Line('c', "", "bd"),
-						new Line('d', "", "ce"),
-						new Line('e', "", "e")
+						new Line('a', "", "b", true),
+						new Line('b', "", "", true),
+						new Line('c', "", "bd", true),
+						new Line('d', "", "ce", true),
+						new Line('e', "", "e", true)
 		}));
 		
 		exampleSet.add(new Example("Semi-Stable",
 				new Line[] {
-					new Line('a', "", "ac"),
-					new Line('b', "", "c"),
-					new Line('c', "", "d"),
-					new Line('d', "", "")
+					new Line('a', "", "ac", true),
+					new Line('b', "", "c", true),
+					new Line('c', "", "d", true),
+					new Line('d', "", "", true)
+				}));
+		
+		exampleSet.add(new Example("c",
+				new Line[] {
+						new Line('c', "", "c", false)
 				}));
 
 		return exampleSet;
@@ -244,7 +249,7 @@ public class MainInputController { //TODO polish button layout
 						Object t2 = alphabetical[2].get(number);
 						
 						if(cb instanceof CheckBox && t1 instanceof TextField && t2 instanceof TextField){
-							((CheckBox) cb).selectedProperty().set(true);
+							((CheckBox) cb).selectedProperty().set(l.isExists());
 							((TextField) t1).setText(l.getDescription());
 							((TextField) t2).setText(l.getAttacks());
 						}
@@ -276,6 +281,13 @@ public class MainInputController { //TODO polish button layout
 	@FXML //TODO not only selected arguments' attacks
 	public void onShowButton(){
 		arguments = createTransferObjectList();
+		
+		if(hasDanglingAttacks(arguments)){
+			errorLbl.setText("You can only use a framework containing attacks on arguments it does not contain, as an expansion!" +
+					"\nPlease save your framework and use it as an expansion instead!");
+			return;
+		}
+		
 		autosave++; //we have standard 0, we start with 1 and so on
 		String autoName = "autosave " + autosave;
 		
@@ -294,6 +306,20 @@ public class MainInputController { //TODO polish button layout
 		wrapper.loadDemonstration();
 	}
 	
+	private boolean hasDanglingAttacks(ArrayList<ArgumentDto> input) {
+		for(ArgumentDto a: input){
+			if(!a.isSelected() && a.getAttacks().length() != 0){
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * creates ArgumentDtos from all arguments that have input
+	 * @return list of ArgumentDtos
+	 */
 	private ArrayList<ArgumentDto> createTransferObjectList(){
 		ArrayList<ArgumentDto> arguments = new ArrayList<ArgumentDto>();
 		
@@ -313,9 +339,7 @@ public class MainInputController { //TODO polish button layout
 					throw new IndexOutOfBoundsException("UI loading error!");
 				}
 
-				if(ctmp.isSelected()){
-					arguments.add(new ArgumentDto(ctmp.getText().charAt(0), parseArgument(stmp), parseAttacks(atmp)));
-				}
+				arguments.add(new ArgumentDto(ctmp.getText().charAt(0), parseArgument(stmp), parseAttacks(atmp), ctmp.isSelected()));
 			}
 		} catch(InvalidInputException e){
 			errorLbl.setText(e.getMessage());
@@ -342,7 +366,7 @@ public class MainInputController { //TODO polish button layout
 
 		for(int i = 0;i<arguments.size();i++){
 			ArgumentDto tmp = arguments.get(i);
-			lines[i] = new Line(tmp.getName(),tmp.getStatement(),tmp.getAttacks());
+			lines[i] = new Line(tmp.getName(),tmp.getStatement(),tmp.getAttacks(),tmp.isSelected());
 		}
 
 		return new Example(name,lines);
@@ -392,7 +416,7 @@ public class MainInputController { //TODO polish button layout
 	/*TODO after saving a change to something that existed before, but with a new name, the original version is shown
 	--> fix
 	*/
-	@FXML //TODO save attacks of unselected arguments too
+	@FXML 
 	public void onSaveClick(){
 		String name = nameTxt.getText();
 		Example toSave = getExampleByName(name);
@@ -400,7 +424,13 @@ public class MainInputController { //TODO polish button layout
 		ArrayList<ArgumentDto> toList = createTransferObjectList();
 		
 		if(toList == null){
-			return; //handled?
+			errorLbl.setText("Could not read input arguments!");
+			return;
+		}
+		
+		if(name == null || name.length() == 0){
+			errorLbl.setText("Could not save framework, no name was given.");
+			return;
 		}
 		
 		if(toSave == null){
@@ -442,10 +472,10 @@ public class MainInputController { //TODO polish button layout
 	 * @param attack the TextField containing the attack String
 	 * @return a String of valid attacks
 	 * @throws InvalidInputException if there is invalid input, throws error message to calling method
-	 */ //TODO also for non-selected attacks
+	 */
 	private String parseAttacks(TextField attack) throws InvalidInputException {
 		String input = attack.getText();
-		String argumentNames = getSelected();
+		String argumentNames = "ABCDEFGHIJ";
 		String attackValues = "";
 
 		if(input.isEmpty()){
@@ -473,22 +503,6 @@ public class MainInputController { //TODO polish button layout
 		}
 
 		return attackValues;
-	}
-
-	/**
-	 * checks which Arguments' are selected
-	 * @return a String of selected Arguments
-	 */ //TODO remove?
-	private String getSelected() {
-		String selected = "";
-
-		for(CheckBox c: checkBoxes){
-			if(c.isSelected()){
-				selected += c.getText();
-			}
-		}
-
-		return selected;
 	}
 
 	/**

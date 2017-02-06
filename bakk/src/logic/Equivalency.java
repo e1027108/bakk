@@ -40,6 +40,9 @@ public class Equivalency {
 			fstUsed = fst;
 			sndUsed = snd;
 		}
+		
+		//System.out.println(Framework.formatArgumentList(fstUsed.getArguments()) + "/" + Framework.formatArgumentList(sndUsed.getArguments()));
+		//System.out.println(Framework.formatAttackList(fstUsed.getAttacks()) + "/" + Framework.formatAttackList(sndUsed.getAttacks()));
 
 		String extName = "";
 
@@ -131,7 +134,7 @@ public class Equivalency {
 			return true;
 		}
 		else if(fstExt.size() != sndExt.size()){
-			interactor.addToCommands(new Command("The " + framedesc.toLowerCase() + "s do not have the same amounts of extensions (" + fstExt.size() + " and " + sndExt.size() + "extensions). "
+			interactor.addToCommands(new Command("The " + framedesc.toLowerCase() + "s do not have the same amounts of extensions (" + fstExt.size() + " and " + sndExt.size() + " extensions). "
 					+ "They can not be equivalent.", null, 0));
 			return false;
 		}

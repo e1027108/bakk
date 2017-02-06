@@ -51,6 +51,7 @@ public class Framework {
 	 * @return set of all conflict-free sets of the framework
 	 */
 	public ArrayList<Extension> getConflictFreeSets() {
+		System.out.println(this.formatArgumentList(arguments) + " + " + this.formatAttackList(attacks));
 		ArrayList<Extension> conflictFreeSets = new ArrayList<Extension>();
 		ArrayList<ArrayList<Argument>> powerset;
 
@@ -69,6 +70,7 @@ public class Framework {
 				conflictFreeSets.add(tmp);
 			}
 		}
+		System.out.println("");
 
 		interactor.addToCommands(new Command("The conflict-free sets are: " + formatExtensions(conflictFreeSets), null, pane));
 
@@ -584,7 +586,7 @@ public class Framework {
 	public static Argument getArgument(ArrayList<Argument> list, char name) {
 		if(list != null){
 			for(Argument a: list){
-				if(a.getName() == name){
+				if(String.valueOf(a.getName()).toLowerCase().equals(String.valueOf(name).toLowerCase())){
 					return a;
 				}
 			}
@@ -785,7 +787,7 @@ public class Framework {
 	 * @param attacklist the list of attacks to be formatted
 	 * @return a formatted string of the given attacks
 	 */
-	protected static String formatAttackList(ArrayList<Attack> attacklist) {
+	public static String formatAttackList(ArrayList<Attack> attacklist) {
 		String formatted = "{";
 		
 		for(Attack a: attacklist){
@@ -818,7 +820,7 @@ public class Framework {
 	}
 	
 	/**
-	 * checks whether ther are no arguments and no attacks within this framework
+	 * checks whether there are no arguments and no attacks within this framework
 	 * @return true if no argument and no attacks, else false
 	 */
 	public boolean isEmpty(){

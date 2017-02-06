@@ -48,10 +48,15 @@ public class Extension {
 	public boolean isConflictFree(boolean write) {
 		ArrayList<Attack> violatingAttacks = new ArrayList<Attack>();
 
+		System.out.println(this.format());
+		
+		int c = 0;
 		for(Attack a: framework.getAttacks()){
+			System.out.println("" + a.getAttacker().getName() + a.getAttacked().getName());
 			if(arguments.contains(a.getAttacker()) && arguments.contains(a.getAttacked())){
 				violatingAttacks.add(a);
 			}
+			System.out.println(arguments.contains(a.getAttacker()) && arguments.contains(a.getAttacked()));
 		}
 
 		if(!violatingAttacks.isEmpty()){
@@ -64,6 +69,7 @@ public class Extension {
 					String attacked = "" + a.getAttacked().getName();
 					if(!tmp.contains(attacked)){ //multiple arguments could attack the same one
 						tmp += attacked;
+						//System.out.println(tmp);
 					}
 					edgeInstructions.add(new SingleInstruction((a.getAttacker().getName()+attacked),Color.RED));
 				}

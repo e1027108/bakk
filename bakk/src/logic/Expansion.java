@@ -7,7 +7,6 @@ import interactor.GraphInstruction;
 import interactor.Interactor;
 import interactor.SingleInstruction;
 import javafx.scene.paint.Color;
-import logic.Framework.Type;
 
 public class Expansion {
 
@@ -27,7 +26,7 @@ public class Expansion {
 	 * @return the name of the expansion type (or null, if not an expansion at all)
 	 */
 	public String determineExpansionType(String name){
-		if(expansion.isEmpty()){
+		if(expansion == null || expansion.isEmpty()){
 			interactor.addToCommands(new Command("This framework doesn't contain any arguments or attacks, it therefore is not an expansion.",null,pane));
 			return null;
 		}

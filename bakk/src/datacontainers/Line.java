@@ -4,12 +4,14 @@ public class Line{
 	private char name;
 	private String description;
 	private String attacks;
+	private boolean exists;
 
-	public Line(char name, String description, String attacks){
+	public Line(char name, String description, String attacks, boolean exists){
 		this.name = String.valueOf(name).toUpperCase().charAt(0);
 
 		this.description = description;
 		this.attacks = attacks;
+		this.exists = exists;
 	}
 	
 	/**
@@ -47,6 +49,14 @@ public class Line{
 
 	public String getAttacks(){
 		return attacks;
+	}
+
+	public boolean isExists() {
+		return exists;
+	}
+
+	public void setExists(boolean exists) {
+		this.exists = exists;
 	}
 
 }
