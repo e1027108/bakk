@@ -17,6 +17,13 @@ public class Extension {
 	private ArrayList<Attack> incomingAttacks;
 	private boolean cf, adm;
 
+	/**
+	 * creates an extension object
+	 * this contains arguments representing a candidate argument set for an extension
+	 * it also reads the corresponding attacks from the framework
+	 * @param arguments the arguments of the extension
+	 * @param framework the framework the arguments are from
+	 */
 	public Extension(ArrayList<Argument> arguments, Framework framework) {
 		this.arguments = new ArrayList<Argument>();
 		this.framework = framework;
@@ -28,6 +35,11 @@ public class Extension {
 		readAttacks(framework.getAttacks());
 	}
 
+	/**
+	 * reads the attacks from a list and groups them into
+	 * incoming and outgoing attacks with regards to the arguments of the extension
+	 * @param attacks a list of attacks
+	 */
 	private void readAttacks(ArrayList<Attack> attacks) {
 		for(Attack a: attacks){
 			Argument attacker = a.getAttacker();
@@ -45,6 +57,14 @@ public class Extension {
 		}
 	}
 
+	/**
+	 * checks whether the this extension candidate is conflict-free
+	 * this means we check whether an argument in the set is attacked by
+	 * another one, that is also in the set
+	 * @param write whether to write certain messages to the interactor
+	 * @param show whether to write anything to the interactor
+	 * @return if the extension candidate is conflict-free
+	 */
 	public boolean isConflictFree(boolean write, boolean show) {
 		ArrayList<Attack> violatingAttacks = new ArrayList<Attack>();
 		
@@ -83,6 +103,14 @@ public class Extension {
 		return true;
 	}
 
+	/**
+	 * Checks whether this extension candidate really is an admissible extension
+	 * first checks if it is conflict-free
+	 * then checks if it defends itself from outside attacks
+	 * @param write whether to write certain messages to the interactor
+	 * @param show whether to write anything to the interactor
+	 * @return if the extension candidate is admissible
+	 */
 	public boolean isAdmissible(boolean write,boolean show) {
 		ArrayList<Attack> defeated = new ArrayList<Attack>();
 		ArrayList<Attack> undefeated = new ArrayList<Attack>();
@@ -126,6 +154,12 @@ public class Extension {
 		}
 	}
 
+	/**
+	 * checks if the extension is preferred with regards to a list of admissible extensions
+	 * @param admissible a list of all admissible extension to check
+	 * @param show whether to write anything to the interactor
+	 * @return if the extension candidate is preferred
+	 */
 	public boolean isPreferred(ArrayList<Extension> admissible, boolean show) {
 		if(!adm){
 			framework.addToInteractor(new Command(format() + "is not admissible, so it can't be preferred.",null, framework.getPane()),show);
@@ -155,6 +189,11 @@ public class Extension {
 		return true;
 	}
 
+	/**
+	 * checks whether the extension's arguments are a subset of another's
+	 * @param e the extension to compare to
+	 * @return whether a subset relation is true
+	 */
 	private boolean isSubsetOf(Extension e) {
 		ArrayList<Argument> extArg = e.getArguments();
 
@@ -167,6 +206,12 @@ public class Extension {
 		return true;
 	}
 
+	/**
+	 * checks whether the extension is stable by checking
+	 * whether it attacks all arguments it does not contain
+	 * @param show whether to write anything to the interactor
+	 * @return if the extension is stable
+	 */
 	public boolean isStable(boolean show){
 		ArrayList<Argument> outside = new ArrayList<Argument>();
 		ArrayList<Argument> unattacked = new ArrayList<Argument>();
@@ -197,6 +242,14 @@ public class Extension {
 		}
 	}
 
+	/**
+	 * checks if the extension is a complete extension
+	 * by checking whether it contains all argument that it defends from other
+	 * arguments
+	 * @param write whether to write certain messages to the interactor
+	 * @param show whether to write anything to the interactor
+	 * @return if the extension is complete
+	 */
 	public boolean isComplete(boolean write,boolean show){
 		ArrayList<Argument> outside = new ArrayList<Argument>();
 		ArrayList<Argument> uselessDefences = new ArrayList<Argument>();
@@ -274,6 +327,11 @@ public class Extension {
 		}
 	}
 
+	/**
+	 * constructs an instruction containing all the arguments of the extension
+	 * @param color which color the arguments should be
+	 * @return an instruction passable to the interactor
+	 */
 	public GraphInstruction toInstruction(Color color) {
 		ArrayList<SingleInstruction> nodeInstructions = new ArrayList<SingleInstruction>();
 
@@ -285,6 +343,13 @@ public class Extension {
 		return new GraphInstruction(nodeInstructions, null, framework.getPane());
 	}
 
+	/**
+	 * checks whether the extension equals another
+	 * therefore we check if the arguments of the extensions are the same
+	 * (as defined by Argument.equals)
+	 * @param other extension to compare this one to
+	 * @return equality of the two extensions
+	 */
 	public boolean equals(Extension other){
 		ArrayList<Argument> thisArguments = new ArrayList<Argument>();
 		ArrayList<Argument> otherArguments = new ArrayList<Argument>();
@@ -326,6 +391,10 @@ public class Extension {
 		return true;
 	}
 	
+	/**
+	 * formats the extension as a list of arguments
+	 * @return the formatted extension as a string
+	 */
 	public String format() {
 		String formatted = "{";
 

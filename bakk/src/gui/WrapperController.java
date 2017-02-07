@@ -76,6 +76,9 @@ public class WrapperController {
 		contentPane.getChildren().setAll(demonstrationPane);
 	}
 
+	/**
+	 * opens the link provided in the standard browser
+	 */
 	@FXML
 	public void onLinkClick(){
 		try{
@@ -87,6 +90,9 @@ public class WrapperController {
 		}
 	}
 	
+	/**
+	 * writes basic information about this project into the footer
+	 */
 	public void initializeLabels(){
 		paperLink.setText("unsure about link");
 		paperLink.setDisable(false);

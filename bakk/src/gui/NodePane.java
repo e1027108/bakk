@@ -66,7 +66,7 @@ public class NodePane extends AnchorPane{
 	 * saves the Framework given and computes the graph
 	 * @param argumentFramework the framework containing arguments and attacks that are the basis for the graph to be computed
 	 */
-	public void createGraph(Framework argumentFramework, Framework expansion) { //TODO implement expansion here (grayish standard color)
+	public void createGraph(Framework argumentFramework, Framework expansion) {
 		this.framework = argumentFramework;
 		this.expansion = expansion;
 

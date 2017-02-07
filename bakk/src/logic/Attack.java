@@ -9,14 +9,6 @@ public class Attack {
 		this.attacked = argument;
 	}
 
-	public Argument getAttacker(){
-		return attacker;
-	}
-
-	public Argument getAttacked(){
-		return attacked;
-	}
-
 	/**
 	 * this method compares the attackers and defenders of the attack to the given attack
 	 * @param b the attack we compare this attack to
@@ -31,4 +23,13 @@ public class Attack {
 		}
 		return false;
 	}
+
+	public Argument getAttacker(){
+		return attacker;
+	}
+
+	public Argument getAttacked(){
+		return attacked;
+	}
+
 }

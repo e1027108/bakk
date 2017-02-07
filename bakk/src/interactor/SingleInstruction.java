@@ -35,6 +35,11 @@ public class SingleInstruction {
 		}
 	}
 	
+	/**
+	 * creates a singleinstruction object containing a one char name (--> argument)
+	 * @param name the name of an argument
+	 * @param color the color the argument is to be in the graph
+	 */
 	public SingleInstruction(char name, Color color){
 		this.name = String.valueOf(name);
 		this.color = color;
