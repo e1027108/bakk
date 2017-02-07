@@ -36,7 +36,7 @@ public class NamedCircle extends Circle{
 	}
 	
 	/**
-	 * @return the content of the nametag (label) of the node
+	 * @return the content of the nametag (label) of the node, if available (otw null)
 	 */
 	public String getName(){
 		if(nametag != null){

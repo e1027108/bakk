@@ -68,7 +68,7 @@ public class DemonstrationWindowController {
 	private ComboBox<String> setsComboBox, extensionComboBox, comparisonComboBox, expandingComboBox; //dropdown for result sets
 
 	@FXML
-	private Label extensionLbl, numberLbl, expandOptionsLbl, expansionLbl, compareLbl;
+	private Label extensionLbl, nameLbl, expandOptionsLbl, expansionLbl, compareLbl;
 
 	@FXML
 	private ToggleGroup expansionGroup;
@@ -77,7 +77,7 @@ public class DemonstrationWindowController {
 	private RadioButton standardRadio, strongRadio;
 
 	private Tooltip previousTip, arrowTip, backTip, nextTip, allTip, resultsTip, choiceTip, extensionTip, expansionTip, expandTip, comparisonTip, compareTip, typeTip, standardTip, 
-	strongTip, toggleTip; //tooltips for all buttons etc
+	strongTip, toggleTip, nameTip; //tooltips for all buttons etc
 
 	private Framework argumentFramework, comparisonFramework, expansionFramework; //argument framework containing the arguments
 	private ArrayList<Argument> arguments, compArguments, expArguments; //arguments of the framework
@@ -89,6 +89,9 @@ public class DemonstrationWindowController {
 	private Equivalency eq; //this computes equivalencies
 
 	private static final String EXPANDED = "Unexpand";
+	private static final String F1 = "F1";
+	private static final String F2 = "F2";
+	private static final String EX = "Exp";
 
 	/**
 	 * initializes the controller
@@ -154,14 +157,19 @@ public class DemonstrationWindowController {
 
 		toggleTip = new Tooltip("Switch between the graphs.");
 		toggleBtn.setTooltip(toggleTip);
+		
+		nameTip = new Tooltip("Shows whether the base framework (F1) or the comparison framework (F2) is shown."
+				+ "\nAlso says if the frameworks are expanded by stating that \"Exp\" is present.");
+		nameLbl.setTooltip(nameTip);
 	}
 
 	/**
 	 * sets the initial UI and data values
 	 */
 	public void setInitialValues() {
-		numberLbl.setText("");
-
+		nameLbl.setText("");
+		
+		//show graph pane
 		root.getChildren().remove(graphPane);
 		graphPane = new NodePane();
 		root.getChildren().add(graphPane);
@@ -169,7 +177,7 @@ public class DemonstrationWindowController {
 		graphPane.setPrefWidth(445);
 		graphPane.setLayoutX(15); //prevents arcs from going out of visual bounds, y stays 0
 		graphPane.setVisible(true);
-
+		
 		//we need to have an initial comparison pane
 		root.getChildren().remove(comparisonPane);
 		comparisonPane = new NodePane();
@@ -309,12 +317,11 @@ public class DemonstrationWindowController {
 
 		Expansion frameworkExpansion, comparisonExpansion;
 		frameworkExpansion = new Expansion(argumentFramework,expansionFramework);
-		frameworkExpansion.determineExpansionType(""); //TODO fill in right name?
+		frameworkExpansion.determineExpansionType(F1,EX);
 
 		if(comparisonFramework != null){
 			comparisonExpansion = new Expansion(comparisonFramework,expansionFramework);
-			comparisonExpansion.determineExpansionType(expandingComboBox.getSelectionModel().getSelectedItem());
-			System.out.println(expandingComboBox.getSelectionModel().getSelectedItem()); //TODO remove after testing
+			comparisonExpansion.determineExpansionType(F2,EX);
 		}
 	}
 
@@ -385,7 +392,6 @@ public class DemonstrationWindowController {
 		resetSetChoices();
 		expanded = false;
 		expandBtn.setText("Expand");
-		restoreOriginalFrameworks();
 
 		wrapper.loadMain();
 	}
@@ -508,14 +514,19 @@ public class DemonstrationWindowController {
 			}
 			expanded = true;
 			expandBtn.setText(EXPANDED);
-			numberLbl.setText(numberLbl.getText() + " + C"); //TODO "+ C" appears on one framework only (alone) fix
+			if(comparisonFramework == null){
+				nameLbl.setText(F1 + " + " + EX);
+			}
+			else{
+				nameLbl.setText(nameLbl.getText() + " + " + EX);
+			}
 			checkExpansionType();
 		}
 		else{
 			expanded = false;
 			expandBtn.setText("Expand");
 			restoreOriginalFrameworks();
-			numberLbl.setText(numberLbl.getText().replace(" + C",""));
+			nameLbl.setText(nameLbl.getText().replace(" + " + EX,""));
 		}
 	}
 
@@ -528,18 +539,18 @@ public class DemonstrationWindowController {
 		String text = "";
 
 		if(expansionFramework != null){
-			text = " + C";
+			text = " + " + EX;
 		}
 
 		if(graphPane.isVisible()){
 			graphPane.setVisible(false);
 			comparisonPane.setVisible(true);			
-			numberLbl.setText("B" + text);
+			nameLbl.setText(F2 + text);
 		}
 		else{
 			graphPane.setVisible(true);
 			comparisonPane.setVisible(false);
-			numberLbl.setText("A" + text);
+			nameLbl.setText(F1 + text);
 		}
 	}
 
@@ -729,7 +740,7 @@ public class DemonstrationWindowController {
 
 		comparisonPane.createGraph(comparisonFramework,null);
 		toggleBtn.setDisable(false);
-		numberLbl.setText("A");
+		nameLbl.setText(F1);
 
 		try {
 			comparisonPane.drawGraph();
@@ -800,7 +811,7 @@ public class DemonstrationWindowController {
 
 		comparisonComboBox.setItems(FXCollections.observableArrayList(formatList));
 		comparisonComboBox.getSelectionModel().selectFirst();
-		comparisonComboBox.getSelectionModel().selectedIndexProperty().addListener(new ComparisonChoiceListener<Number>());
+		comparisonComboBox.getSelectionModel().selectedIndexProperty().addListener(new ComparisonListener<Number>());
 
 		expandingComboBox.setItems(FXCollections.observableArrayList(formatList));
 		expandingComboBox.getSelectionModel().selectFirst();
@@ -836,7 +847,7 @@ public class DemonstrationWindowController {
 	 * helper method to convert a semantics id (used here)
 	 * to its Framework.Type (used in other classes)
 	 * @param id id of type
-	 * @return type of id
+	 * @return type of id, null if invalid id
 	 */
 	private Type idToType(int id) {
 		switch(id){
@@ -894,7 +905,7 @@ public class DemonstrationWindowController {
 	 * @param <Number> the index of the chosen element
 	 */
 	@SuppressWarnings("hiding")
-	private class ComparisonChoiceListener<Number> implements ChangeListener<Number>{
+	private class ComparisonListener<Number> implements ChangeListener<Number>{
 		@Override
 		public void changed(ObservableValue<? extends Number> oval, Number sval, Number nval){
 			if((Integer) nval == -1){ //because with a new graph an empty selection (id:-1) is shown
@@ -905,7 +916,7 @@ public class DemonstrationWindowController {
 					onToggleClick();
 				}
 				toggleBtn.setDisable(true);
-				numberLbl.setText("");
+				nameLbl.setText("");
 				setDisableRadioButtons(true);
 				computeBtn.setDisable(false);
 				comparisonFramework = null;

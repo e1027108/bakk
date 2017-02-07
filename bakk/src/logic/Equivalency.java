@@ -26,7 +26,7 @@ public class Equivalency {
 	 * @param type the semantics to check for
 	 * @param usePrevious whether to compute sets that were already computed, again
 	 * @param show whether to show extension computations
-	 * @return whether the checked frameworks' extensions are equivalent wrt the given semantics
+	 * @return a list of extensions, if equivalent, null if not
 	 * @throws InvalidInputException if an impermissible semantics was chosen
 	 */
 	public ArrayList<Extension> areStandardEquivalent(int type, boolean usePrevious, boolean show) throws InvalidInputException{

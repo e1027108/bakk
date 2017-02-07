@@ -9,7 +9,7 @@
 <AnchorPane fx:id="root" layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="gui.DemonstrationWindowController">
   <!-- TODO Add Nodes -->
   <children>
-    <Label fx:id="numberLbl" text="no" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="20.0" />
+    <Label id="numberLbl" fx:id="nameLbl" text="no" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="20.0" />
     <Button fx:id="toggleBtn" disable="true" mnemonicParsing="false" onAction="#onToggleClick" text="toggle" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="212.0" />
     <TextArea fx:id="explanationArea" editable="false" prefHeight="450.0" prefWidth="430.0" wrapText="true" AnchorPane.leftAnchor="460.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
     <Button id="backButton" fx:id="backBtn" cancelButton="false" disable="true" mnemonicParsing="false" onAction="#onBackClick" prefWidth="55.0" text="back" AnchorPane.bottomAnchor="110.0" AnchorPane.rightAnchor="382.0" />

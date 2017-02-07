@@ -49,7 +49,7 @@ public class Framework {
 	 * computes all conflict-free sets of the framework
 	 * these are sets of arguments where no argument attacks another inside the set
 	 * @param show whether or not to show interactor commands
-	 * @return set of all conflict-free sets of the framework
+	 * @return set of all conflict-free sets of the framework or null
 	 */
 	public ArrayList<Extension> getConflictFreeSets(boolean show) {
 		ArrayList<Extension> conflictFreeSets = new ArrayList<Extension>();
@@ -107,7 +107,7 @@ public class Framework {
 	 * these are all conflict-free sets, that defend themselves against all outside attacks
 	 * @param usePrevious whether to use previous computation results or compute the needed sets anew
 	 * @param show whether or not to show interactor commands
-	 * @return a list of all admissible extensions of the framework
+	 * @return a list of all admissible extensions of the framework or null
 	 */
 	public ArrayList<Extension> getAdmissibleExtensions(boolean usePrevious, boolean show) {
 		ArrayList<Extension> cf;
@@ -185,7 +185,7 @@ public class Framework {
 	 * these are all admissible extensions that contain all arguments they defend
 	 * @param usePrevious whether or not to take previous computation results for this computation or re-compute those
 	 * @param show whether or not to show interactor commands
-	 * @return a list of all complete extensions of the framework
+	 * @return a list of all complete extensions of the framework or null
 	 */
 	public ArrayList<Extension> getCompleteExtensions(boolean usePrevious, boolean show){
 		ArrayList<Extension> adm;
@@ -240,7 +240,7 @@ public class Framework {
 	 * these are all admissible extensions which defend themselves against outside attacks
 	 * @param usePrevious whether or not to take previous computation results for this computation or re-compute those
 	 * @param show whether or not to show interactor commands
-	 * @return a list of all preferred extensions of the framework
+	 * @return a list of all preferred extensions of the framework or null
 	 */
 	public ArrayList<Extension> getPreferredExtensions(boolean usePrevious, boolean show) {
 		ArrayList<Extension> adm;
@@ -288,7 +288,7 @@ public class Framework {
 	 * 	look at all conflict-free sets that attack all arguments they do not contain themselves
 	 * @param usePrevious whether to use previously computed sets for this computation or to compute them anew
 	 * @param show whether or not to show interactor commands
-	 * @return the set of all stable extensions of the framework
+	 * @return the set of all stable extensions of the framework or null
 	 */
 	public ArrayList<Extension> getStableExtensions(boolean usePrevious, boolean show) {
 		ArrayList<Extension> cf;
@@ -336,7 +336,7 @@ public class Framework {
 	 * 	the maximal complete extension is searched, since it is the grounded extension
 	 * @param usePrevious whether or not to use previous results
 	 * @param show whether or not to show interactor commands
-	 * @return the grounded Extension
+	 * @return the grounded Extension or null
 	 */
 	public Extension getGroundedExtension(boolean usePrevious, boolean show){
 		ArrayList<Extension> co;
@@ -436,7 +436,7 @@ public class Framework {
 	 * 		an extension e is semi-stable if for all f+, e+ is not a proper subset of f+
 	 * @param usePrevious whether previous results are used (true) or re-computed (false)
 	 * @param show whether or not to show interactor commands
-	 * @return a list of all semi-stable extensions of the framework
+	 * @return a list of all semi-stable extensions of the framework or null
 	 */
 	public ArrayList<Extension> getSemiStableExtensions(boolean usePrevious, boolean show){
 		ArrayList<Extension> admExt;
@@ -458,6 +458,10 @@ public class Framework {
 			}
 			
 			addToInteractor(new Command(notification,null, pane),show);
+		}
+		
+		if(invalidityCheck(admExt, "admissible extensions", "semi-stable extensions",show)){
+			return null;
 		}
 
 		ArrayList<Extension> semiStable = new ArrayList<Extension>();
@@ -587,7 +591,7 @@ public class Framework {
 	/**
 	 * returns an argument by name
 	 * @param name
-	 * @return an argument
+	 * @return an argument, if found, null otw
 	 */
 	public static Argument getArgument(ArrayList<Argument> list, char name) {
 		if(list != null){

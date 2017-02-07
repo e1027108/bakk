@@ -137,7 +137,11 @@ public class MainInputController {
 		clearAll();
 	}
 
-	//TODO document, re-evaluate examples (kick some, add some)
+	/**
+	 * creates a list of pre-defined examples
+	 * @return the list of examples
+	 */
+	//TODO re-evaluate examples (kick some, add some)
 	private ArrayList<Example> initializeExamples() {
 		ArrayList<Example>exampleSet = new ArrayList<Example>(); //now also use to save new (implement save/delete behaviour) frameworks
 
@@ -212,6 +216,9 @@ public class MainInputController {
 		return exampleSet;
 	}
 
+	/**
+	 * shows predefined examples in drop down menu
+	 */
 	public void showChoices(){
 		ArrayList<String> formatList = new ArrayList<String>();
 
@@ -223,6 +230,11 @@ public class MainInputController {
 		presetComboBox.getSelectionModel().selectedIndexProperty().addListener(new ChoiceListener<Number>());
 	}
 
+	/**
+	 * an action handler to change the arguments/attacks/descriptions show in the maininput
+	 * according to which example was chosen from the example drop down
+	 * @author Patrick
+	 */
 	@SuppressWarnings("hiding")
 	private class ChoiceListener<Number> implements ChangeListener<Number>{
 		@Override
@@ -261,6 +273,9 @@ public class MainInputController {
 		}
 	}
 
+	/**
+	 * resets all input fields and check boxes to be empty/unselected
+	 */
 	private void resetMask() {
 		for(int i = 0; i<alphabetical[0].size(); i++){
 			Object a = alphabetical[0].get(i);
@@ -278,7 +293,7 @@ public class MainInputController {
 	/**
 	 * reads text from selected rows and stores it into ArgumentDtos, then initiates screen change to Demonstration Window
 	 */
-	@FXML //TODO not only selected arguments' attacks
+	@FXML
 	public void onShowButton(){
 		arguments = createTransferObjectList();
 		
@@ -306,6 +321,12 @@ public class MainInputController {
 		wrapper.loadDemonstration();
 	}
 	
+	/**
+	 * checks whether an example has attacks on/from arguments it does not
+	 * contain itself
+	 * @param input the list of arguments + attacks to check
+	 * @return whether such a "dangling" attack exists
+	 */
 	private boolean hasDanglingAttacks(ArrayList<ArgumentDto> input) {
 		for(ArgumentDto a: input){
 			if(!a.isSelected() && a.getAttacks().length() != 0){
@@ -318,7 +339,7 @@ public class MainInputController {
 
 	/**
 	 * creates ArgumentDtos from all arguments that have input
-	 * @return list of ArgumentDtos
+	 * @return list of ArgumentDtos if available, otw null
 	 */
 	private ArrayList<ArgumentDto> createTransferObjectList(){
 		ArrayList<ArgumentDto> arguments = new ArrayList<ArgumentDto>();
@@ -352,6 +373,11 @@ public class MainInputController {
 		return arguments;
 	}
 
+	/**
+	 * checks whether the example in question is already saved
+	 * @param tmp example to check
+	 * @return whether it already exists
+	 */
 	private boolean exampleExists(Example tmp) {
 		for(Example e:examples){
 			if (e.equals(tmp)) {
@@ -361,6 +387,12 @@ public class MainInputController {
 		return false;
 	}
 	
+	/**
+	 * combines a list of arguments and attacks into an example
+	 * @param arguments a list of argumentDtos containing arguments and their attacks
+	 * @param name how the example created is to be called
+	 * @return the created example
+	 */
 	private Example convertToExample(ArrayList<ArgumentDto> arguments, String name) {
 		Line[] lines = new Line[arguments.size()];
 
@@ -372,6 +404,9 @@ public class MainInputController {
 		return new Example(name,lines);
 	}
 
+	/**
+	 * clears the old input after saving it (if new or changed)
+	 */
 	@FXML
 	public void onNewClick(){ //overwrites old example, if name is same, otherwise writes new autosave
 		Example oldExample;
@@ -403,16 +438,27 @@ public class MainInputController {
 		clearAll();
 	}
 
+	/**
+	 * clears all inputs on button click
+	 */
 	@FXML
 	public void onClearClick(){
 		clearAll();
 	}
 
+	/**
+	 * clears all inputs
+	 */
 	private void clearAll(){
 		presetComboBox.getSelectionModel().selectFirst();
 		nameTxt.setText("");
 	}
 
+
+	/**
+	 * saves the input as a new example, given the name in the name text field
+	 * and adds it to the dropdown, then selects it from there
+	 */
 	/*TODO after saving a change to something that existed before, but with a new name, the original version is shown
 	--> fix
 	*/
@@ -445,6 +491,11 @@ public class MainInputController {
 
 	}
 
+	/**
+	 * searches examples for an example of the name given
+	 * @param name the name of the example to be found
+	 * @return the found example, otw null
+	 */
 	private Example getExampleByName(String name){
 		for (Example e:examples){
 			if (name.equals(e.getName())){
