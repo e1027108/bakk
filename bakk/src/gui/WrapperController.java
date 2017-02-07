@@ -32,7 +32,7 @@ public class WrapperController {
 	 */
 	@FXML
 	void initialize(){
-		description = "Not sure what to refer to here";
+		description = "This project expands a bachelor thesis on argumentation frameworks with equivalency checks. Both are available here:";
 		loadMain();
 	}
 	
