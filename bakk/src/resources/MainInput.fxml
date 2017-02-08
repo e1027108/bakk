@@ -15,9 +15,9 @@
         <Font size="25.0" />
       </font>
     </Label>
-    <Label fx:id="useLbl" layoutY="87.0" text="use?" AnchorPane.leftAnchor="100.0" />
-    <Label fx:id="addLbl" text="argument description:" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="87.0" />
-    <Label fx:id="attackLbl" text="attacks:" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="90.0" />
+    <Label id="useLbl" fx:id="argLbl" text="argument" AnchorPane.leftAnchor="85.0" AnchorPane.topAnchor="90.0" />
+    <Label fx:id="addLbl" text="description" AnchorPane.leftAnchor="316.0" AnchorPane.topAnchor="90.0" />
+    <Label fx:id="attackLbl" text="attacks" AnchorPane.leftAnchor="663.0" AnchorPane.topAnchor="90.0" />
     <CheckBox fx:id="ABox" mnemonicParsing="false" text="A" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="125.0" />
     <TextField fx:id="argumentATxt" prefWidth="400.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="120.0" />
     <TextField fx:id="attackATxt" prefWidth="230.0" AnchorPane.leftAnchor="570.0" AnchorPane.topAnchor="120.0" />

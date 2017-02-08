@@ -132,7 +132,8 @@ public class DemonstrationWindowController {
 		expandingComboBox.setTooltip(expansionTip);
 		expansionLbl.setTooltip(expansionTip);
 
-		expandTip = new Tooltip("Expand both frameworks (if available) with your chosen expansion.");
+		expandTip = new Tooltip("Expand both frameworks (if available) with your chosen expansion\n"
+				+ "and check which type the expansion is of.");
 		expandBtn.setTooltip(expandTip);
 
 		comparisonTip = new Tooltip("Choose a framework to compare your framework to."
@@ -144,7 +145,7 @@ public class DemonstrationWindowController {
 				+ "\ncomputing your chosen equivalency type.");
 		compareBtn.setTooltip(compareTip);
 
-		typeTip = new Tooltip("Chose the type of equivalency to check for your frameworks.");
+		typeTip = new Tooltip("Chose the type of equivalency to check for your frameworks. (expanded or not)");
 		expandOptionsLbl.setTooltip(typeTip);
 
 		standardTip = new Tooltip("Set comparison to check for standard equivalency. This checks whether the"

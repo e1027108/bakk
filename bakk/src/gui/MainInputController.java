@@ -53,7 +53,7 @@ public class MainInputController {
 	private CheckBox ABox, BBox, CBox, DBox, EBox, FBox, GBox, HBox, IBox, JBox; //checkboxes selecting which textfields to be read from
 
 	@FXML
-	private Label useLbl, addLbl, attackLbl, headlineLbl, errorLbl, presetLbl, saveLbl; //descriptive labels
+	private Label argLbl, addLbl, attackLbl, headlineLbl, errorLbl, presetLbl, saveLbl; //descriptive labels
 
 	@FXML
 	private Button showGraphBtn, saveBtn, newBtn, clearBtn;
@@ -61,7 +61,7 @@ public class MainInputController {
 	@FXML
 	private ComboBox<String> presetComboBox;
 
-	private Tooltip showTip, useTip, descriptionTip, attackTip, generalAttackTip, choiceTip, saveTip, newTip,
+	private Tooltip showTip, argTip, descriptionTip, attackTip, generalAttackTip, choiceTip, saveTip, newTip,
 	clearTip; //tooltips describing what to input or what happens
 
 	private Interactor interactor; //Interactor controlling the results the user sees
@@ -84,7 +84,9 @@ public class MainInputController {
 
 		errorLbl.setText("");
 
-		showTip = new Tooltip("Shows a graph representation of the created abstract argumentation framework.\nThere you can compute various extensions.");
+		showTip = new Tooltip("Shows a graph representation of the created abstract argumentation framework.\n"
+				+ "There you can compute various extensions or compare it to another framework.\n"
+				+ "Note: You can only load frameworks that contain all the arguments that have attacks.");
 		showGraphBtn.setTooltip(showTip);
 
 		checkBoxes = new ArrayList<CheckBox>();
@@ -101,10 +103,10 @@ public class MainInputController {
 		alphabetical[1] = statements;
 		alphabetical[2] = attacks;
 
-		useTip = new Tooltip("Select which arguments you want\nto use for further computation.");
-		useLbl.setTooltip(useTip);
+		argTip = new Tooltip("Select which arguments are to be in the framework.");
+		argLbl.setTooltip(argTip);
 		for(CheckBox c: checkBoxes){
-			c.setTooltip(useTip);
+			c.setTooltip(argTip);
 		}
 
 		descriptionTip = new Tooltip("Assign a statement or description to the argument.");
@@ -113,7 +115,8 @@ public class MainInputController {
 			f.setTooltip(descriptionTip);
 		}
 
-		attackTip = new Tooltip("Write the names of the arguments\nthis argument should attack here.");
+		attackTip = new Tooltip("Write the names of the arguments\nthis argument should attack here.\n"
+				+ "Note: the argument does not need to be selected.");
 		for(TextField f: attacks){
 			f.setTooltip(attackTip);
 		}
@@ -124,8 +127,8 @@ public class MainInputController {
 		choiceTip = new Tooltip("You can choose a preset to load an example framework into the textfields above.");
 		presetComboBox.setTooltip(choiceTip);
 
-		saveTip = new Tooltip("Save the currently selected arguments as a new framework with the name given in the textfield or "
-				+ "overwrite the framework specified there.");
+		saveTip = new Tooltip("Save the currently selected arguments and attacks as a new framework\n"
+				+ "with the name given in the textfield or overwrite the framework specified there.");
 		newTip = new Tooltip("Clears all textfields and selections to start a new framework, automatically saves the current selection.");
 		clearTip = new Tooltip("Clears all textfields, does not save any selection.");
 		
