@@ -139,6 +139,7 @@ public class MainInputController {
 
 	/**
 	 * creates a list of pre-defined examples
+	 * each example needs to contain an entry for every letter!
 	 * @return the list of examples
 	 */
 	//TODO re-evaluate examples (kick some, add some)
@@ -151,27 +152,56 @@ public class MainInputController {
 				new Line[] {
 						new Line('a', "I: My government can not negotiate with your government because your government doesn't even recognize my government.", "b", true),
 						new Line('b', "A: Your government doesn't recognize my government either.", "a", true),
-						new Line('c', "I: But your government is a terrorist government.", "b", true)
+						new Line('c', "I: But your government is a terrorist government.", "b", true),
+						new Line('d', "", "", false),
+						new Line('e', "", "", false),
+						new Line('f', "", "", false),
+						new Line('g', "", "", false),
+						new Line('h', "", "", false),
+						new Line('i', "", "", false),
+						new Line('j', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Nixon Diamond",
 				new Line[] {
 						new Line('a', "Nixon is anti-pacifist since he is a republican.", "b", true),
 						new Line('b', "Nixon is a pacifist since he is a quaker.", "a", true),
+						new Line('c', "", "", false),
+						new Line('d', "", "", false),
+						new Line('e', "", "", false),
+						new Line('f', "", "", false),
+						new Line('g', "", "", false),
+						new Line('h', "", "", false),
+						new Line('i', "", "", false),
+						new Line('j', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Thesis Example 1-7",
 				new Line[] {
 						new Line('a', "A: Blue is the most beautiful of all colors.", "b", true),
 						new Line('b', "B: No, black is much more beautiful!", "a", true),
-						new Line('c', "A: That's wrong, black isn't even a color.", "b", true)
+						new Line('c', "A: That's wrong, black isn't even a color.", "b", true),
+						new Line('d', "", "", false),
+						new Line('e', "", "", false),
+						new Line('f', "", "", false),
+						new Line('g', "", "", false),
+						new Line('h', "", "", false),
+						new Line('i', "", "", false),
+						new Line('j', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Thesis Example 8",
 				new Line[] {
 						new Line('a', "", "a", true),
 						new Line('b', "", "ac", true),
-						new Line('c', "", "b", true)
+						new Line('c', "", "b", true),
+						new Line('d', "", "", false),
+						new Line('e', "", "", false),
+						new Line('f', "", "", false),
+						new Line('g', "", "", false),
+						new Line('h', "", "", false),
+						new Line('i', "", "", false),
+						new Line('j', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Thesis Example 9",
@@ -179,7 +209,13 @@ public class MainInputController {
 						new Line('a', "", "b", true),
 						new Line('b', "", "a", true),
 						new Line('c', "", "bd", true),
-						new Line('d', "", "c", true)
+						new Line('d', "", "c", true),
+						new Line('e', "", "", false),
+						new Line('f', "", "", false),
+						new Line('g', "", "", false),
+						new Line('h', "", "", false),
+						new Line('i', "", "", false),
+						new Line('j', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Thesis Figure 4.1",
@@ -188,7 +224,12 @@ public class MainInputController {
 						new Line('b', "", "ac", true),
 						new Line('c', "", "bd", true),
 						new Line('d', "", "ace", true),
-						new Line('e', "", "e", true)
+						new Line('e', "", "e", true),
+						new Line('f', "", "", false),
+						new Line('g', "", "", false),
+						new Line('h', "", "", false),
+						new Line('i', "", "", false),
+						new Line('j', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Egly Example 1",
@@ -197,7 +238,13 @@ public class MainInputController {
 						new Line('b', "", "", true),
 						new Line('c', "", "bd", true),
 						new Line('d', "", "ce", true),
-						new Line('e', "", "e", true)
+						new Line('e', "", "e", true),
+						new Line('e', "", "", false),
+						new Line('f', "", "", false),
+						new Line('g', "", "", false),
+						new Line('h', "", "", false),
+						new Line('i', "", "", false),
+						new Line('j', "", "", false)
 		}));
 		
 		exampleSet.add(new Example("Semi-Stable",
@@ -205,19 +252,37 @@ public class MainInputController {
 					new Line('a', "", "ac", true),
 					new Line('b', "", "c", true),
 					new Line('c', "", "d", true),
-					new Line('d', "", "", true)
+					new Line('d', "", "", true),
+					new Line('e', "", "", false),
+					new Line('f', "", "", false),
+					new Line('g', "", "", false),
+					new Line('h', "", "", false),
+					new Line('i', "", "", false),
+					new Line('j', "", "", false)
 				}));
 		
 		exampleSet.add(new Example("c",
 				new Line[] {
-						new Line('c', "", "c", false)
+						new Line('a', "", "", false),
+						new Line('b', "", "", false),
+						new Line('c', "", "c", false),
+						new Line('d', "", "", false),
+						new Line('e', "", "", false),
+						new Line('f', "", "", false),
+						new Line('g', "", "", false),
+						new Line('h', "", "", false),
+						new Line('i', "", "", false),
+						new Line('j', "", "", false)
 				}));
 
 		return exampleSet;
 	}
 
+	
+	
 	/**
 	 * shows predefined examples in drop down menu
+	 * @param selection 
 	 */
 	public void showChoices(){
 		ArrayList<String> formatList = new ArrayList<String>();
@@ -307,7 +372,7 @@ public class MainInputController {
 		String autoName = "autosave " + autosave;
 		
 		Example tmp = convertToExample(arguments,autoName);
-		if(!exampleExists(tmp)){ //TODO still creates autosave for already existing examples --> fix
+		if(!exampleExists(tmp)){
 			examples.add(tmp);
 			showChoices();
 		}
@@ -459,9 +524,6 @@ public class MainInputController {
 	 * saves the input as a new example, given the name in the name text field
 	 * and adds it to the dropdown, then selects it from there
 	 */
-	/*TODO after saving a change to something that existed before, but with a new name, the original version is shown
-	--> fix
-	*/
 	@FXML 
 	public void onSaveClick(){
 		String name = nameTxt.getText();
@@ -482,11 +544,13 @@ public class MainInputController {
 		if(toSave == null){
 			examples.add(convertToExample(toList,name));
 			showChoices();
+			presetComboBox.getSelectionModel().selectLast();
 		}
 		else{
 			int id = examples.indexOf(toSave);
-			examples.set(id, convertToExample(toList,name)); //overwrite
+			examples.set(id, convertToExample(toList,name));
 			presetComboBox.getSelectionModel().select(id);
+			errorLbl.setText("no change detected");
 		}
 
 	}

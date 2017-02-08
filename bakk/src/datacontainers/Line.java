@@ -16,16 +16,12 @@ public class Line{
 	
 	/**
 	 * returns whether the line equals a given line b
+	 * disregards descriptions
 	 * @param b another line
 	 * @return true/false
 	 */
 	public boolean equals(Line b){
 		if(this.name != b.getChar()){
-			return false;
-		}
-		else if(!this.description.equals(b.getDescription()) && 
-				!((this.description.length() == 0 && b.getDescription().equals("no description available")) ||
-				this.description.equals("no description available") && b.getDescription().length() == 0)) {
 			return false;
 		}
 		else {
