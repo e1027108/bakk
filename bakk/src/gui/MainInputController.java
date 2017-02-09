@@ -157,7 +157,7 @@ public class MainInputController {
 						new Line('B', "", "C", true),
 						new Line('C', "", "A", true),
 						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
-						new Line('H',"","",false), new Line('I',"","",false), new Line('I',"","",false)
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
 				}));
 
 		exampleSet.add(new Example(
@@ -167,7 +167,7 @@ public class MainInputController {
 						new Line('B', "", "A", true),
 						new Line('C', "", "B", true),
 						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
-						new Line('H',"","",false), new Line('I',"","",false), new Line('I',"","",false)
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
 				}));
 		
 		exampleSet.add(new Example(
@@ -175,7 +175,7 @@ public class MainInputController {
 				new Line[] {
 						new Line('A', "", "", false), new Line('B', "", "", false),	new Line('C', "", "", false),
 						new Line('D',"","B",true), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
-						new Line('H',"","",false), new Line('I',"","",false), new Line('I',"","",false)
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
 				}));
 
 		return exampleSet;

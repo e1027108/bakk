@@ -22,6 +22,7 @@ public class Line{
 	 */
 	public boolean equals(Line b){
 		if(this.name != b.getChar()){
+			System.out.println(this.name + ", " + b.getChar());
 			return false;
 		}
 		else {

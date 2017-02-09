@@ -639,8 +639,6 @@ public class DemonstrationWindowController {
 				Argument expDef = Framework.getArgument(expArguments,l.getAttacks().charAt(i));
 				Argument argDef = null;
 				Argument comDef = null;
-				
-				System.out.println("checking: (" + l.getChar() + "," + l.getAttacks().charAt(i) + ")");
 
 				if(expDef == null){
 					argDef = Framework.getArgument(argumentFramework.getArguments(), l.getAttacks().charAt(i));
