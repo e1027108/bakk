@@ -489,10 +489,17 @@ public class DemonstrationWindowController {
 
 		RadioButton selectedToggle = (RadioButton) expansionGroup.getSelectedToggle();
 		boolean standard = selectedToggle.getText().equals("standard");
-
+		String fname = F1;
+		String sname = F2;
+		
+		if(expanded){
+			fname += " + " + EX;
+			sname += " + " + EX;
+		}
+		
 		if(standard){
 			try {
-				resultSet = eq.areStandardEquivalent(extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected(),showExtensionsCheckBox.isSelected());
+				resultSet = eq.areStandardEquivalent(fname,sname,extensionComboBox.getSelectionModel().getSelectedIndex(),previousCheckBox.isSelected(),showExtensionsCheckBox.isSelected());
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
 				return;
