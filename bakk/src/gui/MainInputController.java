@@ -153,128 +153,128 @@ public class MainInputController {
 
 		exampleSet.add(new Example("DUNG Example 1",
 				new Line[] {
-						new Line('a', "I: My government can not negotiate with your government because your government doesn't even recognize my government.", "b", true),
-						new Line('b', "A: Your government doesn't recognize my government either.", "a", true),
-						new Line('c', "I: But your government is a terrorist government.", "b", true),
-						new Line('d', "", "", false),
-						new Line('e', "", "", false),
-						new Line('f', "", "", false),
-						new Line('g', "", "", false),
-						new Line('h', "", "", false),
-						new Line('i', "", "", false),
-						new Line('j', "", "", false)
+						new Line('A', "I: My government can not negotiate with your government because your government doesn't even recognize my government.", "B", true),
+						new Line('B', "A: Your government doesn't recognize my government either.", "A", true),
+						new Line('C', "I: But your government is a terrorist government.", "B", true),
+						new Line('D', "", "", false),
+						new Line('E', "", "", false),
+						new Line('F', "", "", false),
+						new Line('G', "", "", false),
+						new Line('H', "", "", false),
+						new Line('I', "", "", false),
+						new Line('J', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Nixon Diamond",
 				new Line[] {
-						new Line('a', "Nixon is anti-pacifist since he is a republican.", "b", true),
-						new Line('b', "Nixon is a pacifist since he is a quaker.", "a", true),
-						new Line('c', "", "", false),
-						new Line('d', "", "", false),
-						new Line('e', "", "", false),
-						new Line('f', "", "", false),
-						new Line('g', "", "", false),
-						new Line('h', "", "", false),
-						new Line('i', "", "", false),
-						new Line('j', "", "", false)
+						new Line('A', "Nixon is anti-pacifist since he is a republican.", "B", true),
+						new Line('B', "Nixon is a pacifist since he is a quaker.", "A", true),
+						new Line('C', "", "", false),
+						new Line('D', "", "", false),
+						new Line('E', "", "", false),
+						new Line('F', "", "", false),
+						new Line('G', "", "", false),
+						new Line('H', "", "", false),
+						new Line('I', "", "", false),
+						new Line('J', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Thesis Example 1-7",
 				new Line[] {
-						new Line('a', "A: Blue is the most beautiful of all colors.", "b", true),
-						new Line('b', "B: No, black is much more beautiful!", "a", true),
-						new Line('c', "A: That's wrong, black isn't even a color.", "b", true),
-						new Line('d', "", "", false),
-						new Line('e', "", "", false),
-						new Line('f', "", "", false),
-						new Line('g', "", "", false),
-						new Line('h', "", "", false),
-						new Line('i', "", "", false),
-						new Line('j', "", "", false)
+						new Line('A', "A: Blue is the most beautiful of all colors.", "B", true),
+						new Line('B', "B: No, black is much more beautiful!", "A", true),
+						new Line('C', "A: That's wrong, black isn't even a color.", "B", true),
+						new Line('D', "", "", false),
+						new Line('E', "", "", false),
+						new Line('F', "", "", false),
+						new Line('G', "", "", false),
+						new Line('H', "", "", false),
+						new Line('I', "", "", false),
+						new Line('J', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Thesis Example 8",
 				new Line[] {
-						new Line('a', "", "a", true),
-						new Line('b', "", "ac", true),
-						new Line('c', "", "b", true),
-						new Line('d', "", "", false),
-						new Line('e', "", "", false),
-						new Line('f', "", "", false),
-						new Line('g', "", "", false),
-						new Line('h', "", "", false),
-						new Line('i', "", "", false),
-						new Line('j', "", "", false)
+						new Line('A', "", "A", true),
+						new Line('B', "", "AC", true),
+						new Line('C', "", "B", true),
+						new Line('D', "", "", false),
+						new Line('E', "", "", false),
+						new Line('F', "", "", false),
+						new Line('G', "", "", false),
+						new Line('H', "", "", false),
+						new Line('I', "", "", false),
+						new Line('J', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Thesis Example 9",
 				new Line[] {
-						new Line('a', "", "b", true),
-						new Line('b', "", "a", true),
-						new Line('c', "", "bd", true),
-						new Line('d', "", "c", true),
-						new Line('e', "", "", false),
-						new Line('f', "", "", false),
-						new Line('g', "", "", false),
-						new Line('h', "", "", false),
-						new Line('i', "", "", false),
-						new Line('j', "", "", false)
+						new Line('A', "", "B", true),
+						new Line('B', "", "A", true),
+						new Line('C', "", "BD", true),
+						new Line('D', "", "C", true),
+						new Line('E', "", "", false),
+						new Line('F', "", "", false),
+						new Line('G', "", "", false),
+						new Line('H', "", "", false),
+						new Line('I', "", "", false),
+						new Line('J', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Thesis Figure 4.1",
 				new Line[] {
-						new Line('a', "", "", true),
-						new Line('b', "", "ac", true),
-						new Line('c', "", "bd", true),
-						new Line('d', "", "ace", true),
-						new Line('e', "", "e", true),
-						new Line('f', "", "", false),
-						new Line('g', "", "", false),
-						new Line('h', "", "", false),
-						new Line('i', "", "", false),
-						new Line('j', "", "", false)
+						new Line('A', "", "", true),
+						new Line('B', "", "AC", true),
+						new Line('C', "", "BD", true),
+						new Line('D', "", "ACE", true),
+						new Line('E', "", "E", true),
+						new Line('F', "", "", false),
+						new Line('G', "", "", false),
+						new Line('H', "", "", false),
+						new Line('I', "", "", false),
+						new Line('J', "", "", false)
 		}));
 
 		exampleSet.add(new Example("Egly Example 1",
 				new Line[] {
-						new Line('a', "", "b", true),
-						new Line('b', "", "", true),
-						new Line('c', "", "bd", true),
-						new Line('d', "", "ce", true),
-						new Line('e', "", "e", true),
-						new Line('f', "", "", false),
-						new Line('g', "", "", false),
-						new Line('h', "", "", false),
-						new Line('i', "", "", false),
-						new Line('j', "", "", false)
+						new Line('A', "", "B", true),
+						new Line('B', "", "", true),
+						new Line('C', "", "BD", true),
+						new Line('D', "", "CE", true),
+						new Line('E', "", "E", true),
+						new Line('F', "", "", false),
+						new Line('G', "", "", false),
+						new Line('H', "", "", false),
+						new Line('I', "", "", false),
+						new Line('J', "", "", false)
 		}));
 		
 		exampleSet.add(new Example("Semi-Stable",
 				new Line[] {
-					new Line('a', "", "ac", true),
-					new Line('b', "", "c", true),
-					new Line('c', "", "d", true),
-					new Line('d', "", "", true),
-					new Line('e', "", "", false),
-					new Line('f', "", "", false),
-					new Line('g', "", "", false),
-					new Line('h', "", "", false),
-					new Line('i', "", "", false),
-					new Line('j', "", "", false)
+					new Line('A', "", "AC", true),
+					new Line('B', "", "C", true),
+					new Line('C', "", "D", true),
+					new Line('D', "", "", true),
+					new Line('E', "", "", false),
+					new Line('F', "", "", false),
+					new Line('G', "", "", false),
+					new Line('H', "", "", false),
+					new Line('I', "", "", false),
+					new Line('J', "", "", false)
 				}));
 		
-		exampleSet.add(new Example("c",
+		exampleSet.add(new Example("C",
 				new Line[] {
-						new Line('a', "", "", false),
-						new Line('b', "", "", false),
-						new Line('c', "", "c", false),
-						new Line('d', "", "", false),
-						new Line('e', "", "", false),
-						new Line('f', "", "", false),
-						new Line('g', "", "", false),
-						new Line('h', "", "", false),
-						new Line('i', "", "", false),
-						new Line('j', "", "", false)
+						new Line('A', "", "", false),
+						new Line('B', "", "", false),
+						new Line('C', "", "C", false),
+						new Line('D', "", "", false),
+						new Line('E', "", "", false),
+						new Line('F', "", "", false),
+						new Line('G', "", "", false),
+						new Line('H', "", "", false),
+						new Line('I', "", "", false),
+						new Line('J', "", "", false)
 				}));
 
 		return exampleSet;
@@ -371,7 +371,7 @@ public class MainInputController {
 		}
 		
 		autosave++; //we have standard 0, we start with 1 and so on
-		String autoName = "autosave " + autosave;
+		String autoName = "Autosave " + autosave;
 		
 		Example tmp = convertToExample(arguments,autoName);
 		if(!exampleExists(tmp)){
@@ -392,7 +392,7 @@ public class MainInputController {
 	 * checks whether an example has attacks on/from arguments it does not
 	 * contain itself
 	 * @param input the list of arguments + attacks to check
-	 * @return whether such a "dangling" attack exists
+	 * @return whether such a "Dangling" attack exists
 	 */
 	private boolean hasDanglingAttacks(ArrayList<ArgumentDto> input) {
 		for(ArgumentDto a: input){
@@ -433,7 +433,7 @@ public class MainInputController {
 			errorLbl.setText(e.getMessage());
 			return null;
 		} catch(IndexOutOfBoundsException e){
-			errorLbl.setText("critical error: " + e.getMessage());
+			errorLbl.setText("Critical error: " + e.getMessage());
 			return null;
 		}
 		
@@ -481,7 +481,7 @@ public class MainInputController {
 		
 		if(oldName == null || oldName.equals("")){
 			autosave++;
-			oldName = "autosave " + autosave; 
+			oldName = "Autosave " + autosave; 
 		}
 		
 		ArrayList<ArgumentDto> toList = createTransferObjectList();	

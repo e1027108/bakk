@@ -210,8 +210,6 @@ public class NodePane extends AnchorPane{
 			this.getChildren().add(tmp);
 
 			nodes.add(circle);
-
-			System.out.println("Added node " + circle.getName());
 		}
 
 		// draw the edges
@@ -237,8 +235,6 @@ public class NodePane extends AnchorPane{
 			else{
 				drawDirectedArc(pStart, getPreferredAngle(pEnd, nodePositions), direction);
 			}
-			
-			System.out.println("Added edge " + direction);
 		}
 	}
 

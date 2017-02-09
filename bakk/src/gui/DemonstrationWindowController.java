@@ -511,6 +511,8 @@ public class DemonstrationWindowController {
 	@FXML
 	public void onExpandClick(){
 		if(!expanded){
+			checkExpansionType();
+			
 			try {
 				expandFrameworks();
 			} catch (InvalidInputException e) {
@@ -518,15 +520,16 @@ public class DemonstrationWindowController {
 				restoreOriginalFrameworks();
 				return;
 			}
-			expanded = true;
-			expandBtn.setText(EXPANDED);
+			
 			if(comparisonFramework == null){
 				nameLbl.setText(F1 + " + " + EX);
 			}
 			else{
 				nameLbl.setText(nameLbl.getText() + " + " + EX);
 			}
-			checkExpansionType();
+			
+			expanded = true;
+			expandBtn.setText(EXPANDED);
 		}
 		else{
 			expanded = false;
@@ -639,13 +642,18 @@ public class DemonstrationWindowController {
 					}
 				}
 
-				if(attacker != null && defender != null && 
-						(comparisonFramework == null || (comparisonFramework != null && compAtt != null && compDef != null))){
-					expAttacks.add(new Attack(attacker,defender));
+				if(attacker == null || defender == null){
+					conditionalToggle(1);
+					throw new InvalidInputException("Invalid attack detected in " + EX + " for " + F1 + "! (" + l.getChar() + 
+							"," + l.getAttacks().charAt(i) + ")");
+				}
+				else if(comparisonFramework != null && (compAtt == null || compDef == null)){
+					conditionalToggle(2);
+					throw new InvalidInputException("Invalid attack detected in " + EX + " for " + F2 + "! (" + l.getChar() + 
+							"," + l.getAttacks().charAt(i) + ")");
 				}
 				else{
-					throw new InvalidInputException("Invalid attack detected! (" + l.getChar() + 
-							"," + l.getAttacks().charAt(i) + ")");
+					expAttacks.add(new Attack(attacker,defender));
 				}
 			}
 		}
@@ -671,6 +679,7 @@ public class DemonstrationWindowController {
 		if(comparisonFramework != null){
 			initializeGraph(comparisonPane,comparisonFramework,null);
 		}
+		conditionalToggle(1);
 	}
 
 	/**
@@ -686,11 +695,17 @@ public class DemonstrationWindowController {
 		
 		try {
 			pane.drawGraph();
-			pane.setVisible(true);
 		} catch (InvalidInputException e) {
 			interactor.emptyQueue();
 			explanationArea.setText(e.getMessage() + "\n The graph may not be correctly displayed!");
 			explanationArea.setStyle("-fx-text-fill: red;");
+		}
+		
+		if(pane == graphPane){
+			conditionalToggle(1);
+		}
+		else if(pane == comparisonPane){
+			conditionalToggle(2);
 		}
 	}
 
