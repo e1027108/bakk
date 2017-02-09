@@ -318,16 +318,24 @@ public class DemonstrationWindowController {
 	 * computes the type of expansion the expansion framework would be to the framework
 	 * and to the comparison framework (if available)
 	 */
-	private void checkExpansionType() {
-		interactor.emptyQueue();
+	private boolean checkExpansionType() {
+		String ftype = null;
+		String ctype = null;
 
 		Expansion frameworkExpansion, comparisonExpansion;
 		frameworkExpansion = new Expansion(argumentFramework,expansionFramework);
-		frameworkExpansion.determineExpansionType(F1,EX);
+		ftype = frameworkExpansion.determineExpansionType(F1,EX);
 
 		if(comparisonFramework != null){
 			comparisonExpansion = new Expansion(comparisonFramework,expansionFramework);
-			comparisonExpansion.determineExpansionType(F2,EX);
+			ctype = comparisonExpansion.determineExpansionType(F2,EX);
+		}
+		
+		if(ftype == null || (comparisonFramework != null && ctype == null)){
+			return false;
+		}
+		else{
+			return true;
 		}
 	}
 
@@ -510,9 +518,9 @@ public class DemonstrationWindowController {
 	 */
 	@FXML
 	public void onExpandClick(){
-		if(!expanded){
-			checkExpansionType();
-			
+		interactor.emptyQueue();
+		
+		if(!expanded){			
 			try {
 				expandFrameworks();
 			} catch (InvalidInputException e) {
@@ -537,6 +545,8 @@ public class DemonstrationWindowController {
 			restoreOriginalFrameworks();
 			nameLbl.setText(nameLbl.getText().replace(" + " + EX,""));
 		}
+		
+		setUI(false);
 	}
 
 	/**
@@ -660,6 +670,10 @@ public class DemonstrationWindowController {
 
 		expansionFramework = new Framework(expArguments, expAttacks, interactor, 0); //pane should never be used --> 0
 
+		if(!checkExpansionType()){
+			return;
+		}
+		
 		//this should draw the expanded version
 		initializeGraph(graphPane,argumentFramework,expansionFramework);
 
