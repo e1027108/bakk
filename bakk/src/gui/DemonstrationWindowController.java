@@ -215,7 +215,7 @@ public class DemonstrationWindowController {
 		//set comparable examples
 		showExamplesInComboBoxes();
 		expanded = false;
-		
+
 		comparisonPane.setVisible(false);
 		graphPane.setVisible(true);
 	}
@@ -330,7 +330,7 @@ public class DemonstrationWindowController {
 			comparisonExpansion = new Expansion(comparisonFramework,expansionFramework);
 			ctype = comparisonExpansion.determineExpansionType(F2,EX);
 		}
-		
+
 		if(ftype == null || (comparisonFramework != null && ctype == null)){
 			return false;
 		}
@@ -519,7 +519,7 @@ public class DemonstrationWindowController {
 	@FXML
 	public void onExpandClick(){
 		interactor.emptyQueue();
-		
+
 		if(!expanded){			
 			try {
 				expandFrameworks();
@@ -528,14 +528,7 @@ public class DemonstrationWindowController {
 				restoreOriginalFrameworks();
 				return;
 			}
-			
-			if(comparisonFramework == null){
-				nameLbl.setText(F1 + " + " + EX);
-			}
-			else{
-				nameLbl.setText(nameLbl.getText() + " + " + EX);
-			}
-			
+
 			expanded = true;
 			expandBtn.setText(EXPANDED);
 		}
@@ -545,7 +538,7 @@ public class DemonstrationWindowController {
 			restoreOriginalFrameworks();
 			nameLbl.setText(nameLbl.getText().replace(" + " + EX,""));
 		}
-		
+
 		setUI(false);
 	}
 
@@ -557,7 +550,7 @@ public class DemonstrationWindowController {
 	public void onToggleClick(){
 		String text = "";
 
-		if(expansionFramework != null){
+		if(expansionFramework != null && !text.contains(EX)){
 			text = " + " + EX;
 		}
 
@@ -618,8 +611,7 @@ public class DemonstrationWindowController {
 		Example current = MainInputController.getExamples().get(expandingComboBox.getSelectionModel().getSelectedIndex());
 
 		if(expandingComboBox.getSelectionModel().getSelectedIndex() < 1){
-			explanationArea.setText("No expansion framework was chosen, could not expand framework!");
-			return;
+			throw new InvalidInputException("No expansion framework was chosen, could not expand framework!");
 		}
 
 		expArguments = new ArrayList<Argument>();
@@ -632,39 +624,71 @@ public class DemonstrationWindowController {
 		}
 
 		for(Line l: current.getLines()){
-			Argument attacker = Framework.getArgument(expArguments,l.getChar());
-			Argument compAtt = null;
-			Argument compDef = null;
+			Argument expAtt = Framework.getArgument(expArguments,l.getChar());
+			Argument argAtt = null;
+			Argument comAtt = null;
 
-			if(attacker == null){
-				attacker = Framework.getArgument(argumentFramework.getArguments(), l.getChar());
+			if(expAtt == null){
+				argAtt = Framework.getArgument(argumentFramework.getArguments(), l.getChar());
 				if(comparisonFramework != null){
-					compAtt = Framework.getArgument(comparisonFramework.getArguments(), l.getChar());
+					comAtt = Framework.getArgument(comparisonFramework.getArguments(), l.getChar());
 				}
 			}
 
 			for(int i = 0;i<l.getAttacks().length();i++){
-				Argument defender = Framework.getArgument(expArguments,l.getAttacks().charAt(i));
-				if(defender == null){
-					defender = Framework.getArgument(argumentFramework.getArguments(), l.getAttacks().charAt(i));
+				Argument expDef = Framework.getArgument(expArguments,l.getAttacks().charAt(i));
+				Argument argDef = null;
+				Argument comDef = null;
+				
+				System.out.println("checking: (" + l.getChar() + "," + l.getAttacks().charAt(i) + ")");
+
+				if(expDef == null){
+					argDef = Framework.getArgument(argumentFramework.getArguments(), l.getAttacks().charAt(i));
 					if(comparisonFramework != null){
-						compDef = Framework.getArgument(comparisonFramework.getArguments(), l.getAttacks().charAt(i));
+						comDef = Framework.getArgument(comparisonFramework.getArguments(), l.getAttacks().charAt(i));
 					}
 				}
 
-				if(attacker == null || defender == null){
-					conditionalToggle(1);
-					throw new InvalidInputException("Invalid attack detected in " + EX + " for " + F1 + "! (" + l.getChar() + 
-							"," + l.getAttacks().charAt(i) + ")");
-				}
-				else if(comparisonFramework != null && (compAtt == null || compDef == null)){
-					conditionalToggle(2);
-					throw new InvalidInputException("Invalid attack detected in " + EX + " for " + F2 + "! (" + l.getChar() + 
-							"," + l.getAttacks().charAt(i) + ")");
+				Argument attUsed = null;
+				Argument defUsed = null;
+				
+				if(expAtt == null){
+					if(argAtt == null){
+						conditionalToggle(1);
+						throw new InvalidInputException("Invalid attacker detected in " + EX + " for " + F1 + "! (" + l.getChar() + ")");
+					}
+					else{
+						attUsed = argAtt;
+						if(comAtt == null && comparisonFramework != null){
+							conditionalToggle(2);
+							throw new InvalidInputException("Invalid attacker detected in " + EX + " for " + F2 + "! (" + l.getChar() + ")");
+						}
+					}
 				}
 				else{
-					expAttacks.add(new Attack(attacker,defender));
+					attUsed = expAtt;
 				}
+				
+				if(expDef == null){
+					if(argDef == null){
+						conditionalToggle(1);
+						throw new InvalidInputException("Invalid attack detected in " + EX + " for " + F1 + "! (" + l.getChar() + 
+								"," + l.getAttacks().charAt(i) + ")");
+					}
+					else{
+						defUsed = argDef;
+						if(comparisonFramework != null && comDef == null){
+							conditionalToggle(2);
+							throw new InvalidInputException("Invalid attack detected in " + EX + " for " + F2 + "! (" + l.getChar() + 
+									"," + l.getAttacks().charAt(i) + ")");
+						}
+					}
+				}
+				else{
+					defUsed = expDef;
+				}
+				
+				expAttacks.add(new Attack(attUsed,defUsed));
 			}
 		}
 
@@ -673,7 +697,7 @@ public class DemonstrationWindowController {
 		if(!checkExpansionType()){
 			return;
 		}
-		
+
 		//this should draw the expanded version
 		initializeGraph(graphPane,argumentFramework,expansionFramework);
 
@@ -704,9 +728,9 @@ public class DemonstrationWindowController {
 	 */
 	private void initializeGraph(NodePane pane, Framework framework, Framework expansion){
 		pane.getChildren().clear();
-		
+
 		pane.createGraph(framework,expansion);
-		
+
 		try {
 			pane.drawGraph();
 		} catch (InvalidInputException e) {
@@ -714,7 +738,7 @@ public class DemonstrationWindowController {
 			explanationArea.setText(e.getMessage() + "\n The graph may not be correctly displayed!");
 			explanationArea.setStyle("-fx-text-fill: red;");
 		}
-		
+
 		if(pane == graphPane){
 			conditionalToggle(1);
 		}
@@ -777,7 +801,7 @@ public class DemonstrationWindowController {
 
 		comparisonPane.createGraph(comparisonFramework,null);
 		toggleBtn.setDisable(false);
-		nameLbl.setText(F1);
+		nameLbl.setText(F2);
 
 		try {
 			comparisonPane.drawGraph();
@@ -949,9 +973,7 @@ public class DemonstrationWindowController {
 				return;
 			}
 			else if((Integer) nval == 0){
-				if(!comparisonPane.isVisible()){
-					onToggleClick();
-				}
+				conditionalToggle(1);
 				toggleBtn.setDisable(true);
 				nameLbl.setText("");
 				setDisableRadioButtons(true);
@@ -963,6 +985,7 @@ public class DemonstrationWindowController {
 					onExpandClick();
 				}
 
+				conditionalToggle(2);
 				computeBtn.setDisable(true);
 				setDisableRadioButtons(false);
 				initializeComparisonResources();

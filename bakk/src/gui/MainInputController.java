@@ -131,7 +131,7 @@ public class MainInputController {
 				+ "with the name given in the textfield or overwrite the framework specified there.");
 		newTip = new Tooltip("Clears all textfields and selections to start a new framework, automatically saves the current selection.");
 		clearTip = new Tooltip("Clears all textfields, does not save any selection.");
-		
+
 		saveBtn.setTooltip(saveTip);
 		newBtn.setTooltip(newTip);
 		clearBtn.setTooltip(clearTip);
@@ -145,143 +145,44 @@ public class MainInputController {
 	 * each example needs to contain an entry for every letter!
 	 * @return the list of examples
 	 */
-	//TODO re-evaluate examples (kick some, add some)
 	private ArrayList<Example> initializeExamples() {
 		ArrayList<Example>exampleSet = new ArrayList<Example>(); //now also use to save new (implement save/delete behaviour) frameworks
 
 		exampleSet.add(new Example("",null));
 
-		exampleSet.add(new Example("DUNG Example 1",
-				new Line[] {
-						new Line('A', "I: My government can not negotiate with your government because your government doesn't even recognize my government.", "B", true),
-						new Line('B', "A: Your government doesn't recognize my government either.", "A", true),
-						new Line('C', "I: But your government is a terrorist government.", "B", true),
-						new Line('D', "", "", false),
-						new Line('E', "", "", false),
-						new Line('F', "", "", false),
-						new Line('G', "", "", false),
-						new Line('H', "", "", false),
-						new Line('I', "", "", false),
-						new Line('J', "", "", false)
-		}));
-
-		exampleSet.add(new Example("Nixon Diamond",
-				new Line[] {
-						new Line('A', "Nixon is anti-pacifist since he is a republican.", "B", true),
-						new Line('B', "Nixon is a pacifist since he is a quaker.", "A", true),
-						new Line('C', "", "", false),
-						new Line('D', "", "", false),
-						new Line('E', "", "", false),
-						new Line('F', "", "", false),
-						new Line('G', "", "", false),
-						new Line('H', "", "", false),
-						new Line('I', "", "", false),
-						new Line('J', "", "", false)
-		}));
-
-		exampleSet.add(new Example("Thesis Example 1-7",
-				new Line[] {
-						new Line('A', "A: Blue is the most beautiful of all colors.", "B", true),
-						new Line('B', "B: No, black is much more beautiful!", "A", true),
-						new Line('C', "A: That's wrong, black isn't even a color.", "B", true),
-						new Line('D', "", "", false),
-						new Line('E', "", "", false),
-						new Line('F', "", "", false),
-						new Line('G', "", "", false),
-						new Line('H', "", "", false),
-						new Line('I', "", "", false),
-						new Line('J', "", "", false)
-		}));
-
-		exampleSet.add(new Example("Thesis Example 8",
-				new Line[] {
-						new Line('A', "", "A", true),
-						new Line('B', "", "AC", true),
-						new Line('C', "", "B", true),
-						new Line('D', "", "", false),
-						new Line('E', "", "", false),
-						new Line('F', "", "", false),
-						new Line('G', "", "", false),
-						new Line('H', "", "", false),
-						new Line('I', "", "", false),
-						new Line('J', "", "", false)
-		}));
-
-		exampleSet.add(new Example("Thesis Example 9",
+		exampleSet.add(new Example(
+				"Woltran Standard 1a",
 				new Line[] {
 						new Line('A', "", "B", true),
+						new Line('B', "", "C", true),
+						new Line('C', "", "A", true),
+						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('I',"","",false)
+				}));
+
+		exampleSet.add(new Example(
+				"Woltran Standard 1b",
+				new Line[] {
+						new Line('A', "", "C", true),
 						new Line('B', "", "A", true),
-						new Line('C', "", "BD", true),
-						new Line('D', "", "C", true),
-						new Line('E', "", "", false),
-						new Line('F', "", "", false),
-						new Line('G', "", "", false),
-						new Line('H', "", "", false),
-						new Line('I', "", "", false),
-						new Line('J', "", "", false)
-		}));
-
-		exampleSet.add(new Example("Thesis Figure 4.1",
-				new Line[] {
-						new Line('A', "", "", true),
-						new Line('B', "", "AC", true),
-						new Line('C', "", "BD", true),
-						new Line('D', "", "ACE", true),
-						new Line('E', "", "E", true),
-						new Line('F', "", "", false),
-						new Line('G', "", "", false),
-						new Line('H', "", "", false),
-						new Line('I', "", "", false),
-						new Line('J', "", "", false)
-		}));
-
-		exampleSet.add(new Example("Egly Example 1",
-				new Line[] {
-						new Line('A', "", "B", true),
-						new Line('B', "", "", true),
-						new Line('C', "", "BD", true),
-						new Line('D', "", "CE", true),
-						new Line('E', "", "E", true),
-						new Line('F', "", "", false),
-						new Line('G', "", "", false),
-						new Line('H', "", "", false),
-						new Line('I', "", "", false),
-						new Line('J', "", "", false)
-		}));
-		
-		exampleSet.add(new Example("Semi-Stable",
-				new Line[] {
-					new Line('A', "", "AC", true),
-					new Line('B', "", "C", true),
-					new Line('C', "", "D", true),
-					new Line('D', "", "", true),
-					new Line('E', "", "", false),
-					new Line('F', "", "", false),
-					new Line('G', "", "", false),
-					new Line('H', "", "", false),
-					new Line('I', "", "", false),
-					new Line('J', "", "", false)
+						new Line('C', "", "B", true),
+						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('I',"","",false)
 				}));
 		
-		exampleSet.add(new Example("C",
+		exampleSet.add(new Example(
+				"Woltran Expansion 1",
 				new Line[] {
-						new Line('A', "", "", false),
-						new Line('B', "", "", false),
-						new Line('C', "", "C", false),
-						new Line('D', "", "", false),
-						new Line('E', "", "", false),
-						new Line('F', "", "", false),
-						new Line('G', "", "", false),
-						new Line('H', "", "", false),
-						new Line('I', "", "", false),
-						new Line('J', "", "", false)
+						new Line('A', "", "", false), new Line('B', "", "", false),	new Line('C', "", "", false),
+						new Line('D',"","B",true), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('I',"","",false)
 				}));
 
 		return exampleSet;
 	}
 
-	
-	
+
+
 	/**
 	 * shows predefined examples in drop down menu
 	 * @param selection 
@@ -326,7 +227,7 @@ public class MainInputController {
 						Object cb = alphabetical[0].get(number);
 						Object t1 = alphabetical[1].get(number);
 						Object t2 = alphabetical[2].get(number);
-						
+
 						if(cb instanceof CheckBox && t1 instanceof TextField && t2 instanceof TextField){
 							((CheckBox) cb).selectedProperty().set(l.isExists());
 							((TextField) t1).setText(l.getDescription());
@@ -363,16 +264,16 @@ public class MainInputController {
 	@FXML
 	public void onShowButton(){
 		arguments = createTransferObjectList();
-		
+
 		if(hasDanglingAttacks(arguments)){
 			errorLbl.setText("You can only use a framework containing attacks on arguments it does not contain, as an expansion!" +
 					"\nPlease save your framework and use it as an expansion instead!");
 			return;
 		}
-		
+
 		autosave++; //we have standard 0, we start with 1 and so on
 		String autoName = "Autosave " + autosave;
-		
+
 		Example tmp = convertToExample(arguments,autoName);
 		if(!exampleExists(tmp)){
 			examples.add(tmp);
@@ -387,7 +288,7 @@ public class MainInputController {
 		interactor.setDemonstrationValues();
 		wrapper.loadDemonstration();
 	}
-	
+
 	/**
 	 * checks whether an example has attacks on/from arguments it does not
 	 * contain itself
@@ -410,7 +311,7 @@ public class MainInputController {
 	 */
 	private ArrayList<ArgumentDto> createTransferObjectList(){
 		ArrayList<ArgumentDto> arguments = new ArrayList<ArgumentDto>();
-		
+
 		try{
 			for(int i = 0; i <= alphabetical[0].size()-1; i++){
 				CheckBox ctmp;
@@ -436,7 +337,7 @@ public class MainInputController {
 			errorLbl.setText("Critical error: " + e.getMessage());
 			return null;
 		}
-		
+
 		return arguments;
 	}
 
@@ -453,7 +354,7 @@ public class MainInputController {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * combines a list of arguments and attacks into an example
 	 * @param arguments a list of argumentDtos containing arguments and their attacks
@@ -478,21 +379,21 @@ public class MainInputController {
 	public void onNewClick(){ //overwrites old example, if name is same, otherwise writes new autosave
 		Example oldExample;
 		String oldName = nameTxt.getText();
-		
+
 		if(oldName == null || oldName.equals("")){
 			autosave++;
 			oldName = "Autosave " + autosave; 
 		}
-		
+
 		ArrayList<ArgumentDto> toList = createTransferObjectList();	
-		
+
 		if(toList == null){
 			return; //handled?
 		}
-		
+
 		oldExample = convertToExample(toList,oldName);
 		Example prevVersion = getExampleByName(oldName);
-		
+
 		if(prevVersion != null){
 			examples.set(examples.indexOf(prevVersion),oldExample); // previous name version gets overwritten
 			showChoices();
@@ -501,7 +402,7 @@ public class MainInputController {
 			examples.add(oldExample);
 			showChoices();
 		}
-		
+
 		clearAll();
 	}
 
@@ -532,17 +433,17 @@ public class MainInputController {
 		Example toSave = getExampleByName(name);
 
 		ArrayList<ArgumentDto> toList = createTransferObjectList();
-		
+
 		if(toList == null){
 			errorLbl.setText("Could not read input arguments!");
 			return;
 		}
-		
+
 		if(name == null || name.length() == 0){
 			errorLbl.setText("Could not save framework, no name was given.");
 			return;
 		}
-		
+
 		if(toSave == null){
 			examples.add(convertToExample(toList,name));
 			showChoices();
