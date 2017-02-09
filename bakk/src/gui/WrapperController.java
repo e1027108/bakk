@@ -32,7 +32,7 @@ public class WrapperController {
 	 */
 	@FXML
 	void initialize(){
-		description = "This project expands a bachelor thesis on argumentation frameworks with equivalency checks. Both are available here:";
+		description = "This project on the equivalence between argumentation frameworks is available here:";
 		loadMain();
 	}
 	
@@ -94,7 +94,7 @@ public class WrapperController {
 	 * writes basic information about this project into the footer
 	 */
 	public void initializeLabels(){
-		paperLink.setText("unsure about link");
+		paperLink.setText("https://github.com/e1027108/bakk/tree/equivalency");
 		paperLink.setDisable(false);
 		descriptionLbl.setText(description);
 		descriptionLbl.setStyle("-fx-text-fill: black;");
