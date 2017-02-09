@@ -242,7 +242,6 @@ public class MainInputController {
 						new Line('c', "", "bd", true),
 						new Line('d', "", "ce", true),
 						new Line('e', "", "e", true),
-						new Line('e', "", "", false),
 						new Line('f', "", "", false),
 						new Line('g', "", "", false),
 						new Line('h', "", "", false),

@@ -158,7 +158,7 @@ public class DemonstrationWindowController {
 
 		toggleTip = new Tooltip("Switch between the graphs.");
 		toggleBtn.setTooltip(toggleTip);
-		
+
 		nameTip = new Tooltip("Shows whether the base framework (F1) or the comparison framework (F2) is shown."
 				+ "\nAlso says if the frameworks are expanded by stating that \"Exp\" is present.");
 		nameLbl.setTooltip(nameTip);
@@ -167,26 +167,26 @@ public class DemonstrationWindowController {
 	/**
 	 * sets the initial UI and data values
 	 */
-	public void setInitialValues() {
-		nameLbl.setText("");
-		
+	public void setInitialValues() {		
 		//show graph pane
-		root.getChildren().remove(graphPane);
-		graphPane = new NodePane();
-		root.getChildren().add(graphPane);
-		graphPane.setPrefHeight(470);
-		graphPane.setPrefWidth(445);
-		graphPane.setLayoutX(15); //prevents arcs from going out of visual bounds, y stays 0
-		graphPane.setVisible(true);
-		
+		if(graphPane == null){
+			root.getChildren().remove(graphPane);
+			graphPane = new NodePane();
+			root.getChildren().add(graphPane);
+			graphPane.setPrefHeight(470);
+			graphPane.setPrefWidth(445);
+			graphPane.setLayoutX(15); //prevents arcs from going out of visual bounds, y stays 0
+		}
+
 		//we need to have an initial comparison pane
-		root.getChildren().remove(comparisonPane);
-		comparisonPane = new NodePane();
-		root.getChildren().add(comparisonPane);
-		comparisonPane.setPrefHeight(470);
-		comparisonPane.setPrefWidth(445);
-		comparisonPane.setLayoutX(15);
-		comparisonPane.setVisible(false);
+		if(comparisonPane == null){
+			root.getChildren().remove(comparisonPane);
+			comparisonPane = new NodePane();
+			root.getChildren().add(comparisonPane);
+			comparisonPane.setPrefHeight(470);
+			comparisonPane.setPrefWidth(445);
+			comparisonPane.setLayoutX(15);
+		}
 
 		interactor = Interactor.getInstance(this);
 		interactor.updateComparisonGraph(); //in case the interactor already exists
@@ -204,6 +204,8 @@ public class DemonstrationWindowController {
 		resultsBtn.setDisable(true);
 		setDisableRadioButtons(true);
 
+		nameLbl.setText("");
+
 		//set now the values for extension box
 		String[] extarr = new String[]{"","conflict-free","admissible","complete","preferred","stable","grounded","semi-stable"};
 		ArrayList<String> extensionTypes = new ArrayList<String>();
@@ -213,6 +215,9 @@ public class DemonstrationWindowController {
 		//set comparable examples
 		showExamplesInComboBoxes();
 		expanded = false;
+		
+		comparisonPane.setVisible(false);
+		graphPane.setVisible(true);
 	}
 
 	/**
@@ -466,7 +471,7 @@ public class DemonstrationWindowController {
 		if(expanded){
 			eq.expandFrameworks(expansionFramework); //this should have to exist
 		}
-	
+
 		RadioButton selectedToggle = (RadioButton) expansionGroup.getSelectedToggle();
 		boolean standard = selectedToggle.getText().equals("standard");
 
@@ -675,11 +680,13 @@ public class DemonstrationWindowController {
 	 * @param expansion an (optional) expansion to the framework we might want to also show
 	 */
 	private void initializeGraph(NodePane pane, Framework framework, Framework expansion){
+		pane.getChildren().clear();
+		
 		pane.createGraph(framework,expansion);
-
+		
 		try {
-			pane.getChildren().clear();
 			pane.drawGraph();
+			pane.setVisible(true);
 		} catch (InvalidInputException e) {
 			interactor.emptyQueue();
 			explanationArea.setText(e.getMessage() + "\n The graph may not be correctly displayed!");
@@ -913,7 +920,7 @@ public class DemonstrationWindowController {
 				return;
 			}
 			else if((Integer) nval == 0){
-				if(!comparisonPane.isDisabled()){
+				if(!comparisonPane.isVisible()){
 					onToggleClick();
 				}
 				toggleBtn.setDisable(true);

@@ -197,7 +197,12 @@ public class NodePane extends AnchorPane{
 				tmp.setTooltip(new Tooltip(Framework.getArgument(framework.getArguments(),v.charAt(0)).getStatement()));
 			}
 			catch(NullPointerException e){
-				tmp.setTooltip(new Tooltip(Framework.getArgument(expansion.getArguments(),v.charAt(0)).getStatement()));
+				try{
+					tmp.setTooltip(new Tooltip(Framework.getArgument(expansion.getArguments(),v.charAt(0)).getStatement()));
+				}
+				catch(NullPointerException e2){
+					tmp.setTooltip(new Tooltip("no argument description"));
+				}
 			}
 
 			tmp.setLayoutX(p.getX()-CIRCLE_RADIUS*0.3);
@@ -205,6 +210,8 @@ public class NodePane extends AnchorPane{
 			this.getChildren().add(tmp);
 
 			nodes.add(circle);
+
+			System.out.println("Added node " + circle.getName());
 		}
 
 		// draw the edges
@@ -230,6 +237,8 @@ public class NodePane extends AnchorPane{
 			else{
 				drawDirectedArc(pStart, getPreferredAngle(pEnd, nodePositions), direction);
 			}
+			
+			System.out.println("Added edge " + direction);
 		}
 	}
 
