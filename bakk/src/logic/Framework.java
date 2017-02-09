@@ -116,7 +116,6 @@ public class Framework {
 		ArrayList<Extension> admissible = new ArrayList<Extension>();
 
 		if(!usePrevious || (previousConflictFreeSets == null)){
-			System.out.println(this + " " + previousConflictFreeSets);
 			addToInteractor(new Command("Computing conflict-free sets to compute admissible extensions!", null, pane),show);
 			cf = getConflictFreeSets(show);
 		}

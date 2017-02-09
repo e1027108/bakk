@@ -151,7 +151,7 @@ public class MainInputController {
 		exampleSet.add(new Example("",null));
 
 		exampleSet.add(new Example( //woltran introduction
-				"Standard Example a",
+				"Standard Example F1",
 				new Line[] {
 						new Line('A', "", "B", true), new Line('B', "", "C", true), new Line('C', "", "A", true),
 						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
@@ -159,7 +159,7 @@ public class MainInputController {
 				}));
 
 		exampleSet.add(new Example(
-				"Standard Example b",
+				"Standard Example F2",
 				new Line[] {
 						new Line('A', "", "C", true), new Line('B', "", "A", true), new Line('C', "", "B", true),
 						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
@@ -219,6 +219,38 @@ public class MainInputController {
 				new Line[] {
 						new Line('A', "", "", false), new Line('B', "", "A", false), new Line('C', "", "AD", true),
 						new Line('D',"","",true), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));
+		
+		exampleSet.add(new Example(
+				"Not strong ad/pr F1",
+				new Line[] {
+						new Line('A', "", "B", true), new Line('B', "", "BC", true), new Line('C', "", "A", true),
+						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));
+		
+		exampleSet.add(new Example(
+				"Not strong ad/pr F2",
+				new Line[] {
+						new Line('A', "", "", true), new Line('B', "", "BC", true), new Line('C', "", "A", true),
+						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));
+		
+		exampleSet.add(new Example(
+				"Bigger not strong Example F1",
+				new Line[] {
+						new Line('A', "", "B", true), new Line('B', "", "", true), new Line('C', "", "BD", true),
+						new Line('D',"","CE",true), new Line('E',"","E",true), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));
+		
+		exampleSet.add(new Example(
+				"Bigger not strong Example F2",
+				new Line[] {
+						new Line('A', "", "BE", true), new Line('B', "", "", true), new Line('C', "", "BD", true),
+						new Line('D',"","CE",true), new Line('E',"","E",true), new Line('F',"","",false), new Line('G',"","",false),
 						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
 				}));
 
