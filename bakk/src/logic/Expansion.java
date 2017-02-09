@@ -67,12 +67,6 @@ public class Expansion {
 			interactor.addToCommands(new Command(expname + " does only contain new attacks and therefore may be an expansion",new GraphInstruction(null,attins,pane),pane));
 		}
 		
-		interactor.addToCommands(new Command("We now check whether " + expname + " is a normal expansion.",expansion.toInstruction(Color.BLUE),pane));
-		
-		if(checkNormalExpansion(expname)){ //interactor commands in method
-			return "normal";
-		}
-		
 		interactor.addToCommands(new Command("We now check whether " + expname + " is a strong expansion",expansion.toInstruction(Color.BLUE),pane));
 		
 		if(checkStrongExpansion(framename,expname)){ //interactor commands in method
@@ -83,6 +77,12 @@ public class Expansion {
 		
 		if(checkWeakExpansion(framename,expname)){ //interactor commands in method
 			return "weak";
+		}
+		
+		interactor.addToCommands(new Command("We now check whether " + expname + " is a normal expansion.",expansion.toInstruction(Color.BLUE),pane));
+		
+		if(checkNormalExpansion(expname)){ //interactor commands in method
+			return "normal";
 		}
 		
 		interactor.addToCommands(new Command("We now check whether " + expname + " is a local expansion",expansion.toInstruction(Color.BLUE),pane));
@@ -114,7 +114,7 @@ public class Expansion {
 			edgeins = new ArrayList<SingleInstruction>();
 			nodeins = new ArrayList<SingleInstruction>();
 			if(Framework.getArgument(expansion.getArguments(),a.getAttacker().getName()) == null && Framework.getArgument(expansion.getArguments(),a.getAttacked().getName()) == null){
-				edgeins.add(expansion.getEdgeInstructionFromAttack(""+a.getAttacker().getName()+a.getAttacker().getName(),Color.RED));
+				edgeins.add(expansion.getEdgeInstructionFromAttack(""+a.getAttacker().getName()+a.getAttacked().getName(),Color.RED));
 				nodeins.add(new SingleInstruction(a.getAttacker().getName(),Color.RED));
 				nodeins.add(new SingleInstruction(a.getAttacked().getName(),Color.RED));
 				
@@ -123,7 +123,7 @@ public class Expansion {
 				return false;
 			}
 			else{
-				edgeins.add(expansion.getEdgeInstructionFromAttack(""+a.getAttacker().getName()+a.getAttacker().getName(),Color.GREEN));
+				edgeins.add(expansion.getEdgeInstructionFromAttack(""+a.getAttacker().getName()+a.getAttacked().getName(),Color.GREEN));
 				nodeins.add(new SingleInstruction(a.getAttacker().getName(),Color.GREEN));
 				nodeins.add(new SingleInstruction(a.getAttacked().getName(),Color.GREEN));
 				
@@ -165,7 +165,7 @@ public class Expansion {
 			edgeins = new ArrayList<SingleInstruction>();
 			nodeins = new ArrayList<SingleInstruction>();
 			if(!(framework.contains(a.getAttacker()) && expansion.contains(a.getAttacked()))){
-				edgeins.add(expansion.getEdgeInstructionFromAttack(""+a.getAttacker().getName()+a.getAttacker().getName(),Color.GREEN));
+				edgeins.add(expansion.getEdgeInstructionFromAttack(""+a.getAttacker().getName()+a.getAttacked().getName(),Color.GREEN));
 				nodeins.add(new SingleInstruction(a.getAttacker().getName(),Color.GREEN));
 				nodeins.add(new SingleInstruction(a.getAttacked().getName(),Color.GREEN));
 				
@@ -218,7 +218,7 @@ public class Expansion {
 			edgeins = new ArrayList<SingleInstruction>();
 			nodeins = new ArrayList<SingleInstruction>();
 			if(!(framework.contains(a.getAttacked()) && expansion.contains(a.getAttacker()))){
-				edgeins.add(expansion.getEdgeInstructionFromAttack(""+a.getAttacker().getName()+a.getAttacker().getName(),Color.GREEN));
+				edgeins.add(expansion.getEdgeInstructionFromAttack(""+a.getAttacker().getName()+a.getAttacked().getName(),Color.GREEN));
 				nodeins.add(new SingleInstruction(a.getAttacker().getName(),Color.GREEN));
 				nodeins.add(new SingleInstruction(a.getAttacked().getName(),Color.GREEN));
 				
@@ -226,17 +226,17 @@ public class Expansion {
 						new GraphInstruction(nodeins,edgeins,pane),pane));
 			}
 			else{
-				edgeins.add(expansion.getEdgeInstructionFromAttack(""+a.getAttacker().getName()+a.getAttacker().getName(),Color.RED));
+				edgeins.add(expansion.getEdgeInstructionFromAttack(""+a.getAttacker().getName()+a.getAttacked().getName(),Color.RED));
 				nodeins.add(new SingleInstruction(a.getAttacker().getName(),Color.RED));
 				nodeins.add(new SingleInstruction(a.getAttacked().getName(),Color.RED));
 				
-				interactor.addToCommands(new Command(expname + " is not a strong expansion, since (" + a.getAttacker().getName() + "," + a.getAttacked().getName() + ") attacks from " + expname + " onto " + framename + ".",
+				interactor.addToCommands(new Command(expname + " is not a weak expansion, since (" + a.getAttacker().getName() + "," + a.getAttacked().getName() + ") attacks from " + expname + " onto " + framename + ".",
 						new GraphInstruction(nodeins,edgeins,pane),pane));
 				return false;
 			}
 		}
 		
-		interactor.addToCommands(new Command(expname + "is a strong expansion, since none of its attacks from its arguments attack " + framename + ".",expansion.toInstruction(Color.GREEN),pane));
+		interactor.addToCommands(new Command(expname + " is a weak expansion, since none of its attacks from its arguments attack " + framename + ".",expansion.toInstruction(Color.GREEN),pane));
 		return true;
 	}
 

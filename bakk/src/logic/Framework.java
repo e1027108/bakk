@@ -570,7 +570,6 @@ public class Framework {
 	 * @throws InvalidInputException if no valid type was given (not all types have kernels)
 	 */
 	private void computeKernel(Type type) throws InvalidInputException {
-		System.out.println(pane);
 		kernel.put(type, new Kernel(this,interactor, name, type, pane));
 	}
 

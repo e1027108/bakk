@@ -497,7 +497,6 @@ public class DemonstrationWindowController {
 				resultSet = null; //so it knows not to show anything
 			} catch (InvalidInputException e) {
 				explanationArea.setText(e.getMessage());
-				e.printStackTrace();
 				return;
 			}
 		}

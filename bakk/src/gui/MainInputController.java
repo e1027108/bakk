@@ -150,8 +150,8 @@ public class MainInputController {
 
 		exampleSet.add(new Example("",null));
 
-		exampleSet.add(new Example(
-				"Woltran Standard 1a",
+		exampleSet.add(new Example( //woltran introduction
+				"Standard Example a",
 				new Line[] {
 						new Line('A', "", "B", true),
 						new Line('B', "", "C", true),
@@ -161,7 +161,7 @@ public class MainInputController {
 				}));
 
 		exampleSet.add(new Example(
-				"Woltran Standard 1b",
+				"Standard Example b",
 				new Line[] {
 						new Line('A', "", "C", true),
 						new Line('B', "", "A", true),
@@ -171,10 +171,26 @@ public class MainInputController {
 				}));
 		
 		exampleSet.add(new Example(
-				"Woltran Expansion 1",
+				"Standard Example Expansion",
 				new Line[] {
 						new Line('A', "", "", false), new Line('B', "", "", false),	new Line('C', "", "", false),
 						new Line('D',"","B",true), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));
+		
+		exampleSet.add(new Example(
+				"Expansion Example base",
+				new Line[] {
+						new Line('A', "", "B", true), new Line('B', "", "", true), new Line('C', "", "", false),
+						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));
+		
+		exampleSet.add(new Example(
+				"Expansion Weak",
+				new Line[] {
+						new Line('A', "", "", false), new Line('B', "", "C", false), new Line('C', "", "D", true),
+						new Line('D',"","",true), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
 						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
 				}));
 
