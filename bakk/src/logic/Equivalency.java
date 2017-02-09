@@ -289,9 +289,9 @@ public class Equivalency {
 	 * therefore calls to expand both the base as well as the comparison framework
 	 * @param exp the expanding framework to enhance both frameworks
 	 */
-	public void expandFrameworks(Framework exp) {
-		fstExpanded = Framework.expandFramework(fst,exp);
-		sndExpanded = Framework.expandFramework(snd,exp);
+	public void expandFrameworks(Framework exp, String ename) {
+		fstExpanded = Framework.expandFramework(fst,fst.getName(),exp,ename);
+		sndExpanded = Framework.expandFramework(snd,snd.getName(),exp,ename);
 	}
 
 	/**

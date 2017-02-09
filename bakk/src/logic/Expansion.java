@@ -143,8 +143,8 @@ public class Expansion {
 	 * @return whether or not the expanding framework is a strong expansion to the base framework
 	 */
 	private boolean checkStrongExpansion(String framename, String expname) {
-		Framework fArgs = new Framework(framework.getArguments(),new ArrayList<Attack>(),interactor,pane);
-		Framework eArgs = new Framework(expansion.getArguments(),new ArrayList<Attack>(),interactor,pane);
+		Framework fArgs = new Framework(framework.getArguments(),new ArrayList<Attack>(),interactor,framename,pane);
+		Framework eArgs = new Framework(expansion.getArguments(),new ArrayList<Attack>(),interactor,expname,pane);
 		
 		GraphInstruction fArgIns = fArgs.toInstruction(Color.GREEN);
 		GraphInstruction eArgIns = eArgs.toInstruction(Color.BLUE);
@@ -196,8 +196,8 @@ public class Expansion {
 	 * @return whether the expanding framework is a weak expansion of the base framework
 	 */
 	private boolean checkWeakExpansion(String framename, String expname) {
-		Framework fArgs = new Framework(framework.getArguments(),new ArrayList<Attack>(),interactor,pane);
-		Framework eArgs = new Framework(expansion.getArguments(),new ArrayList<Attack>(),interactor,pane);
+		Framework fArgs = new Framework(framework.getArguments(),new ArrayList<Attack>(),interactor,framename,pane);
+		Framework eArgs = new Framework(expansion.getArguments(),new ArrayList<Attack>(),interactor,expname,pane);
 		
 		GraphInstruction fArgIns = fArgs.toInstruction(Color.GREEN);
 		GraphInstruction eArgIns = eArgs.toInstruction(Color.BLUE);

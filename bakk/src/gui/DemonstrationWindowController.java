@@ -192,7 +192,7 @@ public class DemonstrationWindowController {
 		interactor.updateComparisonGraph(); //in case the interactor already exists
 		interactor.updateGraph();
 		readArguments(interactor.getRawArguments());
-		argumentFramework = new Framework(arguments, attacks, interactor, 1);
+		argumentFramework = new Framework(arguments, attacks, interactor, F1, 1);
 
 		initializeGraph(graphPane, argumentFramework, null);
 		explanationArea.setText("");
@@ -417,7 +417,7 @@ public class DemonstrationWindowController {
 	public void onComputeClick(){
 		int exChoice = extensionComboBox.getSelectionModel().getSelectedIndex();
 
-		Framework framework = Framework.expandFramework(argumentFramework,expansionFramework);
+		Framework framework = Framework.expandFramework(argumentFramework,F1,expansionFramework,EX);
 
 		switch(exChoice){
 		case 0:
@@ -477,7 +477,7 @@ public class DemonstrationWindowController {
 
 		//if we are here, it is possible to compare something
 		if(expanded){
-			eq.expandFrameworks(expansionFramework); //this should have to exist
+			eq.expandFrameworks(expansionFramework,EX); //this should have to exist
 		}
 
 		RadioButton selectedToggle = (RadioButton) expansionGroup.getSelectedToggle();
@@ -690,7 +690,7 @@ public class DemonstrationWindowController {
 			}
 		}
 
-		expansionFramework = new Framework(expArguments, expAttacks, interactor, 0); //pane should never be used --> 0
+		expansionFramework = new Framework(expArguments, expAttacks, interactor, EX, 0); //pane should never be used --> 0
 
 		if(!checkExpansionType()){
 			return;
@@ -795,7 +795,7 @@ public class DemonstrationWindowController {
 			}
 		}
 
-		comparisonFramework = new Framework(compArguments, compAttacks, interactor, 2);
+		comparisonFramework = new Framework(compArguments, compAttacks, interactor, F2, 2);
 
 		comparisonPane.createGraph(comparisonFramework,null);
 		toggleBtn.setDisable(false);

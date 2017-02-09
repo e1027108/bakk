@@ -12,63 +12,56 @@ import javafx.scene.paint.Color;
 public class Kernel extends Framework {
 
 	private Type type;
-	private Framework parent;
 	private int pane;
 
-	public Kernel(Framework parent, Interactor interactor, Type type, int pane) throws InvalidInputException {
-		super(parent.getArguments(), parent.getAttacks(), interactor, pane);
-		this.parent = parent;
+	public Kernel(Framework parent, Interactor interactor, String name, Type type, int pane) throws InvalidInputException {
+		super(parent.getArguments(), parent.getAttacks(), interactor, name, pane);
 		this.type = type;
 		this.pane = pane;
-		computeKernel(this.type);
+		computeKernel(name, this.type);
 	}
 
 	/**
 	 * initiates the computation of the kernel depending on which semantics was given
 	 * @param type the semantics of the kernel
+	 * @param name of framework
 	 * @throws InvalidInputException if an invalid semantics was requested
 	 */
-	private void computeKernel(Type type) throws InvalidInputException {
+	private void computeKernel(String name, Type type) throws InvalidInputException {
+		
 		switch(type){
 		case st:
-			interactor.addToCommands(new Command("Computing stable kernel of framework with arguments " + 
-					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+			interactor.addToCommands(new Command("Computing stable kernel of " + name,
 					null,pane));
 			computeStableKernel();
 			break;
 		case ad:
-			interactor.addToCommands(new Command("Computing admissible kernel of framework with arguments " + 
-					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+			interactor.addToCommands(new Command("Computing admissible kernel of " + name,
 					null,pane));
 			computeAdmissibleKernel(false);
 			break;
 		case gr:
-			interactor.addToCommands(new Command("Computing grounded kernel of framework with arguments " + 
-					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+			interactor.addToCommands(new Command("Computing grounded kernel of " + name,
 					null,pane));
 			computeGroundedKernel(false);
 			break;
 		case co:
-			interactor.addToCommands(new Command("Computing complete kernel of framework with arguments " + 
-					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+			interactor.addToCommands(new Command("Computing complete kernel of " + name,
 					null,pane));
 			computeCompleteKernel(false);
 			break;
 		case adstar:
-			interactor.addToCommands(new Command("Computing admissible-*-kernel of framework with arguments " + 
-					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+			interactor.addToCommands(new Command("Computing admissible-*-kernel of " + name,
 					null,pane));
 			computeAdmissibleKernel(true);
 			break;
 		case costar:
-			interactor.addToCommands(new Command("Computing complete-*-kernel of framework with arguments " + 
-					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+			interactor.addToCommands(new Command("Computing complete-*-kernel of " + name,
 					null,pane));
 			computeCompleteKernel(true);
 			break;
 		case grstar:
-			interactor.addToCommands(new Command("Computing grounded-*-kernel of framework with arguments " + 
-					Framework.formatArgumentList(parent.getArguments()) + " and attacks " + Framework.formatAttackList(parent.getAttacks()),
+			interactor.addToCommands(new Command("Computing grounded-*-kernel of " + name,
 					null,pane));
 			computeGroundedKernel(true);
 			break;
@@ -87,7 +80,7 @@ public class Kernel extends Framework {
 		selfAttacking = getSelfAttacking();
 
 		if(selfAttacking.isEmpty()){
-			interactor.addToCommands(new Command("No arguments attack themselves, the kernel is equivalent to the framework!",null,pane));
+			interactor.addToCommands(new Command("No arguments attack themselves, the kernel is equal to the framework!",this.toInstruction(Color.GREEN),pane));
 			return;
 		}
 
@@ -129,7 +122,7 @@ public class Kernel extends Framework {
 					selfAttackInstruction,pane));
 		}
 		else{
-			interactor.addToCommands(new Command("No arguments attack themselves, the kernel is equivalent to the framework!",null,pane));
+			interactor.addToCommands(new Command("No arguments attack themselves, the kernel is equal to the framework!",this.toInstruction(Color.GREEN),pane));
 			return;
 		}
 
@@ -264,7 +257,7 @@ public class Kernel extends Framework {
 					selfAttackInstruction,pane));
 		}
 		else{
-			interactor.addToCommands(new Command("No arguments attack themselves, the kernel is equivalent to the framework!",null,pane));
+			interactor.addToCommands(new Command("No arguments attack themselves, the kernel is equal to the framework!",this.toInstruction(Color.GREEN),pane));
 			return;
 		}
 
@@ -388,7 +381,7 @@ public class Kernel extends Framework {
 		selfAttacking = getSelfAttacking();
 
 		if(selfAttacking.isEmpty()){
-			interactor.addToCommands(new Command("There are no self-attacking arguments, therefore the kernel is equal to the framework.",null,pane));
+			interactor.addToCommands(new Command("There are no self-attacking arguments, therefore the kernel is equal to the framework.",this.toInstruction(Color.GREEN),pane));
 			return;
 		}
 

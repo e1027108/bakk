@@ -382,7 +382,7 @@ public class MainInputController {
 
 		if(oldName == null || oldName.equals("")){
 			autosave++;
-			oldName = "Autosave " + autosave; 
+			oldName = "Autosave " + autosave;
 		}
 
 		ArrayList<ArgumentDto> toList = createTransferObjectList();	

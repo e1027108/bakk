@@ -29,6 +29,7 @@ public class Framework {
 	
 	public enum Type {cf,ad,co,pr,st,ss,gr,adstar,costar,grstar};
 	private HashMap<Type,Kernel> kernel;
+	private String name;
 	
 	/**
 	 * An argumentation framework consists of arguments (denoted by letters) and attacks (denoted by pairs of arguments, denoted by letters)
@@ -37,12 +38,13 @@ public class Framework {
 	 * @param interactor the object that links the gui and logic computations
 	 * @param pane which gui graph the interactor should interact with
 	 */
-	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor, int pane) {
+	public Framework(ArrayList<Argument> arguments, ArrayList<Attack> attacks, Interactor interactor, String name, int pane) {
 		this.arguments = arguments;
 		this.attacks = attacks;
 		this.interactor = interactor;
 		this.kernel = new HashMap<Type,Kernel>();
 		this.pane = pane;
+		this.name = name;
 	}
 	
 	/**
@@ -568,7 +570,8 @@ public class Framework {
 	 * @throws InvalidInputException if no valid type was given (not all types have kernels)
 	 */
 	private void computeKernel(Type type) throws InvalidInputException {
-		kernel.put(type, new Kernel(this,interactor,type, pane)); //Kernel computes itself in constructor
+		System.out.println(pane);
+		kernel.put(type, new Kernel(this,interactor, name, type, pane));
 	}
 
 	/**
@@ -643,7 +646,7 @@ public class Framework {
 	 * @param expansion the second framework to combine, acts as an expansion to the base
 	 * @return the union of the frameworks (using the bases interactor and pane information)
 	 */
-	public static Framework expandFramework(Framework framework, Framework expansion) {
+	public static Framework expandFramework(Framework framework, String fname, Framework expansion, String ename) {
 		ArrayList<Argument> tmpArguments = new ArrayList<Argument>();
 		ArrayList<Attack> tmpAttacks = new ArrayList<Attack>();
 
@@ -680,7 +683,7 @@ public class Framework {
 			}
 		}
 		
-		return new Framework(tmpArguments, tmpAttacks, framework.getInteractor(), framework.getPane());
+		return new Framework(tmpArguments, tmpAttacks, framework.getInteractor(), fname + " + " + ename, framework.getPane());
 	}
 	
 	/**
@@ -876,5 +879,9 @@ public class Framework {
 	
 	public Interactor getInteractor(){
 		return interactor;
+	}
+
+	public String getName() {
+		return name;
 	}
 }
