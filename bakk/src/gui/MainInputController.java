@@ -153,9 +153,7 @@ public class MainInputController {
 		exampleSet.add(new Example( //woltran introduction
 				"Standard Example a",
 				new Line[] {
-						new Line('A', "", "B", true),
-						new Line('B', "", "C", true),
-						new Line('C', "", "A", true),
+						new Line('A', "", "B", true), new Line('B', "", "C", true), new Line('C', "", "A", true),
 						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
 						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
 				}));
@@ -163,9 +161,7 @@ public class MainInputController {
 		exampleSet.add(new Example(
 				"Standard Example b",
 				new Line[] {
-						new Line('A', "", "C", true),
-						new Line('B', "", "A", true),
-						new Line('C', "", "B", true),
+						new Line('A', "", "C", true), new Line('B', "", "A", true), new Line('C', "", "B", true),
 						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
 						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
 				}));
@@ -179,7 +175,7 @@ public class MainInputController {
 				}));
 		
 		exampleSet.add(new Example(
-				"Expansion Example base",
+				"Example Expansion base",
 				new Line[] {
 						new Line('A', "", "B", true), new Line('B', "", "", true), new Line('C', "", "", false),
 						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
@@ -187,9 +183,41 @@ public class MainInputController {
 				}));
 		
 		exampleSet.add(new Example(
-				"Expansion Weak",
+				"Example Expansion Weak",
 				new Line[] {
 						new Line('A', "", "", false), new Line('B', "", "C", false), new Line('C', "", "D", true),
+						new Line('D',"","",true), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));
+		
+		exampleSet.add(new Example(
+				"Example Expansion Strong",
+				new Line[] {
+						new Line('A', "", "", false), new Line('B', "", "", false), new Line('C', "", "AB", true),
+						new Line('D',"","C",true), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));
+		
+		exampleSet.add(new Example(
+				"Example Expansion Normal",
+				new Line[] {
+						new Line('A', "", "", false), new Line('B', "", "D", false), new Line('C', "", "AD", true),
+						new Line('D',"","C",true), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));
+		
+		exampleSet.add(new Example(
+				"Example Expansion Local",
+				new Line[] {
+						new Line('A', "", "A", false), new Line('B', "", "AB", false), new Line('C', "", "", false),
+						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));
+		
+		exampleSet.add(new Example(
+				"Example Expansion Not",
+				new Line[] {
+						new Line('A', "", "", false), new Line('B', "", "A", false), new Line('C', "", "AD", true),
 						new Line('D',"","",true), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
 						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
 				}));

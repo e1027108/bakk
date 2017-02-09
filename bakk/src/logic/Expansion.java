@@ -91,7 +91,7 @@ public class Expansion {
 			return "local";
 		}
 		
-		interactor.addToCommands(new Command(expname + " does not fit any expansion type and is therefore not an expansion",expansion.toInstruction(Color.RED),pane));
+		interactor.addToCommands(new Command(expname + " does not fit any expansion type and is therefore not of any expansion type.",expansion.toInstruction(Color.RED),pane));
 		return null;
 	}
 
@@ -183,7 +183,7 @@ public class Expansion {
 			}
 		}
 		
-		interactor.addToCommands(new Command(expname + "is a strong expansion, since none of the attacks onto it come from " + framename + ".",expansion.toInstruction(Color.GREEN),pane));
+		interactor.addToCommands(new Command(expname + " is a strong expansion, since none of the attacks onto it come from " + framename + ".",expansion.toInstruction(Color.GREEN),pane));
 		return true;
 	}
 

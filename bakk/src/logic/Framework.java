@@ -116,6 +116,7 @@ public class Framework {
 		ArrayList<Extension> admissible = new ArrayList<Extension>();
 
 		if(!usePrevious || (previousConflictFreeSets == null)){
+			System.out.println(this + " " + previousConflictFreeSets);
 			addToInteractor(new Command("Computing conflict-free sets to compute admissible extensions!", null, pane),show);
 			cf = getConflictFreeSets(show);
 		}
@@ -699,7 +700,7 @@ public class Framework {
 		}
 		for(Attack a: attacks){
 			edgeInstructions.add(new SingleInstruction(""+a.getAttacker().getName()+a.getAttacked().getName(),color));
-		}
+		} //TODO if time, not completely contained , therefore not completely colored --> minor fix
 
 		return new GraphInstruction(nodeInstructions,edgeInstructions,pane);
 	}

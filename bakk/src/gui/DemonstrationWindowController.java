@@ -417,7 +417,14 @@ public class DemonstrationWindowController {
 	public void onComputeClick(){
 		int exChoice = extensionComboBox.getSelectionModel().getSelectedIndex();
 
-		Framework framework = Framework.expandFramework(argumentFramework,F1,expansionFramework,EX);
+		Framework framework;
+
+		if(expansionFramework != null){
+			framework = Framework.expandFramework(argumentFramework,F1,expansionFramework,EX);
+		}
+		else{
+			framework = argumentFramework;
+		}
 
 		switch(exChoice){
 		case 0:
@@ -648,7 +655,7 @@ public class DemonstrationWindowController {
 
 				Argument attUsed = null;
 				Argument defUsed = null;
-				
+
 				if(expAtt == null){
 					if(argAtt == null){
 						conditionalToggle(1);
@@ -665,7 +672,7 @@ public class DemonstrationWindowController {
 				else{
 					attUsed = expAtt;
 				}
-				
+
 				if(expDef == null){
 					if(argDef == null){
 						conditionalToggle(1);
@@ -684,7 +691,7 @@ public class DemonstrationWindowController {
 				else{
 					defUsed = expDef;
 				}
-				
+
 				expAttacks.add(new Attack(attUsed,defUsed));
 			}
 		}
