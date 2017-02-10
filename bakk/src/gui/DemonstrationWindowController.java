@@ -913,6 +913,7 @@ public class DemonstrationWindowController {
 		}
 
 		expandOptionsLbl.setDisable(disabled);
+		showExtensionsCheckBox.setDisable(disabled);
 	}
 
 	/**
