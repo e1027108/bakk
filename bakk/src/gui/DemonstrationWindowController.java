@@ -800,12 +800,18 @@ public class DemonstrationWindowController {
 				Argument attacker = Framework.getArgument(compArguments,l.getChar());
 				for(int i = 0;i<l.getAttacks().length();i++){
 					Argument defender = Framework.getArgument(compArguments,l.getAttacks().charAt(i));
-					if(defender == null){
-						explanationArea.setText("Illegal attack detected!");
+					if(defender == null){ //attacking non-existing argument
+						explanationArea.setText("Illegal attack detected (" + l.getChar() + "," + l.getAttacks().charAt(i) + ")! The framework might be only an expansion.");
+						//comparisonComboBox.getSelectionModel().selectFirst();
 						return;
 					}
 					compAttacks.add(new Attack(attacker,defender));
 				}
+			}
+			else if(!l.isExists() && !l.getAttacks().isEmpty()){ //non-existing argument attacking
+				explanationArea.setText("Illegal attacker detected (" + l.getChar() + ")! The framework might be only an expansion.");
+				//comparisonComboBox.getSelectionModel().selectFirst();
+				return;
 			}
 		}
 
