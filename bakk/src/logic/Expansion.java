@@ -33,7 +33,8 @@ public class Expansion {
 			return null;
 		}
 		else{
-			interactor.addToCommands(new Command(expname + " does contain arguments or attacks, it may be an expansion.",expansion.toInstruction(Color.GREEN),pane));
+			interactor.addToCommands(new Command(expname + " does contain arguments (" + Framework.formatArgumentList(expansion.getArguments()) + ") or attacks (" 
+					+ Framework.formatAttackList(expansion.getAttacks()) + "), it may be an expansion.",expansion.toInstruction(Color.GREEN),pane));
 		}
 		
 		ArrayList<Argument> existingArgs = getExistingArguments();

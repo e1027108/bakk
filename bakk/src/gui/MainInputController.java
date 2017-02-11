@@ -253,6 +253,22 @@ public class MainInputController {
 						new Line('D',"","CE",true), new Line('E',"","E",true), new Line('F',"","",false), new Line('G',"","",false),
 						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
 				}));
+		
+		/*exampleSet.add(new Example(
+				"test",
+				new Line[] {
+						new Line('A', "", "A", false), new Line('B', "", "B", false), new Line('C', "", "", false),
+						new Line('D',"","",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));
+		
+		exampleSet.add(new Example(
+				"test2",
+				new Line[] {
+						new Line('A', "", "", false), new Line('B', "", "", false), new Line('C', "", "C", false),
+						new Line('D',"","D",false), new Line('E',"","",false), new Line('F',"","",false), new Line('G',"","",false),
+						new Line('H',"","",false), new Line('I',"","",false), new Line('J',"","",false)
+				}));*/
 
 		return exampleSet;
 	}
@@ -373,8 +389,17 @@ public class MainInputController {
 	 */
 	private boolean hasDanglingAttacks(ArrayList<ArgumentDto> input) {
 		for(ArgumentDto a: input){
-			if(!a.isSelected() && a.getAttacks().length() != 0){
+			if(!a.isSelected() && a.getAttacks().length() != 0){ //can't attack if you don't exist
 				return true;
+			}
+			else{
+				for(int i = 0;i < a.getAttacks().length(); i++){
+					for(ArgumentDto b: input){
+						if(!b.isSelected() && a.getAttacks().charAt(i) == b.getName()){ //can't be attacked if you don't exist
+							return true;
+						}
+					}
+				}
 			}
 		}
 

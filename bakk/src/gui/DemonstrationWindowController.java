@@ -215,7 +215,7 @@ public class DemonstrationWindowController {
 		//set comparable examples
 		showExamplesInComboBoxes();
 		expanded = false;
-
+		
 		comparisonPane.setVisible(false);
 		graphPane.setVisible(true);
 	}
@@ -550,6 +550,7 @@ public class DemonstrationWindowController {
 			expandBtn.setText("Expand");
 			restoreOriginalFrameworks();
 			nameLbl.setText(nameLbl.getText().replace(" + " + EX,""));
+			explanationArea.setText("Successfully unexpanded frameworks.");
 		}
 
 		setUI(false);
@@ -887,6 +888,7 @@ public class DemonstrationWindowController {
 
 		expandingComboBox.setItems(FXCollections.observableArrayList(formatList));
 		expandingComboBox.getSelectionModel().selectFirst();
+		expandingComboBox.getSelectionModel().selectedIndexProperty().addListener(new ExpandListener<Number>());
 	}
 
 	/**
@@ -1001,6 +1003,21 @@ public class DemonstrationWindowController {
 				computeBtn.setDisable(true);
 				setDisableRadioButtons(false);
 				initializeComparisonResources();
+			}
+		}
+	}
+	
+	/**
+	 * the ChoiceListener listens for changes on a combobox, and unexpands if expanded
+	 * @author patrick.bellositz
+	 * @param <Number> the index of the chosen element
+	 */
+	@SuppressWarnings("hiding")
+	private class ExpandListener<Number> implements ChangeListener<Number>{
+		@Override
+		public void changed(ObservableValue<? extends Number> oval, Number sval, Number nval){
+			if(expanded){
+				onExpandClick();
 			}
 		}
 	}
