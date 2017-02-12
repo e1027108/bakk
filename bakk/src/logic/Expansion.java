@@ -153,7 +153,7 @@ public class Expansion {
 		
 		interactor.addToCommands(new Command("We check whether the arguments of " + expname + " are a normal expansion to the arguments of " + framename + ".",fArgIns,pane));
 		
-		if(!checkNormalExpansion(expname + " (arguments only)")){
+		if(!checkNormalExpansion("arguments of " + expname)){
 			interactor.addToCommands(new Command("Since the arguments of " + expname + " are not a normal expansion of the argument of " + framename + ", " + expname + " is not a strong expansion.",
 					expansion.toInstruction(Color.RED),pane));
 			return false;
@@ -206,7 +206,7 @@ public class Expansion {
 		
 		interactor.addToCommands(new Command("We check whether the arguments of " + expname + " are a normal expansion to the arguments of " + framename + ".",fArgIns,pane));
 		
-		if(!checkNormalExpansion(expname + " (arguments only)")){
+		if(!checkNormalExpansion("arguments of " + expname)){
 			interactor.addToCommands(new Command("Since the arguments of " + expname + " are not a normal expansion of the argument of " + framename + ", " + expname + " is not a strong expansion.",
 					expansion.toInstruction(Color.RED),pane));
 			return false;

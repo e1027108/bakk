@@ -1003,6 +1003,7 @@ public class DemonstrationWindowController {
 			else{ // on choosing a framework, old expansion on just one example are unexpanded
 				if(expansionFramework != null){
 					onExpandClick();
+					explanationArea.setText(F1 + " was automatically unexpanded! If you want to compare expanded frameworks, please expand again!");
 				}
 
 				conditionalToggle(2);
