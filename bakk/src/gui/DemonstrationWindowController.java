@@ -1,5 +1,6 @@
 package gui;
 
+import interactor.Command;
 import interactor.GraphInstruction;
 import interactor.Interactor;
 
@@ -330,11 +331,31 @@ public class DemonstrationWindowController {
 			comparisonExpansion = new Expansion(comparisonFramework,expansionFramework);
 			ctype = comparisonExpansion.determineExpansionType(F2,EX);
 		}
-
+		
 		if(ftype == null || (comparisonFramework != null && ctype == null)){
+			String fresult;
+			String cresult = "";
+			
+			if(ftype == null){
+				fresult = EX + " is not an expansion of " + F1 + ".";
+			}
+			else{
+				fresult = EX + " is a " + ftype + " expansion of " + F1 + ".";
+			}
+			
+			if(ctype == null && comparisonFramework != null){
+				cresult = EX + " is not an expansion of " + F2 + ".";
+			}
+			else{
+				cresult = EX + " is a " + ctype + " expansion of " + F2 + ".";
+			}
+			
+			interactor.addToCommands(new Command(fresult + " " + cresult + " We don't expand the frameworks since " + EX + " is not an expansion to both!",null,0));
+						
 			return false;
 		}
 		else{
+			interactor.addToCommands(new Command(EX + " is an expansion of " + F1 + "(" + ftype + ") and of " + F2 + "(" + ctype + ").",null,0));
 			return true;
 		}
 	}
