@@ -350,7 +350,7 @@ public class DemonstrationWindowController {
 				cresult = EX + " is a " + ctype + " expansion of " + F2 + ".";
 			}
 			
-			interactor.addToCommands(new Command(fresult + " " + cresult + " We don't expand the frameworks since " + EX + " is not an expansion to both!",null,0));
+			interactor.addToCommands(new Command(fresult + " " + cresult + " We don't expand.",null,0));
 						
 			return false;
 		}
